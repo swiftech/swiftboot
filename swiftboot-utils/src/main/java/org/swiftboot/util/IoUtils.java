@@ -1,4 +1,4 @@
-package org.github.swiftech.swiftboot.util;
+package org.swiftboot.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

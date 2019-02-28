@@ -1,4 +1,4 @@
-package org.github.swiftech.swiftboot.util;
+package org.swiftboot.util;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;

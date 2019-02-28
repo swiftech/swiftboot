@@ -1,4 +1,4 @@
-package org.github.swiftech.swiftboot.util;
+package org.swiftboot.util;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
