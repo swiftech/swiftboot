@@ -14,7 +14,7 @@ public class CryptoUtils {
      * @param salt
      * @return
      */
-    public String md5salt(String src, String salt) {
+    public static String md5salt(String src, String salt) {
         return md5(src + salt);
     }
 
