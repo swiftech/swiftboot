@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.UUID;
 
 /**
- * @author Allen 2019-02-27
+ * @author swiftech
  **/
 public class IdUtils {
 

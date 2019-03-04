@@ -1,0 +1,19 @@
+
+http:
+  cors:
+    allow:
+      # 跨域允许的范围
+      origin: "*"
+  client:
+    connect:
+      # http 客户端链接超时时间
+      timeout: 2000
+    socket:
+      # http 客户端socket超时时间
+      timeout: 10000
+common:
+  web:
+    validation:
+      result:
+        # 是否输出json格式的校验结果，否则直接输出为字符串拼接
+        json: true

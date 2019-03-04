@@ -1,0 +1,36 @@
+package org.swiftboot.web.model.dao.impl;
+
+import org.swiftboot.web.model.entity.IdPojo;
+import org.swiftboot.web.model.entity.Persistent;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+/**
+ * 自定义 Jpa Dao 接口的基类
+ * @author swiftech
+ **/
+public abstract class BaseCustomizeDaoImpl<T extends IdPojo> {
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    protected Class<Persistent> entityClass;
+
+    protected CriteriaQuery makeCriteriaQuery(String key, Object value) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> q = (CriteriaQuery<T>) cb.createQuery(entityClass);
+        Root<T> from = (Root<T>) q.from(entityClass);
+        q.select(from).where(
+                cb.equal(from.get(key), value)
+        );
+        return q;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+}

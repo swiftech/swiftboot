@@ -1,4 +1,4 @@
-package org.swiftboot.collections;
+package org.swiftboot.collections.map;
 
 import org.apache.commons.lang3.Range;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * 用取值范围（Range）作为 Key 存储键值，但是直接用 Range 中的元素作为 key 来操作。
  *
- * @author swiftech 2015-07-13
+ * @author swiftech
  * @param <K>
  * @param <V>
  */
