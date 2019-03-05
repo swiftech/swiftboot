@@ -44,14 +44,14 @@ public abstract class ErrorCodeSupport {
     public static final String CODE_APP_VERSION_EXPIRED = "2006"; // App版本过期，请升级至新版本
     public static final String CODE_SYS_TIME_DIFF = "2007"; // 您的手机系统时间不正确，请先校准！
     public static final String CODE_FILE_UPLOAD_FAIL = "2008"; // 上传文件失败
-    public static final String CODE_FILE_DOWNLOAD_FAIL = "2009"; // 上传文件失败
+    public static final String CODE_FILE_DOWNLOAD_FAIL = "2009"; // 下载文件失败
     public static final String CODE_UNDER_DEVELOPMENT = "2010"; // 正在开发中，敬请期待
     public static final String CODE_TEXT_TOO_LONG = "2011"; // 文字长度过长
     public static final String CODE_TXVERSION_ERROR = "2012"; // 他人已做操作，请刷新当前页面或数据
     public static final String CODE_NEED_LOGIN = "2013"; // 需要登录
     public static final String CODE_GET_CURRENT_SYSUSER_FAILED = "2014"; // 获取当前登录的系统用户失败
     public static final String CODE_PERSISTENT_ERROR = "2015"; // 数据库操作失败
-    public static final String CODE_FILE_NOT_EXIST= "2016"; // 文件不存在
+    public static final String CODE_FILE_NOT_EXIST = "2016"; // 文件不存在
 
     /**
      * 用户业务错误代码定义 21xx
@@ -64,7 +64,7 @@ public abstract class ErrorCodeSupport {
     public static final String CODE_USER_FROZEN = "2105";//用户已被冻结
     public static final String CODE_USER_ACCOUNT_EMPTY = "2106";//请输入账号
     public static final String CODE_USER_PASSWORD_EMPTY = "2107";//请输入密码
-    public static final String CODE_VALIDATION_SESSION_NOT_EXIST = "2108"; // 登录会话不存在
+    public static final String CODE_USER_SESSION_NOT_EXIST = "2108"; // 用户登录会话不存在
 
     // CAPTCHA
     public static final String CODE_CAPTCHA_NO_EXIST = "2104";// 没有找到验证码
@@ -81,44 +81,10 @@ public abstract class ErrorCodeSupport {
 
     // Register (TODO 部分验证错误代码会被统一验证框架取代）
     public static final String CODE_REG_USER_EXISTS = "2131";// 用户已注册
-    public static final String CODE_PWD_ERR = "2132";// 用户密码验证失败
     public static final String CODE_REG_FAIL = "2133";// 用户注册失败
-    public static final String CODE_USER_UPDATE_INFO_FAILED = "2134";// 更新个人信息失败
-    public static final String CODE_USER_NICK_NAME_TOO_LONG = "2135";// 昵称长度太长
-    public static final String CODE_USER_NAME_TOO_LONG = "2136";// 姓名长度太长
-    public static final String CODE_VALIDATION_PASSWORD_BLANK = "2137"; // 密码不能为空
-    public static final String CODE_VALIDATION_CAPTCHA_BLANK = "2018"; // 请填写验证码
-    public static final String CODE_VALIDATION_PASSWORD_TOO_SHORT = "2023"; // 密码长度过短
-    public static final String CODE_VALIDATION_PASSWORD_TOO_LONG = "2024"; // 密码长度过长
     // Others
     public static final String CODE_CHANGE_PWD_FAILD = "2141";// 修改密码失败
 
-    // Corporation
-    public static final String CODE_CORP_SAVE_FAILED = "2151";// 企业信息录入失败
-    public static final String CODE_CORP_CONTACT_NAME_TOO_LONG = "2153";// 企业联系人姓名太长
-    public static final String CODE_CORP_NAME_EMPTY = "2154";// 企业名称不能为空
-    public static final String CODE_CORP_DISTRICT_EMPTY = "2155";// 企业地区不能为空
-    public static final String CODE_CORP_CONTACT_NAME_EMPTY = "2156";// 企业联系人不能为空
-    public static final String CODE_CORP_EMAIL_EMPTY = "2157";// 企业联系人电子邮件不能为空
-    public static final String CODE_CORP_PHONE_EMPTY = "2158";// 企业联系电话不能为空
-    public static final String CODE_CORP_NAME_TOO_LONG = "2159";// 企业名称太长
-
-    /**
-     * 表单验证错误信息
-     */
-    public static final String CODE_VALID_REQUIRED = "3100"; // 必须输入
-    public static final String CODE_VALID_LOGIN_NAME_FORMAT = "3101"; //登录名格式错误，只能使用英文字母和数字
-    public static final String CODE_VALID_LOGIN_NAME_LENGTH = "3102"; //登录名长度不能低于3位，不能超过32位
-    public static final String CODE_VALID_LOGIN_PWD_FORMAT = "3103"; //密码长度不能低于8位，不能超过32位并且必须包含英文字母和数字
-    public static final String CODE_VALID_LOGIN_PWD_LENGTH = "3104"; //密码长度不能低于8位，不能超过32位
-    public static final String CODE_VALID_IDCARDNO_WRONG = "3105"; //身份证号码格式错误
-    public static final String CODE_VALID_PHONENO_WRONG = "3106"; //手机号码格式错误
-    public static final String CODE_VALID_EMAIL_WRONG = "3107"; //邮箱格式错误
-
-    /**
-     * 其他
-     */
-    public static final String CODE_LOAD_EMAIL_TEMPLATE_ERROR = "3201"; // 加载邮件模板失败
 
     // code -> message
     private static HashMap<String, String> errorCodeMap = new HashMap<>();
@@ -179,6 +145,10 @@ public abstract class ErrorCodeSupport {
     public static void validate() {
         Map<String, Object> cache = new HashMap<>();
         Field[] fields = ErrorCodeSupport.class.getDeclaredFields();
+        if (fields.length == 0) {
+            System.out.println("没有找到预定义的错误代码");
+            return;
+        }
         try {
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(String.class)) {

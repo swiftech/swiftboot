@@ -1,12 +1,14 @@
 package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import org.swiftboot.web.model.entity.Persistent;
 
 /**
  * @author swiftech
  * @param <E>
  */
+@ApiModel
 public abstract class BaseSessionCommand<E extends Persistent> extends BasePopulateCommand<E>{
 
     @JsonIgnore

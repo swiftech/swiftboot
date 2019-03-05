@@ -1,6 +1,7 @@
 package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.IdUtils;
@@ -19,27 +20,28 @@ import java.util.Collection;
  * TODO 用 annotation 实现 converter 或者 formatter
  *
  * @author swiftech
- * @param <E> 对应的实体类
+ * @param <P> 对应的实体类
  * @author swiftech 2018-11-21
  */
-public abstract class BasePopulateCommand<E extends Persistent> extends HttpCommand {
+@ApiModel
+public abstract class BasePopulateCommand<P extends Persistent> extends HttpCommand {
 
-    public E createEntity() {
-        E ret;
+    public P createEntity() {
+        P ret;
         Type genericSuperclass = getClass().getGenericSuperclass();
         if (genericSuperclass == null) {
             throw new RuntimeException("反射错误");
         }
         System.out.println(genericSuperclass);
 
-        Class<E> entityClass = (Class<E>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
+        Class<P> entityClass = (Class<P>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
         if (entityClass == null) {
             throw new RuntimeException("反射错误");
         }
         System.out.println(entityClass);
 
         try {
-            Constructor<E> constructor = entityClass.getConstructor();
+            Constructor<P> constructor = entityClass.getConstructor();
             ret = constructor.newInstance();
             ret.setId(IdUtils.makeUUID());
             ret.setCreateTime(System.currentTimeMillis());
@@ -53,13 +55,13 @@ public abstract class BasePopulateCommand<E extends Persistent> extends HttpComm
     }
 
 
-    public E populateEntity(E entity) {
-        this.doPopulate((Class<E>) entity.getClass(), entity);
+    public P populateEntity(P entity) {
+        this.doPopulate((Class<P>) entity.getClass(), entity);
         return entity;
     }
 
 
-    private void doPopulate(Class<E> entityClass, E entityInstance) {
+    private void doPopulate(Class<P> entityClass, P entityInstance) {
         // 复制所有属性至实体类，如果实体类不存在该属性，则抛出异常
         Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class);
         for (Field srcField : allFields) {

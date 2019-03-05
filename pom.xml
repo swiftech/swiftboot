@@ -18,8 +18,8 @@
 
     <modules>
         <module>swiftboot-utils</module>
-        <module>swiftboot-web</module>
         <module>swiftboot-collections</module>
+        <module>swiftboot-web</module>
     </modules>
 
     <properties>

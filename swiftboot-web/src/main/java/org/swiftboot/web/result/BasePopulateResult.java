@@ -1,6 +1,8 @@
 package org.swiftboot.web.result;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.model.entity.Persistent;
@@ -15,6 +17,8 @@ import java.util.Collection;
  * @author swiftech
  **/
 public abstract class BasePopulateResult<E extends Persistent> {
+
+    private Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
 
     /**
      * 按照返回值类型创建返回值对象，并从实体类填充返回值
@@ -55,7 +59,10 @@ public abstract class BasePopulateResult<E extends Persistent> {
      * @param entity
      */
     public BasePopulateResult<E> populateByEntity(E entity) {
-        System.out.println("populate result from entity: " + entity);
+        if (entity == null) {
+            throw new RuntimeException("实体类为空");
+        }
+        log.info("populate result from entity: " + entity);
         Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : allFields) {
             Field srcField;

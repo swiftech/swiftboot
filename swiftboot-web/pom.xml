@@ -14,7 +14,7 @@
     <description>企业Web应用基础</description>
 
     <properties>
-        <spring.version>4.3.21.RELEASE</spring.version>
+        <spring.version>5.1.5.RELEASE</spring.version>
         <servlet.version>3.1.0</servlet.version>
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
         <swagger.version>1.5.22</swagger.version>
@@ -22,6 +22,7 @@
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <validation.api.version>2.0.1.Final</validation.api.version>
         <hibernate.validator.version>6.0.14.Final</hibernate.validator.version>
+        <log4j2.version>2.9.1</log4j2.version>
     </properties>
 
     <dependencies>
@@ -35,6 +36,12 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${commons.beanutils.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
@@ -104,6 +111,36 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!--测试-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
