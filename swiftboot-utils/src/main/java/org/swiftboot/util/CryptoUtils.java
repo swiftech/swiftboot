@@ -4,7 +4,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
- * @author swiftech 2017-02-16
+ * @author swiftech
  **/
 public class CryptoUtils {
 

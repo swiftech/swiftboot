@@ -20,6 +20,12 @@ public abstract class BaseCustomizeDaoImpl<T extends IdPojo> {
 
     protected Class<Persistent> entityClass;
 
+    /**
+     * 创建一个单个字段查询的 CriteriaQuery 对象
+     * @param key
+     * @param value
+     * @return
+     */
     protected CriteriaQuery makeCriteriaQuery(String key, Object value) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> q = (CriteriaQuery<T>) cb.createQuery(entityClass);

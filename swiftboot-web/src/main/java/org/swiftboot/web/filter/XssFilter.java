@@ -26,6 +26,7 @@ public class XssFilter extends OncePerRequestFilter {
     @Value("${http.cors.allow.origin:*}")
     String corsAllowOrigin = "*";
 
+    // TODO configurable
     private List<String> allowedHeaders = new ArrayList<String>() {
         {
             add("session_id");

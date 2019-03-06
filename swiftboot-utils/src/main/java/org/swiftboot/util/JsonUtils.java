@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 依赖 Jackson 库
  *
- * @author swiftech 2015-02-16
+ * @author swiftech
  */
 public class JsonUtils {
 

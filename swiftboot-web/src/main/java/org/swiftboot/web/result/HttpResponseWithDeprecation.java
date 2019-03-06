@@ -7,6 +7,8 @@ import org.swiftboot.web.exception.ErrorCodeSupport;
 import java.io.Serializable;
 
 /**
+ * 正确的返回值，但是提示接口已经废弃
+ *
  * @author swiftech
  **/
 @ApiModel("接口废弃的返回值，标识接口已废弃")

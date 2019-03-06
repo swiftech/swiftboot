@@ -79,7 +79,7 @@ public abstract class ErrorCodeSupport {
     public static final String CODE_SMS_CAPTCHA_LACK_SEND_TO = "2119";// 缺少手机号码
     public static final String CODE_SMS_CAPTCHA_LACK_DEVICEID = "2118";// 缺少设备ID
 
-    // Register (TODO 部分验证错误代码会被统一验证框架取代）
+    // Register
     public static final String CODE_REG_USER_EXISTS = "2131";// 用户已注册
     public static final String CODE_REG_FAIL = "2133";// 用户注册失败
     // Others

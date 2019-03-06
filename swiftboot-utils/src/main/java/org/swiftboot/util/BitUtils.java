@@ -3,7 +3,7 @@ package org.swiftboot.util;
 import java.util.Collection;
 
 /**
- * @author swiftech 2015-06-05
+ * @author swiftech
  **/
 public class BitUtils {
 

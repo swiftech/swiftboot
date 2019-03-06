@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  *
- * @author switech 2015-05-14
+ * @author switech
  **/
 public class SysUtils {
 

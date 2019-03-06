@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 处理Java注解的工具类
  *
- * Created by swiftech on 15/1/24.
+ * @author swiftech
  */
 public class AnnotationUtils {
 
