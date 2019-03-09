@@ -19,9 +19,8 @@ import java.util.Collection;
  * TODO Nested Properties的处理（忽略？）
  * TODO 用 annotation 实现 converter 或者 formatter
  *
- * @author swiftech
  * @param <P> 对应的实体类
- * @author swiftech 2018-11-21
+ * @author swiftech
  */
 @ApiModel
 public abstract class BasePopulateCommand<P extends Persistent> extends HttpCommand {
