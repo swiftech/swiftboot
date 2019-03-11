@@ -57,6 +57,7 @@ public abstract class BasePopulateResult<E extends Persistent> {
      * 从实体类填充当前返回值对象
      *
      * @param entity
+     * @return
      */
     public BasePopulateResult<E> populateByEntity(E entity) {
         if (entity == null) {

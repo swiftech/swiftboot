@@ -27,7 +27,6 @@ public class HttpResponse<T extends Object> implements Serializable {
     @ApiModelProperty(value = "错误代码对应的错误信息", required = false, example = "OK")
     protected String msg = ErrorCodeSupport.getErrorMessage(ErrorCodeSupport.CODE_OK);
 
-    // use getResult() method to visit to avoid NullPointer
     @ApiModelProperty(value = "返回的对象")
     protected T result;
 

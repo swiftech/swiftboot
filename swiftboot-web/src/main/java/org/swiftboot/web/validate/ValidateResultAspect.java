@@ -4,11 +4,12 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.swiftboot.web.exception.ValidationException;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.swiftboot.collections.ArrayUtils;
+import org.swiftboot.web.exception.ValidationException;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ValidateResultAspect {
     public void process(JoinPoint joinPoint) {
         logger.debug("@ConvertValidateResult ...");
         Object[] args = joinPoint.getArgs();
-        Object result = getFirstMatch(args, BindingResult.class);
+        Object result = ArrayUtils.getFirstMatch(args, BindingResult.class);
         if (result != null) {
             BindingResult bindingResult = (BindingResult) result;
             List<ObjectError> allErrors = bindingResult.getAllErrors();
@@ -47,25 +48,6 @@ public class ValidateResultAspect {
         else {
             logger.debug("没有验证错误");
         }
-    }
-
-    /**
-     * 获取数组中第一个类型匹配的元素
-     * TODO 重构到 swiftboot-collections
-     * @param collection
-     * @param clazz
-     * @return
-     */
-    public static Object getFirstMatch(Object[] collection, Class clazz) {
-        if (collection == null || clazz == null) {
-            return null;
-        }
-        for (Object o : collection) {
-            if (clazz.isAssignableFrom(o.getClass())) {
-                return o;
-            }
-        }
-        return null;
     }
 
 }

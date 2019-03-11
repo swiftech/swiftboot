@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 列表查询结果抽象类
  *
- * @author swiftech 2015-11-22
+ * @author swiftech
  **/
 public abstract class BaseListableResult<T extends BasePopulateResult, E extends Persistent> {
 
