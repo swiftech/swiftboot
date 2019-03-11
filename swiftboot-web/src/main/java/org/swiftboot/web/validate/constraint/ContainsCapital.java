@@ -13,7 +13,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * 检验字符串中是否含有大写字符
- * @author swiftech 2018-01-18
+ *
+ * @author swiftech
  **/
 @Documented
 @Constraint(validatedBy = {ContainsCapitalValidator.class})

@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 
 /**
  * 自定义 Jpa Dao 接口的基类
+ *
  * @author swiftech
  **/
 public abstract class BaseCustomizeDaoImpl<T extends IdPojo> {
@@ -22,6 +23,7 @@ public abstract class BaseCustomizeDaoImpl<T extends IdPojo> {
 
     /**
      * 创建一个单个字段查询的 CriteriaQuery 对象
+     *
      * @param key
      * @param value
      * @return

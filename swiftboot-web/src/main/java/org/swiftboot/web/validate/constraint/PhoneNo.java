@@ -13,6 +13,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * 校验中国地区11位手机号码
+ *
+ * @author swiftech
  */
 @Target({FIELD})
 @Retention(RUNTIME)

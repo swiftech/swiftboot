@@ -13,7 +13,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * 校验字符串是否含有数字
- * @author swiftech 2018-01-18
+ *
+ * @author swiftech
  **/
 @Documented
 @Constraint(validatedBy = {ContainsNumberValidator.class})
