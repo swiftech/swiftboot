@@ -18,6 +18,8 @@ import java.util.Collection;
  **/
 public abstract class BasePopulateResult<E extends Persistent> {
 
+    @JsonIgnore
+    @PopulateIgnore
     private Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
 
     /**

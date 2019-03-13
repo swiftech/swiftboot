@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.swiftboot.web.constant.HttpConstants;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,21 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * XSS 过滤器
+ * 跨域过滤器，实现跨域访问的设置
  *
  * @author swiftech
  */
-public class XssFilter extends OncePerRequestFilter {
+public class CorsFilter extends OncePerRequestFilter {
 
-    private Logger log = LoggerFactory.getLogger(XssFilter.class);
+    private Logger log = LoggerFactory.getLogger(CorsFilter.class);
 
     @Value("${http.cors.allow.origin:*}")
-    String corsAllowOrigin = "*";
+    private String corsAllowOrigin = "*";
 
     // TODO configurable
     private List<String> allowedHeaders = new ArrayList<String>() {
         {
-            add("session_id");
+            add(HttpConstants.SESSION_ID_NAME);
             add("Content-Type");
             add("Access-Control-Allow-Headers");
             add("Authorization");
@@ -39,15 +40,16 @@ public class XssFilter extends OncePerRequestFilter {
         }
     };
 
-    public XssFilter() {
+    public CorsFilter() {
         log.info("初始化跨域过滤器");
         log.info("Access-Control-Allow-Origin: " + corsAllowOrigin);
         log.info("Access-Control-Allow-Headers: " + StringUtils.join(allowedHeaders, ","));
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//		System.out.println("跨域访问, 合法来源：*");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", corsAllowOrigin);
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", StringUtils.join(allowedHeaders, ","));
