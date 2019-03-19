@@ -29,7 +29,6 @@ public abstract class BaseListableResult<T extends BasePopulateResult, E extends
         if (genericSuperclass == null) {
             throw new RuntimeException("反射错误");
         }
-        System.out.println(genericSuperclass);
         Class<T> itemClass = (Class<T>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
         if (itemClass == null) {
             throw new RuntimeException("类定义缺少元素的类型");
