@@ -9,9 +9,9 @@ import org.swiftboot.web.model.entity.Persistent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * 提供将入实体类的值填入返回值的方法。如果 Result 存在的参数在实体类中不存在的话，则抛出异常。
@@ -45,35 +45,40 @@ public abstract class BasePopulateResult<E extends Persistent> {
             constructor = targetClass.getConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException("Result缺少无参数构造函数");
+            throw new RuntimeException("Result类缺少无参数构造函数");
         }
         try {
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Result缺少无参数构造函数");
+            throw new RuntimeException("Result类缺少无参数构造函数");
         }
         ret.populateByEntity(entity);
         return ret;
     }
 
+    /**
+     * 从实体类填充当前返回值对象，如果属性值是其他对象的集合，那么也会自动从实体类中获取对应名字的集合来填充返回值的集合
+     * @param entity
+     * @return
+     */
     public BasePopulateResult<E> populateByEntity(E entity) {
         return populateByEntity(entity, this);
     }
 
     /**
-     * 从实体类填充当前返回值对象
+     * 从实体类填充属性至返回值对象，如果属性值是其他对象的集合，那么也会自动从实体类中获取对应名字的集合来填充返回值的集合
      *
      * @param entity
      * @return
      */
-    public BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult result) {
+    public BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
         if (entity == null) {
             throw new RuntimeException("实体类为空");
         }
         log.info("populate result from entity: " + entity);
-        Collection<Field> allFields = BeanUtils.getFieldsIgnore(result.getClass(), JsonIgnore.class, PopulateIgnore.class);
-        for (Field targetField : allFields) {
+        Collection<Field> targetFields = BeanUtils.getFieldsIgnore(result.getClass(), JsonIgnore.class, PopulateIgnore.class);
+        for (Field targetField : targetFields) {
             Field srcField;
             try {
                 srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
@@ -84,17 +89,35 @@ public abstract class BasePopulateResult<E extends Persistent> {
             // unlock
             boolean accessible = targetField.isAccessible();
             targetField.setAccessible(true);
-            // 处理集合类
-            if (Set.class.isAssignableFrom(srcField.getType())
-                    || List.class.isAssignableFrom(srcField.getType())) {
+            // 处理集合类属性
+            if (Collection.class.isAssignableFrom(srcField.getType())
+                    && Collection.class.isAssignableFrom(targetField.getType())) {
+                System.out.println("处理集合: " + targetField.getName());
                 try {
-                    targetField.getType().getGenericInterfaces();
-                    Collection value = (Collection) BeanUtils.forceGetProperty(entity, srcField.getName());
-//                    for (Object subEntity : value) {
-//                        populateByEntity(subEntity, );
-//                    }
-                } catch (NoSuchFieldException e) {
+                    Type[] actualTypeArguments = ((ParameterizedType) targetField.getGenericType()).getActualTypeArguments();
+                    if (actualTypeArguments.length > 0) {
+                        Collection srcCollection = (Collection) BeanUtils.forceGetProperty(entity, srcField.getName());
+                        Collection targetCollection = (Collection) BeanUtils.forceGetProperty(result, targetField.getName());
+                        if (targetCollection == null) {
+                            if (Set.class.isAssignableFrom(targetField.getType())) {
+                                targetCollection = new HashSet();
+                            }
+                            else if (List.class.isAssignableFrom(targetField.getType())) {
+                                targetCollection = new ArrayList();
+                            }
+                            targetField.set(result, targetCollection);
+                        }
+                        Class clazz = (Class) actualTypeArguments[0];
+                        for (Object subEntity : srcCollection) {
+                            if (subEntity instanceof Persistent) {
+                                BasePopulateResult<E> subResult = createResult(clazz, (Persistent) subEntity);
+                                targetCollection.add(subResult);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
+                    throw new RuntimeException(String.format("填充集合属性失败 %s", srcField.getName()));
                 }
             }
             else {
@@ -103,7 +126,7 @@ public abstract class BasePopulateResult<E extends Persistent> {
                     targetField.set(result, value);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new RuntimeException(String.format("复制属性失败 %s", srcField.getName()));
+                    throw new RuntimeException(String.format("填充属性失败 %s", srcField.getName()));
                 }
             }
             targetField.setAccessible(accessible);
