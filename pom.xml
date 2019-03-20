@@ -13,18 +13,19 @@
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <description>企业Web应用脚手架</description>
 
     <modules>
         <module>swiftboot-utils</module>
         <module>swiftboot-collections</module>
         <module>swiftboot-web</module>
+        <module>swiftboot-rpc</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
-        <swiftboot.version>1.0.1-SNAPSHOT</swiftboot.version>
+        <swiftboot.version>1.0.2-SNAPSHOT</swiftboot.version>
         <slf4j.version>1.7.25</slf4j.version>
         <jackson.version>2.9.8</jackson.version>
         <commons.lang.version>3.8.1</commons.lang.version>
