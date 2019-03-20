@@ -7,7 +7,10 @@ import java.lang.annotation.Target;
 
 /**
  * 标注填充时忽略的类属性
+ *
  * @author swiftech
+ * @see org.swiftboot.web.result.BasePopulateResult
+ * @see org.swiftboot.web.command.BasePopulateCommand
  **/
 @Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.IdUtils;
+import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.model.entity.Persistent;
 
 import java.lang.reflect.Constructor;
@@ -14,8 +15,8 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 /**
- * 提供将参数填入实体类的方法。如果 Command 存在的参数在实体类中不存在的话，则抛出异常。
- * 为了达到目的，要求实体类 E 不能有带参数的构造函数。
+ * 提供将参数填入实体类的方法 populateEntity() 和创建 Command 类所对应的实体类的方法 createEntity()
+ * 要求实体类 E 不能有带参数的构造函数。
  * TODO Nested Properties的处理（忽略？）
  * TODO 用 annotation 实现 converter 或者 formatter
  *
@@ -25,6 +26,10 @@ import java.util.Collection;
 @ApiModel
 public abstract class BasePopulateCommand<P extends Persistent> extends HttpCommand {
 
+    /**
+     * 创建对应的实体类 P 的实例并且用属性填充实例
+     * @return
+     */
     public P createEntity() {
         P ret;
         Type genericSuperclass = getClass().getGenericSuperclass();
@@ -48,12 +53,18 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             e.printStackTrace();
             throw new RuntimeException("创建实体类错误");
         }
-
         this.doPopulate(entityClass, ret);
         return ret;
     }
 
-
+    /**
+     * 将 Command 中的属性值填充至实体类中。
+     * 除了用注解 org.swiftboot.web.annotation.JsonIgnore 或 org.swiftboot.web.annotation.PopulateIgnore 标注的属性之外，
+     * Command 中存在的属性实体类也必须存在，否则抛出异常。
+     *
+     * @param entity
+     * @return
+     */
     public P populateEntity(P entity) {
         this.doPopulate((Class<P>) entity.getClass(), entity);
         return entity;
@@ -62,7 +73,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
 
     private void doPopulate(Class<P> entityClass, P entityInstance) {
         // 复制所有属性至实体类，如果实体类不存在该属性，则抛出异常
-        Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class);
+        Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field srcField : allFields) {
             Field targetField = null;
             try {
