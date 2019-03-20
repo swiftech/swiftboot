@@ -24,7 +24,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <swiftboot.version>1.0-SNAPSHOT</swiftboot.version>
+        <swiftboot.version>1.0.1-SNAPSHOT</swiftboot.version>
         <slf4j.version>1.7.25</slf4j.version>
         <jackson.version>2.9.8</jackson.version>
         <commons.lang.version>3.8.1</commons.lang.version>
