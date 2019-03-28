@@ -14,15 +14,19 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 /**
- * 提供将入实体类的值填入返回值的方法。如果 Result 存在的参数在实体类中不存在的话，则抛出异常。
+ * 提供将入实体类的属性值填入返回值的方法。如果 Result 存在的属性名称在实体类中不存在的话，则抛出异常。
+ * <code>populateByEntity(E entity)</code> 方法将实体类的属性填充到当前对象实例中。
+ * 静态方法<code>populateByEntity(E entity, BasePopulateResult<E> result)</code>将指定实体类属性值填充至指定的 Result 实例中。
+ * 标记 {@link JsonIgnore} 注解的 Result 类属性不会被处理。
+ * 如果希望某个实体类中不存在的属性也能出现在 Result 类中，那么可以用 {@link PopulateIgnore} 来标注这个属性。
  *
  * @author swiftech
  **/
 public abstract class BasePopulateResult<E extends Persistent> {
 
-    @JsonIgnore
-    @PopulateIgnore
-    private Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
+//    @JsonIgnore
+//    @PopulateIgnore
+//    private Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
 
     /**
      * 按照返回值类型创建返回值对象，并从实体类填充返回值
@@ -72,10 +76,11 @@ public abstract class BasePopulateResult<E extends Persistent> {
      * @param entity
      * @return
      */
-    public BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
+    public static <E extends Persistent> BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
         if (entity == null) {
             throw new RuntimeException("实体类为空");
         }
+        Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
         log.info("populate result from entity: " + entity);
         Collection<Field> targetFields = BeanUtils.getFieldsIgnore(result.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : targetFields) {
@@ -92,7 +97,6 @@ public abstract class BasePopulateResult<E extends Persistent> {
             // 处理集合类属性
             if (Collection.class.isAssignableFrom(srcField.getType())
                     && Collection.class.isAssignableFrom(targetField.getType())) {
-                System.out.println("处理集合: " + targetField.getName());
                 try {
                     Type[] actualTypeArguments = ((ParameterizedType) targetField.getGenericType()).getActualTypeArguments();
                     if (actualTypeArguments.length > 0) {

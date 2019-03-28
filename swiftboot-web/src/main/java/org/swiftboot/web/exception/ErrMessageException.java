@@ -13,6 +13,11 @@ public class ErrMessageException extends RuntimeException {
     public ErrMessageException() {
     }
 
+    public ErrMessageException(ErrMessageException exception) {
+        super(ErrorCodeSupport.getErrorMessage(exception.getErrorCode()));
+        this.errorCode = exception.getErrorCode();
+    }
+
     public ErrMessageException(String errorCode) {
         super(ErrorCodeSupport.getErrorMessage(errorCode));
         this.errorCode = errorCode;

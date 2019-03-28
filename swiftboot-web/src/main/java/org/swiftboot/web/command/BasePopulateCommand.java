@@ -28,6 +28,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
 
     /**
      * 创建对应的实体类 P 的实例并且用属性填充实例
+     *
      * @return
      */
     public P createEntity() {
@@ -59,7 +60,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
 
     /**
      * 将 Command 中的属性值填充至实体类中。
-     * 除了用注解 org.swiftboot.web.annotation.JsonIgnore 或 org.swiftboot.web.annotation.PopulateIgnore 标注的属性之外，
+     * 除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
      * Command 中存在的属性实体类也必须存在，否则抛出异常。
      *
      * @param entity
@@ -70,9 +71,13 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
         return entity;
     }
 
-
+    /**
+     * 复制所有属性至实体类，如果实体类不存在该属性，则抛出异常
+     *
+     * @param entityClass
+     * @param entityInstance
+     */
     private void doPopulate(Class<P> entityClass, P entityInstance) {
-        // 复制所有属性至实体类，如果实体类不存在该属性，则抛出异常
         Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field srcField : allFields) {
             Field targetField = null;

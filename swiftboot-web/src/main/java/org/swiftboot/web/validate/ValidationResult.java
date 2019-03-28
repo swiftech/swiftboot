@@ -1,37 +1,64 @@
 package org.swiftboot.web.validate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.StringUtils;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.swiftboot.util.AnnotationUtils;
+import org.swiftboot.util.BeanUtils;
+import org.swiftboot.web.exception.ErrorCodeSupport;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
  * 表单提交输入验证返回值，出现表单验证错误时创建并填充　HttpResponse　对象。
  * 可以设置多个输入框对应错误消息（或者错误消息资源代码）
  *
- * @see org.swiftboot.web.result.HttpResponse
  * @author swiftech
+ * @see org.swiftboot.web.result.HttpResponse
  */
 public class ValidationResult extends ArrayList<ValidationResult.InputError> {
 
     /**
      * 从校验结果生成可返回客户端的对象
      *
-     * @param bean      校验的参数对象
+     * @param bean          校验的参数对象
      * @param bindingResult 校验结果对象
      * @return
+     */
+    public static ValidationResult readFromBindingResult(Object bean, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ValidationResult validationResult = new ValidationResult();
+            for (ObjectError objectError : bindingResult.getAllErrors()) {
+                String k = getJsonPropertyKeyFromError(bean, objectError.getCodes());
+                FieldError fe = (FieldError) objectError;
+                String fieldDesc;
+                try {
+                    ApiModelProperty apiModelAnno =
+                            (ApiModelProperty) AnnotationUtils.getFieldAnnotation(BeanUtils.getDeclaredField(bean, fe.getField()), ApiModelProperty.class);
+                    fieldDesc = apiModelAnno.value();
+                } catch (Exception e) {
+                    fieldDesc = k;
+                }
+                validationResult.addErrorMsg(k, fieldDesc + objectError.getDefaultMessage());
+            }
+            return validationResult;
+        }
+        return null;
+    }
+
+    /**
+     * 从校验结果生成可返回客户端的对象
+     *
+     * @param bean          校验的参数对象
+     * @param bindingResult 校验结果对象
+     * @return
+     * @deprecated
      */
     public static ValidationResult fromBindingResult(Object bean, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ValidationResult validationResult = new ValidationResult();
-
             for (ObjectError objectError : bindingResult.getAllErrors()) {
                 String k = getJsonPropertyKeyFromError(bean, objectError.getCodes());
                 validationResult.addErrorMsg(k, objectError.getDefaultMessage());
@@ -46,7 +73,7 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
             return null;
         }
         String s = error[1];
-        return getJsonPropertyValue(targetBean, s.substring(StringUtils.indexOf(s, '.') + 1));
+        return AnnotationUtils.getJsonPropertyValue(targetBean, s.substring(StringUtils.indexOf(s, '.') + 1));
     }
 
     /**
@@ -87,7 +114,6 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
         return !this.isEmpty();
     }
 
-
     /**
      * 输入参数错误类
      */
@@ -126,77 +152,5 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
         }
     }
 
-    /**
-     * 获取 bean 中指定名称 JsonProperty 注解的值
-     *
-     * @param targetBean
-     * @param fieldName
-     * @return
-     */
-    public static String getJsonPropertyValue(Object targetBean, String fieldName) {
-        try {
-            Field declaredField = getDeclaredField(targetBean, fieldName);
-            JsonProperty fieldAnnotation = (JsonProperty) getFieldAnnotation(declaredField, JsonProperty.class);
-            if (fieldAnnotation == null) {
-                return fieldName;
-            }
-            else {
-                return fieldAnnotation.value();
-            }
-        } catch (NoSuchFieldException e) {
-            // 此处无需处理
-        }
-        return fieldName;
-    }
 
-    /**
-     * 获取指定 Field 中的指定类型的注解实例
-     *
-     * @param field
-     * @param annotationClazz
-     * @return
-     */
-    public static Annotation getFieldAnnotation(Field field, Class annotationClazz) {
-        Annotation[] annotations = field.getDeclaredAnnotations();
-        for (Annotation declaredAnnotation : annotations) {
-            if (declaredAnnotation.annotationType() == annotationClazz) {
-                return declaredAnnotation;
-            }
-        }
-        return null;
-    }
-
-
-    /**
-     * 循环向上转型，获取对象声明的字段。
-     *
-     * @param object       对象
-     * @param propertyName 属性名称
-     * @return 字段对象
-     * @throws NoSuchFieldException 没有该字段时抛出
-     */
-    public static Field getDeclaredField(Object object, String propertyName) throws NoSuchFieldException {
-        return getDeclaredField(object.getClass(), propertyName);
-    }
-
-    /**
-     * 循环向上转型，获取对象声明的字段。
-     *
-     * @param clazz        类
-     * @param propertyName 属性名称
-     * @return 字段对象
-     * @throws NoSuchFieldException 没有该字段时抛出
-     */
-    public static Field getDeclaredField(Class clazz, String propertyName) throws NoSuchFieldException {
-        Assert.notNull(clazz, "");
-        Assert.hasText(propertyName, "");
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-            try {
-                return superClass.getDeclaredField(propertyName);
-            } catch (NoSuchFieldException e) {
-                // Field不在当前类定义，继续向上转型
-            }
-        }
-        throw new NoSuchFieldException("No such field: " + clazz.getName() + '.' + propertyName);
-    }
 }

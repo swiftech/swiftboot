@@ -23,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Aspect
 @Component
 public class ValidateResultAspect {
-    private static Logger logger = getLogger(ValidateResultAspect.class);
+    private static Logger log = getLogger(ValidateResultAspect.class);
 
     /**
      * 切入带有 ConvertValidateResult 注解的方法
@@ -34,19 +34,20 @@ public class ValidateResultAspect {
 
     @Before("convertResult()")
     public void process(JoinPoint joinPoint) {
-        logger.debug("@ConvertValidateResult ...");
+        log.debug("@ConvertValidateResult ...");
         Object[] args = joinPoint.getArgs();
         Object result = ArrayUtils.getFirstMatch(args, BindingResult.class);
         if (result != null) {
             BindingResult bindingResult = (BindingResult) result;
+            log.info(bindingResult.getTarget().toString());
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             if (!allErrors.isEmpty()) {
-                ValidationResult validationResult = ValidationResult.fromBindingResult(bindingResult.getTarget(), bindingResult);
+                ValidationResult validationResult = ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
                 throw new ValidationException("参数验证不通过", validationResult);
             }
         }
         else {
-            logger.debug("没有验证错误");
+            log.debug("没有验证错误");
         }
     }
 
