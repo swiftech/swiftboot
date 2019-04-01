@@ -4,12 +4,14 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
+ * 
  * @author swiftech
  **/
 public class CryptoUtils {
 
     /**
      * 加盐 MD5
+     *
      * @param src
      * @param salt
      * @return
@@ -20,6 +22,7 @@ public class CryptoUtils {
 
     /**
      * MD5
+     *
      * @param src
      * @return
      */

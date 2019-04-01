@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理Java注解的工具类
+ * 通过反射处理 Java 注解的工具类
  *
  * @author swiftech
  */

@@ -11,7 +11,7 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
- * 使用java反射机制操作对象
+ * 通过反射机制操作对象
  * 提供：
  * 1. 获取类及其父类定义的 Field
  * 2. 忽略 Field 的修饰符获取它的值
@@ -85,7 +85,6 @@ public class BeanUtils {
      * @return 字段对象集合
      */
     public static Collection<Field> getFieldsIgnore(Class clazz, Collection<String> ignores) {
-
         Set<Field> ret = new HashSet<>();
         for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Field declaredField : superClass.getDeclaredFields()) {
@@ -97,38 +96,39 @@ public class BeanUtils {
         return ret;
     }
 
+//    /**
+//     * 获取除了 annoClass 指定的注解修饰之外的 {@link Field} 集合
+//     *
+//     * @param clazz
+//     * @param annoClass
+//     * @return
+//     */
+//    public static Collection<Field> getFieldsIgnore(Class clazz, Class<Annotation> annoClass) {
+//        Set<Field> ret = new HashSet<>();
+//        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+//            for (Field declaredField : superClass.getDeclaredFields()) {
+//                Annotation annotation = declaredField.getAnnotation(annoClass);
+//                if (annotation == null) {
+//                    ret.add(declaredField);
+//                }
+//            }
+//        }
+//        return ret;
+//    }
+
     /**
+     * 获取除了 annoClasses 指定的注解修饰之外的 {@link Field} 集合
      *
      * @param clazz
-     * @param annoClass
+     * @param annoClasses
      * @return
      */
-    public static Collection<Field> getFieldsIgnore(Class clazz, Class annoClass) {
-
+    public static Collection<Field> getFieldsIgnore(Class clazz, Class... annoClasses) {
         Set<Field> ret = new HashSet<>();
         for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+            field:
             for (Field declaredField : superClass.getDeclaredFields()) {
-                Annotation annotation = declaredField.getAnnotation(annoClass);
-                if (annotation == null) {
-                    ret.add(declaredField);
-                }
-            }
-        }
-        return ret;
-    }
-
-    /**
-     *
-     * @param clazz
-     * @param annoClass
-     * @return
-     */
-    public static Collection<Field> getFieldsIgnore(Class clazz, Class... annoClass) {
-
-        Set<Field> ret = new HashSet<>();
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-            field: for (Field declaredField : superClass.getDeclaredFields()) {
-                for (Class aClass : annoClass) {
+                for (Class aClass : annoClasses) {
                     Annotation annotation = declaredField.getAnnotation(aClass);
                     if (annotation != null) {
                         continue field;
@@ -300,9 +300,10 @@ public class BeanUtils {
 
     /**
      * 按照指定的类型获取属性值列表。
+     *
      * @param bean
      * @param fieldClass 属性值类型
-     * @param <T> 返回的属性值类
+     * @param <T>        返回的属性值类
      * @return
      */
     public static <T> List<T> getPropertiesByType(Object bean, Class<T> fieldClass) {

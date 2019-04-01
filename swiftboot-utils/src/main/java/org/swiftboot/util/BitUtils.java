@@ -9,6 +9,7 @@ public class BitUtils {
 
     /**
      * 判断一个数字的二进制位是否和另外一个数字的二进制位重叠
+     *
      * @param target
      * @param body
      * @param <T>
@@ -19,7 +20,7 @@ public class BitUtils {
     }
 
     /**
-     * 对列表中的所有长整数做逻辑或操作，相当于合并所有二进制位
+     * 对集合中的所有长整数做逻辑或操作，相当于合并所有二进制位
      *
      * @param longs
      * @return 返回操作结果
