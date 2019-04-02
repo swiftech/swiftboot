@@ -1,6 +1,6 @@
 package org.swiftboot.web.model.entity;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.swiftboot.web.annotation.PropertyDescription;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -12,15 +12,15 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class BaseEntity extends BaseIdEntity implements Persistent {
 
-    @ApiModelProperty(value = "创建时间", example = "1545355038524")
+    @PropertyDescription(value = "创建时间", example = "1545355038524")
     @Column(name = "CREATE_TIME", columnDefinition = "BIGINT COMMENT '创建时间'")
     private Long createTime;
 
-    @ApiModelProperty(value = "修改时间", example = "1545355038524")
+    @PropertyDescription(value = "修改时间", example = "1545355038524")
     @Column(name = "UPDATE_TIME", columnDefinition = "BIGINT COMMENT '修改时间'")
     private Long updateTime;
 
-    @ApiModelProperty(value = "是否逻辑删除", example = "false")
+    @PropertyDescription(value = "是否逻辑删除", example = "false")
     @Column(name = "IS_DELETE", columnDefinition = "BIT DEFAULT FALSE COMMENT '是否逻辑删除'")
     private Boolean isDelete = Boolean.FALSE;
 

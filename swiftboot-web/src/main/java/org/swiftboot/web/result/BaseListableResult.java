@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author swiftech
  **/
-public abstract class BaseListableResult<T extends BasePopulateResult, E extends Persistent> {
+public abstract class BaseListableResult<T extends BasePopulateResult, E extends Persistent> implements Result{
 
     public abstract List<T> getItems();
 

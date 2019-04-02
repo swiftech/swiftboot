@@ -22,7 +22,7 @@ import java.util.*;
  *
  * @author swiftech
  **/
-public abstract class BasePopulateResult<E extends Persistent> {
+public abstract class BasePopulateResult<E extends Persistent> implements Result{
 
 //    @JsonIgnore
 //    @PopulateIgnore

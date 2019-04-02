@@ -1,7 +1,5 @@
 package org.swiftboot.util;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -53,31 +51,6 @@ public class AnnotationUtils {
         }
         return ret;
     }
-
-
-    /**
-     * 获取 bean 中指定名称 JsonProperty 注解的值
-     *
-     * @param targetBean
-     * @param fieldName
-     * @return
-     */
-    public static String getJsonPropertyValue(Object targetBean, String fieldName) {
-        try {
-            Field declaredField = BeanUtils.getDeclaredField(targetBean, fieldName);
-            JsonProperty fieldAnnotation = (JsonProperty) getFieldAnnotation(declaredField, JsonProperty.class);
-            if (fieldAnnotation == null) {
-                return fieldName;
-            }
-            else {
-                return fieldAnnotation.value();
-            }
-        } catch (NoSuchFieldException e) {
-            // 此处无需处理
-        }
-        return fieldName;
-    }
-
 
     /**
      * 获取指定 Field 中的指定类型的注解实例

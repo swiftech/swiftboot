@@ -8,6 +8,7 @@ import org.springframework.validation.ObjectError;
 import org.swiftboot.util.AnnotationUtils;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.util.JacksonUtils;
 
 import java.util.ArrayList;
 
@@ -78,7 +79,7 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
             return null;
         }
         String s = error[1];
-        return AnnotationUtils.getJsonPropertyValue(targetBean, s.substring(StringUtils.indexOf(s, '.') + 1));
+        return JacksonUtils.getJsonPropertyValue(targetBean, s.substring(StringUtils.indexOf(s, '.') + 1));
     }
 
     /**

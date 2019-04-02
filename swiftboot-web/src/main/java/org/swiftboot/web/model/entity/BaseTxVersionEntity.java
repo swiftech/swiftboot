@@ -1,6 +1,6 @@
 package org.swiftboot.web.model.entity;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.swiftboot.web.annotation.PropertyDescription;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -18,7 +18,7 @@ public abstract class BaseTxVersionEntity extends BaseEntity {
     }
 
     @Version
-    @ApiModelProperty(value = "事务锁版本", example = "1")
+    @PropertyDescription(value = "事务锁版本", example = "1")
     @Column(name = "VERSION")
     private Long txVersion = 0L;
 

@@ -27,7 +27,7 @@ import java.util.Collection;
 public abstract class BasePopulateCommand<P extends Persistent> extends HttpCommand {
 
     /**
-     * 创建对应的实体类 P 的实例并且用属性填充实例
+     * 创建对应的实体类 P 的实例并且用属性值填充实例
      *
      * @return
      */
@@ -38,6 +38,13 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             throw new RuntimeException("反射错误");
         }
         System.out.println(genericSuperclass);
+        if (!(genericSuperclass instanceof ParameterizedType)) {
+            // 如果存在集成，则向上取一级
+            genericSuperclass = genericSuperclass.getClass().getGenericSuperclass();
+            if (!(genericSuperclass instanceof ParameterizedType)) {
+                throw new RuntimeException(String.format("父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", genericSuperclass.getTypeName()));
+            }
+        }
 
         Class<P> entityClass = (Class<P>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
         if (entityClass == null) {

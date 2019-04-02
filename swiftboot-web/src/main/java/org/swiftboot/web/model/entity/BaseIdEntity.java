@@ -1,6 +1,6 @@
 package org.swiftboot.web.model.entity;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.swiftboot.web.annotation.PropertyDescription;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class BaseIdEntity implements IdPojo {
 
-    @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
+    @PropertyDescription(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @Id()
     @Column(name = "ID", columnDefinition = "char(32) COMMENT '唯一标识'")
     private String id;

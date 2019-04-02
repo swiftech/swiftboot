@@ -11,7 +11,7 @@ import java.util.Map;
  * @author swiftech
  **/
 @ApiModel("默认的按分类统计结果")
-public class DefaultClassifiedCountResult<K, V> {
+public class DefaultClassifiedCountResult<K, V> implements Result{
 
     @ApiModelProperty(value = "统计结果，按照分类的标识存储")
     @JsonProperty("count_map")
