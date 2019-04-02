@@ -40,9 +40,14 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
         System.out.println(genericSuperclass);
         if (!(genericSuperclass instanceof ParameterizedType)) {
             // 如果存在集成，则向上取一级
-            genericSuperclass = genericSuperclass.getClass().getGenericSuperclass();
+            genericSuperclass = ((Class)genericSuperclass).getGenericSuperclass();
+            if (genericSuperclass == null) {
+                throw new RuntimeException("反射错误");
+            }
+            System.out.println(genericSuperclass);
             if (!(genericSuperclass instanceof ParameterizedType)) {
-                throw new RuntimeException(String.format("父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", genericSuperclass.getTypeName()));
+                throw new RuntimeException(
+                        String.format("父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", getClass().getGenericSuperclass().getTypeName()));
             }
         }
 
