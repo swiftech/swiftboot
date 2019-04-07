@@ -17,22 +17,22 @@ import java.util.Date;
 /**
  * 创建商品订单关系
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRelEntity> {
 
-    @ApiModelProperty(value = "商品ID", required = true, example = "7f46aa44e0724ef9af0319a0769bd091")
-    @JsonProperty("demo_goods_id")
+    @ApiModelProperty(value = "商品ID", required = true, example = "e8af5ea376fde35fb2c504633f55b128")
+    @JsonProperty("goods_id")
     @Length(max = 32)
     @NotBlank
-    private String demoGoodsId;
+    private String goodsId;
 
-    @ApiModelProperty(value = "订单ID", required = true, example = "ea8e6cc03954c56948680b38d9768666")
-    @JsonProperty("demo_order_id")
+    @ApiModelProperty(value = "订单ID", required = true, example = "527d36e654f9eaea6a9b46380d253fc9")
+    @JsonProperty("order_id")
     @Length(max = 32)
     @NotBlank
-    private String demoOrderId;
+    private String orderId;
 
 
     /**
@@ -40,17 +40,17 @@ public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRe
      *
      * @return
      */
-    public String getDemoGoodsId() {
-        return demoGoodsId;
+    public String getGoodsId() {
+        return goodsId;
     }
 
     /**
      * 设置商品ID
      *
-     * @param demoGoodsId
+     * @param goodsId
      */
-    public void setDemoGoodsId(String demoGoodsId) {
-        this.demoGoodsId = demoGoodsId;
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 
     /**
@@ -58,17 +58,17 @@ public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRe
      *
      * @return
      */
-    public String getDemoOrderId() {
-        return demoOrderId;
+    public String getOrderId() {
+        return orderId;
     }
 
     /**
      * 设置订单ID
      *
-     * @param demoOrderId
+     * @param orderId
      */
-    public void setDemoOrderId(String demoOrderId) {
-        this.demoOrderId = demoOrderId;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
 }

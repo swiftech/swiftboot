@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 /**
  * 保存订单
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class OrderSaveCommand extends OrderCreateCommand {

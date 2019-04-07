@@ -10,7 +10,7 @@ import org.swiftboot.web.result.BasePopulateResult;
 /**
  * 创建订单结果
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class OrderCreateResult extends BasePopulateResult<OrderEntity> {

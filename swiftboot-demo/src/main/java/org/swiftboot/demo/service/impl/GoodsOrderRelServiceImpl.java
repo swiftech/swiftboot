@@ -25,7 +25,7 @@ import java.util.Optional;
 /**
  * 商品订单关系服务接口实现
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Service
 public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
@@ -59,7 +59,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
     public GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveCommand cmd) {
         GoodsOrderRelSaveResult ret = new GoodsOrderRelSaveResult();
         Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(cmd.getId());
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             GoodsOrderRelEntity p = optEntity.get();
             p = cmd.populateEntity(p);
             GoodsOrderRelEntity saved = goodsOrderRelDao.save(p);
@@ -76,7 +76,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
     @Override
     public void deleteGoodsOrderRel(String goodsOrderRelId) {
         Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(goodsOrderRelId);
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             GoodsOrderRelEntity p = optEntity.get();
             p.setDelete(true);
             goodsOrderRelDao.save(p);
@@ -106,8 +106,8 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
     @Override
     public void deleteGoodsOrderRel(GoodsOrderRelDelPurgeCommand cmd) {
         List<GoodsOrderRelEntity> entities =
-        goodsOrderRelDao.findByDemoGoodsIdAndDemoOrderId(
-            cmd.getDemoGoodsId(), cmd.getDemoOrderId());
+        goodsOrderRelDao.findByGoodsIdAndOrderId(
+            cmd.getGoodsId(), cmd.getOrderId());
         for (GoodsOrderRelEntity p : entities) {
             p.setDelete(true);
             goodsOrderRelDao.save(p);
@@ -150,8 +150,8 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
      */
     @Override
     public void purgeGoodsOrderRel(GoodsOrderRelDelPurgeCommand cmd) {
-        goodsOrderRelDao.deleteByDemoGoodsIdAndDemoOrderId (
-            cmd.getDemoGoodsId(), cmd.getDemoOrderId());
+        goodsOrderRelDao.deleteByGoodsIdAndOrderId (
+            cmd.getGoodsId(), cmd.getOrderId());
     }
 
     /**

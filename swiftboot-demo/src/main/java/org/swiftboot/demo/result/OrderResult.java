@@ -11,10 +11,22 @@ import java.util.Date;
 /**
  * 订单
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class OrderResult extends BasePopulateResult {
+
+    @ApiModelProperty(value = "订单编号", example = "2019032411081201")
+    @JsonProperty("order_code")
+    private String orderCode;
+
+    @ApiModelProperty(value = "订单描述", example = "越快越好")
+    @JsonProperty("description")
+    private String description;
+
+    @ApiModelProperty(value = "商品总数", example = "5")
+    @JsonProperty("total_count")
+    private Integer totalCount;
 
     @ApiModelProperty(value = "发货地址", example = "极乐世界102号")
     @JsonProperty("address")
@@ -32,22 +44,64 @@ public class OrderResult extends BasePopulateResult {
     @JsonProperty("is_delete")
     private Boolean isDelete;
 
-    @ApiModelProperty(value = "商品总数", example = "5")
-    @JsonProperty("total_count")
-    private Integer totalCount;
-
-    @ApiModelProperty(value = "订单编号", example = "2019032411081201")
-    @JsonProperty("order_code")
-    private String orderCode;
-
-    @ApiModelProperty(value = "订单描述", example = "越快越好")
-    @JsonProperty("description")
-    private String description;
-
     @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @JsonProperty("id")
     private String id;
 
+
+    /**
+     * 获取订单编号
+     *
+     * @return
+     */
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    /**
+     * 设置订单编号
+     *
+     * @param orderCode
+     */
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    /**
+     * 获取订单描述
+     *
+     * @return
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * 设置订单描述
+     *
+     * @param description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * 获取商品总数
+     *
+     * @return
+     */
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    /**
+     * 设置商品总数
+     *
+     * @param totalCount
+     */
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
 
     /**
      * 获取发货地址
@@ -119,60 +173,6 @@ public class OrderResult extends BasePopulateResult {
      */
     public void setIsDelete(Boolean isDelete) {
         this.isDelete = isDelete;
-    }
-
-    /**
-     * 获取商品总数
-     *
-     * @return
-     */
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    /**
-     * 设置商品总数
-     *
-     * @param totalCount
-     */
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    /**
-     * 获取订单编号
-     *
-     * @return
-     */
-    public String getOrderCode() {
-        return orderCode;
-    }
-
-    /**
-     * 设置订单编号
-     *
-     * @param orderCode
-     */
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
-    }
-
-    /**
-     * 获取订单描述
-     *
-     * @return
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 设置订单描述
-     *
-     * @param description
-     */
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     /**

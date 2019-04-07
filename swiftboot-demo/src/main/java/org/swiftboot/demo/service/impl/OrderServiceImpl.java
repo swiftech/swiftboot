@@ -24,7 +24,7 @@ import java.util.Optional;
 /**
  * 订单服务接口实现
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService{
     public OrderSaveResult saveOrder(OrderSaveCommand cmd) {
         OrderSaveResult ret = new OrderSaveResult();
         Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
             p = cmd.populateEntity(p);
             OrderEntity saved = orderDao.save(p);
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void deleteOrder(String orderId) {
         Optional<OrderEntity> optEntity = orderDao.findById(orderId);
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
             p.setDelete(true);
             orderDao.save(p);

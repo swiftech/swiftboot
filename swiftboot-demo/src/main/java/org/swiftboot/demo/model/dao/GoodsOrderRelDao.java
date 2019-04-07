@@ -10,37 +10,51 @@ import java.util.List;
 /**
  * 商品订单关系数据访问接口
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 public interface GoodsOrderRelDao extends PagingAndSortingRepository<GoodsOrderRelEntity, String>, GoodsOrderRelCustomizeDao {
 
     /**
      * 按照商品ID查询商品订单关系
      *
-     * @param demoGoodsId 商品ID
+     * @param goodsId 商品ID
      * @return
      */
-    List<GoodsOrderRelEntity> findByDemoGoodsId(String demoGoodsId);
+    List<GoodsOrderRelEntity> findByGoodsId(String goodsId);
 
+    /**
+     * 按照商品ID查询未逻辑删除的商品订单关系
+     *
+     * @param goodsId 商品ID
+     * @return
+     */
+    List<GoodsOrderRelEntity> findByIsDeleteFalseAndGoodsId(String goodsId);
 
     /**
      * 按照订单ID查询商品订单关系
      *
-     * @param demoOrderId 订单ID
+     * @param orderId 订单ID
      * @return
      */
-    List<GoodsOrderRelEntity> findByDemoOrderId(String demoOrderId);
+    List<GoodsOrderRelEntity> findByOrderId(String orderId);
 
+    /**
+     * 按照订单ID查询未逻辑删除的商品订单关系
+     *
+     * @param orderId 订单ID
+     * @return
+     */
+    List<GoodsOrderRelEntity> findByIsDeleteFalseAndOrderId(String orderId);
 
 
     /**
      * 按照两个外键查询两个关联表字段存在的关系
      *
-     * @param demoGoodsId 商品ID
-     * @param demoOrderId 订单ID
+     * @param goodsId 商品ID
+     * @param orderId 订单ID
      * @return
      */
-    List<GoodsOrderRelEntity> findByDemoGoodsIdAndDemoOrderId(String demoGoodsId, String demoOrderId);
+    List<GoodsOrderRelEntity> findByGoodsIdAndOrderId(String goodsId, String orderId);
 
     /**
      * 批量按照ID查询商品订单关系
@@ -60,10 +74,10 @@ public interface GoodsOrderRelDao extends PagingAndSortingRepository<GoodsOrderR
     /**
      * 删除两个关联表字段存在的关系
      *
-     * @param demoGoodsId 商品ID
-     * @param demoOrderId 订单ID
+     * @param goodsId 商品ID
+     * @param orderId 订单ID
      */
-    void deleteByDemoGoodsIdAndDemoOrderId(String demoGoodsId, String demoOrderId);
+    void deleteByGoodsIdAndOrderId(String goodsId, String orderId);
 
     /**
      * 统计非逻辑删除的商品订单关系总数
@@ -75,33 +89,33 @@ public interface GoodsOrderRelDao extends PagingAndSortingRepository<GoodsOrderR
     /**
      * 按照商品ID统计商品订单关系总数
      *
-     * @param demoGoodsId 商品ID
+     * @param goodsId 商品ID
      * @return
      */
-    long countByDemoGoodsId(String demoGoodsId);
+    long countByGoodsId(String goodsId);
 
     /**
      * 按照商品ID统计非逻辑删除的商品订单关系总数
      *
-     * @param demoGoodsId 商品ID
+     * @param goodsId 商品ID
      * @return
      */
-    long countByIsDeleteFalseAndDemoGoodsId(String demoGoodsId);
+    long countByIsDeleteFalseAndGoodsId(String goodsId);
 
     /**
      * 按照订单ID统计商品订单关系总数
      *
-     * @param demoOrderId 订单ID
+     * @param orderId 订单ID
      * @return
      */
-    long countByDemoOrderId(String demoOrderId);
+    long countByOrderId(String orderId);
 
     /**
      * 按照订单ID统计非逻辑删除的商品订单关系总数
      *
-     * @param demoOrderId 订单ID
+     * @param orderId 订单ID
      * @return
      */
-    long countByIsDeleteFalseAndDemoOrderId(String demoOrderId);
+    long countByIsDeleteFalseAndOrderId(String orderId);
 
 }

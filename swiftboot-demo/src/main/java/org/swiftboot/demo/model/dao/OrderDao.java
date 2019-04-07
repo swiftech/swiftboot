@@ -10,27 +10,9 @@ import java.util.List;
 /**
  * 订单数据访问接口
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 public interface OrderDao extends PagingAndSortingRepository<OrderEntity, String>, OrderCustomizeDao {
-
-    /**
-     * 按照发货地址查询订单
-     *
-     * @param address 发货地址
-     * @return
-     */
-    List<OrderEntity> findByAddress(String address);
-
-
-    /**
-     * 按照商品总数查询订单
-     *
-     * @param totalCount 商品总数
-     * @return
-     */
-    List<OrderEntity> findByTotalCount(Integer totalCount);
-
 
     /**
      * 按照订单编号查询订单
@@ -40,6 +22,13 @@ public interface OrderDao extends PagingAndSortingRepository<OrderEntity, String
      */
     List<OrderEntity> findByOrderCode(String orderCode);
 
+    /**
+     * 按照订单编号查询未逻辑删除的订单
+     *
+     * @param orderCode 订单编号
+     * @return
+     */
+    List<OrderEntity> findByIsDeleteFalseAndOrderCode(String orderCode);
 
     /**
      * 按照订单描述查询订单
@@ -49,6 +38,45 @@ public interface OrderDao extends PagingAndSortingRepository<OrderEntity, String
      */
     List<OrderEntity> findByDescription(String description);
 
+    /**
+     * 按照订单描述查询未逻辑删除的订单
+     *
+     * @param description 订单描述
+     * @return
+     */
+    List<OrderEntity> findByIsDeleteFalseAndDescription(String description);
+
+    /**
+     * 按照商品总数查询订单
+     *
+     * @param totalCount 商品总数
+     * @return
+     */
+    List<OrderEntity> findByTotalCount(Integer totalCount);
+
+    /**
+     * 按照商品总数查询未逻辑删除的订单
+     *
+     * @param totalCount 商品总数
+     * @return
+     */
+    List<OrderEntity> findByIsDeleteFalseAndTotalCount(Integer totalCount);
+
+    /**
+     * 按照发货地址查询订单
+     *
+     * @param address 发货地址
+     * @return
+     */
+    List<OrderEntity> findByAddress(String address);
+
+    /**
+     * 按照发货地址查询未逻辑删除的订单
+     *
+     * @param address 发货地址
+     * @return
+     */
+    List<OrderEntity> findByIsDeleteFalseAndAddress(String address);
 
 
 

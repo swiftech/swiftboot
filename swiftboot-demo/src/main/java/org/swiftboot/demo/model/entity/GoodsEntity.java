@@ -3,8 +3,6 @@ package org.swiftboot.demo.model.entity;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.web.annotation.PropertyDescription;
 import org.swiftboot.web.model.entity.BaseEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +14,7 @@ import java.util.Date;
 /**
  * 商品
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Description("商品")
 @Entity
@@ -44,6 +42,13 @@ public class GoodsEntity extends BaseEntity {
     @Column(name = "PRICE", scale = 8, precision = 2, columnDefinition = "DOUBLE(8.2) COMMENT '商品价格'")
     private Double price;
 
+
+    public GoodsEntity() {
+    }
+
+    public GoodsEntity(String id) {
+        super(id);
+    }
 
     /**
      * 获取商品名称

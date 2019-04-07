@@ -11,10 +11,18 @@ import java.util.Date;
 /**
  * 商品
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class GoodsResult extends BasePopulateResult {
+
+    @ApiModelProperty(value = "商品名称", example = "闲趣清闲薄脆饼干")
+    @JsonProperty("name")
+    private String name;
+
+    @ApiModelProperty(value = "商品描述", example = "清闲不腻，松脆松化")
+    @JsonProperty("description")
+    private String description;
 
     @ApiModelProperty(value = "商品价格", example = "12.5")
     @JsonProperty("price")
@@ -28,22 +36,50 @@ public class GoodsResult extends BasePopulateResult {
     @JsonProperty("create_time")
     private Long createTime;
 
-    @ApiModelProperty(value = "商品描述", example = "清闲不腻，松脆松化")
-    @JsonProperty("description")
-    private String description;
-
     @ApiModelProperty(value = "是否逻辑删除", example = "false")
     @JsonProperty("is_delete")
     private Boolean isDelete;
-
-    @ApiModelProperty(value = "商品名称", example = "闲趣清闲薄脆饼干")
-    @JsonProperty("name")
-    private String name;
 
     @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @JsonProperty("id")
     private String id;
 
+
+    /**
+     * 获取商品名称
+     *
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * 设置商品名称
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * 获取商品描述
+     *
+     * @return
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * 设置商品描述
+     *
+     * @param description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     /**
      * 获取商品价格
@@ -100,24 +136,6 @@ public class GoodsResult extends BasePopulateResult {
     }
 
     /**
-     * 获取商品描述
-     *
-     * @return
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 设置商品描述
-     *
-     * @param description
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
      * 获取是否逻辑删除
      *
      * @return
@@ -133,24 +151,6 @@ public class GoodsResult extends BasePopulateResult {
      */
     public void setIsDelete(Boolean isDelete) {
         this.isDelete = isDelete;
-    }
-
-    /**
-     * 获取商品名称
-     *
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 设置商品名称
-     *
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
     /**

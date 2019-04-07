@@ -17,43 +17,43 @@ import java.util.Date;
 /**
  * 创建商品
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
-
-    @ApiModelProperty(value = "商品价格", example = "12.5")
-    @JsonProperty("price")
-    @NotNull
-    private Double price;
-
-    @ApiModelProperty(value = "商品描述", example = "清闲不腻，松脆松化")
-    @JsonProperty("description")
-    @Length(max = 64)
-    private String description;
 
     @ApiModelProperty(value = "商品名称", example = "闲趣清闲薄脆饼干")
     @JsonProperty("name")
     @Length(max = 16)
     private String name;
 
+    @ApiModelProperty(value = "商品描述", example = "清闲不腻，松脆松化")
+    @JsonProperty("description")
+    @Length(max = 64)
+    private String description;
+
+    @ApiModelProperty(value = "商品价格", example = "12.5")
+    @JsonProperty("price")
+    @NotNull
+    private Double price;
+
 
     /**
-     * 获取商品价格
+     * 获取商品名称
      *
      * @return
      */
-    public Double getPrice() {
-        return price;
+    public String getName() {
+        return name;
     }
 
     /**
-     * 设置商品价格
+     * 设置商品名称
      *
-     * @param price
+     * @param name
      */
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -75,21 +75,21 @@ public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
     }
 
     /**
-     * 获取商品名称
+     * 获取商品价格
      *
      * @return
      */
-    public String getName() {
-        return name;
+    public Double getPrice() {
+        return price;
     }
 
     /**
-     * 设置商品名称
+     * 设置商品价格
      *
-     * @param name
+     * @param price
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
 }

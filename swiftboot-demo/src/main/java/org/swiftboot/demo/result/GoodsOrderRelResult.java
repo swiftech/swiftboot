@@ -11,18 +11,22 @@ import java.util.Date;
 /**
  * 商品订单关系
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class GoodsOrderRelResult extends BasePopulateResult {
 
+    @ApiModelProperty(value = "商品ID", example = "e8af5ea376fde35fb2c504633f55b128")
+    @JsonProperty("goods_id")
+    private String goodsId;
+
+    @ApiModelProperty(value = "订单ID", example = "527d36e654f9eaea6a9b46380d253fc9")
+    @JsonProperty("order_id")
+    private String orderId;
+
     @ApiModelProperty(value = "修改时间", example = "1545355038524")
     @JsonProperty("update_time")
     private Long updateTime;
-
-    @ApiModelProperty(value = "商品ID", example = "7f46aa44e0724ef9af0319a0769bd091")
-    @JsonProperty("demo_goods_id")
-    private String demoGoodsId;
 
     @ApiModelProperty(value = "创建时间", example = "1545355038524")
     @JsonProperty("create_time")
@@ -36,10 +40,42 @@ public class GoodsOrderRelResult extends BasePopulateResult {
     @JsonProperty("id")
     private String id;
 
-    @ApiModelProperty(value = "订单ID", example = "ea8e6cc03954c56948680b38d9768666")
-    @JsonProperty("demo_order_id")
-    private String demoOrderId;
 
+    /**
+     * 获取商品ID
+     *
+     * @return
+     */
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    /**
+     * 设置商品ID
+     *
+     * @param goodsId
+     */
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    /**
+     * 获取订单ID
+     *
+     * @return
+     */
+    public String getOrderId() {
+        return orderId;
+    }
+
+    /**
+     * 设置订单ID
+     *
+     * @param orderId
+     */
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     /**
      * 获取修改时间
@@ -57,24 +93,6 @@ public class GoodsOrderRelResult extends BasePopulateResult {
      */
     public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
-    }
-
-    /**
-     * 获取商品ID
-     *
-     * @return
-     */
-    public String getDemoGoodsId() {
-        return demoGoodsId;
-    }
-
-    /**
-     * 设置商品ID
-     *
-     * @param demoGoodsId
-     */
-    public void setDemoGoodsId(String demoGoodsId) {
-        this.demoGoodsId = demoGoodsId;
     }
 
     /**
@@ -129,24 +147,6 @@ public class GoodsOrderRelResult extends BasePopulateResult {
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * 获取订单ID
-     *
-     * @return
-     */
-    public String getDemoOrderId() {
-        return demoOrderId;
-    }
-
-    /**
-     * 设置订单ID
-     *
-     * @param demoOrderId
-     */
-    public void setDemoOrderId(String demoOrderId) {
-        this.demoOrderId = demoOrderId;
     }
 
 

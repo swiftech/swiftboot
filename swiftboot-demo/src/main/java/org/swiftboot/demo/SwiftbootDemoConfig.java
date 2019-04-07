@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  **/
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"org.swiftboot.web"})
+@ComponentScan(basePackages = {"org.swiftboot.demo"})
 public class SwiftbootDemoConfig {
 
 }

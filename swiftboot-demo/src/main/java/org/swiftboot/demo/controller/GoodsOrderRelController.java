@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 /**
  * 商品订单关系
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Api(tags = {"GoodsOrderRel商品订单关系"})
 @Controller
@@ -113,7 +113,7 @@ public class GoodsOrderRelController {
         return new HttpResponse<>();
     }
 
-    @ApiOperation(notes = "逻辑删除商品订单关系，按照商品ID和订单ID", value = "逻辑删除商品订单关系关系，按照商品ID和订单ID")
+    @ApiOperation(notes = "逻辑删除商品订单关系，按照商品ID和订单ID", value = "逻辑删除商品订单关系关系")
     @RequestMapping(value = "delete/byfk", method = RequestMethod.DELETE)
     @ConvertValidateResult
     public
@@ -152,7 +152,7 @@ public class GoodsOrderRelController {
         return new HttpResponse<>();
     }
 
-    @ApiOperation(notes = "永久删除商品订单关系关系，按照商品ID和订单ID", value = "永久删除商品订单关系关系，按照商品ID和订单ID")
+    @ApiOperation(notes = "永久删除商品订单关系关系，按照商品ID和订单ID", value = "永久删除商品订单关系关系")
     @RequestMapping(value = "purge/byfk", method = RequestMethod.DELETE)
     @ConvertValidateResult
     public

@@ -24,7 +24,7 @@ import java.util.Optional;
 /**
  * 商品服务接口实现
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Service
 public class GoodsServiceImpl implements GoodsService{
@@ -58,7 +58,7 @@ public class GoodsServiceImpl implements GoodsService{
     public GoodsSaveResult saveGoods(GoodsSaveCommand cmd) {
         GoodsSaveResult ret = new GoodsSaveResult();
         Optional<GoodsEntity> optEntity = goodsDao.findById(cmd.getId());
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             GoodsEntity p = optEntity.get();
             p = cmd.populateEntity(p);
             GoodsEntity saved = goodsDao.save(p);
@@ -138,7 +138,7 @@ public class GoodsServiceImpl implements GoodsService{
     public GoodsResult queryGoods(String goodsId) {
         GoodsResult ret = null;
         Optional<GoodsEntity> optEntity = goodsDao.findById(goodsId);
-        if (optEntity.isPresent()) {
+        if (optEntity != null && optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
             ret = GoodsResult.createResult(GoodsResult.class, optEntity.get());
         }

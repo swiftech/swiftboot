@@ -10,27 +10,9 @@ import java.util.List;
 /**
  * 商品数据访问接口
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 public interface GoodsDao extends PagingAndSortingRepository<GoodsEntity, String>, GoodsCustomizeDao {
-
-    /**
-     * 按照商品价格查询商品
-     *
-     * @param price 商品价格
-     * @return
-     */
-    List<GoodsEntity> findByPrice(Double price);
-
-
-    /**
-     * 按照商品描述查询商品
-     *
-     * @param description 商品描述
-     * @return
-     */
-    List<GoodsEntity> findByDescription(String description);
-
 
     /**
      * 按照商品名称查询商品
@@ -40,6 +22,45 @@ public interface GoodsDao extends PagingAndSortingRepository<GoodsEntity, String
      */
     List<GoodsEntity> findByName(String name);
 
+    /**
+     * 按照商品名称查询未逻辑删除的商品
+     *
+     * @param name 商品名称
+     * @return
+     */
+    List<GoodsEntity> findByIsDeleteFalseAndName(String name);
+
+    /**
+     * 按照商品描述查询商品
+     *
+     * @param description 商品描述
+     * @return
+     */
+    List<GoodsEntity> findByDescription(String description);
+
+    /**
+     * 按照商品描述查询未逻辑删除的商品
+     *
+     * @param description 商品描述
+     * @return
+     */
+    List<GoodsEntity> findByIsDeleteFalseAndDescription(String description);
+
+    /**
+     * 按照商品价格查询商品
+     *
+     * @param price 商品价格
+     * @return
+     */
+    List<GoodsEntity> findByPrice(Double price);
+
+    /**
+     * 按照商品价格查询未逻辑删除的商品
+     *
+     * @param price 商品价格
+     * @return
+     */
+    List<GoodsEntity> findByIsDeleteFalseAndPrice(Double price);
 
 
 

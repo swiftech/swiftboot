@@ -17,20 +17,10 @@ import java.util.Date;
 /**
  * 创建订单
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {
-
-    @ApiModelProperty(value = "发货地址", example = "极乐世界102号")
-    @JsonProperty("address")
-    @Length(max = 64)
-    private String address;
-
-    @ApiModelProperty(value = "商品总数", example = "5")
-    @JsonProperty("total_count")
-    @NotNull
-    private Integer totalCount;
 
     @ApiModelProperty(value = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")
@@ -42,42 +32,16 @@ public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {
     @Length(max = 64)
     private String description;
 
+    @ApiModelProperty(value = "商品总数", example = "5")
+    @JsonProperty("total_count")
+    @NotNull
+    private Integer totalCount;
 
-    /**
-     * 获取发货地址
-     *
-     * @return
-     */
-    public String getAddress() {
-        return address;
-    }
+    @ApiModelProperty(value = "发货地址", example = "极乐世界102号")
+    @JsonProperty("address")
+    @Length(max = 64)
+    private String address;
 
-    /**
-     * 设置发货地址
-     *
-     * @param address
-     */
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    /**
-     * 获取商品总数
-     *
-     * @return
-     */
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    /**
-     * 设置商品总数
-     *
-     * @param totalCount
-     */
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
 
     /**
      * 获取订单编号
@@ -113,6 +77,42 @@ public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * 获取商品总数
+     *
+     * @return
+     */
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    /**
+     * 设置商品总数
+     *
+     * @param totalCount
+     */
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    /**
+     * 获取发货地址
+     *
+     * @return
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * 设置发货地址
+     *
+     * @param address
+     */
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }

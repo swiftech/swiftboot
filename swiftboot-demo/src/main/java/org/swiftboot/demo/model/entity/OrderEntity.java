@@ -3,8 +3,6 @@ package org.swiftboot.demo.model.entity;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.web.annotation.PropertyDescription;
 import org.swiftboot.web.model.entity.BaseEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +14,7 @@ import java.util.Date;
 /**
  * 订单
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Description("订单")
 @Entity
@@ -51,6 +49,13 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "ADDRESS", length = 64, columnDefinition = "VARCHAR(64) COMMENT '发货地址'")
     private String address;
 
+
+    public OrderEntity() {
+    }
+
+    public OrderEntity(String id) {
+        super(id);
+    }
 
     /**
      * 获取订单编号

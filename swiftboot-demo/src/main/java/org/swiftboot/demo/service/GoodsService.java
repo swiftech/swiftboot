@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 商品服务接口
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Transactional
 public interface GoodsService {

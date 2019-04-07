@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 查询订单列表
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @ApiModel
 public class OrderListResult extends BaseListableResult<OrderResult, OrderEntity> {

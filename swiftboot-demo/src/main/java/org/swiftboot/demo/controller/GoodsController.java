@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 /**
  * 商品
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Api(tags = {"Goods商品"})
 @Controller

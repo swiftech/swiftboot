@@ -3,8 +3,6 @@ package org.swiftboot.demo.model.entity;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.web.annotation.PropertyDescription;
 import org.swiftboot.web.model.entity.BaseEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +14,7 @@ import java.util.Date;
 /**
  * 商品订单关系
  *
- * @author swiftech 2019-01-15
+ * @author swiftech 2019-04-07
  **/
 @Description("商品订单关系")
 @Entity
@@ -26,44 +24,51 @@ public class GoodsOrderRelEntity extends BaseEntity {
     /**
      * 商品ID 
      */
-    @PropertyDescription(value = "商品ID", example = "7f46aa44e0724ef9af0319a0769bd091")
+    @PropertyDescription(value = "商品ID", example = "e8af5ea376fde35fb2c504633f55b128")
     @Column(name = "DEMO_GOODS_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '商品ID'")
-    private String demoGoodsId;
+    private String goodsId;
 
     /**
      * 订单ID 
      */
-    @PropertyDescription(value = "订单ID", example = "ea8e6cc03954c56948680b38d9768666")
+    @PropertyDescription(value = "订单ID", example = "527d36e654f9eaea6a9b46380d253fc9")
     @Column(name = "DEMO_ORDER_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '订单ID'")
-    private String demoOrderId;
+    private String orderId;
 
+
+    public GoodsOrderRelEntity() {
+    }
+
+    public GoodsOrderRelEntity(String id) {
+        super(id);
+    }
 
     /**
      * 获取商品ID
      */
-    public String getDemoGoodsId() {
-        return demoGoodsId;
+    public String getGoodsId() {
+        return goodsId;
     }
 
     /**
      * 设置商品ID
      */
-    public void setDemoGoodsId(String demoGoodsId) {
-        this.demoGoodsId = demoGoodsId;
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
     }
 
     /**
      * 获取订单ID
      */
-    public String getDemoOrderId() {
-        return demoOrderId;
+    public String getOrderId() {
+        return orderId;
     }
 
     /**
      * 设置订单ID
      */
-    public void setDemoOrderId(String demoOrderId) {
-        this.demoOrderId = demoOrderId;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
 
