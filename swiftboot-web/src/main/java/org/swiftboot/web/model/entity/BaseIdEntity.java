@@ -19,6 +19,13 @@ public abstract class BaseIdEntity implements IdPojo {
     @Column(name = "ID", columnDefinition = "char(32) COMMENT '唯一标识'")
     private String id;
 
+    public BaseIdEntity() {
+    }
+
+    public BaseIdEntity(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

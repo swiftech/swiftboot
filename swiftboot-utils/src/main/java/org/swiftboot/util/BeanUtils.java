@@ -96,26 +96,6 @@ public class BeanUtils {
         return ret;
     }
 
-//    /**
-//     * 获取除了 annoClass 指定的注解修饰之外的 {@link Field} 集合
-//     *
-//     * @param clazz
-//     * @param annoClass
-//     * @return
-//     */
-//    public static Collection<Field> getFieldsIgnore(Class clazz, Class<Annotation> annoClass) {
-//        Set<Field> ret = new HashSet<>();
-//        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
-//            for (Field declaredField : superClass.getDeclaredFields()) {
-//                Annotation annotation = declaredField.getAnnotation(annoClass);
-//                if (annotation == null) {
-//                    ret.add(declaredField);
-//                }
-//            }
-//        }
-//        return ret;
-//    }
-
     /**
      * 获取除了 annoClasses 指定的注解修饰之外的 {@link Field} 集合
      *

@@ -21,8 +21,8 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class HttpResponse<T extends Object> implements Serializable {
 
-    @ApiModelProperty(value = "业务错误代码，长度4个字节", required = true, example = "1000")
-    protected String code = ErrorCodeSupport.CODE_OK; // Default success code
+    @ApiModelProperty(value = "业务错误代码，长度4个字节的数字", required = true, example = "1000")
+    protected String code = ErrorCodeSupport.CODE_OK;
 
     @ApiModelProperty(value = "错误代码对应的错误信息", required = false, example = "OK")
     protected String msg = ErrorCodeSupport.getErrorMessage(ErrorCodeSupport.CODE_OK);

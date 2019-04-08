@@ -28,6 +28,11 @@ public abstract class BaseEntity extends BaseIdEntity implements Persistent {
         this.createTime = System.currentTimeMillis();
     }
 
+    public BaseEntity(String id) {
+        super(id);
+        this.createTime = System.currentTimeMillis();
+    }
+
     @Override
     public Long getCreateTime() {
         return createTime;

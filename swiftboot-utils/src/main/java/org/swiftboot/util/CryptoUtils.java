@@ -10,7 +10,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class CryptoUtils {
 
     /**
-     * 加盐 MD5
+     * 加盐 MD5(16进制表示）
      *
      * @param src
      * @param salt
@@ -21,7 +21,7 @@ public class CryptoUtils {
     }
 
     /**
-     * MD5
+     * 16进制表示的 MD5
      *
      * @param src
      * @return
