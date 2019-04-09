@@ -22,3 +22,10 @@ common:
     validation:
       result:
         json: true
+
+swiftboot:
+  web:
+    model:
+      autoGenerateId: false
+    validation:
+      resultInJson: false

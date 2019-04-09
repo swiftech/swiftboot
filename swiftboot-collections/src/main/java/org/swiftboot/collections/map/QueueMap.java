@@ -1,4 +1,4 @@
-package org.swiftboot.collections;
+package org.swiftboot.collections.map;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;

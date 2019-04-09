@@ -27,7 +27,7 @@ import java.util.Optional;
  * @author swiftech 2019-04-07
  **/
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
@@ -170,7 +170,7 @@ public class OrderServiceImpl implements OrderService{
     /**
      * 分页查询订单
      *
-     * @param page 页数，从0开始
+     * @param page     页数，从0开始
      * @param pageSize 页大小
      * @return
      */

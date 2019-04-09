@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.swiftboot.web.SwiftBootConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ValidationResult;
 import org.swiftboot.web.validate.ValidationResult.InputError;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 
 /**
@@ -25,9 +27,11 @@ public class ValidationExceptionProcessor {
 
     private static Logger log = LoggerFactory.getLogger(ValidationExceptionProcessor.class);
 
-    @Value("${common.web.validation.result.json:true}")
-    boolean isValidationResultJson = true;
+//    @Value("${common.web.validation.result.json:true}")
+//    boolean isValidationResultJson = true;
 
+    @Resource
+    SwiftBootConfigBean swiftBootConfigBean;
 
     /**
      * 处理验证异常（ControllerAdvise 处理异常可能先于 @Aspect 执行，所以此处加上异常处理）
@@ -45,7 +49,7 @@ public class ValidationExceptionProcessor {
         BindingResult bindingResult = e.getBindingResult();
         if (bindingResult.hasErrors()) {
             ValidationResult validationResult = ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
-            if (isValidationResultJson) {
+            if (swiftBootConfigBean.getValidation().isResultInJson()) {
                 return new HttpResponse<>(ErrorCodeSupport.CODE_PARAMS_ERROR, validationResult);
             }
             else {
@@ -74,7 +78,7 @@ public class ValidationExceptionProcessor {
     public HttpResponse<ValidationResult> onValidationException(NativeWebRequest request, ValidationException e) {
         log.debug("onValidationException...");
         log.error(e.getMessage(), e);
-        if (isValidationResultJson) {
+        if (swiftBootConfigBean.getValidation().isResultInJson()) {
             return new HttpResponse<>(ErrorCodeSupport.CODE_PARAMS_ERROR, e.getValidationResult());
         }
         else {

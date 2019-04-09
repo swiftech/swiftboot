@@ -43,6 +43,7 @@ public class CollectionUtils {
 
     /**
      * 集合中是否包含指定类型
+     *
      * @param collection
      * @param clazz
      * @return
@@ -61,6 +62,7 @@ public class CollectionUtils {
 
     /**
      * 获取数组中第一个类型匹配的元素
+     *
      * @param collection
      * @param clazz
      * @return
@@ -79,6 +81,7 @@ public class CollectionUtils {
 
     /**
      * 获取数组中第一个类型匹配的元素
+     *
      * @param collection
      * @param clazz
      * @return

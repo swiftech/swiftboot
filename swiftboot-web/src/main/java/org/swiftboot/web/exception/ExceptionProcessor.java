@@ -2,7 +2,6 @@ package org.swiftboot.web.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,9 +30,6 @@ import org.swiftboot.web.result.HttpResponse;
 public class ExceptionProcessor {
 
     private static Logger log = LoggerFactory.getLogger(ExceptionProcessor.class);
-
-    @Value("${common.web.validation.result.json:true}")
-    boolean isValidationResultJson = true;
 
     /**
      * 应用到所有 @RequestMapping 注解的方法,在其抛出 ErrMessageException 的时候执行

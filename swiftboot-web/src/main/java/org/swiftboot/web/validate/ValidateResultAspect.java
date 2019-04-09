@@ -42,7 +42,8 @@ public class ValidateResultAspect {
             log.info(bindingResult.getTarget().toString());
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             if (!allErrors.isEmpty()) {
-                ValidationResult validationResult = ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
+                ValidationResult validationResult =
+                        ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
                 throw new ValidationException("参数验证不通过", validationResult);
             }
         }

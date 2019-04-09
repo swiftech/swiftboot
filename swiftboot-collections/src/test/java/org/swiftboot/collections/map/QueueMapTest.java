@@ -1,4 +1,4 @@
-package org.swiftboot.collections;
+package org.swiftboot.collections.map;
 
 import java.util.Map;
 
