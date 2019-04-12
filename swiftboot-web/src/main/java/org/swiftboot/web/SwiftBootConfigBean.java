@@ -11,9 +11,15 @@ import org.swiftboot.web.config.ValidationResultConfigBean;
 @ConfigurationProperties("swiftboot.web")
 public class SwiftBootConfigBean {
 
+    /**
+     * Model 配置
+     */
     @NestedConfigurationProperty
     private ModelConfigBean model;
 
+    /**
+     * 验证配置
+     */
     @NestedConfigurationProperty
     private ValidationResultConfigBean validation;
 

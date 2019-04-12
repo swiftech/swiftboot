@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.web.model.entity.BaseEntity;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+
 /**
  * 保存实体类之前设置更新时间（UPDATE_TIME）
  *
@@ -19,12 +22,16 @@ public class UpdateTimeAspect {
 
     private Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
 
+    @Resource
+    EntityManager entityManager;
+
     @Pointcut(value = "execution(public * org.springframework.data.repository.CrudRepository+.save*(..))")
     public void pointcut() {
     }
 
     @Before(value = "pointcut()")
     public Object before(JoinPoint joinPoint) {
+        log.debug(this.getClass().getSimpleName() + " before()");
         // 检测前置条件
         Object[] args = joinPoint.getArgs();
         if (args == null || args.length == 0) {
@@ -34,14 +41,25 @@ public class UpdateTimeAspect {
         for (Object arg : args) {
             if (arg instanceof BaseEntity) {
                 BaseEntity baseEntity = (BaseEntity) arg;
-                if (StringUtils.isNotBlank(baseEntity.getId())) {
-                    baseEntity.setUpdateTime(System.currentTimeMillis());
+                tryToSetUpdateTime(baseEntity);
+            }
+            else if(arg instanceof Iterable) {
+                for (Object baseEntity : ((Iterable) arg)) {
+                    if (baseEntity instanceof BaseEntity) {
+                        tryToSetUpdateTime((BaseEntity) baseEntity);
+                    }
                 }
             }
             else {
-                log.warn("不是继承自 BaseEntity 的实体类: " + arg);
+                log.debug("略过不处理: " + arg);
             }
         }
         return null;
+    }
+
+    private void tryToSetUpdateTime(BaseEntity baseEntity) {
+        if (StringUtils.isNotBlank(baseEntity.getId()) && entityManager.contains(baseEntity)) {
+            baseEntity.setUpdateTime(System.currentTimeMillis());
+        }
     }
 }

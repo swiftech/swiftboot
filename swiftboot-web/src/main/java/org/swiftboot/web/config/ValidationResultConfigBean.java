@@ -8,7 +8,7 @@ public class ValidationResultConfigBean {
     /**
      * 是否以 JSON 格式返回验证结果，默认为 true
      */
-    boolean resultInJson = true;
+    private boolean resultInJson = true;
 
     public boolean isResultInJson() {
         return resultInJson;

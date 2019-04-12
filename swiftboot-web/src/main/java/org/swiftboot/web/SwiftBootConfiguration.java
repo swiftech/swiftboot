@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.ConfigurableWebEnvironment;
 
 /**
+ * SwiftBoot 配置类
+ *
  * @author Allen 2019-04-09
  **/
 @Configuration
@@ -17,8 +19,4 @@ public class SwiftBootConfiguration {
         return new SwiftBootConfigBean();
     }
 
-//    @Bean
-//    ValidationResultConfigBean validationResultConfigBean(ConfigurableWebEnvironment env) {
-//        return new ValidationResultConfigBean();
-//    }
 }
