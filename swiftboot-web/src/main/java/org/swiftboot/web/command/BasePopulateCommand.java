@@ -16,9 +16,7 @@ import java.util.Collection;
 
 /**
  * 提供将参数填入实体类的方法 populateEntity() 和创建 Command 类所对应的实体类的方法 createEntity()
- * 要求实体类 E 不能有带参数的构造函数。
- * TODO Nested Properties的处理（忽略？）
- * TODO 用 annotation 实现 converter 或者 formatter
+ * 要求实体类 E 必须有无参数的构造函数。
  *
  * @param <P> 对应的实体类
  * @author swiftech
@@ -53,7 +51,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
 
         Class<P> entityClass = (Class<P>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
         if (entityClass == null) {
-            throw new RuntimeException("反射错误");
+            throw new RuntimeException("反射错误，无法获取实体类的类型(Class)");
         }
         System.out.println(entityClass);
 
@@ -64,7 +62,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             ret.setCreateTime(System.currentTimeMillis());
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("创建实体类错误");
+            throw new RuntimeException("实例化实体类失败: " + entityClass.getClass());
         }
         this.doPopulate(entityClass, ret);
         return ret;

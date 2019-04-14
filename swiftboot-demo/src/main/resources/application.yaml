@@ -17,15 +17,14 @@ logging:
   level:
     root: INFO
     org.swiftboot: DEBUG
-common:
-  web:
-    validation:
-      result:
-        json: true
-
+#common:
+#  web:
+#    validation:
+#      result:
+#        json: true
 swiftboot:
   web:
     model:
-      autoGenerateId: false
+      autoGenerateId: true
     validation:
       resultInJson: false

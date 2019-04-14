@@ -164,7 +164,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
     public GoodsOrderRelResult queryGoodsOrderRel(String goodsOrderRelId) {
         GoodsOrderRelResult ret = null;
         Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(goodsOrderRelId);
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
             ret = GoodsOrderRelResult.createResult(GoodsOrderRelResult.class, optEntity.get());
         }

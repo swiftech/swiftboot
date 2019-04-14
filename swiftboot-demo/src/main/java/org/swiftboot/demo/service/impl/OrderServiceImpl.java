@@ -138,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResult queryOrder(String orderId) {
         OrderResult ret = null;
         Optional<OrderEntity> optEntity = orderDao.findById(orderId);
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
             ret = OrderResult.createResult(OrderResult.class, optEntity.get());
         }

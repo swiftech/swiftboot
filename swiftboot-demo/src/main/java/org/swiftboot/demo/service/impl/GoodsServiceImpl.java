@@ -1,5 +1,11 @@
 package org.swiftboot.demo.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 import org.swiftboot.demo.controller.command.GoodsCreateCommand;
 import org.swiftboot.demo.controller.command.GoodsSaveCommand;
 import org.swiftboot.demo.model.dao.GoodsDao;
@@ -10,12 +16,6 @@ import org.swiftboot.demo.result.GoodsResult;
 import org.swiftboot.demo.result.GoodsSaveResult;
 import org.swiftboot.demo.service.GoodsService;
 import org.swiftboot.web.command.IdListCommand;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -138,7 +138,7 @@ public class GoodsServiceImpl implements GoodsService{
     public GoodsResult queryGoods(String goodsId) {
         GoodsResult ret = null;
         Optional<GoodsEntity> optEntity = goodsDao.findById(goodsId);
-        if (optEntity != null && optEntity.isPresent()) {
+        if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
             ret = GoodsResult.createResult(GoodsResult.class, optEntity.get());
         }
