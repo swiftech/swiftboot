@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.web.SwiftBootConfigBean;
-import org.swiftboot.web.model.entity.BaseEntity;
 import org.swiftboot.web.model.entity.BaseIdEntity;
 import org.swiftboot.web.model.id.IdGenerator;
 
@@ -16,7 +15,7 @@ import javax.annotation.Resource;
 
 /**
  * 拦截 Spring Data JPA 的保存动作，设置实体类的 ID
- *
+ * 如果实体类 ID 已经存在，则不做处理
  * @author swiftech
  **/
 @Aspect
@@ -56,9 +55,9 @@ public class EntityIdAspect {
                 this.tryToSetID(idEntity);
             }
             else if (arg instanceof Iterable) {
-                for (Object baseEntity : ((Iterable) arg)) {
-                    if (baseEntity instanceof BaseEntity) {
-                        this.tryToSetID((BaseIdEntity) baseEntity);
+                for (Object idEntity : ((Iterable) arg)) {
+                    if (idEntity instanceof BaseIdEntity) {
+                        this.tryToSetID((BaseIdEntity) idEntity);
                     }
                 }
             }

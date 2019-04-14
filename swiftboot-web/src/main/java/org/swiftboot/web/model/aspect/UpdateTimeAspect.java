@@ -41,12 +41,12 @@ public class UpdateTimeAspect {
         for (Object arg : args) {
             if (arg instanceof BaseEntity) {
                 BaseEntity baseEntity = (BaseEntity) arg;
-                tryToSetUpdateTime(baseEntity);
+                this.tryToSetUpdateTime(baseEntity);
             }
             else if(arg instanceof Iterable) {
                 for (Object baseEntity : ((Iterable) arg)) {
                     if (baseEntity instanceof BaseEntity) {
-                        tryToSetUpdateTime((BaseEntity) baseEntity);
+                        this.tryToSetUpdateTime((BaseEntity) baseEntity);
                     }
                 }
             }
