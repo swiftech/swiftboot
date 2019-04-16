@@ -35,14 +35,14 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
         if (genericSuperclass == null) {
             throw new RuntimeException("反射错误");
         }
-        System.out.println(genericSuperclass);
+//        System.out.println(genericSuperclass);
         if (!(genericSuperclass instanceof ParameterizedType)) {
             // 如果存在集成，则向上取一级
             genericSuperclass = ((Class)genericSuperclass).getGenericSuperclass();
             if (genericSuperclass == null) {
                 throw new RuntimeException("反射错误");
             }
-            System.out.println(genericSuperclass);
+//            System.out.println(genericSuperclass);
             if (!(genericSuperclass instanceof ParameterizedType)) {
                 throw new RuntimeException(
                         String.format("父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", getClass().getGenericSuperclass().getTypeName()));
@@ -53,13 +53,13 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
         if (entityClass == null) {
             throw new RuntimeException("反射错误，无法获取实体类的类型(Class)");
         }
-        System.out.println(entityClass);
+//        System.out.println(entityClass);
 
         try {
             Constructor<P> constructor = entityClass.getConstructor();
             ret = constructor.newInstance();
-            ret.setId(IdUtils.makeUUID());
-            ret.setCreateTime(System.currentTimeMillis());
+//            ret.setId(IdUtils.makeUUID());
+//            ret.setCreateTime(System.currentTimeMillis());
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("实例化实体类失败: " + entityClass.getClass());
