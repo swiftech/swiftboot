@@ -24,6 +24,8 @@ logging:
 #        json: true
 swiftboot:
   web:
+    filter:
+      cors-allow-origin: '*'
     model:
       autoGenerateId: true
     validation:

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.swiftboot.web.filter.CorsFilter;
 import org.swiftboot.web.model.id.EntityIdGenerator;
 import org.swiftboot.web.model.id.IdGenerator;
 
@@ -14,10 +15,15 @@ import org.swiftboot.web.model.id.IdGenerator;
 @EnableWebMvc
 @ComponentScan(basePackages = {
         "org.swiftboot.demo",
-        "org.swiftboot.web.model.aspect",
+//        "org.swiftboot.web.model.aspect",
         "org.swiftboot.web"
 })
 public class SwiftbootDemoConfig {
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter();
+    }
 
     @Bean
     IdGenerator idGenerator() {
