@@ -2,6 +2,7 @@ package org.swiftboot.web;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.swiftboot.web.config.FilterConfigBean;
 import org.swiftboot.web.config.ModelConfigBean;
 import org.swiftboot.web.config.ValidationResultConfigBean;
 
@@ -23,6 +24,17 @@ public class SwiftBootConfigBean {
     @NestedConfigurationProperty
     private ValidationResultConfigBean validation;
 
+    /**
+     * 过滤器配置
+     */
+    @NestedConfigurationProperty
+    private FilterConfigBean filter;
+
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        return new CorsFilter();
+//    }
+
     public ModelConfigBean getModel() {
         return model;
     }
@@ -37,5 +49,13 @@ public class SwiftBootConfigBean {
 
     public void setValidation(ValidationResultConfigBean validation) {
         this.validation = validation;
+    }
+
+    public FilterConfigBean getFilter() {
+        return filter;
+    }
+
+    public void setFilter(FilterConfigBean filter) {
+        this.filter = filter;
     }
 }
