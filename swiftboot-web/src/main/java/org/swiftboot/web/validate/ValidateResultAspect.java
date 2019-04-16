@@ -12,6 +12,7 @@ import org.swiftboot.collections.ArrayUtils;
 import org.swiftboot.web.exception.ValidationException;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -39,7 +40,7 @@ public class ValidateResultAspect {
         Object result = ArrayUtils.getFirstMatch(args, BindingResult.class);
         if (result != null) {
             BindingResult bindingResult = (BindingResult) result;
-            log.info(bindingResult.getTarget().toString());
+            log.info(Objects.requireNonNull(bindingResult.getTarget()).toString());
             List<ObjectError> allErrors = bindingResult.getAllErrors();
             if (!allErrors.isEmpty()) {
                 ValidationResult validationResult =

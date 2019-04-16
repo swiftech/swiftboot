@@ -20,7 +20,7 @@ import javax.persistence.EntityManager;
 @Aspect
 public class UpdateTimeAspect {
 
-    private Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
+    private Logger log = LoggerFactory.getLogger(UpdateTimeAspect.class);
 
     @Resource
     EntityManager entityManager;
@@ -43,7 +43,7 @@ public class UpdateTimeAspect {
                 BaseEntity baseEntity = (BaseEntity) arg;
                 this.tryToSetUpdateTime(baseEntity);
             }
-            else if(arg instanceof Iterable) {
+            else if (arg instanceof Iterable) {
                 for (Object baseEntity : ((Iterable) arg)) {
                     if (baseEntity instanceof BaseEntity) {
                         this.tryToSetUpdateTime((BaseEntity) baseEntity);

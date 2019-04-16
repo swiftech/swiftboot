@@ -1,6 +1,6 @@
 package org.swiftboot.web;
 
-import org.swiftboot.util.SysUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * 判断 Spring Boot 的环境
@@ -16,7 +16,7 @@ public class SpringBootEnv {
     public static boolean isDevMode = true;
 
     static {
-        String profile = SysUtils.getSysParam("spring.profiles.active");
+        String profile = SystemUtils.getEnvironmentVariable("spring.profiles.active", "dev");
         if ("prod".equals(profile)) {
             System.out.println("生产模式");
             isProductionMode = true;

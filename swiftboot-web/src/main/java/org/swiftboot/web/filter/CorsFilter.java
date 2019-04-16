@@ -27,6 +27,10 @@ public class CorsFilter extends OncePerRequestFilter {
     @Value("${http.cors.allow.origin:*}")
     private String corsAllowOrigin = "*";
 
+    //
+//    @Resource
+//    SwiftBootConfigBean swiftBootConfigBean;
+
     // TODO configurable
     private List<String> allowedHeaders = new ArrayList<String>() {
         {
@@ -43,14 +47,17 @@ public class CorsFilter extends OncePerRequestFilter {
     public CorsFilter() {
         log.info("初始化跨域过滤器");
         log.info("Access-Control-Allow-Origin: " + corsAllowOrigin);
+//        log.info("Access-Control-Allow-Origin: " + swiftBootConfigBean.getFilter().getCorsAllowOrigin());
         log.info("Access-Control-Allow-Headers: " + StringUtils.join(allowedHeaders, ","));
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", corsAllowOrigin);
+//        response.setHeader("Access-Control-Allow-Origin", swiftBootConfigBean.getFilter().getCorsAllowOrigin());
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", StringUtils.join(allowedHeaders, ","));
         response.setHeader("Access-Control-Allow-Credentials", "true");
