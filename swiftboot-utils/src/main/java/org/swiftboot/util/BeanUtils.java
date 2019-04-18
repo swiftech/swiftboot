@@ -121,7 +121,7 @@ public class BeanUtils {
     }
 
     /**
-     * 暴力获取对象变量值，忽略private、protected修饰符的限制。
+     * 强制获取对象变量值，忽略 private、protected 修饰符的限制。
      *
      * @param object       对象
      * @param propertyName 属性名称
@@ -129,8 +129,20 @@ public class BeanUtils {
      * @throws NoSuchFieldException 没有该字段时抛出
      */
     public static Object forceGetProperty(Object object, String propertyName) throws NoSuchFieldException {
-
         Field field = getDeclaredField(object, propertyName);
+        return forceGetProperty(object, field);
+    }
+
+    /**
+     * 强制获取对象变量值，忽略 private、protected 修饰符的限制。
+     * @param object    对象
+     * @param field     属性域
+     * @return  属性的值
+     */
+    public static Object forceGetProperty(Object object, Field field) {
+        if (field == null || object == null) {
+            throw new RuntimeException("");
+        }
 
         boolean accessible = field.isAccessible();
         field.setAccessible(true);
@@ -139,15 +151,14 @@ public class BeanUtils {
         try {
             result = field.get(object);
         } catch (IllegalAccessException e) {
-            // logger.info("Can't get {}.{} value", object.getClass().getName(), propertyName);
-            logger.info("Can't get " + object.getClass().getName() + "." + propertyName + " value");
+            throw new RuntimeException("无法获取 Field 值： " + field.getName());
         }
         field.setAccessible(accessible);
         return result;
     }
 
     /**
-     * 暴力设置对象变量值，忽略private、protected修饰符的限制。
+     * 强制设置对象变量值，忽略private、protected修饰符的限制。
      *
      * @param object       对象
      * @param propertyName 属性名称
@@ -163,13 +174,13 @@ public class BeanUtils {
         try {
             field.set(object, newValue);
         } catch (IllegalAccessException e) {
-            logger.info("Can't set " + object.getClass().getName() + "." + propertyName + "");
+            logger.info(String.format("设置值失败： %s=%s", object.getClass().getName(), propertyName));
         }
         field.setAccessible(accessible);
     }
 
     /**
-     * 暴力调用对象函数，忽略private、protected修饰符的限制。
+     * 强制调用对象函数，忽略private、protected修饰符的限制。
      *
      * @param object     对象
      * @param methodName 方法名
