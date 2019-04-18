@@ -15,7 +15,6 @@ import org.swiftboot.web.model.id.IdGenerator;
 @EnableWebMvc
 @ComponentScan(basePackages = {
         "org.swiftboot.demo",
-//        "org.swiftboot.web.model.aspect",
         "org.swiftboot.web"
 })
 public class SwiftbootDemoConfig {

@@ -31,6 +31,7 @@ import javax.annotation.Resource;
 @Api(tags = {"Goods商品"})
 @Controller
 @RequestMapping("/goods")
+@ResponseBody
 public class GoodsController {
 
     private Logger log = LoggerFactory.getLogger(GoodsController.class);
@@ -42,7 +43,6 @@ public class GoodsController {
     @RequestMapping(value = "create", method = RequestMethod.POST)
     @ConvertValidateResult
     public
-    @ResponseBody
     HttpResponse<GoodsCreateResult> goodsCreate(
             @RequestBody @Validated @ApiParam("创建商品参数") GoodsCreateCommand command) {
         log.info("> /goods/create");
@@ -55,7 +55,6 @@ public class GoodsController {
     @RequestMapping(value = "save", method = RequestMethod.POST)
     @ConvertValidateResult
     public
-    @ResponseBody
     HttpResponse<GoodsSaveResult> goodsSave(
             @RequestBody @Validated @ApiParam("保存商品参数") GoodsSaveCommand command) {
         log.info("> /goods/save");
@@ -67,7 +66,6 @@ public class GoodsController {
     @ApiOperation(notes = "查询商品", value = "查询商品")
     @RequestMapping(value = "query", method = RequestMethod.GET)
     public
-    @ResponseBody
     HttpResponse<GoodsResult> goodsQuery(
             @RequestParam("goods_id") String goodsId) {
         log.info("> /goods/query");
@@ -79,7 +77,6 @@ public class GoodsController {
     @ApiOperation(notes = "查询商品列表", value = "查询商品列表")
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public
-    @ResponseBody
     HttpResponse<GoodsListResult> goodsList() {
         log.info("> /goods/list");
         GoodsListResult ret = goodsService.queryGoodsList();
@@ -90,7 +87,6 @@ public class GoodsController {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     @ConvertValidateResult
     public
-    @ResponseBody
     HttpResponse<Void> goodsDelete(
             @RequestBody @Validated @ApiParam("商品ID") IdCommand command) {
         log.info("> /goods/delete");
@@ -103,7 +99,6 @@ public class GoodsController {
     @RequestMapping(value = "delete/list", method = RequestMethod.DELETE)
     @ConvertValidateResult
     public
-    @ResponseBody
     HttpResponse<Void> goodsDeleteList(
             @RequestBody @Validated @ApiParam("商品ID列表") IdListCommand command) {
         log.info("> /goods/delete/list");
@@ -117,7 +112,6 @@ public class GoodsController {
     @RequestMapping(value = "purge", method = RequestMethod.DELETE)
     @ConvertValidateResult
     public
-    @ResponseBody
     HttpResponse<Void> goodsPurge(
             @RequestBody @Validated @ApiParam("商品ID") IdCommand command) {
         log.info("> /goods/purge");
@@ -130,7 +124,6 @@ public class GoodsController {
     @RequestMapping(value = "purge/list", method = RequestMethod.DELETE)
     @ConvertValidateResult
     public
-    @ResponseBody
     HttpResponse<Void> goodsPurgeList(
             @RequestBody @Validated @ApiParam("商品ID列表") IdListCommand command) {
         log.info("> /goods/purge/list");
