@@ -13,10 +13,10 @@ import org.swiftboot.web.model.id.IdGenerator;
  * @author Allen 2019-04-09
  **/
 @Configuration
-@ConditionalOnProperty(value = "swiftboot.web.model.autoGenerateId")
 public class SwiftBootModelConfiguration {
 
     @Bean
+    @ConditionalOnProperty(value = "swiftboot.web.model.autoGenerateId", havingValue = "true")
     EntityIdAspect entityIdAspect() {
         return new EntityIdAspect();
     }

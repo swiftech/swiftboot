@@ -1,11 +1,12 @@
 package org.swiftboot.web.exception;
 
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.swiftboot.web.model.entity.BaseEntity;
+import org.swiftboot.web.model.entity.ChildEntity;
+import org.swiftboot.web.model.entity.ParentEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
-import javax.persistence.Column;
-import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,12 +18,12 @@ public class BasePopulateResultTest {
     @Test
     public void test() {
 
-        BasePopulateResult<TestEntity> result = new TestResult();
+        BasePopulateResult<ParentEntity> result = new TestResult();
 
-        TestEntity entity = new TestEntity();
+        ParentEntity entity = new ParentEntity();
         entity.setName("测试实体类");
-        TestItemEntity entityItem1 = new TestItemEntity();
-        TestItemEntity entityItem2 = new TestItemEntity();
+        ChildEntity entityItem1 = new ChildEntity();
+        ChildEntity entityItem2 = new ChildEntity();
         entityItem1.setName("实体类子项1");
         entityItem2.setName("实体类子项2");
         entity.getItems().add(entityItem1);
@@ -31,50 +32,14 @@ public class BasePopulateResultTest {
         ((TestResult) result).setItems(new HashSet<>());// 初始化空的集合
         result.populateByEntity(entity);
         System.out.println(entity.getName());
+        Assertions.assertFalse(StringUtils.isBlank(entity.getName()));
         for (TestItemResult item : ((TestResult) result).getItems()) {
             System.out.println(item.getName());
-        }
-
-    }
-
-    public static class TestEntity extends BaseEntity {
-        @Column
-        String name;
-
-        @OneToMany
-        Set<TestItemEntity> items = new HashSet<>();
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Set<TestItemEntity> getItems() {
-            return items;
-        }
-
-        public void setItems(Set<TestItemEntity> items) {
-            this.items = items;
+            Assertions.assertFalse(StringUtils.isBlank(item.getName()));
         }
     }
 
-    public static class TestItemEntity extends BaseEntity {
-        @Column
-        String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    public static class TestResult extends BasePopulateResult<TestEntity> {
+    public static class TestResult extends BasePopulateResult<ParentEntity> {
         String name;
 
         Set<TestItemResult> items;
@@ -96,7 +61,7 @@ public class BasePopulateResultTest {
         }
     }
 
-    public static class TestItemResult extends BasePopulateResult<TestItemEntity> {
+    public static class TestItemResult extends BasePopulateResult<ChildEntity> {
         String name;
 
         public String getName() {

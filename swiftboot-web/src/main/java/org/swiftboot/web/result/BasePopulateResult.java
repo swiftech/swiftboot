@@ -49,13 +49,13 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
             constructor = targetClass.getConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException("Result类缺少无参数构造函数");
+            throw new RuntimeException(String.format("%s类缺少无参数构造方法", targetClass.getName()));
         }
         try {
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Result类缺少无参数构造函数");
+            throw new RuntimeException(String.format("%s构造失败，可能缺少无参数构造方法，或者没有继承 BasePopulateResult", targetClass.getName()));
         }
         ret.populateByEntity(entity);
         return ret;

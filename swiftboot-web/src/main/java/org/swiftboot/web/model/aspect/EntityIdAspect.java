@@ -1,17 +1,24 @@
 package org.swiftboot.web.model.aspect;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.SwiftBootConfigBean;
 import org.swiftboot.web.model.entity.BaseIdEntity;
 import org.swiftboot.web.model.id.IdGenerator;
 
 import javax.annotation.Resource;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * 拦截 Spring Data JPA 的保存动作，设置实体类的 ID
@@ -53,12 +60,12 @@ public class EntityIdAspect {
         for (Object arg : args) {
             if (arg instanceof BaseIdEntity) {
                 BaseIdEntity idEntity = (BaseIdEntity) arg;
-                this.tryToSetID(idEntity);
+                this.tryToSetIdAndSubIds(idEntity);
             }
             else if (arg instanceof Iterable) {
                 for (Object idEntity : ((Iterable) arg)) {
                     if (idEntity instanceof BaseIdEntity) {
-                        this.tryToSetID((BaseIdEntity) idEntity);
+                        this.tryToSetIdAndSubIds((BaseIdEntity) idEntity);
                     }
                 }
             }
@@ -69,11 +76,42 @@ public class EntityIdAspect {
         return null;
     }
 
-    private void tryToSetID(BaseIdEntity idEntity) {
-        // ID不存在才生成，
+    /**
+     * 尝试设置 ID 和所有子对象的 ID
+     *
+     * @param idEntity
+     */
+    private void tryToSetIdAndSubIds(BaseIdEntity idEntity) {
+        // ID不存在才生成
         if (StringUtils.isBlank(idEntity.getId())) {
             String id = idGenerator.generate(idEntity);
             idEntity.setId(id);
         }
+
+        tryToSetRelEntities(idEntity, OneToOne.class);
+
+        tryToSetRelEntities(idEntity, OneToMany.class);
     }
+
+    /**
+     * 尝试设置关联实体类的 ID
+     *
+     * @param parentEntity
+     * @param clazz
+     */
+    private void tryToSetRelEntities(BaseIdEntity parentEntity, Class<? extends Annotation> clazz) {
+        List<Field> otoList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), clazz);
+        for (Field oto : otoList) {
+            Object relEntity = BeanUtils.forceGetProperty(parentEntity, oto);
+            if (relEntity instanceof BaseIdEntity) {
+                tryToSetIdAndSubIds((BaseIdEntity) relEntity); // - 递归 -
+            }
+            else if (relEntity instanceof Iterable) {
+                for (Object subEntity : ((Iterable) relEntity)) {
+                    tryToSetIdAndSubIds((BaseIdEntity) subEntity); // - 递归 -
+                }
+            }
+        }
+    }
+
 }
