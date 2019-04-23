@@ -76,12 +76,12 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
     }
 
     /**
-     * 复制所有属性至实体类，如果实体类不存在该属性，则抛出异常
+     * internal share
      *
      * @param entityClass
-     * @param entityInstance
+     * @param entity
      */
-    private void doPopulate(Class<P> entityClass, P entityInstance) {
+    private void doPopulate(Class<P> entityClass, P entity) {
         Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field srcField : allFields) {
             Field targetField = null;
@@ -98,7 +98,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             targetField.setAccessible(true);
             try {
                 Object value = PropertyUtils.getProperty(this, srcField.getName());
-                targetField.set(entityInstance, value);
+                targetField.set(entity, value);
             } catch (Exception e) {
                 throw new RuntimeException(String.format("复制属性失败 %s", srcField.getName()));
             }

@@ -3,6 +3,7 @@ package org.swiftboot.demo.service.impl;
 import org.swiftboot.demo.controller.command.OrderCreateCommand;
 import org.swiftboot.demo.controller.command.OrderSaveCommand;
 import org.swiftboot.demo.model.dao.OrderDao;
+import org.swiftboot.demo.model.entity.OrderDetailEntity;
 import org.swiftboot.demo.model.entity.OrderEntity;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +45,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderCreateResult createOrder(OrderCreateCommand cmd) {
         OrderEntity p = cmd.createEntity();
+        OrderDetailEntity od = new OrderDetailEntity();
+        od.setDescription("订单明细项");
+        p.setDetails(new HashSet<OrderDetailEntity>() {
+            {
+                add(od);
+            }
+        });
         OrderEntity saved = orderDao.save(p);
         log.debug("保存订单: " + saved.getId());
         return new OrderCreateResult(saved.getId());

@@ -22,40 +22,36 @@ import java.util.*;
  *
  * @author swiftech
  **/
-public abstract class BasePopulateResult<E extends Persistent> implements Result{
-
-//    @JsonIgnore
-//    @PopulateIgnore
-//    private Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
+public abstract class BasePopulateResult<E extends Persistent> implements Result {
 
     /**
      * 按照返回值类型创建返回值对象，并从实体类填充返回值
      *
-     * @param targetClass
-     * @param entity
+     * @param resultClass   返回对象类型
+     * @param entity    实体类
      * @param <T>
      * @return
      */
     public static <T extends BasePopulateResult> T createResult(
-            Class<T> targetClass,
+            Class<T> resultClass,
             Persistent entity) {
-        if (targetClass == null || entity == null) {
+        if (resultClass == null || entity == null) {
             throw new IllegalArgumentException("缺少必要的参数");
         }
 
         T ret;
         Constructor<T> constructor;
         try {
-            constructor = targetClass.getConstructor();
+            constructor = resultClass.getConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("%s类缺少无参数构造方法", targetClass.getName()));
+            throw new RuntimeException(String.format("%s类缺少无参数构造方法", resultClass.getName()));
         }
         try {
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("%s构造失败，可能缺少无参数构造方法，或者没有继承 BasePopulateResult", targetClass.getName()));
+            throw new RuntimeException(String.format("%s构造失败，可能缺少无参数构造方法，或者没有继承 BasePopulateResult", resultClass.getName()));
         }
         ret.populateByEntity(entity);
         return ret;
@@ -63,17 +59,19 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
 
     /**
      * 从实体类填充当前返回值对象，如果属性值是其他对象的集合，那么也会自动从实体类中获取对应名字的集合来填充返回值的集合
+     *
      * @param entity
      * @return
      */
     public BasePopulateResult<E> populateByEntity(E entity) {
-        return populateByEntity(entity, this);
+        return BasePopulateResult.populateByEntity(entity, this);
     }
 
     /**
      * 从实体类填充属性至返回值对象，如果属性值是其他对象的集合，那么也会自动从实体类中获取对应名字的集合来填充返回值的集合
      *
      * @param entity
+     * @param result
      * @return
      */
     public static <E extends Persistent> BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {

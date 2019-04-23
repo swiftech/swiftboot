@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.swiftboot.web.result.BasePopulateResult;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Set;
 
 /**
  * 订单
@@ -48,6 +47,7 @@ public class OrderResult extends BasePopulateResult {
     @JsonProperty("id")
     private String id;
 
+    private Set<OrderDetailResult> details;
 
     /**
      * 获取订单编号
@@ -193,5 +193,11 @@ public class OrderResult extends BasePopulateResult {
         this.id = id;
     }
 
+    public Set<OrderDetailResult> getDetails() {
+        return details;
+    }
 
+    public void setDetails(Set<OrderDetailResult> details) {
+        this.details = details;
+    }
 }

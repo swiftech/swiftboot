@@ -4,12 +4,8 @@ import org.springframework.context.annotation.Description;
 import org.swiftboot.web.annotation.PropertyDescription;
 import org.swiftboot.web.model.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * 订单
@@ -49,6 +45,12 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "ADDRESS", length = 64, columnDefinition = "VARCHAR(64) COMMENT '发货地址'")
     private String address;
 
+    /**
+     * 订单明细列表
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_ID")
+    private Set<OrderDetailEntity> details;
 
     public OrderEntity() {
     }
@@ -113,5 +115,19 @@ public class OrderEntity extends BaseEntity {
         this.address = address;
     }
 
+    /**
+     * 获取订单明细列表
+     * @return
+     */
+    public Set<OrderDetailEntity> getDetails() {
+        return details;
+    }
 
+    /**
+     * 设置订单明细列表
+     * @param details
+     */
+    public void setDetails(Set<OrderDetailEntity> details) {
+        this.details = details;
+    }
 }
