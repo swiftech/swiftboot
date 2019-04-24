@@ -84,6 +84,7 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
 
 
 ##### 控制器 `Controller`
+
 * 所有的控制器接口返回统一定义的响应对象 HttpResponse，包含错误代码、错误消息以及泛型表达的接口返回值。`POST` 接口的所有输入参数对象继承 `HttpCommand` 或者它的子类。
 
   例如一个创建订单的接口如下：
