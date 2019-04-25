@@ -12,6 +12,7 @@ swiftboot:
       # 跨域允许的范围
       cors-allow-origin: '*'
     model:
+      # 是否自动生成实体类的 ID
       autoGenerateId: true
     validation:
       # 是否输出json格式的校验结果，否则直接输出为字符串拼接
