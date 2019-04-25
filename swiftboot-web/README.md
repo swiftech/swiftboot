@@ -1,14 +1,14 @@
 # SwiftBoot-Web
 SwiftBoot 的主模块，开发 Web 应用需要引用。
 
-### 依赖
+## 依赖
 * Servlet >= 3.1.0
 * Spring Framework >= 5.1.5.RELEASE
 * SpringBoot >= 2.1.3.RELEASE
 * Spring Data JPA >= 2.1.5.RELEASE
 
 
-### 特性
+## 特性
 * 开箱即用，用更少的代码完成更多的工作。SwiftBoot 是无侵入性的，你可以只使用其中的一部分功能，也可以随时去掉它或者切换为别的框架。
 * 统一固定的返回值格式:
   ```json
@@ -31,9 +31,9 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 * 自动处理接口参数验证结果，转换为 `JSON` 格式的统一格式；扩展的表单验证器，可验证：手机号，包含大写数字，包含数字，包含特殊符号。
 
 
-### 如何使用
+## 如何使用
 
-##### Model层
+### Model层
 * Dao
 SwiftBoot 使用 `Spring Data JPA` 来实现 Model 层，所有 Dao 接口必须继承 `CrudRepository` 接口或者其子接口
 
@@ -83,7 +83,7 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
   ```
 
 
-##### 控制器 `Controller`
+### 控制器 `Controller`
 
 * 所有的控制器接口返回统一定义的响应对象 HttpResponse，包含错误代码、错误消息以及泛型表达的接口返回值。`POST` 接口的所有输入参数对象继承 `HttpCommand` 或者它的子类。
 
@@ -143,7 +143,8 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
   ```
 
 
-##### Service 层
+### Service 层
+
 Web 开发中最无趣的工作之一就是从接口参数对象中复制每个参数值到 Dao 层的实体类中进行保存，反之亦然。 SwiftBoot 实现了自动化的参数填充，它能够有选择性的将参数值填充到对应的实体类中，也能将实体类中的值填充到返回值对象中（如果实体类关联了其他实体类对象，它也会对应的填充到返回值对象的内嵌对象中去）。
 * 输入参数自动填充实现方法：
   * 输入参数对象继承 `BasePopulateCommand`
@@ -210,7 +211,7 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
 
 
 
-### Maven
+## Maven
 
   ```xml
   <dependency>

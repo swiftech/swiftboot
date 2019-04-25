@@ -17,7 +17,8 @@ import java.util.Objects;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * 将验证结果转换为JSON格式，包含原始的 key 对应 的错误消息
+ * 将验证结果转换为 JSON 格式，包含原始的 key 对应 的错误消息
+ * 在控制器方法有 BindingResult 参数的时候
  *
  * @author swiftech
  */
@@ -32,6 +33,10 @@ public class ValidateResultAspect {
     @Pointcut("@annotation(org.swiftboot.web.validate.ConvertValidateResult)")
     private void convertResult() {
     }
+
+//    @Pointcut("@annotation(org.swiftboot.web.validate.ConvertValidateResult)")
+//    private void convertResult() {
+//    }
 
     @Before("convertResult()")
     public void process(JoinPoint joinPoint) {
