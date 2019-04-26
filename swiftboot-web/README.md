@@ -30,11 +30,23 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   * 是否逻辑删除：IS_DELETE
 * 自动处理接口参数验证结果，转换为 `JSON` 格式的统一格式；扩展的表单验证器，可验证：手机号，包含大写数字，包含数字，包含特殊符号。
 
+## 下载 jar 包：
+
+  Maven: 
+  
+  ```xml
+  <dependency>
+    <groupId>com.github.swiftech</groupId>
+    <artifactId>swiftboot-web</artifactId>
+    <version>1.0.7-SNAPSHOT</version>
+  </dependency>
+  ```
 
 ## 如何使用
 
 ### Model层
 * Dao
+
 SwiftBoot 使用 `Spring Data JPA` 来实现 Model 层，所有 Dao 接口必须继承 `CrudRepository` 接口或者其子接口
 
   ```java
@@ -43,6 +55,7 @@ SwiftBoot 使用 `Spring Data JPA` 来实现 Model 层，所有 Dao 接口必须
   ```
 
 * 实体类
+
 SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity`，`BaseIdEntity` 定义了主键字段 ID，`BaseEntity` 继承 `BaseIdEntity` 并定义了创建时间 CREATE_TIME、更新时间 UPDATE_TIME、是否逻辑删除 IS_DELETE 三个字段
 
   ```java
@@ -58,6 +71,7 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
   ```
 
 * 主键ID
+
 对于实体类的主键 ID 的赋值，你有两种选择：
   * 自行创建 ID 并赋值给实体类，例如：
 
@@ -211,22 +225,3 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
 
 
 
-## Maven
-
-  ```xml
-  <dependency>
-    <groupId>com.github.swiftech</groupId>
-    <artifactId>swiftboot-web</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.swiftech</groupId>
-    <artifactId>swiftboot-utils</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
-  </dependency>
-  <dependency>
-    <groupId>com.github.swiftech</groupId>
-    <artifactId>swiftboot-collections</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
-  </dependency>
-  ```

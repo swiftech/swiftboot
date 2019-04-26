@@ -22,16 +22,6 @@
     <dependencies>
         <dependency>
             <groupId>com.github.swiftech</groupId>
-            <artifactId>swiftboot-utils</artifactId>
-            <version>${swiftboot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.swiftech</groupId>
-            <artifactId>swiftboot-collections</artifactId>
-            <version>${swiftboot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.swiftech</groupId>
             <artifactId>swiftboot-web</artifactId>
             <version>${swiftboot.version}</version>
         </dependency>
