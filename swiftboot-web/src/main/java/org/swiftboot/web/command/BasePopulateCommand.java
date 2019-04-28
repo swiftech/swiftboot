@@ -3,6 +3,7 @@ package org.swiftboot.web.command;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.swiftboot.collections.CollectionUtils;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.model.entity.Persistent;
@@ -35,8 +36,8 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             throw new RuntimeException("反射错误");
         }
         if (!(genericSuperclass instanceof ParameterizedType)) {
-            // 如果存在集成，则向上取一级
-            genericSuperclass = ((Class)genericSuperclass).getGenericSuperclass();
+            // 如果存在继承，则向上取一级
+            genericSuperclass = ((Class) genericSuperclass).getGenericSuperclass();
             if (genericSuperclass == null) {
                 throw new RuntimeException("反射错误");
             }
@@ -84,6 +85,42 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
     private void doPopulate(Class<P> entityClass, P entity) {
         Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field srcField : allFields) {
+            // 处理嵌套
+            if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())) {
+                BasePopulateCommand sub = (BasePopulateCommand) BeanUtils.forceGetProperty(this, srcField);
+                if (sub == null) {
+                    continue;
+                }
+                try {
+                    Persistent relEntity = sub.createEntity();
+                    BeanUtils.forceSetProperty(entity, srcField.getName(), relEntity);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                continue;
+            }
+            else if (Collection.class.isAssignableFrom(srcField.getType())) {
+                Collection items = (Collection) BeanUtils.forceGetProperty(this, srcField);
+                try {
+                    Field targetField = BeanUtils.getDeclaredField(entity, srcField.getName());
+                    System.out.println(targetField.getType());
+                    Collection c = CollectionUtils.constructCollectionByType(targetField.getType());
+                    for (Object item : items) {
+                        if (item instanceof BasePopulateCommand) {
+                            Persistent childEntity = ((BasePopulateCommand) item).createEntity();
+                            c.add(childEntity);
+                        }
+                    }
+                    BeanUtils.forceSetProperty(entity, srcField.getName(), c);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                continue;
+            }
+
+            // 处理当前对象的值域
             Field targetField = null;
             try {
                 targetField = BeanUtils.getDeclaredField(entityClass, srcField.getName());
