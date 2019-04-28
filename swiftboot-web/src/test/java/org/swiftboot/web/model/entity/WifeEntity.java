@@ -6,21 +6,21 @@ import javax.persistence.*;
  * @author Allen 2019-04-17
  **/
 @Entity
-@Table(name = "CHILD_TABLE")
-public class ChildEntity extends BaseEntity {
+@Table(name = "WIFE_TABLE")
+public class WifeEntity extends BaseEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
-    private ParentEntity parent;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "HUSBAND_ID")
+    private HusbandEntity parent;
 
     @Column
     private String name;
 
-    public ParentEntity getParent() {
+    public HusbandEntity getParent() {
         return parent;
     }
 
-    public void setParent(ParentEntity parent) {
+    public void setParent(HusbandEntity parent) {
         this.parent = parent;
     }
 
