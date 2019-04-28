@@ -3,7 +3,7 @@ package org.swiftboot.web.command;
 import org.swiftboot.web.model.entity.ChildEntity;
 
 /**
- * @author Allen 2019-04-28
+ * @author swiftech
  **/
 public class ChildCommand extends BasePopulateCommand<ChildEntity> {
 

@@ -3,7 +3,6 @@ package org.swiftboot.web;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.ConfigurableWebEnvironment;
 
 /**
  * SwiftBoot 配置类
@@ -14,9 +13,15 @@ import org.springframework.web.context.ConfigurableWebEnvironment;
 @EnableConfigurationProperties
 public class SwiftBootConfiguration {
 
+//    @Bean
+//    public SwiftBootConfigBean swiftBootConfigBean(ConfigurableWebEnvironment env) {
+//        return new SwiftBootConfigBean();
+//    }
+
     @Bean
-    public SwiftBootConfigBean swiftBootConfigBean(ConfigurableWebEnvironment env) {
+    public SwiftBootConfigBean swiftBootConfigBean() {
         return new SwiftBootConfigBean();
     }
+
 
 }

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  *
- * @author Allen 2019-04-28
+ * @author swiftech
  **/
 @Configuration
 public class AspectTestConfig {

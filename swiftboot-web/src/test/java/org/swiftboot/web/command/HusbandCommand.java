@@ -1,7 +1,7 @@
 package org.swiftboot.web.command;
 
 /**
- * @author Allen 2019-04-17
+ * @author swiftech
  **/
 public class HusbandCommand extends BasePopulateCommand<org.swiftboot.web.model.entity.HusbandEntity> {
 

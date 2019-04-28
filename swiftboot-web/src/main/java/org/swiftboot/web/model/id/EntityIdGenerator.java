@@ -3,7 +3,7 @@ package org.swiftboot.web.model.id;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.util.IdUtils;
-import org.swiftboot.web.model.entity.BaseIdEntity;
+import org.swiftboot.web.model.entity.IdPojo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author swiftech
  **/
-public class EntityIdGenerator implements IdGenerator<BaseIdEntity> {
+public class EntityIdGenerator implements IdGenerator<IdPojo> {
 
     public static final int MIN_CODE_LEN = 2;
     public static final int MAX_CODE_LEN = 6;
@@ -22,9 +22,9 @@ public class EntityIdGenerator implements IdGenerator<BaseIdEntity> {
     private Map<Class, String> classCodeMapping = new HashMap<>();
 
     @Override
-    public String generate(BaseIdEntity object) {
+    public String generate(IdPojo object) {
         // 自动根据业务对象名称生成业务对象代码，
-        Class<? extends BaseIdEntity> entityClass = object.getClass();
+        Class<? extends IdPojo> entityClass = object.getClass();
         String code = null;
         if (classCodeMapping.containsKey(entityClass)) {
             code = classCodeMapping.get(entityClass);

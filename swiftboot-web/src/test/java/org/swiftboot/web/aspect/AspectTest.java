@@ -2,7 +2,7 @@ package org.swiftboot.web.aspect;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -11,10 +11,10 @@ import javax.annotation.Resource;
 /**
  * Test Aspect in SpringBoot-test
  *
- * @author Allen 2019-04-19
+ * @author swiftech
  **/
 @ExtendWith(SpringExtension.class)
-//@DataJpaTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Import(AspectTestConfig.class)
 public class AspectTest {
 

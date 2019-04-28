@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import org.swiftboot.web.model.entity.OrphanEntity;
 
 /**
- * @author Allen 2019-04-22
+ * @author swiftech
  **/
 @ApiModel
 public class OrphanCommand extends BasePopulateCommand<OrphanEntity> {

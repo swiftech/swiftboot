@@ -5,7 +5,7 @@ import org.swiftboot.web.model.entity.WifeEntity;
 import javax.persistence.*;
 
 /**
- * @author Allen 2019-04-17
+ * @author swiftech
  **/
 public class WifeCommand extends BasePopulateCommand<WifeEntity> {
 

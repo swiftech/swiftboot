@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.SwiftBootConfigBean;
 import org.swiftboot.web.model.entity.BaseIdEntity;
+import org.swiftboot.web.model.entity.IdPojo;
 import org.swiftboot.web.model.id.IdGenerator;
 
 import javax.annotation.Resource;
@@ -35,7 +36,7 @@ public class EntityIdAspect {
     SwiftBootConfigBean swiftBootConfigBean;
 
     @Resource
-    private IdGenerator<BaseIdEntity> idGenerator;
+    private IdGenerator<IdPojo> idGenerator;
 
 
     @Pointcut(value = "execution(public * org.springframework.data.repository.CrudRepository+.save*(..))")
@@ -58,14 +59,14 @@ public class EntityIdAspect {
         }
 
         for (Object arg : args) {
-            if (arg instanceof BaseIdEntity) {
-                BaseIdEntity idEntity = (BaseIdEntity) arg;
+            if (arg instanceof IdPojo) {
+                IdPojo idEntity = (IdPojo) arg;
                 this.tryToSetIdAndSubIds(idEntity);
             }
             else if (arg instanceof Iterable) {
                 for (Object idEntity : ((Iterable) arg)) {
-                    if (idEntity instanceof BaseIdEntity) {
-                        this.tryToSetIdAndSubIds((BaseIdEntity) idEntity);
+                    if (idEntity instanceof IdPojo) {
+                        this.tryToSetIdAndSubIds((IdPojo) idEntity);
                     }
                 }
             }
@@ -81,7 +82,7 @@ public class EntityIdAspect {
      *
      * @param idEntity
      */
-    private void tryToSetIdAndSubIds(BaseIdEntity idEntity) {
+    private void tryToSetIdAndSubIds(IdPojo idEntity) {
         // ID不存在才生成
         if (StringUtils.isBlank(idEntity.getId())) {
             String id = idGenerator.generate(idEntity);
@@ -99,7 +100,7 @@ public class EntityIdAspect {
      * @param parentEntity
      * @param clazz
      */
-    private void tryToSetRelEntities(BaseIdEntity parentEntity, Class<? extends Annotation> clazz) {
+    private void tryToSetRelEntities(IdPojo parentEntity, Class<? extends Annotation> clazz) {
         List<Field> otoList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), clazz);
         for (Field oto : otoList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, oto);

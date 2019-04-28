@@ -12,7 +12,7 @@ import org.swiftboot.web.model.id.IdGenerator;
 /**
  * @author swiftech
  **/
-@Configuration
+//@Configuration
 //@TestConfiguration
 //@EnableWebMvc
 @ComponentScan(basePackages = {

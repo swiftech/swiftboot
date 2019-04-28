@@ -5,7 +5,7 @@ import org.swiftboot.web.model.entity.ParentEntity;
 import java.util.Set;
 
 /**
- * @author Allen 2019-04-28
+ * @author swiftech
  **/
 public class ParentCommand extends BasePopulateCommand<ParentEntity> {
 
