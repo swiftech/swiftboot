@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Allen 2019-04-17
+ * @author swiftech
  **/
 @Entity
 @Table(name = "PARENT_TABLE")

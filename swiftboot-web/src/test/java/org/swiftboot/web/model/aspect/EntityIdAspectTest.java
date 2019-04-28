@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.SwiftBootConfiguration;
-import org.swiftboot.web.SwiftBootModelConfiguration;
 import org.swiftboot.web.model.dao.CustomizedDao;
 import org.swiftboot.web.model.dao.ParentDao;
 import org.swiftboot.web.model.entity.ChildEntity;
@@ -27,11 +25,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 //@DataJpaTest
 @SpringBootTest // 不能用 @DataJpaTest 否则 Aspect 无法生效
-@Import({
-        EntityIdAspectTestConfig.class,
-        SwiftBootConfiguration.class,
-        SwiftBootModelConfiguration.class
-})
+@Import(EntityIdAspectTestConfig.class)
 public class EntityIdAspectTest {
 
 //    @Resource

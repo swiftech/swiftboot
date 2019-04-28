@@ -3,7 +3,7 @@ package org.swiftboot.web.model.entity;
 import javax.persistence.*;
 
 /**
- * @author Allen 2019-04-17
+ * @author swiftech
  **/
 @Entity
 @Table(name = "CHILD_TABLE")

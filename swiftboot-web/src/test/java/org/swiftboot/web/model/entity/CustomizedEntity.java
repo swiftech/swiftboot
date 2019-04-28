@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author Allen 2019-04-22
+ * @author swiftech
  **/
 @Entity
 @Table(name = "CUSTOMIZED_TABLE")

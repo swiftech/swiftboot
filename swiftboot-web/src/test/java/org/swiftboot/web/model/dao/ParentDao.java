@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.swiftboot.web.model.entity.ParentEntity;
 
 /**
- * @author Allen 2019-04-17
+ * @author swiftech
  **/
 @Repository
 public interface ParentDao extends PagingAndSortingRepository<ParentEntity, String> {
