@@ -141,7 +141,7 @@ public class BeanUtils {
      */
     public static Object forceGetProperty(Object object, Field field) {
         if (field == null || object == null) {
-            throw new RuntimeException("");
+            throw new IllegalArgumentException("参数不能为空");
         }
 
         boolean accessible = field.isAccessible();
@@ -151,7 +151,7 @@ public class BeanUtils {
         try {
             result = field.get(object);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("无法获取 Field 值： " + field.getName());
+            throw new RuntimeException(String.format("无法获取名为 %s 的值", field.getName()));
         }
         field.setAccessible(accessible);
         return result;

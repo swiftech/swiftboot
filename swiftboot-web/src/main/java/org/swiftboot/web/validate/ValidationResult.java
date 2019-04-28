@@ -37,7 +37,8 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
                 String fieldDesc;
                 try {
                     ApiModelProperty apiModelAnno =
-                            (ApiModelProperty) AnnotationUtils.getFieldAnnotation(BeanUtils.getDeclaredField(bean, fe.getField()), ApiModelProperty.class);
+                            (ApiModelProperty) AnnotationUtils.getFieldAnnotation(
+                                    BeanUtils.getDeclaredField(bean, fe.getField()), ApiModelProperty.class);
                     if (apiModelAnno == null || StringUtils.isBlank(apiModelAnno.value())) {
                         fieldDesc = k; // 不存在的话退回实用 key 值来标识
                     }

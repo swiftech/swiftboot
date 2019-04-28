@@ -9,7 +9,6 @@ import org.swiftboot.web.model.entity.OrphanEntity;
 @ApiModel
 public class OrphanCommand extends BasePopulateCommand<OrphanEntity> {
 
-
     private String name;
 
     public String getName() {

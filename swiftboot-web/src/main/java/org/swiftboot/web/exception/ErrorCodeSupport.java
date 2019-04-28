@@ -29,7 +29,6 @@ public abstract class ErrorCodeSupport {
     private Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
 
     public static final String CODE_OK = "1000";
-    public static final String CODE_OK_WITH_DEPRECATION = "1001"; // 该接口已废弃
     public static final String CODE_OK_WITH_CONTENT = "1002";
 
     /**
