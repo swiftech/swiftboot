@@ -22,7 +22,7 @@ public class JsonUtils {
     static Logger log = LoggerFactory.getLogger(JsonUtils.class);
 
     /**
-     * 按照格式"xxx.xxx.xxx"递归选中 JSON 树中的子节点
+     * 按照格式 "xxx.xxx.xxx" 递归选中 JSON 树中的子节点
      *
      * @param rootNode
      * @param selector
@@ -55,40 +55,61 @@ public class JsonUtils {
     }
 
     /**
-     * @param jsonResult
+     * JSON 格式字符串转换为 Map
+     *
+     * @param strJson
      * @return
      * @throws IOException
      */
-    public static Map jsonToMap(String jsonResult) throws IOException {
+    public static Map jsonToMap(String strJson) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonResult, new TypeReference<Map>() {
+        return mapper.readValue(strJson, new TypeReference<Map>() {
         });
     }
 
     /**
-     * @param jsonResult
-     * @param type
+     * JSON 格式字符串转换为指定类型对象
+     *
+     * @param strJson
+     * @param type    目标对象类型
      * @param <T>
      * @return
      * @throws IOException
      */
-    public static <T> T jsonTo(String jsonResult, Class<T> type) throws IOException {
+    public static <T> T jsonTo(String strJson, Class<T> type) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonResult, type);
+        return mapper.readValue(strJson, type);
     }
 
-    public static <T> T jsonTo(String jsonResult, TypeReference type) throws IOException {
+    /**
+     * JSON 格式字符串转换为指定类型对象
+     *
+     * @param strJson
+     * @param type    目标对象类型
+     * @param <T>
+     * @return
+     * @throws IOException
+     */
+    public static <T> T jsonTo(String strJson, TypeReference type) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonResult, type);
+        return mapper.readValue(strJson, type);
     }
 
+    /**
+     * Map 转换为 JSON 格式字符串
+     *
+     * @param map
+     * @return
+     * @throws JsonProcessingException
+     */
     public static String mapToJson(Map map) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(map);
     }
 
     /**
-     * 把对象转换为 JSON 字符串
+     * 把对象转换为 JSON 格式字符串
+     *
      * @param obj
      * @return
      * @throws IOException
@@ -99,7 +120,8 @@ public class JsonUtils {
     }
 
     /**
-     * 转换为格式化过的 JSON 格式
+     * 转换为格式化过的 JSON 格式字符串
+     *
      * @param obj
      * @return
      * @throws IOException

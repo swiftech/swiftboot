@@ -11,9 +11,9 @@
 
 * `BitUtils` 二进制位操作
 
-* `CryptoUtils` 
+* `CryptoUtils` md5加盐
 
-* `IdUtils` ID工具类
+* `IdUtils` ID工具类，生成UUID，业务ID，流水号等
 
 * `IoUtils` IO读写工具类
 
