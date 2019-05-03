@@ -1,10 +1,10 @@
 package org.swiftboot.web.validate;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author swiftech
  * @see ValidateResultAspect
  */
-@Target({METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RUNTIME)
 @Documented
 public @interface ConvertValidateResult {

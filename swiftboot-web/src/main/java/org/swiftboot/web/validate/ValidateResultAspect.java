@@ -31,14 +31,17 @@ public class ValidateResultAspect {
      * 切入带有 ConvertValidateResult 注解的方法
      */
     @Pointcut("@annotation(org.swiftboot.web.validate.ConvertValidateResult)")
-    private void convertResult() {
+    private void annotatedMethod() {
     }
 
-//    @Pointcut("@annotation(org.swiftboot.web.validate.ConvertValidateResult)")
-//    private void convertResult() {
-//    }
+    /**
+     * 切入带有 ConvertValidateResult 注解的类
+     */
+    @Pointcut("@within(org.swiftboot.web.validate.ConvertValidateResult)")
+    private void annotatedClass() {
+    }
 
-    @Before("convertResult()")
+    @Before("annotatedMethod() || annotatedClass()")
     public void process(JoinPoint joinPoint) {
         log.debug("@ConvertValidateResult ...");
         Object[] args = joinPoint.getArgs();

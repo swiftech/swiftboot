@@ -1,5 +1,6 @@
 package org.swiftboot.demo.controller;
 
+import org.springframework.validation.BindingResult;
 import org.swiftboot.demo.controller.command.OrderCreateCommand;
 import org.swiftboot.demo.controller.command.OrderSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
@@ -8,6 +9,7 @@ import org.swiftboot.demo.result.OrderResult;
 import org.swiftboot.demo.result.OrderSaveResult;
 import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.util.JsonUtils;
+import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.command.IdCommand;
 import org.swiftboot.web.command.IdListCommand;
@@ -44,7 +46,8 @@ public class OrderController {
     public
     @ResponseBody
     HttpResponse<OrderCreateResult> orderCreate(
-            @RequestBody @Validated @ApiParam("创建订单参数") OrderCreateCommand command) {
+            @RequestBody @Validated @ApiParam("创建订单参数") OrderCreateCommand command,
+            BindingResult bindingResult) {
         log.info("> /order/create");
         log.debug(JsonUtils.object2PrettyJson(command));
         OrderCreateResult ret = orderService.createOrder(command);
@@ -53,12 +56,16 @@ public class OrderController {
 
     @ApiOperation(notes = "保存订单", value = "保存订单")
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    @ConvertValidateResult
     public
     @ResponseBody
     HttpResponse<OrderSaveResult> orderSave(
-            @RequestBody @Validated @ApiParam("保存订单参数") OrderSaveCommand command) {
+            @RequestBody @Validated @ApiParam("保存订单参数") OrderSaveCommand command,
+            BindingResult bindingResult) {
         log.info("> /order/save");
+        if (bindingResult.hasErrors()) {
+            log.error("验证错误：" + bindingResult.getErrorCount());
+            return new HttpResponse<>(ErrorCodeSupport.CODE_SYS_ERR, "验证错误");
+        }
         log.debug(JsonUtils.object2PrettyJson(command));
         OrderSaveResult ret = orderService.saveOrder(command);
         return new HttpResponse<>(ret);

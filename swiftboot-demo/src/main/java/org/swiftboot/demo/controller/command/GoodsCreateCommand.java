@@ -1,18 +1,13 @@
 package org.swiftboot.demo.controller.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.swiftboot.demo.model.entity.GoodsEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.swiftboot.web.command.BasePopulateCommand;
 import org.hibernate.validator.constraints.Length;
+import org.swiftboot.demo.model.entity.GoodsEntity;
+import org.swiftboot.web.command.BasePopulateCommand;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 创建商品
