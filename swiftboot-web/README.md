@@ -2,10 +2,11 @@
 SwiftBoot 的主模块，开发 Web 应用需要引用。
 
 ## 依赖
-* Servlet >= 3.1.0
-* Spring Framework >= 5.1.5.RELEASE
-* SpringBoot >= 2.1.3.RELEASE
-* Spring Data JPA >= 2.1.5.RELEASE
+* Servlet >= 3.1
+* Spring Framework >= 5.1.x.RELEASE
+* Spring MVC >= 5.1.x.RELEASE
+* Spring Boot >= 2.1.x.RELEASE
+* Spring Data JPA >= 2.1.x.RELEASE
 
 
 ## 特性
@@ -16,7 +17,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
     "code": "<4位的错误代码>",
     "msg" : "<错误消息>",
     "content": {
-      <自定义的JSON格式的返回内容>
+      "自定义的JSON格式的返回内容"
     }
   }
   ```
@@ -24,21 +25,21 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 * 统一的接口返回对象基类 `BasePopulateResult`，可实现自动将实体类的属性值填充到返回值中。
 * 提供了统一的控制器（Controller）异常处理，自动将未处理的异常转换成 `JSON` 格式的接口响应对象返回给客户端。
 * 定义了实体类基类，包含了必须的和大多数表都需要的字段，所有的实体类都继承它们。包含字段：
-  * 主键：ID
-  * 创建时间：CREATE_TIME
-  * 更新时间：UPDATE_TIME
-  * 是否逻辑删除：IS_DELETE
+  * 主键：`ID`
+  * 创建时间：`CREATE_TIME`
+  * 更新时间：`UPDATE_TIME`
+  * 是否逻辑删除：`IS_DELETE`
 * 自动处理接口参数验证结果，转换为 `JSON` 格式的统一格式；扩展的表单验证器，可验证：手机号，包含大写数字，包含数字，包含特殊符号。
 
-## 下载 jar 包：
+## 引用 jar 包：
 
-  Maven: 
-  
+  Maven:
+
   ```xml
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.8-SNAPSHOT</version>
   </dependency>
   ```
 
@@ -56,7 +57,7 @@ SwiftBoot 使用 `Spring Data JPA` 来实现 Model 层，所有 Dao 接口必须
 
 * 实体类
 
-SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity`，`BaseIdEntity` 定义了主键字段 ID，`BaseEntity` 继承 `BaseIdEntity` 并定义了创建时间 CREATE_TIME、更新时间 UPDATE_TIME、是否逻辑删除 IS_DELETE 三个字段
+SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity`，`BaseIdEntity` 定义了主键字段 ID，`BaseEntity` 继承 `BaseIdEntity` 并定义了创建时间 `CREATE_TIME`、更新时间 `UPDATE_TIME`、是否逻辑删除 `IS_DELETE` 三个字段
 
   ```java
   @Entity
@@ -87,7 +88,7 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
       model:
         autoGenerateId: true
   ```
-  那么，在通过 Dao 的 save() 或 saveAll() 方法保存实体对象的时候，SwiftBoot 默认情况下会给实体类自动生成 UUID 主键。另外，SwiftBoot 提供了一个更好的主键ID生成器 `EntityIdGenerator`，它可以生成格式为 **业务代码+时间戳+随机字符串** 的长度为32字节的主键ID，例如：`order20190422170606462gbxudaaxgt`，这个主键既有UUID的优点但是比UUID更容易识别并且带来更好的性能。启用这个 ID 生成器只要配置：
+  那么，在通过 Dao 的 `save()` 或 `saveAll()` 方法保存实体对象的时候，SwiftBoot 默认情况下会给实体类自动生成 UUID 主键。另外，SwiftBoot 提供了一个更好的主键ID生成器 `EntityIdGenerator`，它可以生成格式为 **业务代码+时间戳+随机字符串** 的长度为32字节的主键ID，例如：`order20190422170606462gbxudaaxgt`，这个主键既有UUID的优点但是比UUID更容易识别并且带来更好的性能。启用这个 ID 生成器只要配置：
 
   ```java
   @Bean
@@ -104,7 +105,6 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
   例如一个创建订单的接口如下：
   ```java
   @RequestMapping(value = "order/create", method = RequestMethod.POST)
-  @ConvertValidateResult
   public
   @ResponseBody HttpResponse<OrderCreateResult> orderCreate(
           @RequestBody @Validated @ApiParam("创建订单参数") OrderCreateCommand command) {
@@ -114,7 +114,6 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
   ```
 
   SpringMVC 的 `@ResponseBody` 注解会把方法返回的 HttpResponse 对象及其内嵌的对象一起转换成 JSON 格式返回给访问接口的客户端。
-  `@ConvertValidateResult` 注解是 SwiftBoot 定义的注解，在方法上添加它会把 Validation 框架的验证结果转换成统一的 JSON 格式的错误信息给客户端（它自动从 Command 对象的注解中获取到参数对应的描述信息）
 
   ```java
   @ApiModel
@@ -130,7 +129,8 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
     private String description;
   }
   ```
-* 控制器中抛出的异常直接抛出会使得客户端的错误展示非常不友好，而通过代码去捕获即繁琐又容易遗留，SwiftBoot 实现了 AOP 增强 `ExceptionProcessor` 和 `ValidationExceptionProcessor`，他们将异常信息以统一的JSON格式输出给客户端，配置方法如下：
+
+* 控制器中抛出的异常直接抛出会使得客户端的错误展示非常不友好，而通过代码去捕获即繁琐又容易遗留，SwiftBoot 实现了控制器增强 `ExceptionProcessor`，他将异常信息以统一的 `JSON` 格式输出给客户端，配置方法如下：
   ```java
   @Configuration
   @EnableWebMvc
@@ -148,11 +148,27 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
     ExceptionProcessor exceptionProcessor() {
         return new ExceptionProcessor();
     }
+  }
+  ```
 
+* 输入参数验证
+
+  除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 JSON 输出格式。（自动从 Command 对象的注解中获取到参数对应的描述信息）
+  配置：
+  ```java
     @Bean
     ValidationExceptionProcessor validationExceptionProcessor() {
         return new ValidationExceptionProcessor();
     }
+  ```
+
+  如果接口参数中有 BindingResult 这个参数，那么验证异常就不会抛出，此时可以在控制器类上添加注解 `@ConvertValidateResult` 来标识需要拦截并抛出 `ValidationException` 异常。这个注解也可以加在控制器方法上，只有该方法执行的时候才会进行增强处理。
+
+  ```java
+  @Controller
+  @RequestMapping("/order")
+  @ConvertValidateResult
+  public class OrderController {
   }
   ```
 
@@ -221,7 +237,3 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
     private String description;
   }
   ```
-
-
-
-
