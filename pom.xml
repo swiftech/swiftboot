@@ -31,6 +31,7 @@
         <commons.lang.version>3.8.1</commons.lang.version>
         <commons.codec.version>1.12</commons.codec.version>
         <commons.collections.version>4.3</commons.collections.version>
+        <junit.version>5.4.0</junit.version>
     </properties>
 
 
@@ -67,18 +68,10 @@
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.4.0</version>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.4.0</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <dependencyManagement>
@@ -128,15 +121,8 @@
 
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>5.4.0</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.4.0</version>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
 

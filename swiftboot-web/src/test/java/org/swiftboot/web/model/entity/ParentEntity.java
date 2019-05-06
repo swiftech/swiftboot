@@ -1,8 +1,9 @@
 package org.swiftboot.web.model.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author swiftech
@@ -17,7 +18,7 @@ public class ParentEntity extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     private
-    Set<ChildEntity> items = new HashSet<>();
+    List<ChildEntity> items = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -27,11 +28,11 @@ public class ParentEntity extends BaseEntity {
         this.name = name;
     }
 
-    public Set<ChildEntity> getItems() {
+    public List<ChildEntity> getItems() {
         return items;
     }
 
-    public void setItems(Set<ChildEntity> items) {
+    public void setItems(List<ChildEntity> items) {
         this.items = items;
     }
 }
