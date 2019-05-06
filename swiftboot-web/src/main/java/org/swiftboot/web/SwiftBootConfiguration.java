@@ -13,15 +13,15 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties
 public class SwiftBootConfiguration {
 
-//    @Bean
-//    public SwiftBootConfigBean swiftBootConfigBean(ConfigurableWebEnvironment env) {
-//        return new SwiftBootConfigBean();
-//    }
 
     @Bean
     public SwiftBootConfigBean swiftBootConfigBean() {
         return new SwiftBootConfigBean();
     }
 
-
+// 测试环境不工作（ConfigurableWebEnvironment = null)
+//    @Bean
+//    public SwiftBootConfigBean swiftBootConfigBean(ConfigurableWebEnvironment env) {
+//        return new SwiftBootConfigBean();
+//    }
 }

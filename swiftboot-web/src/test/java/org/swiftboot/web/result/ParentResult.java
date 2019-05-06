@@ -2,6 +2,7 @@ package org.swiftboot.web.result;
 
 import org.swiftboot.web.model.entity.ParentEntity;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ public class ParentResult extends BasePopulateResult<ParentEntity> {
 
     private String name;
 
-    private Set<ChildResult> items;
+    private List<ChildResult> items;
 
     public String getName() {
         return name;
@@ -21,11 +22,11 @@ public class ParentResult extends BasePopulateResult<ParentEntity> {
         this.name = name;
     }
 
-    public Set<ChildResult> getItems() {
+    public List<ChildResult> getItems() {
         return items;
     }
 
-    public void setItems(Set<ChildResult> items) {
+    public void setItems(List<ChildResult> items) {
         this.items = items;
     }
 }

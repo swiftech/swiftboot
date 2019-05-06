@@ -16,7 +16,7 @@ import org.swiftboot.web.model.entity.CustomizedEntity;
 import org.swiftboot.web.model.entity.ParentEntity;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -53,7 +53,7 @@ public class EntityIdAspectTest {
         entity.setName("君父");
         ChildEntity childEntity = new ChildEntity();
         childEntity.setName("臣子");
-        entity.setItems(new HashSet<>());
+        entity.setItems(new ArrayList<>());
         entity.getItems().add(childEntity);
         parentDao.save(entity);
         Optional<ParentEntity> optParent = parentDao.findById(entity.getId());
