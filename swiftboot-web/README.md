@@ -48,7 +48,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 ### Model层
 * Dao
 
-SwiftBoot 使用 `Spring Data JPA` 来实现 Model 层，所有 Dao 接口必须继承 `CrudRepository` 接口或者其子接口
+SwiftBoot 使用 Spring Data JPA 来实现 Model 层，所有 Dao 接口必须继承 `CrudRepository` 接口或者其子接口
 
   ```java
   public interface OrderDao extends CrudRepository<OrderEntity, String> {
@@ -98,9 +98,9 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
   ```
 
 
-### 控制器 `Controller`
+### 控制器 Controller
 
-* 所有的控制器接口返回统一定义的响应对象 HttpResponse，包含错误代码、错误消息以及泛型表达的接口返回值。`POST` 接口的所有输入参数对象继承 `HttpCommand` 或者它的子类。
+* 所有的控制器接口返回统一定义的响应对象 `HttpResponse`，包含错误代码、错误消息以及泛型表达的接口返回值。`POST` 接口的所有输入参数对象继承 `HttpCommand` 或者它的子类。
 
   例如一个创建订单的接口如下：
   ```java
@@ -113,7 +113,7 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
   }
   ```
 
-  SpringMVC 的 `@ResponseBody` 注解会把方法返回的 HttpResponse 对象及其内嵌的对象一起转换成 JSON 格式返回给访问接口的客户端。
+  SpringMVC 的 `@ResponseBody` 注解会把方法返回的 `HttpResponse` 对象及其内嵌的对象一起转换成 JSON 格式返回给访问接口的客户端。
 
   ```java
   @ApiModel
@@ -153,7 +153,7 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
 
 * 输入参数验证
 
-  除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 JSON 输出格式。（自动从 Command 对象的注解中获取到参数对应的描述信息）
+  除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 `JSON` 输出格式。（自动从 Command 对象的注解中获取到参数对应的描述信息）
   配置：
   ```java
     @Bean
@@ -162,7 +162,7 @@ SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity
     }
   ```
 
-  如果接口参数中有 BindingResult 这个参数，那么验证异常就不会抛出，此时可以在控制器类上添加注解 `@ConvertValidateResult` 来标识需要拦截并抛出 `ValidationException` 异常。这个注解也可以加在控制器方法上，只有该方法执行的时候才会进行增强处理。
+  如果接口参数中有 `BindingResult` 这个参数，那么验证异常就不会抛出，此时可以在控制器类上添加注解 `@ConvertValidateResult` 来标识需要拦截并抛出 `ValidationException` 异常。这个注解也可以加在控制器方法上，只有该方法执行的时候才会进行增强处理。
 
   ```java
   @Controller
@@ -192,7 +192,7 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
     @Override
     public OrderCreateResult createOrder(OrderCreateCommand cmd) {
         OrderEntity p = cmd.createEntity();
-        p.setId(IdUtils.makeUUID());
+        p.setId(IdUtils.makeUUID()); // 如果设置了自动生成 ID 就不需要这一行
         OrderEntity saved = orderDao.save(p);
         return new OrderCreateResult(saved.getId());
     }
