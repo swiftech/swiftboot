@@ -7,14 +7,14 @@ import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * HttpServlet IO 工具类
+ *
  * @author swiftech
  **/
 public class HttpServletIOUtils {
@@ -26,30 +26,13 @@ public class HttpServletIOUtils {
      * @param response
      */
     public static void writeFileToResponseStream(File file, HttpServletResponse response) {
-        OutputStream out = null;
-        try {
-            String encodedFileName = new String(file.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
-            response.setCharacterEncoding(CharEncoding.UTF_8);
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment; filename=" + encodedFileName);
-            byte[] bytes = IoUtils.readAllToBytes(new FileInputStream(file));
-            if (bytes == null || bytes.length == 0) {
-                throw new RuntimeException("读取文件错误或者文件损坏");
+        String encodedFileName = new String(file.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+        Map<String, String> headers = new HashMap<String, String>() {
+            {
+                put("Content-Disposition", "attachment; filename=" + encodedFileName);
             }
-            out = response.getOutputStream();
-            out.write(bytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        };
+        writeFileToResponseStream(file, response, "application/octet-stream", headers);
     }
 
     /**
@@ -61,7 +44,7 @@ public class HttpServletIOUtils {
     public static void writeImageToResponseStream(File file,
                                                   HttpServletResponse response) {
         String fileExt = StringUtils.substringAfterLast(file.getName(), ".");
-        if (StringUtils.equalsAnyIgnoreCase(fileExt, "jpg", "png", "gif")) {
+        if (StringUtils.equalsAnyIgnoreCase(fileExt, "jpg", "png", "gif", "webp")) {
             writeFileToResponseStream(file, response, "image/" + fileExt, null);
         }
         else {
@@ -69,10 +52,38 @@ public class HttpServletIOUtils {
         }
     }
 
+    /**
+     * 将文件写入 HttpServletResponse 流
+     *
+     * @param file
+     * @param response
+     * @param contentType
+     * @param headers
+     */
     public static void writeFileToResponseStream(File file,
                                                  HttpServletResponse response,
                                                  String contentType,
                                                  Map<String, String> headers) {
+        try {
+            writeStreamToResponseStream(new FileInputStream(file), response, contentType, headers);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
+        }
+    }
+
+    /**
+     * 将输入流写入 HttpServletResponse 流
+     *
+     * @param inputStream
+     * @param response
+     * @param contentType
+     * @param headers
+     */
+    public static void writeStreamToResponseStream(InputStream inputStream,
+                                                   HttpServletResponse response,
+                                                   String contentType,
+                                                   Map<String, String> headers) {
         OutputStream out = null;
         try {
             response.setCharacterEncoding(CharEncoding.UTF_8);
@@ -83,7 +94,7 @@ public class HttpServletIOUtils {
                     response.setHeader(k, v);
                 }
             }
-            byte[] bytes = IoUtils.readAllToBytes(new FileInputStream(file));
+            byte[] bytes = IoUtils.readAllToBytes(inputStream);
             if (bytes == null || bytes.length == 0) {
                 throw new RuntimeException("读取文件错误或者文件损坏");
             }
