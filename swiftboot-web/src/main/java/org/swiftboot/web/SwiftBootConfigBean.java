@@ -16,19 +16,19 @@ public class SwiftBootConfigBean {
      * Model 配置
      */
     @NestedConfigurationProperty
-    private ModelConfigBean model;
+    private ModelConfigBean model = new ModelConfigBean();
 
     /**
      * 验证配置
      */
     @NestedConfigurationProperty
-    private ValidationResultConfigBean validation;
+    private ValidationResultConfigBean validation = new ValidationResultConfigBean();
 
     /**
      * 过滤器配置
      */
     @NestedConfigurationProperty
-    private FilterConfigBean filter;
+    private FilterConfigBean filter = new FilterConfigBean();
 
 //    @Bean
 //    public CorsFilter corsFilter() {
