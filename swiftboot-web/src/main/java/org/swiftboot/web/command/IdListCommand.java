@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * 业务对象ID列表
+ * 业务对象 ID 列表
  *
  * @author swiftech
  */

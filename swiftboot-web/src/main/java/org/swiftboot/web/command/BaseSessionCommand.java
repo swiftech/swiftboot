@@ -14,7 +14,7 @@ public abstract class BaseSessionCommand<E extends Persistent> extends BasePopul
 
     @JsonIgnore
     public void setSessionId(String sessionId) {
-        setHeader(HttpConstants.SESSION_ID_NAME, sessionId);
+        setHeader(HttpConstants.DEFAULT_SESSION_ID_NAME, sessionId);
     }
 
     @JsonIgnore
@@ -22,6 +22,6 @@ public abstract class BaseSessionCommand<E extends Persistent> extends BasePopul
         if (getHeaders() == null) {
             return null;
         }
-        return getHeaders().get(HttpConstants.SESSION_ID_NAME);
+        return getHeaders().get(HttpConstants.DEFAULT_SESSION_ID_NAME);
     }
 }

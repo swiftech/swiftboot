@@ -34,7 +34,7 @@ public class CorsFilter extends OncePerRequestFilter {
     // TODO configurable
     private List<String> allowedHeaders = new ArrayList<String>() {
         {
-            add(HttpConstants.SESSION_ID_NAME);
+            add(HttpConstants.DEFAULT_SESSION_ID_NAME);
             add("Content-Type");
             add("Access-Control-Allow-Headers");
             add("Authorization");

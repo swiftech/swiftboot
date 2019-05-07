@@ -38,13 +38,13 @@ public class HttpServletIOUtils {
     /**
      * 将图片内容写入 HttpServletResponse 流
      *
-     * @param file
+     * @param file 支持 jpg，png，bmp, webp 四种类型
      * @param response
      */
     public static void writeImageToResponseStream(File file,
                                                   HttpServletResponse response) {
         String fileExt = StringUtils.substringAfterLast(file.getName(), ".");
-        if (StringUtils.equalsAnyIgnoreCase(fileExt, "jpg", "png", "gif", "webp")) {
+        if (StringUtils.equalsAnyIgnoreCase(fileExt, "jpg", "jpeg", "png", "gif", "webp")) {
             writeFileToResponseStream(file, response, "image/" + fileExt, null);
         }
         else {
@@ -53,7 +53,7 @@ public class HttpServletIOUtils {
     }
 
     /**
-     * 将文件写入 HttpServletResponse 流
+     * 将文件内容写入 HttpServletResponse 流
      *
      * @param file
      * @param response
