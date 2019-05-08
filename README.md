@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>com.github.swiftech</groupId>
 			<artifactId>swiftboot-web</artifactId>
-			<version>1.0.8-SNAPSHOT</version>
+			<version>1.0.9-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

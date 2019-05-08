@@ -16,7 +16,8 @@ import java.util.Collection;
 
 /**
  * 提供将参数填入实体类的方法 populateEntity() 和创建 Command 类所对应的实体类的方法 createEntity()
- * 要求实体类 E 必须有无参数的构造函数。
+ * 要求实体类 E 必须有无参数的构造函数，除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
+ * Command 中存在的属性实体类也必须存在（名称和类型一一对应），否则抛出异常。
  *
  * @param <P> 对应的实体类
  * @author swiftech
@@ -104,7 +105,6 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                 Collection items = (Collection) BeanUtils.forceGetProperty(this, srcField);
                 try {
                     Field targetField = BeanUtils.getDeclaredField(entity, srcField.getName());
-                    System.out.println(targetField.getType());
                     Collection c = CollectionUtils.constructCollectionByType(targetField.getType());
                     for (Object item : items) {
                         if (item instanceof BasePopulateCommand) {
