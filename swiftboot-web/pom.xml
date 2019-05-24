@@ -13,16 +13,18 @@
     <description>企业Web应用基础框架</description>
 
     <properties>
-        <spring.version>5.1.6.RELEASE</spring.version>
-        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
+        <spring.version>5.1.7.RELEASE</spring.version>
+        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
         <servlet.version>3.1.0</servlet.version>
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
         <swagger.version>1.5.22</swagger.version>
-        <aspectj.version>1.8.14</aspectj.version>
+        <aspectj.version>1.9.3</aspectj.version>
         <validation.api.version>2.0.1.Final</validation.api.version>
+        <hibernate.version>5.3.10.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <hibernate.validator.version>6.0.16.Final</hibernate.validator.version>
         <log4j2.version>2.9.1</log4j2.version>
+        <spring.data.version>2.1.5.RELEASE</spring.data.version>
     </properties>
 
     <dependencies>
@@ -163,7 +165,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.3.7.Final</version>
+            <version>${hibernate.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -205,7 +207,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>2.1.5.RELEASE</version>
+            <version>${spring.data.version}</version>
             <scope>test</scope>
         </dependency>
 

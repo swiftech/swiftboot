@@ -79,24 +79,24 @@ public class CollectionUtils {
     /**
      * 按照 ClassifyFilter 接口返回的 key 值分类存放元素集合（和原集合相同类型的集合）
      *
-     * @param collection
+     * @param srcCollection
      * @param classifyFilter
      * @return
      */
-    public static Map classify(Collection collection, ClassifyFilter classifyFilter) {
-        Map<String, Collection> ret = new HashMap<>();
-        for (Object o : collection) {
-            String key = classifyFilter.filter(o);
+    public static <T> Map<Object, Collection> classify(Collection<T> srcCollection, ClassifyFilter classifyFilter) {
+        Map<Object, Collection> ret = new HashMap<>();
+        for (Object o : srcCollection) {
+            Object key = classifyFilter.filter(o);
             Collection coll = ret.get(key);
             if (coll == null) {
-                if (collection instanceof List) {
+                if (srcCollection instanceof List) {
                     coll = new ArrayList();
                 }
-                else if (collection instanceof Set) {
+                else if (srcCollection instanceof Set) {
                     coll = new HashSet();
                 }
                 else {
-
+                    throw new RuntimeException("集合类型不支持: " + srcCollection.getClass());
                 }
                 ret.put(key, coll);
             }
