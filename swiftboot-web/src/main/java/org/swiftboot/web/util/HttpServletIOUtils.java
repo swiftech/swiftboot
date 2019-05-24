@@ -8,9 +8,12 @@ import org.swiftboot.web.exception.ErrorCodeSupport;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.swiftboot.util.constant.FileConstants.IMAGE_FILES;
 
 /**
  * HttpServlet IO 工具类
@@ -38,14 +41,15 @@ public class HttpServletIOUtils {
     /**
      * 将图片内容写入 HttpServletResponse 流
      *
-     * @param file 支持 jpg，png，bmp, webp 四种类型
+     * @param file     支持 jpg，png，bmp, webp, gif 五种类型
      * @param response
      */
     public static void writeImageToResponseStream(File file,
                                                   HttpServletResponse response) {
         String fileExt = StringUtils.substringAfterLast(file.getName(), ".");
-        if (StringUtils.equalsAnyIgnoreCase(fileExt, "jpg", "jpeg", "png", "gif", "webp")) {
-            writeFileToResponseStream(file, response, "image/" + fileExt, null);
+        if (StringUtils.equalsAnyIgnoreCase(fileExt, IMAGE_FILES)) {
+            String contentType = URLConnection.guessContentTypeFromName(file.getName());
+            writeFileToResponseStream(file, response, contentType, null);
         }
         else {
             throw new RuntimeException("不是图片格式的文件: " + file.getPath());
@@ -96,7 +100,7 @@ public class HttpServletIOUtils {
             }
             byte[] bytes = IoUtils.readAllToBytes(inputStream);
             if (bytes == null || bytes.length == 0) {
-                throw new RuntimeException("读取文件错误或者文件损坏");
+                throw new RuntimeException("无法从输入流中读取字节");
             }
             out = response.getOutputStream();
             out.write(bytes);
