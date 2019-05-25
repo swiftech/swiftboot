@@ -20,3 +20,16 @@
 * `JsonUtils` Json处理工具类
 
 * `SysUtils` 处理操作系统的工具类
+
+
+### Maven
+	```xml
+	<dependencies>
+		<dependency>
+			<groupId>com.github.swiftech</groupId>
+			<artifactId>swiftboot-utils</artifactId>
+			<version>1.0.10-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	```

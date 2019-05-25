@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 描述实体类属性
  *
- * @author Allen 2019-03-31
+ * @author swiftech
  **/
 @Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
