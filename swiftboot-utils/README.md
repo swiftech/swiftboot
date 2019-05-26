@@ -23,13 +23,14 @@
 
 
 ### Maven
-	```xml
-	<dependencies>
-		<dependency>
-			<groupId>com.github.swiftech</groupId>
-			<artifactId>swiftboot-utils</artifactId>
-			<version>1.0.10-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 
-	```
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.github.swiftech</groupId>
+		<artifactId>swiftboot-utils</artifactId>
+		<version>1.0.10-SNAPSHOT</version>
+	</dependency>
+</dependencies>
+
+```
