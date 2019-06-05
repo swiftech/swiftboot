@@ -22,6 +22,7 @@ public class SwiftBootModelConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(value = "swiftboot.web.model")
     UpdateTimeAspect updateTimeAspect() {
         return new UpdateTimeAspect();
     }

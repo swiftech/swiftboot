@@ -10,7 +10,8 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 
 
 ## 特性
-* 开箱即用，用更少的代码完成更多的工作。SwiftBoot 是无侵入性的，你可以只使用其中的一部分功能，也可以随时去掉它或者切换为别的框架。
+* 开箱即用，用更少的代码完成更多的工作。
+* 是无侵入性，你可以只使用其中的一部分功能，也可以随时去掉它或者切换为别的框架。
 * 统一固定的返回值格式:
   ```json
   {
@@ -48,7 +49,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 ### Model层
 * Dao
 
-SwiftBoot 使用 Spring Data JPA 来实现 Model 层，所有 Dao 接口必须继承 `CrudRepository` 接口或者其子接口
+SwiftBoot-Web 使用 Spring Data JPA 来实现 Model 层，所有 Dao 接口必须继承 `CrudRepository` 接口或者其子接口
 
   ```java
   public interface OrderDao extends CrudRepository<OrderEntity, String> {
@@ -57,7 +58,7 @@ SwiftBoot 使用 Spring Data JPA 来实现 Model 层，所有 Dao 接口必须�
 
 * 实体类
 
-SwiftBoot 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity`，`BaseIdEntity` 定义了主键字段 ID，`BaseEntity` 继承 `BaseIdEntity` 并定义了创建时间 `CREATE_TIME`、更新时间 `UPDATE_TIME`、是否逻辑删除 `IS_DELETE` 三个字段
+SwiftBoot-Web 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity`，`BaseIdEntity` 定义了主键字段 ID，`BaseEntity` 继承 `BaseIdEntity` 并定义了创建时间 `CREATE_TIME`、更新时间 `UPDATE_TIME`、是否逻辑删除 `IS_DELETE` 三个字段
 
   ```java
   @Entity

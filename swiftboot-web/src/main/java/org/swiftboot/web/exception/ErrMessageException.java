@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 服务层使用的异常
+ *
  * @author swiftech
  */
 public class ErrMessageException extends RuntimeException {

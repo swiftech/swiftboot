@@ -13,16 +13,17 @@
 * 无论何种转换都使用统一的接口和调用方式
 
 ### Maven
-	```xml
-	<dependencies>
-		<dependency>
-			<groupId>com.github.swiftech</groupId>
-			<artifactId>swiftboot-fileconvert</artifactId>
-			<version>1.0.10-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 
-	```
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.github.swiftech</groupId>
+		<artifactId>swiftboot-fileconvert</artifactId>
+		<version>1.0.10-SNAPSHOT</version>
+	</dependency>
+</dependencies>
+
+```
 	
 ### 使用方法
 

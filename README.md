@@ -2,14 +2,6 @@
 
 基于Spring Framework，Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
 
-### 模块
-* [swiftboot-web](swiftboot-web/): 企业Web应用基础框架
-* [swiftboot-collections](swiftboot-collections/): 企业应用集合类
-* [swiftboot-utils](swiftboot-utils/): 企业应用工具类
-* [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验）
-* [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中）
-* [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
-
 
 ### 特性
 * 开箱即用，只需要很少的配置即可使用，用更少的代码完成更多的工作。
@@ -20,6 +12,16 @@
 * 主键UUID自动生成机制。
 * 企业 Web 开发常用的工具类和集合类。
 * 常见文档格式转换。
+
+
+### 模块
+* [swiftboot-web](swiftboot-web/): 企业Web应用基础框架
+* [swiftboot-collections](swiftboot-collections/): 企业应用集合类
+* [swiftboot-utils](swiftboot-utils/): 企业应用工具类
+* [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验）
+* [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中）
+* [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
+
 
 ### 快速指南
 

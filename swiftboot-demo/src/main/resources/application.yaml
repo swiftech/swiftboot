@@ -16,11 +16,6 @@ logging:
   level:
     root: INFO
     org.swiftboot: DEBUG
-#common:
-#  web:
-#    validation:
-#      result:
-#        json: true
 swiftboot:
   web:
     filter:
