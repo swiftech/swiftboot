@@ -13,7 +13,7 @@
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.10-SNAPSHOT</version>
+    <version>1.0.11-SNAPSHOT</version>
     <description>企业Web应用快速开发开发框架</description>
 
     <modules>
@@ -25,7 +25,7 @@
     </modules>
 
     <properties>
-        <swiftboot.version>1.0.10-SNAPSHOT</swiftboot.version>
+        <swiftboot.version>1.0.11-SNAPSHOT</swiftboot.version>
         <java.version>1.8</java.version>
         <slf4j.version>1.7.26</slf4j.version>
         <jackson.version>2.9.9</jackson.version>
