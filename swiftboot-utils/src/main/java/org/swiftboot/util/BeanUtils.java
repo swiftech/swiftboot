@@ -19,7 +19,7 @@ import java.util.*;
  * 4. 根据 field 类型获取 Field 定义
  * 5. 获取静态 Field
  *
- * @author Wang Yuxing
+ * @author swiftech
  */
 public class BeanUtils {
     protected static final Logger logger = LoggerFactory.getLogger(BeanUtils.class);
