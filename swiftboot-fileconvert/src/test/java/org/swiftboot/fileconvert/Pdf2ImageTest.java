@@ -12,7 +12,8 @@ import java.io.OutputStream;
  **/
 public class Pdf2ImageTest extends BaseTest {
 
-    //    @Test Maven install 失败
+    // Maven install 失败
+    @Test
     public void test() {
         InputStream pdf = this.getClass().getResourceAsStream("/source.pdf");
 
@@ -20,7 +21,7 @@ public class Pdf2ImageTest extends BaseTest {
             fileConverter.convert(new Source("pdf", pdf), new Target("jpg", new ConvertCallback() {
                 @Override
                 public OutputStream onPage(int page) throws Exception {
-
+                    System.out.println("write to: " + targetDir);
                     FileOutputStream out = new FileOutputStream(new File(targetDir, "target" + page + ".jpg"));
                     return out;
                 }

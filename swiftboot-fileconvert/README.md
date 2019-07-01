@@ -31,4 +31,25 @@
 	
 ### 使用方法
 
-TODO
+例如，将一个 PDF 文件转换为图片
+
+```java
+File srcDir = new File("/src/dir/");
+File targetDir = new File("/target/dir/");
+File srcFile = new File(srcDir, "original.pdf");
+FileConverter fileConverter = new FileConverter();
+// 定义转换输入源
+Source src = new Source("pdf", new FileInputStream(srcFile))
+// 定义转换目标（为每个转换得到的文档创建一个输出流）
+Target target = new Target("jpg", new ConvertCallback() {
+	@Override
+	public OutputStream onPage(int i) throws Exception {
+		String targetFileName = i + ".jpg";
+		File targetFile = new File(targetDir, targetFileName);
+		FileOutputStream outputStream = new FileOutputStream(targetFile);
+		return outputStream;
+	}
+});
+fileConverter.convert(src, target);
+
+```
