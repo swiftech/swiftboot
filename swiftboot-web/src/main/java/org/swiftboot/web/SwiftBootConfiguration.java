@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * SwiftBoot 配置类
  *
- * @author Allen 2019-04-09
+ * @author swiftech
  **/
 @Configuration
 @EnableConfigurationProperties

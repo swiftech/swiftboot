@@ -1,7 +1,7 @@
 package org.swiftboot.web.config;
 
 /**
- * @author Allen 2019-04-16
+ * @author swiftech
  **/
 public class FilterConfigBean {
 

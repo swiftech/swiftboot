@@ -7,7 +7,7 @@ import org.swiftboot.web.config.ModelConfigBean;
 import org.swiftboot.web.config.ValidationResultConfigBean;
 
 /**
- * @author Allen 2019-04-09
+ * @author swiftech
  **/
 @ConfigurationProperties("swiftboot.web")
 public class SwiftBootConfigBean {

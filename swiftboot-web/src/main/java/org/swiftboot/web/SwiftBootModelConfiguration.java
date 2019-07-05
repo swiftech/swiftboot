@@ -10,7 +10,7 @@ import org.swiftboot.web.model.id.DefaultIdGenerator;
 import org.swiftboot.web.model.id.IdGenerator;
 
 /**
- * @author Allen 2019-04-09
+ * @author swiftech
  **/
 @Configuration
 public class SwiftBootModelConfiguration {

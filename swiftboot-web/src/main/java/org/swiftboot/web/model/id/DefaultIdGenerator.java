@@ -6,7 +6,7 @@ import org.swiftboot.web.model.entity.IdPojo;
 /**
  * 默认 ID 生成器
  *
- * @author Allen 2019-04-16
+ * @author swiftech
  **/
 public class DefaultIdGenerator implements IdGenerator<IdPojo> {
 
