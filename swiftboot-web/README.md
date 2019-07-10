@@ -40,7 +40,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>1.0.11-SNAPSHOT</version>
+    <version>1.0.12-SNAPSHOT</version>
   </dependency>
   ```
 
@@ -58,7 +58,7 @@ SwiftBoot-Web 使用 Spring Data JPA 来实现 Model 层，所有 Dao 接口必�
 
 * 实体类
 
-SwiftBoot-Web 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity`，`BaseIdEntity` 定义了主键字段 ID，`BaseEntity` 继承 `BaseIdEntity` 并定义了创建时间 `CREATE_TIME`、更新时间 `UPDATE_TIME`、是否逻辑删除 `IS_DELETE` 三个字段
+SwiftBoot-Web 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEntity`，`BaseIdEntity` 定义了主键字段 ID，`BaseEntity` 继承 `BaseIdEntity` 并定义了创建时间 `CREATE_TIME`、更新时间 `UPDATE_TIME`、是否逻辑删除 `IS_DELETE` 三个字段。也许这些字段不会都用得到，但是为每个表添加这些字段也不会有什么明显的影响。
 
   ```java
   @Entity

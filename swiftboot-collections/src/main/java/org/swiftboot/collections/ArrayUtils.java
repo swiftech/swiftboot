@@ -1,5 +1,8 @@
 package org.swiftboot.collections;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * @author swiftech
  **/
@@ -16,11 +19,10 @@ public class ArrayUtils {
         if (array == null || clazz == null) {
             return null;
         }
-        for (Object o : array) {
-            if (clazz.isAssignableFrom(o.getClass())) {
-                return o;
-            }
-        }
-        return null;
+        Optional<Object> first = Arrays.stream(array)
+                .filter(s -> clazz.isAssignableFrom(s.getClass()))
+                .findFirst();
+        return first.orElse(null);
     }
+
 }

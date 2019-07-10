@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 简单的 IO 处理工具类，只能处理文件流
  *
  * @author swiftech
  */

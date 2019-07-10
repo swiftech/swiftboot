@@ -3,6 +3,7 @@ package org.swiftboot.web.util;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.util.IoUtils;
+import org.swiftboot.util.BufferedIoUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
@@ -83,6 +84,7 @@ public class HttpServletIOUtils {
      * @param response
      * @param contentType
      * @param headers
+     * @deprecated 用 writeInputStreamToResponseStream
      */
     public static void writeStreamToResponseStream(InputStream inputStream,
                                                    HttpServletResponse response,
@@ -104,6 +106,46 @@ public class HttpServletIOUtils {
             }
             out = response.getOutputStream();
             out.write(bytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 将输入流写入 HttpServletResponse 流
+     *
+     * @param inputStream
+     * @param response
+     * @param contentType
+     * @param headers
+     */
+    public static void writeInputStreamToResponseStream(InputStream inputStream,
+                                                   HttpServletResponse response,
+                                                   String contentType,
+                                                   Map<String, String> headers) {
+        OutputStream out = null;
+        try {
+            response.setCharacterEncoding(CharEncoding.UTF_8);
+            response.setContentType(contentType);
+            if (headers != null) {
+                for (String k : headers.keySet()) {
+                    String v = headers.get(k);
+                    response.setHeader(k, v);
+                }
+            }
+            out = response.getOutputStream();
+            OutputStream finalOut = out;
+            BufferedIoUtils.readInputStream(inputStream, 1024, finalOut::write);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
