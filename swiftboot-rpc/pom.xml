@@ -6,7 +6,7 @@
     <parent>
         <artifactId>swiftboot</artifactId>
         <groupId>com.github.swiftech</groupId>
-        <version>1.0.12-SNAPSHOT</version>
+        <version>1.0.13</version>
     </parent>
 
     <artifactId>swiftboot-rpc</artifactId>

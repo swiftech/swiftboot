@@ -34,54 +34,47 @@ public abstract class ErrorCodeSupport {
     /**
      * 常规错误代码 20xx
      **/
-    public static final String CODE_SYS_ERR = "2000";//未知系统错误
-    public static final String CODE_VALIDATION_FAIL = "2001"; // 表单验证错误
+    public static final String CODE_SYS_ERR = "2000"; //未知系统错误
+    public static final String CODE_SYS_DB_ERROR = "2001"; //数据库错误
     public static final String CODE_PARAMS_ERROR = "2002"; // 输入参数错误
     public static final String CODE_NO_PERMISSION = "2003"; // 没有权限进行操作
-    public static final String CODE_SESSION_TIMEOUT = "2004"; // 会话超时，请重新登录
     public static final String CODE_ILLEGAL_API_ACESS = "2005"; // 非法的 API 调用
-    public static final String CODE_APP_VERSION_EXPIRED = "2006"; // App版本过期，请升级至新版本
-    public static final String CODE_SYS_TIME_DIFF = "2007"; // 您的手机系统时间不正确，请先校准！
+    public static final String CODE_APP_VERSION_EXPIRED = "2006"; // 客户端版本低，请升级至新版本
+    public static final String CODE_SYS_TIME_DIFF = "2007"; // 客户端时间和服务器端不一致
     public static final String CODE_FILE_UPLOAD_FAIL = "2008"; // 上传文件失败
     public static final String CODE_FILE_DOWNLOAD_FAIL = "2009"; // 下载文件失败
-    public static final String CODE_UNDER_DEVELOPMENT = "2010"; // 正在开发中，敬请期待
-    public static final String CODE_TEXT_TOO_LONG = "2011"; // 文字长度过长
+    public static final String CODE_FILE_NOT_EXIST = "2010"; // 文件不存在
     public static final String CODE_TXVERSION_ERROR = "2012"; // 他人已做操作，请刷新当前页面或数据
-    public static final String CODE_NEED_LOGIN = "2013"; // 需要登录
-    public static final String CODE_GET_CURRENT_SYSUSER_FAILED = "2014"; // 获取当前登录的系统用户失败
-    public static final String CODE_PERSISTENT_ERROR = "2015"; // 数据库操作失败
-    public static final String CODE_FILE_NOT_EXIST = "2016"; // 文件不存在
+
 
     /**
-     * 用户业务错误代码定义 21xx
+     * 用户错误代码定义 21xx
      */
-    // Signin
+    // 登录
     public static final String CODE_NO_REG = "2100";// 用户未注册
-    public static final String CODE_NO_SIGNIN = "2101"; // 用户未登录
-    public static final String CODE_SIGNIN_FAIL = "2102"; //账号或密码错误
-    public static final String CODE_SIGNIN_WRONG_PWD = "2103"; //密码错误
-    public static final String CODE_USER_FROZEN = "2105";//用户已被冻结
-    public static final String CODE_USER_ACCOUNT_EMPTY = "2106";//请输入账号
-    public static final String CODE_USER_PASSWORD_EMPTY = "2107";//请输入密码
-    public static final String CODE_USER_SESSION_NOT_EXIST = "2108"; // 用户登录会话不存在
+    public static final String CODE_NO_SIGNIN = "2101";// 用户未登录
+    public static final String CODE_SIGNIN_FAIL = "2102";// 账号或密码错误
+    public static final String CODE_SIGNIN_WRONG_PWD = "2103";// 密码错误
+    public static final String CODE_USER_FROZEN = "2105";// 用户已被冻结
+    public static final String CODE_USER_ACCOUNT_EMPTY = "2106";// 请输入账号
+    public static final String CODE_USER_PASSWORD_EMPTY = "2107";// 请输入密码
+    public static final String CODE_USER_SESSION_NOT_EXIST = "2108";// 用户登录会话不存在
+    public static final String CODE_SESSION_TIMEOUT = "2109";// 会话超时，请重新登录
 
-    // CAPTCHA
+    // 验证码
     public static final String CODE_CAPTCHA_NO_EXIST = "2104";// 没有找到验证码
-    public static final String CODE_CAPTCHA_EMPTY = "2110";//请输入验证码
-    public static final String CODE_CAPTCHA_NO_REPEAT = " 2111";// 不能重复重复获取，请稍后再试
+    public static final String CODE_CAPTCHA_EMPTY = "2110";// 请输入验证码
+    public static final String CODE_CAPTCHA_TOO_MANY = " 2111";// 获取太频繁，请稍后再试
     public static final String CODE_CAPTCHA_SEND_FAIL = "2112";// 发送验证码失败
-    public static final String CODE_CAPTCHA_TOOMANY = "2113";// 超过验证码最多条数限制
+    public static final String CODE_CAPTCHA_TOOMANY = "2113";// 超过验证码发送上限
     public static final String CODE_CAPTCHA_WRONG = "2114"; // 验证码错误
-    public static final String CODE_CAPTCHA_RETRY = "2116";// 请稍后再试
-    public static final String CODE_CAPTCHA_EXPIRED = "2117";//验证码已失效，请重新获取
-    public static final String CODE_SMS_CAPTCHA_WRONG = "2115";// 短信验证码错误
-    public static final String CODE_SMS_CAPTCHA_LACK_SEND_TO = "2119";// 缺少手机号码
-    public static final String CODE_SMS_CAPTCHA_LACK_DEVICEID = "2118";// 缺少设备ID
+    public static final String CODE_CAPTCHA_EXPIRED = "2117";// 验证码已失效，请重新获取
+    public static final String CODE_SMS_CAPTCHA_LACK_SEND_TO = "2119";// 请输入手机号码
 
-    // Register
+    // 注册
     public static final String CODE_REG_USER_EXISTS = "2131";// 用户已注册
     public static final String CODE_REG_FAIL = "2133";// 用户注册失败
-    // Others
+    // 其他
     public static final String CODE_CHANGE_PWD_FAILD = "2141";// 修改密码失败
 
 
@@ -187,7 +180,7 @@ public abstract class ErrorCodeSupport {
                     log.debug(String.format("  %s(%s)", field.getName(), fieldValue));
                     String message = null;
                     try {
-                        message = messageSource.getMessage(field.getName(), null, Locale.CHINESE);
+                        message = messageSource.getMessage(field.getName(), null, Locale.CHINESE); // TODO
                     } catch (NoSuchMessageException e) {
                         log.info(String.format("Message %s ignored", field.getName()));
                         continue;
