@@ -33,7 +33,7 @@ public class EntityIdAspect {
     private Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
 
     @Resource
-    SwiftBootConfigBean swiftBootConfigBean;
+    private SwiftBootConfigBean swiftBootConfigBean;
 
     @Resource
     private IdGenerator<IdPojo> idGenerator;
