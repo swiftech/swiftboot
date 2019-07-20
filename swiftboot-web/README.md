@@ -2,6 +2,7 @@
 SwiftBoot 的主模块，开发 Web 应用需要引用。
 
 ## 依赖
+* JDK >= 1.8
 * Servlet >= 3.1
 * Spring Framework >= 5.1.x.RELEASE
 * Spring MVC >= 5.1.x.RELEASE
@@ -40,7 +41,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>1.0.12-SNAPSHOT</version>
+    <version>1.0.13</version>
   </dependency>
   ```
 

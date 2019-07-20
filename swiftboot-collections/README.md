@@ -3,15 +3,15 @@
 
 ### 
 
-* ArrayUtils
+* ArrayUtils	数组工具类
 
-* CollectionUtils
+* CollectionUtils	集合工具类
 
-* MapUtils
+* MapUtils	映射工具类
 
-* QueueMap
+* QueueMap	带有队列功能的 Map，所有的 Key 有序存储在队列中
 
-* IntRangeKeyMap
+* IntRangeKeyMap	
 
 
 ### Maven
@@ -21,7 +21,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-collections</artifactId>
-		<version>1.0.11-SNAPSHOT</version>
+		<version>1.0.13</version>
 	</dependency>
 </dependencies>
 

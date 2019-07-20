@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 带有队列功能的Map，所有的 Key 有序存储在队列中，
+ * 带有队列功能的 Map，所有的 Key 有序存储在队列中
  *
  * @author swiftech
  * @param <K> 健类型

@@ -2,6 +2,9 @@
 
 基于Spring Framework，Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
 
+### 为什么要有 SwiftBoot
+* 虽然用 Spring Boot 搭建框架进行开发已经简化了很多配置的工作，但是对于大多数中小型的项目来说来，还是有一些重复性的工作。
+* 开源社区中已经有很多快速开发框架，它们功能很多但是太过于臃肿并且侵入性很强。
 
 ### 特性
 * 开箱即用，只需要很少的配置即可使用，用更少的代码完成更多的工作。
@@ -11,7 +14,7 @@
 * 自动验证输入参数并自动转换为统一的返回格式。
 * 主键UUID自动生成机制。
 * 企业 Web 开发常用的工具类和集合类。
-* 常见文档格式转换。
+* 常见文档格式转换（开发中）。
 
 
 ### 模块
@@ -32,7 +35,7 @@
 		<dependency>
 			<groupId>com.github.swiftech</groupId>
 			<artifactId>swiftboot-web</artifactId>
-			<version>1.0.11-SNAPSHOT</version>
+			<version>1.0.13</version>
 		</dependency>
 	</dependencies>
 
