@@ -1,5 +1,6 @@
 package org.swiftboot.fileconvert;
 
+import org.apache.commons.collections4.map.MultiKeyMap;
 import org.swiftboot.fileconvert.impl.Html2PdfConvert;
 import org.swiftboot.fileconvert.impl.Pdf2ImageConvert;
 import org.swiftboot.fileconvert.impl.Word2ImageConvert;
@@ -10,6 +11,14 @@ import org.swiftboot.util.constant.FileConstants;
  * @author swiftech
  **/
 public class ConvertFactory {
+
+//    private MultiKeyMap<String, Class<? extends Convert>> mapping = new MultiKeyMap<>();
+//
+//    public void init() {
+//        mapping.put("html", "pdf", Html2PdfConvert.class);
+//        mapping.put("pdf", )
+//    }
+
 
     public Convert createConvert(Source source, Target target) {
         if ("html".equals(source.getFileType())) {

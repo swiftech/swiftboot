@@ -39,7 +39,7 @@ public class GoodsEntity extends BaseEntity {
      * 商品价格 
      */
     @PropertyDescription(value = "商品价格", example = "12.5")
-    @Column(name = "PRICE", scale = 8, precision = 2, columnDefinition = "DOUBLE(8.2) COMMENT '商品价格'")
+    @Column(name = "PRICE", scale = 8, precision = 2)//, columnDefinition = "DOUBLE(8.2) COMMENT '商品价格'")
     private Double price;
 
 
