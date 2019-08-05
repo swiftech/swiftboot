@@ -2,6 +2,7 @@ package org.swiftboot.util;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 
@@ -27,6 +28,9 @@ public class CryptoUtils {
      * @return
      */
     public static String md5(String src) {
+        if (StringUtils.isBlank(src)) {
+            throw new IllegalArgumentException(src);
+        }
         byte[] md5 = DigestUtils.md5((src).getBytes());
         if (md5 == null) {
             return null;

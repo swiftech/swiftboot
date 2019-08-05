@@ -13,6 +13,20 @@ import java.util.*;
  **/
 public class CollectionUtilsTest {
 
+    public static void main(String[] args) {
+        List<String> l = new ArrayList<String>() {
+            {
+                add("hello");
+                add("list");
+            }
+        };
+        String[] objects = (String[]) l.toArray(new String[]{});
+        for (String object : objects) {
+            System.out.println(object);
+        }
+
+    }
+
     @Test
     public void testConstructByType() {
         Assertions.assertDoesNotThrow(new Executable() {
