@@ -39,7 +39,7 @@ public class GoodsController {
     private Logger log = LoggerFactory.getLogger(GoodsController.class);
 
     @Resource
-    GoodsService goodsService;
+    private GoodsService goodsService;
 
     @ApiOperation(notes = "创建商品", value = "创建商品")
     @RequestMapping(value = "create", method = RequestMethod.POST)

@@ -37,7 +37,7 @@ public class GoodsOrderRelController {
     private Logger log = LoggerFactory.getLogger(GoodsOrderRelController.class);
 
     @Resource
-    GoodsOrderRelService goodsOrderRelService;
+    private GoodsOrderRelService goodsOrderRelService;
 
     @ApiOperation(notes = "创建商品订单关系", value = "创建商品订单关系")
     @RequestMapping(value = "create", method = RequestMethod.POST)
