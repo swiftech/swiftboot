@@ -30,10 +30,6 @@ public class SwiftBootConfigBean {
     @NestedConfigurationProperty
     private FilterConfigBean filter = new FilterConfigBean();
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        return new CorsFilter();
-//    }
 
     public ModelConfigBean getModel() {
         return model;
