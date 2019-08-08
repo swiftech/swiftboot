@@ -13,8 +13,8 @@
     <description>企业Web应用基础框架</description>
 
     <properties>
-        <spring.version>5.1.7.RELEASE</spring.version>
-        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+        <spring.version>5.1.9.RELEASE</spring.version>
+        <spring.boot.version>2.1.7.RELEASE</spring.boot.version>
         <servlet.version>3.1.0</servlet.version>
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
         <swagger.version>1.5.22</swagger.version>
@@ -22,9 +22,9 @@
         <validation.api.version>2.0.1.Final</validation.api.version>
         <hibernate.version>5.3.10.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
-        <hibernate.validator.version>6.0.16.Final</hibernate.validator.version>
+        <hibernate.validator.version>6.0.17.Final</hibernate.validator.version>
         <log4j2.version>2.9.1</log4j2.version>
-        <spring.data.version>2.1.5.RELEASE</spring.data.version>
+        <spring.data.version>2.1.10.RELEASE</spring.data.version>
     </properties>
 
     <dependencies>
@@ -155,12 +155,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-webmvc</artifactId>-->
-            <!--<version>${spring.version}</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>

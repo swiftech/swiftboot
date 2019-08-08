@@ -23,7 +23,7 @@ public class UpdateTimeAspect {
     private Logger log = LoggerFactory.getLogger(UpdateTimeAspect.class);
 
     @Resource
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Pointcut(value = "execution(public * org.springframework.data.repository.CrudRepository+.save*(..))")
     public void pointcut() {
@@ -42,15 +42,13 @@ public class UpdateTimeAspect {
             if (arg instanceof BaseEntity) {
                 BaseEntity baseEntity = (BaseEntity) arg;
                 this.tryToSetUpdateTime(baseEntity);
-            }
-            else if (arg instanceof Iterable) {
+            } else if (arg instanceof Iterable) {
                 for (Object baseEntity : ((Iterable) arg)) {
                     if (baseEntity instanceof BaseEntity) {
                         this.tryToSetUpdateTime((BaseEntity) baseEntity);
                     }
                 }
-            }
-            else {
+            } else {
                 log.debug("略过不处理: " + arg);
             }
         }
