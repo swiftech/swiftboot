@@ -26,7 +26,7 @@ public class PasswordUtils {
      * @param salt
      * @return
      */
-    public static String md5salt(String src, String salt) {
+    public static String createPassword(String src, String salt) {
         return CryptoUtils.md5salt(src, salt);
     }
 
