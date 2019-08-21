@@ -82,7 +82,7 @@ public abstract class ErrorCodeSupport {
     private static HashMap<String, String> errorCodeMap = new HashMap<>();
 
     @Resource
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     /**
      * 设置错误代码对应的错误消息
@@ -150,10 +150,7 @@ public abstract class ErrorCodeSupport {
                     cache.put(String.valueOf(field.get(null)), field);
                 }
             }
-
-            String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "参数化错误信息");
-            System.out.println("检测参数化信息：" + argumentedMsg);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -185,7 +182,11 @@ public abstract class ErrorCodeSupport {
                         log.info(String.format("Message %s ignored", field.getName()));
                         continue;
                     }
-                    putErrorCodeAndMessage(field.get(null).toString(), message);
+                    if (StringUtils.isBlank(message)) {
+                        log.info(String.format("Not message for '%s'", field.getName()));
+                    } else {
+                        putErrorCodeAndMessage(field.get(null).toString(), message);
+                    }
                 }
             }
 
@@ -206,9 +207,23 @@ public abstract class ErrorCodeSupport {
                         log.info(String.format("Message %s ignored", field.getName()));
                         continue;
                     }
-                    putErrorCodeAndMessage(field.get(null).toString(), message);
+                    if (StringUtils.isBlank(message)) {
+                        log.info(String.format("Not message for '%s'", field.getName()));
+                    } else {
+                        putErrorCodeAndMessage(field.get(null).toString(), message);
+                    }
                 }
             }
+
+            if (errorCodeMap == null || errorCodeMap.isEmpty()) {
+                log.warn("没有正确初始化错误代码资源");
+                return;
+            } else {
+                log.info(String.format("初始化%d个资源", errorCodeMap.size()));
+            }
+
+            String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "参数化错误信息");
+            System.out.println("检测参数化信息：" + argumentedMsg);
         } catch (Exception e) {
             e.printStackTrace();
         }
