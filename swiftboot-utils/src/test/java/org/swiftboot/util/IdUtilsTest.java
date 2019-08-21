@@ -17,9 +17,16 @@ public class IdUtilsTest {
         Assertions.assertEquals(17, s.length());
     }
 
+    @Test
+    public void testMakeSwiftIdByCode() {
+        String s = IdUtils.makeID("teusrore");
+        System.out.println(s);
+        Assertions.assertEquals(32, s.length());
+    }
+
 
     @Test
-    public void testMakeUUIDByCodeAndServerId() {
+    public void testMakeSwiftIdByCodeAndServerId() {
         String s = IdUtils.makeID("adcdef", "1234");
         System.out.println(s);
         Assertions.assertEquals(32, s.length());
@@ -48,7 +55,7 @@ public class IdUtilsTest {
         }
         long end = System.currentTimeMillis();
         System.out.println("生成时间：" + (end - start));
-        System.out.println("平均生成时间：" + new BigDecimal(end -start).divide(new BigDecimal(1000)));
+        System.out.println("平均生成时间：" + new BigDecimal(end - start).divide(new BigDecimal(1000)));
     }
 
 
