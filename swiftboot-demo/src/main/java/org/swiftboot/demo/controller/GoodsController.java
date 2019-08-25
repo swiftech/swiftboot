@@ -1,8 +1,8 @@
 package org.swiftboot.demo.controller;
 
 import org.springframework.validation.BindingResult;
-import org.swiftboot.demo.controller.command.GoodsCreateCommand;
-import org.swiftboot.demo.controller.command.GoodsSaveCommand;
+import org.swiftboot.demo.command.GoodsCreateCommand;
+import org.swiftboot.demo.command.GoodsSaveCommand;
 import org.swiftboot.demo.result.GoodsCreateResult;
 import org.swiftboot.demo.result.GoodsListResult;
 import org.swiftboot.demo.result.GoodsResult;

@@ -1,4 +1,4 @@
-package org.swiftboot.demo.controller.command;
+package org.swiftboot.demo.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -8,12 +8,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * 保存商品
+ * 保存订单明细
  *
- * @author swiftech 2019-04-07
+ * @author swiftech 2019-08-22
  **/
 @ApiModel
-public class GoodsSaveCommand extends GoodsCreateCommand {
+public class OrderDetailSaveCommand extends OrderDetailCreateCommand {
 
     @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @NotBlank
@@ -32,6 +32,7 @@ public class GoodsSaveCommand extends GoodsCreateCommand {
 
     /**
      * 设置 ID
+     *
      * @param id
      */
     public void setId(String id) {

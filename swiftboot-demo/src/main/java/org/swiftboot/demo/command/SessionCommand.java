@@ -1,4 +1,4 @@
-package org.swiftboot.demo.controller.command;
+package org.swiftboot.demo.command;
 
 import org.swiftboot.web.command.BaseSessionCommand;
 

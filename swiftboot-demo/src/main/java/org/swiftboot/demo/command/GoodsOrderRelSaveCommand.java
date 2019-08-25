@@ -1,4 +1,4 @@
-package org.swiftboot.demo.controller.command;
+package org.swiftboot.demo.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -32,6 +32,7 @@ public class GoodsOrderRelSaveCommand extends GoodsOrderRelCreateCommand {
 
     /**
      * 设置 ID
+     *
      * @param id
      */
     public void setId(String id) {

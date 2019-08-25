@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.demo.controller.command.GoodsCreateCommand;
-import org.swiftboot.demo.controller.command.GoodsSaveCommand;
+import org.swiftboot.demo.command.GoodsCreateCommand;
+import org.swiftboot.demo.command.GoodsSaveCommand;
 import org.swiftboot.demo.model.dao.GoodsDao;
 import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.demo.result.GoodsCreateResult;
@@ -27,7 +27,7 @@ import java.util.Optional;
  * @author swiftech 2019-04-07
  **/
 @Service
-public class GoodsServiceImpl implements GoodsService{
+public class GoodsServiceImpl implements GoodsService {
 
     private Logger log = LoggerFactory.getLogger(GoodsServiceImpl.class);
 
@@ -44,7 +44,7 @@ public class GoodsServiceImpl implements GoodsService{
     public GoodsCreateResult createGoods(GoodsCreateCommand cmd) {
         GoodsEntity p = cmd.createEntity();
         GoodsEntity saved = goodsDao.save(p);
-        log.debug("保存商品: " + saved.getId());
+        log.debug("创建商品: " + saved.getId());
         return new GoodsCreateResult(saved.getId());
     }
 
@@ -143,7 +143,7 @@ public class GoodsServiceImpl implements GoodsService{
             ret = GoodsResult.createResult(GoodsResult.class, optEntity.get());
         }
         else {
-            log.debug("没有查询到" + goodsId);
+            log.debug("没有查询到商品, ID: " + goodsId);
         }
         return ret;
     }
@@ -162,7 +162,7 @@ public class GoodsServiceImpl implements GoodsService{
             ret.setTotal(goodsDao.count());
         }
         else {
-            log.debug("没有查询到");
+            log.debug("没有查询到商品");
         }
         return ret;
     }
@@ -183,7 +183,7 @@ public class GoodsServiceImpl implements GoodsService{
             ret.setTotal(goodsDao.count());
         }
         else {
-            log.debug("没有查到");
+            log.debug("没有查到商品");
         }
         return ret;
     }

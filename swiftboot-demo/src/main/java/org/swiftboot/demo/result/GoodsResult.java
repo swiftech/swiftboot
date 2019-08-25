@@ -44,7 +44,6 @@ public class GoodsResult extends BasePopulateResult {
     @JsonProperty("id")
     private String id;
 
-
     /**
      * 获取商品名称
      *
@@ -170,6 +169,5 @@ public class GoodsResult extends BasePopulateResult {
     public void setId(String id) {
         this.id = id;
     }
-
 
 }

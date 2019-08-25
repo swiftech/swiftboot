@@ -1,8 +1,9 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.controller.command.OrderCreateCommand;
-import org.swiftboot.demo.controller.command.OrderSaveCommand;
+import org.swiftboot.demo.command.OrderCreateCommand;
+import org.swiftboot.demo.command.OrderSaveCommand;
 import org.swiftboot.demo.model.dao.OrderDao;
+import org.swiftboot.demo.model.dao.OrderDetailDao;
 import org.swiftboot.demo.model.entity.OrderDetailEntity;
 import org.swiftboot.demo.model.entity.OrderEntity;
 import org.swiftboot.demo.result.OrderCreateResult;
@@ -36,6 +37,9 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private OrderDao orderDao;
 
+    @Resource
+    private OrderDetailDao orderDetailDao;
+
     /**
      * 创建订单
      *
@@ -47,13 +51,14 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity p = cmd.createEntity();
         OrderDetailEntity od = new OrderDetailEntity();
         od.setDescription("订单明细项");
-        p.setDetails(new HashSet<OrderDetailEntity>() {
+        orderDetailDao.save(od);
+        p.setOrderDetails(new HashSet<OrderDetailEntity>() {
             {
                 add(od);
             }
         });
         OrderEntity saved = orderDao.save(p);
-        log.debug("保存订单: " + saved.getId());
+        log.debug("创建订单: " + saved.getId());
         return new OrderCreateResult(saved.getId());
     }
 
@@ -152,7 +157,7 @@ public class OrderServiceImpl implements OrderService {
             ret = OrderResult.createResult(OrderResult.class, optEntity.get());
         }
         else {
-            log.debug("没有查询到" + orderId);
+            log.debug("没有查询到订单, ID: " + orderId);
         }
         return ret;
     }
@@ -171,7 +176,7 @@ public class OrderServiceImpl implements OrderService {
             ret.setTotal(orderDao.count());
         }
         else {
-            log.debug("没有查询到");
+            log.debug("没有查询到订单");
         }
         return ret;
     }
@@ -192,7 +197,7 @@ public class OrderServiceImpl implements OrderService {
             ret.setTotal(orderDao.count());
         }
         else {
-            log.debug("没有查到");
+            log.debug("没有查到订单");
         }
         return ret;
     }

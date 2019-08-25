@@ -9,20 +9,20 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 商品订单关系
+ * 商品详情
  *
  * @author swiftech 2019-04-07
  **/
 @ApiModel
-public class GoodsOrderRelResult extends BasePopulateResult {
+public class GoodsDetailResult extends BasePopulateResult {
 
-    @ApiModelProperty(value = "商品ID", example = "e8af5ea376fde35fb2c504633f55b128")
-    @JsonProperty("goods_id")
-    private String goodsId;
+    @ApiModelProperty(value = "商品图片URI", example = "/image/goods/1029")
+    @JsonProperty("image_uri")
+    private String imageUri;
 
-    @ApiModelProperty(value = "订单ID", example = "527d36e654f9eaea6a9b46380d253fc9")
-    @JsonProperty("order_id")
-    private String orderId;
+    @ApiModelProperty(value = "折扣", example = "0.85")
+    @JsonProperty("discount")
+    private Double discount;
 
     @ApiModelProperty(value = "修改时间", example = "1545355038524")
     @JsonProperty("update_time")
@@ -41,39 +41,39 @@ public class GoodsOrderRelResult extends BasePopulateResult {
     private String id;
 
     /**
-     * 获取商品ID
+     * 获取商品图片URI
      *
      * @return
      */
-    public String getGoodsId() {
-        return goodsId;
+    public String getImageUri() {
+        return imageUri;
     }
 
     /**
-     * 设置商品ID
+     * 设置商品图片URI
      *
-     * @param goodsId
+     * @param imageUri
      */
-    public void setGoodsId(String goodsId) {
-        this.goodsId = goodsId;
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     /**
-     * 获取订单ID
+     * 获取折扣
      *
      * @return
      */
-    public String getOrderId() {
-        return orderId;
+    public Double getDiscount() {
+        return discount;
     }
 
     /**
-     * 设置订单ID
+     * 设置折扣
      *
-     * @param orderId
+     * @param discount
      */
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     /**
@@ -147,6 +147,5 @@ public class GoodsOrderRelResult extends BasePopulateResult {
     public void setId(String id) {
         this.id = id;
     }
-
 
 }

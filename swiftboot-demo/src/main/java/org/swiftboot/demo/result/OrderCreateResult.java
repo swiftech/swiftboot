@@ -15,7 +15,7 @@ import org.swiftboot.web.result.BasePopulateResult;
 @ApiModel
 public class OrderCreateResult extends BasePopulateResult<OrderEntity> {
 
-    @ApiModelProperty("订单 ID")
+    @ApiModelProperty(value = "订单 ID", example = "")
     @JsonProperty("order_id")
     private String orderId;
 

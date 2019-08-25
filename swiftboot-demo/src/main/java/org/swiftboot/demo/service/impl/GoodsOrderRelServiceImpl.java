@@ -1,8 +1,8 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.controller.command.GoodsOrderRelCreateCommand;
-import org.swiftboot.demo.controller.command.GoodsOrderRelDelPurgeCommand;
-import org.swiftboot.demo.controller.command.GoodsOrderRelSaveCommand;
+import org.swiftboot.demo.command.GoodsOrderRelCreateCommand;
+import org.swiftboot.demo.command.GoodsOrderRelDelPurgeCommand;
+import org.swiftboot.demo.command.GoodsOrderRelSaveCommand;
 import org.swiftboot.demo.model.dao.GoodsOrderRelDao;
 import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
 import org.swiftboot.demo.result.GoodsOrderRelCreateResult;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * @author swiftech 2019-04-07
  **/
 @Service
-public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
+public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
 
     private Logger log = LoggerFactory.getLogger(GoodsOrderRelServiceImpl.class);
 
@@ -45,7 +45,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
     public GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateCommand cmd) {
         GoodsOrderRelEntity p = cmd.createEntity();
         GoodsOrderRelEntity saved = goodsOrderRelDao.save(p);
-        log.debug("保存商品订单关系: " + saved.getId());
+        log.debug("创建商品订单关系: " + saved.getId());
         return new GoodsOrderRelCreateResult(saved.getId());
     }
 
@@ -169,7 +169,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
             ret = GoodsOrderRelResult.createResult(GoodsOrderRelResult.class, optEntity.get());
         }
         else {
-            log.debug("没有查询到" + goodsOrderRelId);
+            log.debug("没有查询到商品订单关系, ID: " + goodsOrderRelId);
         }
         return ret;
     }
@@ -188,7 +188,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
             ret.setTotal(goodsOrderRelDao.count());
         }
         else {
-            log.debug("没有查询到");
+            log.debug("没有查询到商品订单关系");
         }
         return ret;
     }
@@ -209,7 +209,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService{
             ret.setTotal(goodsOrderRelDao.count());
         }
         else {
-            log.debug("没有查到");
+            log.debug("没有查到商品订单关系");
         }
         return ret;
     }

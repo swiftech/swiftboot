@@ -4,12 +4,7 @@ import org.springframework.context.annotation.Description;
 import org.swiftboot.web.annotation.PropertyDescription;
 import org.swiftboot.web.model.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import javax.persistence.*;
 
 /**
  * 商品订单关系
@@ -22,18 +17,18 @@ import java.util.Date;
 public class GoodsOrderRelEntity extends BaseEntity {
 
     /**
-     * 商品ID 
-     */
-    @PropertyDescription(value = "商品ID", example = "e8af5ea376fde35fb2c504633f55b128")
-    @Column(name = "DEMO_GOODS_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '商品ID'")
-    private String goodsId;
-
-    /**
-     * 订单ID 
+     * 订单ID
      */
     @PropertyDescription(value = "订单ID", example = "527d36e654f9eaea6a9b46380d253fc9")
-    @Column(name = "DEMO_ORDER_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '订单ID'")
+    @Column(name = "ORDER_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '订单ID'")
     private String orderId;
+
+    /**
+     * 商品
+     */
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "GOODS_ID", nullable = false)
+    private GoodsEntity goods;
 
 
     public GoodsOrderRelEntity() {
@@ -41,20 +36,6 @@ public class GoodsOrderRelEntity extends BaseEntity {
 
     public GoodsOrderRelEntity(String id) {
         super(id);
-    }
-
-    /**
-     * 获取商品ID
-     */
-    public String getGoodsId() {
-        return goodsId;
-    }
-
-    /**
-     * 设置商品ID
-     */
-    public void setGoodsId(String goodsId) {
-        this.goodsId = goodsId;
     }
 
     /**
@@ -71,5 +52,18 @@ public class GoodsOrderRelEntity extends BaseEntity {
         this.orderId = orderId;
     }
 
+    /**
+     * 获取商品
+     */
+    public GoodsEntity getGoods() {
+        return goods;
+    }
+
+    /**
+     * 设置商品
+     */
+    public void setGoods(GoodsEntity goods) {
+        this.goods = goods;
+    }
 
 }

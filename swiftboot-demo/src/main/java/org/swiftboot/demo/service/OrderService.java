@@ -1,7 +1,7 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.controller.command.OrderCreateCommand;
-import org.swiftboot.demo.controller.command.OrderSaveCommand;
+import org.swiftboot.demo.command.OrderCreateCommand;
+import org.swiftboot.demo.command.OrderSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
 import org.swiftboot.demo.result.OrderResult;

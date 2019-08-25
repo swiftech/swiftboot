@@ -46,7 +46,6 @@ public interface GoodsOrderRelDao extends PagingAndSortingRepository<GoodsOrderR
      */
     List<GoodsOrderRelEntity> findByIsDeleteFalseAndOrderId(String orderId);
 
-
     /**
      * 按照两个外键查询两个关联表字段存在的关系
      *

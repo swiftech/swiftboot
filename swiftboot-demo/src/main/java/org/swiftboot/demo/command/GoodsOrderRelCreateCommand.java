@@ -1,4 +1,4 @@
-package org.swiftboot.demo.controller.command;
+package org.swiftboot.demo.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
@@ -8,11 +8,6 @@ import org.swiftboot.web.command.BasePopulateCommand;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 创建商品订单关系

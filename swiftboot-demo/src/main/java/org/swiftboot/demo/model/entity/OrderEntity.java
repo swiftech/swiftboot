@@ -18,39 +18,39 @@ import java.util.Set;
 public class OrderEntity extends BaseEntity {
 
     /**
-     * 订单编号 
+     * 订单编号
      */
     @PropertyDescription(value = "订单编号", example = "2019032411081201")
     @Column(name = "ORDER_CODE", length = 16, columnDefinition = "VARCHAR(16) COMMENT '订单编号'")
     private String orderCode;
 
     /**
-     * 订单描述 
+     * 订单描述
      */
     @PropertyDescription(value = "订单描述", example = "越快越好")
     @Column(name = "DESCRIPTION", length = 64, columnDefinition = "VARCHAR(64) COMMENT '订单描述'")
     private String description;
 
     /**
-     * 商品总数 
+     * 商品总数
      */
     @PropertyDescription(value = "商品总数", example = "5")
     @Column(name = "TOTAL_COUNT", columnDefinition = "INT DEFAULT 0 COMMENT '商品总数'")
     private Integer totalCount = 0;
 
     /**
-     * 发货地址 
+     * 发货地址
      */
     @PropertyDescription(value = "发货地址", example = "极乐世界102号")
     @Column(name = "ADDRESS", length = 64, columnDefinition = "VARCHAR(64) COMMENT '发货地址'")
     private String address;
 
     /**
-     * 订单明细列表
+     * 订单明细
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORDER_ID")
-    private Set<OrderDetailEntity> details;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
+    private Set<OrderDetailEntity> orderDetails;
+
 
     public OrderEntity() {
     }
@@ -116,18 +116,17 @@ public class OrderEntity extends BaseEntity {
     }
 
     /**
-     * 获取订单明细列表
-     * @return
+     * 获取订单明细
      */
-    public Set<OrderDetailEntity> getDetails() {
-        return details;
+    public Set<OrderDetailEntity> getOrderDetails() {
+        return orderDetails;
     }
 
     /**
-     * 设置订单明细列表
-     * @param details
+     * 设置订单明细
      */
-    public void setDetails(Set<OrderDetailEntity> details) {
-        this.details = details;
+    public void setOrderDetails(Set<OrderDetailEntity> orderDetails) {
+        this.orderDetails = orderDetails;
     }
+
 }

@@ -1,8 +1,8 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.controller.command.GoodsOrderRelCreateCommand;
-import org.swiftboot.demo.controller.command.GoodsOrderRelDelPurgeCommand;
-import org.swiftboot.demo.controller.command.GoodsOrderRelSaveCommand;
+import org.swiftboot.demo.command.GoodsOrderRelCreateCommand;
+import org.swiftboot.demo.command.GoodsOrderRelDelPurgeCommand;
+import org.swiftboot.demo.command.GoodsOrderRelSaveCommand;
 import org.swiftboot.demo.result.GoodsOrderRelCreateResult;
 import org.swiftboot.demo.result.GoodsOrderRelListResult;
 import org.swiftboot.demo.result.GoodsOrderRelResult;

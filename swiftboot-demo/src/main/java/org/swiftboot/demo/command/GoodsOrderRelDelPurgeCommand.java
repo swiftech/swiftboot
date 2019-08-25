@@ -1,4 +1,4 @@
-package org.swiftboot.demo.controller.command;
+package org.swiftboot.demo.command;
 
 /**
  * 逻辑或者永久删除商品订单关系的关联关系，根据商品ID和订单ID
