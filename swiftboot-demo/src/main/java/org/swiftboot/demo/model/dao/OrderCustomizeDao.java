@@ -1,7 +1,5 @@
 package org.swiftboot.demo.model.dao;
 
-import org.swiftboot.demo.model.entity.OrderEntity;
-
 /**
  * 订单数据查询接口
  *

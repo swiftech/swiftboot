@@ -63,7 +63,6 @@ public interface GoodsDao extends PagingAndSortingRepository<GoodsEntity, String
     List<GoodsEntity> findByIsDeleteFalseAndPrice(Double price);
 
 
-
     /**
      * 批量按照ID查询商品
      *

@@ -1,7 +1,6 @@
 package org.swiftboot.demo.model.dao.impl;
 
 import org.swiftboot.demo.model.dao.GoodsOrderRelCustomizeDao;
-import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
 import org.swiftboot.web.model.dao.impl.BaseCustomizeDaoImpl;
 
 /**

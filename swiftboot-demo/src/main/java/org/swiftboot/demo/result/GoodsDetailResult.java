@@ -5,9 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.swiftboot.web.result.BasePopulateResult;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * 商品详情
  *

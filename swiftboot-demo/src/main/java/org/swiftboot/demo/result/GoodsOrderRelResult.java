@@ -3,10 +3,8 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.result.BasePopulateResult;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 商品订单关系
@@ -18,6 +16,7 @@ public class GoodsOrderRelResult extends BasePopulateResult {
 
     @ApiModelProperty(value = "商品ID", example = "e8af5ea376fde35fb2c504633f55b128")
     @JsonProperty("goods_id")
+    @PopulateIgnore
     private String goodsId;
 
     @ApiModelProperty(value = "订单ID", example = "527d36e654f9eaea6a9b46380d253fc9")
