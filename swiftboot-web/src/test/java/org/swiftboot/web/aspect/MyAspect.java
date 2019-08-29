@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  *
- * @author Allen 2019-04-18
+ * @author swiftech 2019-04-18
  **/
 @Aspect
 public class MyAspect {
