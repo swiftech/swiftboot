@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 创建订单
  *
- * @author swiftech 2019-04-07
+ * @author swiftech 2019-08-22
  **/
 @ApiModel
 public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {

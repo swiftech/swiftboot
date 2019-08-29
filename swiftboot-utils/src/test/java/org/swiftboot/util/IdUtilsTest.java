@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 /**
- * @author Allen 2019-04-01
+ * @author swiftech 2019-04-01
  **/
 public class IdUtilsTest {
 

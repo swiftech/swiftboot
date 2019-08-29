@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 /**
  * 保存商品订单关系
  *
- * @author swiftech 2019-04-07
+ * @author swiftech 2019-08-22
  **/
 @ApiModel
 public class GoodsOrderRelSaveCommand extends GoodsOrderRelCreateCommand {

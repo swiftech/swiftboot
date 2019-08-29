@@ -9,7 +9,7 @@ import org.swiftboot.collections.CollectionUtils;
 import java.util.*;
 
 /**
- * @author Allen 2019-04-28
+ * @author swiftech 2019-04-28
  **/
 public class CollectionUtilsTest {
 

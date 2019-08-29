@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 创建商品
  *
- * @author swiftech 2019-04-07
+ * @author swiftech 2019-08-22
  **/
 @ApiModel
 public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {

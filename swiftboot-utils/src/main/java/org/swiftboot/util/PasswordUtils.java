@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * @author Allen 2019-07-30
+ * @author swiftech 2019-07-30
  **/
 public class PasswordUtils {
 
