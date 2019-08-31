@@ -34,6 +34,47 @@ public class BeanUtils {
     /**
      * 循环向上转型，获取对象声明的字段。
      *
+     * @param object     对象
+     * @param fieldClass 属性类型
+     * @return 字段对象
+     * @throws NoSuchFieldException 没有该字段时抛出
+     */
+    public static List<Field> getDeclaredFields(Object object, Class fieldClass) throws NoSuchFieldException {
+        return getDeclaredFields(object.getClass(), fieldClass);
+    }
+
+    /**
+     * 循环向上转型，获取对象声明的字段。
+     *
+     * @param clazz      类
+     * @param fieldClass 属性类型
+     * @return 字段对象
+     * @throws NoSuchFieldException 没有该字段时抛出
+     */
+    public static List<Field> getDeclaredFields(Class clazz, Class fieldClass) throws NoSuchFieldException {
+        List<Field> ret = new LinkedList<>();
+        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+            try {
+                for (Field declaredField : superClass.getDeclaredFields()) {
+                    if (declaredField.getType() == fieldClass) {
+                        ret.add(declaredField);
+                    }
+                }
+            } catch (Exception e) {
+                // Field不在当前类定义，继续向上转型
+            }
+        }
+        if (ret.isEmpty()) {
+            throw new NoSuchFieldException(String.format("No such field of type %s in class %s", fieldClass, clazz.getName()));
+        }
+        else {
+            return ret;
+        }
+    }
+
+    /**
+     * 循环向上转型，获取对象声明的字段。
+     *
      * @param object       对象
      * @param propertyName 属性名称
      * @return 字段对象
@@ -121,6 +162,26 @@ public class BeanUtils {
     }
 
     /**
+     * 强制获取指定类型的对象属性变量值列表，忽略 private、protected 修饰符的限制，如果值为 null 则不添加到返回结果中
+     *
+     * @param object     对象
+     * @param fieldClass 属性类型
+     * @return 属性值列表
+     * @throws NoSuchFieldException 没有该字段时抛出
+     */
+    public static <T extends Object> List<T> forceGetProperties(Object object, Class<T> fieldClass) throws NoSuchFieldException {
+        List<T> ret = new LinkedList<>();
+
+        for (Field declaredField : getDeclaredFields(object, fieldClass)) {
+            Object item = forceGetProperty(object, declaredField);
+            if (item != null) {
+                ret.add((T)item);
+            }
+        }
+        return ret;
+    }
+
+    /**
      * 强制获取对象变量值，忽略 private、protected 修饰符的限制。
      *
      * @param object       对象
@@ -135,9 +196,10 @@ public class BeanUtils {
 
     /**
      * 强制获取对象变量值，忽略 private、protected 修饰符的限制。
-     * @param object    对象
-     * @param field     属性域
-     * @return  属性的值
+     *
+     * @param object 对象
+     * @param field  属性域
+     * @return 属性的值
      */
     public static Object forceGetProperty(Object object, Field field) {
         if (field == null || object == null) {
