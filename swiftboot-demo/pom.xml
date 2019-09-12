@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <swiftboot.version>1.0.14</swiftboot.version>
+        <swiftboot.version>1.0.15</swiftboot.version>
     </properties>
 
     <dependencies>
