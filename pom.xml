@@ -13,7 +13,7 @@
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.14</version>
+    <version>1.0.15</version>
     <description>企业Web应用快速开发开发框架</description>
 
     <modules>
