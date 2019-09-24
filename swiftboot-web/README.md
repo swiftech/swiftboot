@@ -41,7 +41,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.14</version>
   </dependency>
   ```
 
@@ -174,6 +174,18 @@ SwiftBoot-Web 要求实体类必须继承 `BaseIdEntity` 或者其子类 `BaseEn
   }
   ```
 
+* HTTP 头处理
+  SwiftBoot 可以帮助你把 HttpServletRequest 中的 Header 自动添加到 Command 对象中, 便于取用
+    ```java
+    @EnableWebMvc
+    public class MyDemoConfig implements WebMvcConfigurer{
+      
+        public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+            Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+            converters.add(new MessageConverter(builder.build));  
+        }
+    }
+    ```
 
 ### Service 层
 

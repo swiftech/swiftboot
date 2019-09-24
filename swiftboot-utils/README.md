@@ -21,6 +21,12 @@
 
 * `SysUtils` 处理操作系统的工具类
 
+* `PasswordUtils` 处理密码创建和验证的工具类，支持加盐
+
+* `NumberFormatUtils` 数格式化工具类
+
+* `BufferedIoUtils` 缓存的IO流工具类
+
 
 ### Maven
 
@@ -29,7 +35,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-utils</artifactId>
-		<version>1.0.13</version>
+		<version>1.0.14</version>
 	</dependency>
 </dependencies>
 

@@ -21,7 +21,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-collections</artifactId>
-		<version>1.0.13</version>
+		<version>1.0.14</version>
 	</dependency>
 </dependencies>
 

@@ -27,6 +27,20 @@
 * [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
 
 
+### 发布
+
+2019-09-08 1.0.14 release
+* 新增了一些工具类
+* 升级了依赖的库
+* 重构一些代码以及更新文档
+* 重构了Demo
+
+2019-07-20 1.0.13 release
+* 第一个稳定版本发布
+
+2018-12-19 1.0-SNAPSHOT
+* 初次提交
+
 ### 快速指南
 
 * 在 `pom.xml` 文件中加入对 SwiftBoot-web 的依赖
@@ -36,7 +50,7 @@
 		<dependency>
 			<groupId>com.github.swiftech</groupId>
 			<artifactId>swiftboot-web</artifactId>
-			<version>1.0.13</version>
+			<version>1.0.14</version>
 		</dependency>
 	</dependencies>
 
