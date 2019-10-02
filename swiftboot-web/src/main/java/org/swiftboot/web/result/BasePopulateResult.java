@@ -79,7 +79,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
             throw new RuntimeException("实体类为空");
         }
         Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
-        log.info("populate result from entity: " + entity);
+        log.debug("populate result from entity: " + entity);
         Collection<Field> targetFields = BeanUtils.getFieldsIgnore(result.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : targetFields) {
             Field srcField;
