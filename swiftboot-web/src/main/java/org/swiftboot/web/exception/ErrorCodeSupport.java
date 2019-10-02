@@ -60,15 +60,16 @@ public abstract class ErrorCodeSupport {
     public static final String CODE_USER_PASSWORD_EMPTY = "2107";// 请输入密码
     public static final String CODE_USER_SESSION_NOT_EXIST = "2108";// 用户登录会话不存在
     public static final String CODE_SESSION_TIMEOUT = "2109";// 会话超时，请重新登录
+    public static final String CODE_USER_LACK_INFO = "2110";// 缺少用户信息，无法登录
 
     // 验证码
-    public static final String CODE_CAPTCHA_NO_EXIST = "2104";// 没有找到验证码
-    public static final String CODE_CAPTCHA_EMPTY = "2110";// 请输入验证码
-    public static final String CODE_CAPTCHA_TOO_MANY = " 2111";// 获取太频繁，请稍后再试
-    public static final String CODE_CAPTCHA_SEND_FAIL = "2112";// 发送验证码失败
-    public static final String CODE_CAPTCHA_TOOMANY = "2113";// 超过验证码发送上限
-    public static final String CODE_CAPTCHA_WRONG = "2114"; // 验证码错误
+    public static final String CODE_CAPTCHA_EMPTY = "2111";// 请输入验证码
+    public static final String CODE_CAPTCHA_TOO_MANY = " 2112";// 获取太频繁，请稍后再试
+    public static final String CODE_CAPTCHA_SEND_FAIL = "2113";// 发送验证码失败
+    public static final String CODE_CAPTCHA_TOOMANY = "2114";// 超过验证码发送上限
+    public static final String CODE_CAPTCHA_WRONG = "2115"; // 验证码错误
     public static final String CODE_CAPTCHA_EXPIRED = "2117";// 验证码已失效，请重新获取
+    public static final String CODE_CAPTCHA_NO_EXIST = "2118";// 没有找到验证码
     public static final String CODE_SMS_CAPTCHA_LACK_SEND_TO = "2119";// 请输入手机号码
 
     // 注册
