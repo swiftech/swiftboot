@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * 默认的统计数量返回对象
+ *
  * @author swiftech
  **/
 @ApiModel("默认的统计结果")

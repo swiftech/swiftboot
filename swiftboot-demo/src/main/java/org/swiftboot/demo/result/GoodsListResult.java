@@ -1,11 +1,10 @@
 package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.swiftboot.demo.model.entity.GoodsEntity;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.swiftboot.web.result.BaseListableResult;
+import org.swiftboot.demo.model.entity.GoodsEntity;
+import org.swiftboot.web.result.BasePopulateListResult;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @author swiftech 2019-04-07
  **/
 @ApiModel
-public class GoodsListResult extends BaseListableResult<GoodsResult, GoodsEntity> {
+public class GoodsListResult extends BasePopulateListResult<GoodsResult, GoodsEntity> {
 
     @ApiModelProperty("商品总数（用于分页查询）")
     @JsonProperty("total")
