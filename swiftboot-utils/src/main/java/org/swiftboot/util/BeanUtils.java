@@ -100,7 +100,7 @@ public class BeanUtils {
                 // Field不在当前类定义，继续向上转型
             }
         }
-        throw new NoSuchFieldException("No such field: " + clazz.getName() + '.' + propertyName);
+        throw new NoSuchFieldException(String.format("No such field: %s.%s", clazz.getName(), propertyName));
     }
 
     /**
@@ -175,7 +175,7 @@ public class BeanUtils {
         for (Field declaredField : getDeclaredFields(object, fieldClass)) {
             Object item = forceGetProperty(object, declaredField);
             if (item != null) {
-                ret.add((T)item);
+                ret.add((T) item);
             }
         }
         return ret;
@@ -242,6 +242,27 @@ public class BeanUtils {
     }
 
     /**
+     * 强制设置对象变量值，忽略private、protected修饰符的限制。
+     *
+     * @param object   对象
+     * @param field    属性
+     * @param newValue 属性值
+     * @throws NoSuchFieldException 没有该字段时抛出
+     */
+    public static void forceSetProperty(Object object, Field field, Object newValue)
+            throws NoSuchFieldException {
+        boolean accessible = field.isAccessible();
+        field.setAccessible(true);
+        try {
+            field.set(object, newValue);
+        } catch (IllegalAccessException e) {
+            logger.info(String.format("设置值失败： %s=%s", object.getClass().getName(), field.getName()));
+        }
+        field.setAccessible(accessible);
+    }
+
+
+    /**
      * 强制调用对象函数，忽略private、protected修饰符的限制。
      *
      * @param object     对象
@@ -252,8 +273,6 @@ public class BeanUtils {
      */
     public static Object invokePrivateMethod(Object object, String methodName, Object... params)
             throws NoSuchMethodException {
-
-
         Class[] types = new Class[params.length];
         for (int i = 0; i < params.length; i++) {
             types[i] = params[i].getClass();
@@ -296,7 +315,33 @@ public class BeanUtils {
         List<Field> list = new ArrayList<>();
         Field[] fields = object.getClass().getDeclaredFields();
         for (Field field : fields) {
-            if (field.getType().isAssignableFrom(propertyType)) {
+            if (propertyType.isAssignableFrom(field.getType())) {
+                list.add(field);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 按类型取得字段列表，忽略 annoClasses 指定的注解修饰的
+     *
+     * @param object
+     * @param propertyType  过滤的属性类型
+     * @param annoClasses   过滤的注解类型
+     * @return
+     */
+    public static List<Field> getFieldsByTypeIgnore(Object object, Class propertyType, Class... annoClasses) {
+        List<Field> list = new ArrayList<>();
+        Field[] fields = object.getClass().getDeclaredFields();
+        NEXT_FIELD:
+        for (Field field : fields) {
+            for (Class annoClass : annoClasses) {
+                Annotation annotation = field.getAnnotation(annoClass);
+                if (annotation != null) {
+                    continue NEXT_FIELD;
+                }
+            }
+            if (propertyType.isAssignableFrom(field.getType())) {
                 list.add(field);
             }
         }

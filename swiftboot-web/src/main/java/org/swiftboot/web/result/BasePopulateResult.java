@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.annotation.PopulateIgnore;
+import org.swiftboot.web.model.entity.BaseEntity;
 import org.swiftboot.web.model.entity.Persistent;
 
 import java.lang.reflect.Constructor;
@@ -17,6 +18,7 @@ import java.util.*;
  * 提供将入实体类的属性值填入返回值的方法。如果 Result 存在的属性名称在实体类中不存在的话，则抛出异常。
  * <code>populateByEntity(E entity)</code> 方法将实体类的属性填充到当前对象实例中。
  * 静态方法<code>populateByEntity(E entity, BasePopulateResult<E> result)</code>将指定实体类属性值填充至指定的 Result 实例中。
+ * 填充方法支持将实体类的 OneToOne 和 OneToMany 的属性填充到 Result 实例中，前提是 Result 实例中对应的属性类型必须也是继承自 BasePopulateResult 的类。
  * 标记 {@link JsonIgnore} 注解的 Result 类属性不会被处理。
  * 如果希望某个实体类中不存在的属性也能出现在 Result 类中，那么可以用 {@link PopulateIgnore} 来标注这个属性。
  *
@@ -27,8 +29,8 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
     /**
      * 按照返回值类型创建返回值对象，并从实体类填充返回值
      *
-     * @param resultClass   返回对象类型
-     * @param entity    实体类
+     * @param resultClass 返回对象类型
+     * @param entity      实体类
      * @param <T>
      * @return
      */
@@ -80,8 +82,61 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
         }
         Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
         log.debug("populate result from entity: " + entity);
+
+        /*
+         * 先处理父实体类（保证ID属性先被处理，下一步处理时略过这些字段）
+         */
+        List<String> ignoredFieldNameList = new LinkedList<>();// 需要忽略的目标属性名称
+        List<Field> fieldsByType = BeanUtils.getFieldsByType(entity, BaseEntity.class);
+        for (Field srcField : fieldsByType) {
+            String relationFiledNameInResultClass = srcField.getName() + "Id";
+            try {
+                BaseEntity parentEntity = (BaseEntity) BeanUtils.forceGetProperty(entity, srcField.getName());
+                if (parentEntity != null) {
+                    BeanUtils.forceSetProperty(result, relationFiledNameInResultClass, parentEntity.getId());
+                    ignoredFieldNameList.add(relationFiledNameInResultClass); // 记录目标属性名称
+                }
+            } catch (Exception e) {
+                // 忽略处理
+                continue;
+            }
+        }
+        /*
+         * 处理（一对一）关联的 Result 对象
+         */
+        List<Field> fieldsOne2One = BeanUtils.getFieldsByTypeIgnore(result, BasePopulateResult.class, JsonIgnore.class, PopulateIgnore.class);
+        for (Field targetField : fieldsOne2One) {
+            ignoredFieldNameList.add(targetField.getName());
+            Field srcField;
+            try {
+                srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性 %s", entity.getClass(), targetField.getName()));
+            }
+            Object subEntity = BeanUtils.forceGetProperty(entity, srcField);
+            if (subEntity instanceof Persistent) {
+                Class subResultClass = (Class) targetField.getGenericType();
+                if (subResultClass != null) {
+                    BasePopulateResult<E> subResult = createResult(subResultClass, (Persistent) subEntity);
+                    try {
+                        BeanUtils.forceSetProperty(result, targetField, subResult);
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(String.format("填充属性失败 %s", srcField.getName()));
+                    }
+                }
+            }
+        }
+
+        /*
+         * 接着处理所有除外键属性之外的所有可用属性
+         */
         Collection<Field> targetFields = BeanUtils.getFieldsIgnore(result.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : targetFields) {
+            if (ignoredFieldNameList.contains(targetField.getName())) {
+                continue;
+            }
             Field srcField;
             try {
                 srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
