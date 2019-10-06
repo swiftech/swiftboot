@@ -84,14 +84,20 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
         log.debug("populate result from entity: " + entity);
 
         /*
-         * 先处理父实体类（保证ID属性先被处理，下一步处理时略过这些字段）
+         * 先处理一对多关联（保证ID属性先被处理，后续处理时略过这些字段）
          */
         List<String> ignoredFieldNameList = new LinkedList<>();// 需要忽略的目标属性名称
         List<Field> fieldsByType = BeanUtils.getFieldsByType(entity, BaseEntity.class);
         for (Field srcField : fieldsByType) {
             String relationFiledNameInResultClass = srcField.getName() + "Id";
             try {
-                BaseEntity parentEntity = (BaseEntity) BeanUtils.forceGetProperty(entity, srcField.getName());
+                Field targetField = result.getClass().getDeclaredField(relationFiledNameInResultClass);
+                if (targetField.getAnnotation(JsonIgnore.class) != null
+                        || targetField.getAnnotation(PopulateIgnore.class) != null) {
+                    continue;
+                }
+
+                BaseEntity parentEntity = (BaseEntity) BeanUtils.forceGetProperty(entity, srcField);
                 if (parentEntity != null) {
                     BeanUtils.forceSetProperty(result, relationFiledNameInResultClass, parentEntity.getId());
                     ignoredFieldNameList.add(relationFiledNameInResultClass); // 记录目标属性名称
