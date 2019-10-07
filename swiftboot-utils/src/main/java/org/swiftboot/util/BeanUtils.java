@@ -271,7 +271,7 @@ public class BeanUtils {
      * @return 调用方法后的返回值
      * @throws NoSuchMethodException 没有该方法时抛出
      */
-    public static Object invokePrivateMethod(Object object, String methodName, Object... params)
+    public static Object forceInvokeMethod(Object object, String methodName, Object... params)
             throws NoSuchMethodException {
         Class[] types = new Class[params.length];
         for (int i = 0; i < params.length; i++) {
@@ -290,7 +290,7 @@ public class BeanUtils {
         }
 
         if (method == null)
-            throw new NoSuchMethodException("No Such Method:" + clazz.getSimpleName() + methodName);
+            throw new NoSuchMethodException(String.format("No Such Method: %s.%s", clazz.getSimpleName(), methodName));
 
         boolean accessible = method.isAccessible();
         method.setAccessible(true);

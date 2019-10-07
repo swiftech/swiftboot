@@ -19,6 +19,7 @@ import java.util.*;
  * <code>populateByEntity(E entity)</code> 方法将实体类的属性填充到当前对象实例中。
  * 静态方法<code>populateByEntity(E entity, BasePopulateResult<E> result)</code>将指定实体类属性值填充至指定的 Result 实例中。
  * 填充方法支持将实体类的 OneToOne 和 OneToMany 的属性填充到 Result 实例中，前提是 Result 实例中对应的属性类型必须也是继承自 BasePopulateResult 的类。
+ *   注意：一对一关系如果需要填充，则必须使用 fetch = FetchType.LAZY 来标注，否则将无法通过反射获取到带有属性值的子类。
  * 标记 {@link JsonIgnore} 注解的 Result 类属性不会被处理。
  * 如果希望某个实体类中不存在的属性也能出现在 Result 类中，那么可以用 {@link PopulateIgnore} 来标注这个属性。
  *
@@ -118,8 +119,19 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                 srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
-                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性 %s", entity.getClass(), targetField.getName()));
+                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性: %s", entity.getClass(), targetField.getName()));
             }
+
+
+//            String getterNameInEntity  = "get" + Character.toUpperCase(srcField.getName().charAt(0)) +  srcField.getName().substring(1);
+//            Object subEntity = null;
+//            try {
+//                subEntity = BeanUtils.forceInvokeMethod(entity, getterNameInEntity);
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性的 Getter: %s", entity.getClass(), targetField.getName()));
+//            }
+
             Object subEntity = BeanUtils.forceGetProperty(entity, srcField);
             if (subEntity instanceof Persistent) {
                 Class subResultClass = (Class) targetField.getGenericType();
