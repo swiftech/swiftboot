@@ -3,10 +3,8 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.result.BasePopulateResult;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 商品
@@ -43,6 +41,10 @@ public class GoodsResult extends BasePopulateResult {
     @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @JsonProperty("id")
     private String id;
+
+    @ApiModelProperty(value = "商品详情")
+    @JsonProperty("goods_detail")
+    private GoodsDetailResult goodsDetail;
 
     /**
      * 获取商品名称
@@ -170,4 +172,11 @@ public class GoodsResult extends BasePopulateResult {
         this.id = id;
     }
 
+    public GoodsDetailResult getGoodsDetail() {
+        return goodsDetail;
+    }
+
+    public void setGoodsDetail(GoodsDetailResult goodsDetail) {
+        this.goodsDetail = goodsDetail;
+    }
 }

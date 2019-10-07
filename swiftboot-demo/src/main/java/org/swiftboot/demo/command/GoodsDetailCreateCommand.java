@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
+import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.command.BasePopulateCommand;
 
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,11 @@ import javax.validation.constraints.NotNull;
 @ApiModel
 public class GoodsDetailCreateCommand extends BasePopulateCommand<GoodsDetailEntity> {
 
+    @ApiModelProperty(value = "商品ID")
+    @JsonProperty("goods_id")
+    @PopulateIgnore
+    private String goodsId;
+
     @ApiModelProperty(value = "商品图片URI", example = "/image/goods/1029")
     @JsonProperty("image_uri")
     @Length(max = 256)
@@ -27,6 +33,13 @@ public class GoodsDetailCreateCommand extends BasePopulateCommand<GoodsDetailEnt
     @NotNull
     private Double discount;
 
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
 
     /**
      * 获取商品图片URI

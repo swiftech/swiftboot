@@ -51,7 +51,8 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity p = cmd.createEntity();
         OrderDetailEntity od = new OrderDetailEntity();
         od.setDescription("订单明细项");
-        orderDetailDao.save(od);
+        od.setOrder(p);
+//        orderDetailDao.save(od);
         p.setOrderDetails(new HashSet<OrderDetailEntity>() {
             {
                 add(od);

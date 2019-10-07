@@ -11,6 +11,7 @@ import java.util.Set;
  * 订单
  *
  * @author swiftech 2019-04-07
+ * @see OrderDetailEntity
  **/
 @Description("订单")
 @Entity

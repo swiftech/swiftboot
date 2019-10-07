@@ -45,8 +45,8 @@ public class GoodsEntity extends BaseEntity {
      * 商品详情
      */
     @PropertyDescription(value = "商品详情", example = "5e8fee17e85b9f0b371e077ad9400b7f")
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "GOODS_DETAIL_ID", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "GOODS_DETAIL_ID", nullable = true)
     private GoodsDetailEntity goodsDetail;
 
     /**

@@ -16,7 +16,6 @@ public class OrderDetailResult extends BasePopulateResult {
 
     @ApiModelProperty(value = "订单ID", example = "f80dc17d1b744a38a438e47c8d95cbd1")
     @JsonProperty("order_id")
-    @PopulateIgnore
     private String orderId;
 
     @ApiModelProperty(value = "明细描述")

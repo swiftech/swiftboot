@@ -2,8 +2,10 @@ package org.swiftboot.demo.service.impl;
 
 import org.swiftboot.demo.command.GoodsDetailCreateCommand;
 import org.swiftboot.demo.command.GoodsDetailSaveCommand;
+import org.swiftboot.demo.model.dao.GoodsDao;
 import org.swiftboot.demo.model.dao.GoodsDetailDao;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
+import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.demo.result.GoodsDetailCreateResult;
 import org.swiftboot.demo.result.GoodsDetailListResult;
 import org.swiftboot.demo.result.GoodsDetailResult;
@@ -32,7 +34,11 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     private Logger log = LoggerFactory.getLogger(GoodsDetailServiceImpl.class);
 
     @Resource
+    private GoodsDao goodsDao;
+
+    @Resource
     private GoodsDetailDao goodsDetailDao;
+
 
     /**
      * 创建商品详情
@@ -44,6 +50,11 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     public GoodsDetailCreateResult createGoodsDetail(GoodsDetailCreateCommand cmd) {
         GoodsDetailEntity p = cmd.createEntity();
         GoodsDetailEntity saved = goodsDetailDao.save(p);
+        Optional<GoodsEntity> optGoods = goodsDao.findById(cmd.getGoodsId());
+        if (optGoods.isPresent()){
+            optGoods.get().setGoodsDetail(p);
+            goodsDao.save(optGoods.get());
+        }
         log.debug("创建商品详情: " + saved.getId());
         return new GoodsDetailCreateResult(saved.getId());
     }

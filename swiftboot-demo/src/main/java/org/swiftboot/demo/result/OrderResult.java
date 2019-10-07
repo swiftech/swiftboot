@@ -3,6 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.result.BasePopulateResult;
 
 import java.util.Set;
@@ -47,7 +48,7 @@ public class OrderResult extends BasePopulateResult {
     @JsonProperty("id")
     private String id;
 
-    private Set<OrderDetailResult> details;
+    private Set<OrderDetailResult> orderDetails;
 
     /**
      * 获取订单编号
@@ -193,11 +194,11 @@ public class OrderResult extends BasePopulateResult {
         this.id = id;
     }
 
-    public Set<OrderDetailResult> getDetails() {
-        return details;
+    public Set<OrderDetailResult> getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setDetails(Set<OrderDetailResult> details) {
-        this.details = details;
+    public void setOrderDetails(Set<OrderDetailResult> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }

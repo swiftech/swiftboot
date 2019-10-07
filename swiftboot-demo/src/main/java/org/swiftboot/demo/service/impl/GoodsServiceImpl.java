@@ -15,6 +15,7 @@ import org.swiftboot.demo.result.GoodsListResult;
 import org.swiftboot.demo.result.GoodsResult;
 import org.swiftboot.demo.result.GoodsSaveResult;
 import org.swiftboot.demo.service.GoodsService;
+import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.command.IdListCommand;
 
 import javax.annotation.Resource;
