@@ -12,5 +12,13 @@
     <artifactId>swiftboot-collections</artifactId>
     <description>企业开发常用集合类</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-utils</artifactId>
+            <version>${swiftboot.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

@@ -14,17 +14,17 @@
 
     <properties>
         <spring.version>5.1.9.RELEASE</spring.version>
-        <spring.boot.version>2.1.8.RELEASE</spring.boot.version>
+        <spring.boot.version>2.1.10.RELEASE</spring.boot.version>
         <servlet.version>3.1.0</servlet.version>
-        <commons.beanutils.version>1.9.3</commons.beanutils.version>
-        <swagger.version>1.5.22</swagger.version>
-        <aspectj.version>1.9.3</aspectj.version>
+        <commons.beanutils.version>1.9.4</commons.beanutils.version>
+        <swagger.version>1.5.24</swagger.version>
+        <aspectj.version>1.9.4</aspectj.version>
         <validation.api.version>2.0.1.Final</validation.api.version>
-        <hibernate.version>5.3.10.Final</hibernate.version>
+        <hibernate.version>5.3.14.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
-        <hibernate.validator.version>6.0.17.Final</hibernate.validator.version>
-        <log4j2.version>2.9.1</log4j2.version>
-        <spring.data.version>2.1.10.RELEASE</spring.data.version>
+        <hibernate.validator.version>6.0.18.Final</hibernate.validator.version>
+        <log4j2.version>2.12.1</log4j2.version>
+        <spring.data.version>2.1.12.RELEASE</spring.data.version>
     </properties>
 
     <dependencies>
