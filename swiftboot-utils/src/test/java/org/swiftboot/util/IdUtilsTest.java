@@ -24,6 +24,11 @@ public class IdUtilsTest {
         Assertions.assertEquals(32, s.length());
     }
 
+    @Test
+    public void testMakeSwiftIdByCodeFail() {
+        String s = IdUtils.makeID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+    }
+
 
     @Test
     public void testMakeSwiftIdByCodeAndServerId() {

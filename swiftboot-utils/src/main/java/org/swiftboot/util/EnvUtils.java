@@ -66,6 +66,13 @@ public class EnvUtils {
      *
      */
     public interface SysPropertyExtractor {
+
+        /**
+         *
+         * @param propEntry
+         * @param str
+         * @return
+         */
         boolean matched(Map.Entry propEntry, String str);
     }
 }
