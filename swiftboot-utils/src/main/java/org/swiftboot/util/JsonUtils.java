@@ -49,7 +49,7 @@ public class JsonUtils {
         log.debug("  select " + keys[idx]);
         curNode = curNode.path(keys[idx++]);
         if (curNode.isNull() || curNode.isMissingNode()) {
-            throw new RuntimeException(String.format("No data found for: %s", ArrayUtils.toString(keys)));
+            throw new RuntimeException(Info.get(JsonUtils.class, "no_data_found1", ArrayUtils.toString(keys)));
         }
         return _select(curNode, keys, idx);
     }

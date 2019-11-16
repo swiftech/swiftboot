@@ -1,5 +1,7 @@
 package org.swiftboot.collections;
 
+import org.swiftboot.util.Info;
+
 import java.util.*;
 
 /**
@@ -96,7 +98,7 @@ public class CollectionUtils {
                     coll = new HashSet();
                 }
                 else {
-                    throw new RuntimeException("集合类型不支持: " + srcCollection.getClass());
+                    throw new RuntimeException(Info.get(CollectionUtils.class, "collection_type_not_supported1", srcCollection.getClass()));
                 }
                 ret.put(key, coll);
             }

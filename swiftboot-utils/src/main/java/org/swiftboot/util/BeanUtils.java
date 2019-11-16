@@ -65,7 +65,7 @@ public class BeanUtils {
             }
         }
         if (ret.isEmpty()) {
-            throw new NoSuchFieldException(String.format("No such field of type %s in class %s", fieldClass, clazz.getName()));
+            throw new NoSuchFieldException(Info.get(BeanUtils.class, "no_field_by_type2", fieldClass, clazz.getName()));
         }
         else {
             return ret;
@@ -100,7 +100,7 @@ public class BeanUtils {
                 // Field不在当前类定义，继续向上转型
             }
         }
-        throw new NoSuchFieldException(String.format("No such field: %s.%s", clazz.getName(), propertyName));
+        throw new NoSuchFieldException(Info.get(BeanUtils.class, "no_field2", clazz.getName(), propertyName));
     }
 
     /**
@@ -203,7 +203,7 @@ public class BeanUtils {
      */
     public static Object forceGetProperty(Object object, Field field) {
         if (field == null || object == null) {
-            throw new IllegalArgumentException("参数不能为空");
+            throw new IllegalArgumentException(Info.get(BeanUtils.class, "params_required"));
         }
 
         boolean accessible = field.isAccessible();
@@ -213,7 +213,7 @@ public class BeanUtils {
         try {
             result = field.get(object);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(String.format("无法获取名为 %s 的值", field.getName()));
+            throw new RuntimeException(Info.get(BeanUtils.class, "get_value_fail1", field.getName()));
         }
         field.setAccessible(accessible);
         return result;
@@ -236,7 +236,7 @@ public class BeanUtils {
         try {
             field.set(object, newValue);
         } catch (IllegalAccessException e) {
-            logger.info(String.format("设置值失败： %s=%s", object.getClass().getName(), propertyName));
+            logger.info(Info.get(BeanUtils.class, "set_value_fail2", object.getClass().getName(), propertyName));
         }
         field.setAccessible(accessible);
     }
@@ -256,7 +256,7 @@ public class BeanUtils {
         try {
             field.set(object, newValue);
         } catch (IllegalAccessException e) {
-            logger.info(String.format("设置值失败： %s=%s", object.getClass().getName(), field.getName()));
+            logger.info(Info.get(BeanUtils.class, "set_value_fail2", object.getClass().getName(), field.getName()));
         }
         field.setAccessible(accessible);
     }
@@ -290,7 +290,7 @@ public class BeanUtils {
         }
 
         if (method == null)
-            throw new NoSuchMethodException(String.format("No Such Method: %s.%s", clazz.getSimpleName(), methodName));
+            throw new NoSuchMethodException(Info.get(BeanUtils.class, "no_field2", clazz.getSimpleName(), methodName));
 
         boolean accessible = method.isAccessible();
         method.setAccessible(true);
@@ -326,8 +326,8 @@ public class BeanUtils {
      * 按类型取得字段列表，忽略 annoClasses 指定的注解修饰的
      *
      * @param object
-     * @param propertyType  过滤的属性类型
-     * @param annoClasses   过滤的注解类型
+     * @param propertyType 过滤的属性类型
+     * @param annoClasses  过滤的注解类型
      * @return
      */
     public static List<Field> getFieldsByTypeIgnore(Object object, Class propertyType, Class... annoClasses) {

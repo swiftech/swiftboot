@@ -1,5 +1,7 @@
 package org.swiftboot.collections.map;
 
+import org.swiftboot.util.Info;
+
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -9,9 +11,9 @@ import java.util.Map;
 /**
  * 带有队列功能的 Map，所有的 Key 有序存储在队列中
  *
- * @author swiftech
  * @param <K> 健类型
  * @param <V> 值的类型
+ * @author swiftech
  */
 public class QueueMap<K extends Serializable, V extends Serializable> extends LinkedHashMap<K, V> {
 
@@ -54,7 +56,7 @@ public class QueueMap<K extends Serializable, V extends Serializable> extends Li
     @Override
     public V put(K key, V value) {
         if (keyQ.size() != this.size()) {
-            throw new IllegalStateException(String.format("队列长度不一致:%d - %d", keyQ.size(), this.size()));
+            throw new IllegalStateException(Info.get(QueueMap.class, "queue_size_not_match2", keyQ.size(), this.size()));
         }
         // 处理重复情况
         if (this.containsKey(key)) {
@@ -103,6 +105,7 @@ public class QueueMap<K extends Serializable, V extends Serializable> extends Li
 
     /**
      * 设置集合元素最大数量
+     *
      * @param max
      */
     public void setMax(int max) {
