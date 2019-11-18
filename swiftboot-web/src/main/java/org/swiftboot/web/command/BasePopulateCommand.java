@@ -5,13 +5,12 @@ import io.swagger.annotations.ApiModel;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.swiftboot.collections.CollectionUtils;
 import org.swiftboot.util.BeanUtils;
+import org.swiftboot.util.GenericUtils;
 import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.model.entity.Persistent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Collection;
 
 /**
@@ -32,23 +31,25 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
      */
     public P createEntity() {
         P ret;
-        Type genericSuperclass = getClass().getGenericSuperclass();
-        if (genericSuperclass == null) {
-            throw new RuntimeException("反射错误");
-        }
-        if (!(genericSuperclass instanceof ParameterizedType)) {
-            // 如果存在继承，则向上取一级
-            genericSuperclass = ((Class) genericSuperclass).getGenericSuperclass();
-            if (genericSuperclass == null) {
-                throw new RuntimeException("反射错误");
-            }
-            if (!(genericSuperclass instanceof ParameterizedType)) {
-                throw new RuntimeException(
-                        String.format("父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", getClass().getGenericSuperclass().getTypeName()));
-            }
-        }
+//        Type genericSuperclass = getClass().getGenericSuperclass();
+//        if (genericSuperclass == null) {
+//            throw new RuntimeException("反射错误");
+//        }
+//        if (!(genericSuperclass instanceof ParameterizedType)) {
+//            // 如果存在继承，则向上取一级
+//            genericSuperclass = ((Class) genericSuperclass).getGenericSuperclass();
+//            if (genericSuperclass == null) {
+//                throw new RuntimeException("反射错误");
+//            }
+//            if (!(genericSuperclass instanceof ParameterizedType)) {
+//                throw new RuntimeException(
+//                        String.format("父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", getClass().getGenericSuperclass().getTypeName()));
+//            }
+//        }
+//
+//        Class<P> entityClass = (Class<P>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
+        Class<P> entityClass = (Class<P>) GenericUtils.genericClass(getClass());
 
-        Class<P> entityClass = (Class<P>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
         if (entityClass == null) {
             throw new RuntimeException("反射错误，无法获取实体类的类型(Class)");
         }
@@ -58,7 +59,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("实例化实体类失败: " + entityClass);
+            throw new RuntimeException(String.format("实例化实体类失败: %s", entityClass));
         }
         this.doPopulate(entityClass, ret);
         return ret;

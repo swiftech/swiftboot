@@ -15,7 +15,10 @@ import javax.validation.constraints.NotBlank;
 @ApiModel
 public class IdCommand extends HttpCommand {
 
-    @ApiModelProperty("业务对象ID")
+    /**
+     * 业务对象ID
+     */
+    @ApiModelProperty("Business object ID")
     @JsonProperty("id")
     @NotBlank
     @Length(min = 32, max = 32)

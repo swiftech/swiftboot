@@ -139,14 +139,13 @@ public abstract class ErrorCodeSupport {
         Map<String, Object> cache = new HashMap<>();
         Field[] fields = ErrorCodeSupport.class.getDeclaredFields();
         if (fields.length == 0) {
-            System.out.println("没有找到预定义的错误代码");
-            return;
+            throw new RuntimeException("没有找到预定义的错误代码");
         }
         try {
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(String.class)) {
                     if (cache.containsKey(field.get(null))) {
-                        throw new RuntimeException("存在重复的错误代码: " + field.get(null));
+                        throw new RuntimeException(String.format("存在重复的错误代码: %s", field.get(null)));
                     }
                     cache.put(String.valueOf(field.get(null)), field);
                 }
@@ -169,9 +168,9 @@ public abstract class ErrorCodeSupport {
         }
 
         try {
-            log.info("Init basic error messages");
+            log.info(String.format("Init pre-defined error messages from: %s", ErrorCodeSupport.class.getName()));
             List<Field> standard = BeanUtils.getStaticFieldsByType(ErrorCodeSupport.class, String.class);
-            log.info(String.format("%d code in total", standard.size()));
+            log.info(String.format("%d error codes in total", standard.size()));
             for (Field field : standard) {
                 if (field.getName().startsWith("CODE_")) {
                     String fieldValue = field.get(null).toString();
@@ -184,14 +183,15 @@ public abstract class ErrorCodeSupport {
                         continue;
                     }
                     if (StringUtils.isBlank(message)) {
-                        log.info(String.format("Not message for '%s'", field.getName()));
-                    } else {
+                        log.info(String.format("No message for '%s'", field.getName()));
+                    }
+                    else {
                         putErrorCodeAndMessage(field.get(null).toString(), message);
                     }
                 }
             }
 
-            log.info("Init custom error messages from: " + this.getClass().getName());
+            log.info(String.format("Init user-defined error messages from: %s", this.getClass().getName()));
             List<Field> fields = BeanUtils.getStaticFieldsByType(this.getClass(), String.class);
             for (Field field : fields) {
                 if (field.getName().startsWith("CODE_")) {
@@ -209,8 +209,9 @@ public abstract class ErrorCodeSupport {
                         continue;
                     }
                     if (StringUtils.isBlank(message)) {
-                        log.info(String.format("Not message for '%s'", field.getName()));
-                    } else {
+                        log.info(String.format("No message for '%s'", field.getName()));
+                    }
+                    else {
                         putErrorCodeAndMessage(field.get(null).toString(), message);
                     }
                 }
@@ -219,12 +220,13 @@ public abstract class ErrorCodeSupport {
             if (errorCodeMap == null || errorCodeMap.isEmpty()) {
                 log.warn("没有正确初始化错误代码资源");
                 return;
-            } else {
-                log.info(String.format("初始化%d个资源", errorCodeMap.size()));
+            }
+            else {
+                log.info(String.format("初始化 %d 个资源", errorCodeMap.size()));
             }
 
             String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "参数化错误信息");
-            System.out.println("检测参数化信息：" + argumentedMsg);
+            log.debug(String.format("确认参数化信息是否正常：%s", argumentedMsg));
         } catch (Exception e) {
             e.printStackTrace();
         }

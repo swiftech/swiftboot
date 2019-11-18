@@ -17,7 +17,10 @@ import java.util.List;
 @ApiModel
 public class IdListCommand extends HttpCommand {
 
-    @ApiModelProperty("业务对象ID列表")
+    /**
+     * 业务对象ID列表
+     */
+    @ApiModelProperty("List of business object ID")
     @JsonProperty("ids")
     @NotEmpty
     private List<@NotBlank @Length(min = 32, max = 32) String> ids;

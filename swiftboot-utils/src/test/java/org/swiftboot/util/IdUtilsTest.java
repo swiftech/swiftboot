@@ -22,6 +22,10 @@ public class IdUtilsTest {
         String s = IdUtils.makeID("teusrore");
         System.out.println(s);
         Assertions.assertEquals(32, s.length());
+
+        System.out.println(IdUtils.makeID("basedocu"));
+        System.out.println(IdUtils.makeID("basident"));
+
     }
 
     @Test

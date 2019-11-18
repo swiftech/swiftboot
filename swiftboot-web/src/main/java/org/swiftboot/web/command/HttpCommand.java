@@ -23,7 +23,7 @@ public class HttpCommand implements Serializable {
     /**
      * HTTP(S) 请求头
      */
-    @ApiModelProperty("HTTP(S) 请求头")
+    @ApiModelProperty("HTTP(S) headers")
     @JsonIgnore
     private Map<String, String> headers;
 

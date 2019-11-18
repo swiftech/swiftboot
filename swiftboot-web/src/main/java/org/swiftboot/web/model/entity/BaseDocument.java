@@ -14,15 +14,24 @@ import javax.persistence.Id;
 @ApiModel
 public abstract class BaseDocument implements Persistent {
 
-    @PropertyDescription(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
+    /**
+     * 唯一标识
+     */
+    @PropertyDescription(value = "Entity ID", example = "basedocu20191119010450543ekxpvom")
     @Id
     private String id;
 
-    @PropertyDescription(value = "创建时间", example = "1545355038524")
+    /**
+     * 创建时间
+     */
+    @PropertyDescription(value = "Creation time", example = "1545355038524")
     @Column(name = "create_time")
     private Long createTime;
 
-    @PropertyDescription(value = "修改时间", example = "1545355038524")
+    /**
+     * 修改时间
+     */
+    @PropertyDescription(value = "Updating time", example = "1545355038524")
     @Column(name = "update_time")
     private Long updateTime;
 

@@ -17,8 +17,11 @@ public abstract class BaseTxVersionEntity extends BaseEntity {
     public BaseTxVersionEntity() {
     }
 
+    /**
+     * 事务锁版本
+     */
     @Version
-    @PropertyDescription(value = "事务锁版本", example = "1")
+    @PropertyDescription(value = "Version for optimistic lock transaction", example = "1")
     @Column(name = "VERSION")
     private Long txVersion = 0L;
 

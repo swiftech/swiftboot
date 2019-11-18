@@ -23,7 +23,7 @@ public class ErrMessageException extends RuntimeException {
         super(ErrorCodeSupport.getErrorMessage(errorCode));
         this.errorCode = errorCode;
         if (StringUtils.isBlank(ErrorCodeSupport.getErrorMessage(errorCode))) {
-            System.out.println("找不到错误代码" + errorCode + "的资源");
+            System.out.printf("找不到错误代码%s的资源%n", errorCode);
         }
     }
 
@@ -36,7 +36,7 @@ public class ErrMessageException extends RuntimeException {
         super(ErrorCodeSupport.getErrorMessage(errorCode, args));
         this.errorCode = errorCode;
         if (StringUtils.isBlank(super.getMessage())) {
-            System.out.println("找不到错误代码" + errorCode + "的资源");
+            System.out.printf("找不到错误代码%s的资源%n", errorCode);
         }
     }
 
