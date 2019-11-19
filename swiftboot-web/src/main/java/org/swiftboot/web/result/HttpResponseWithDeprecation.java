@@ -16,16 +16,16 @@ import java.io.Serializable;
 public class HttpResponseWithDeprecation<T extends Object> extends HttpResponse<T> {
 
     public HttpResponseWithDeprecation() {
-        super.msg = "该接口已废弃";
+        super.msg = "This API is deprecated";
     }
 
     public HttpResponseWithDeprecation(T result) {
         super(result);
-        super.msg = "该接口已废弃";
+        super.msg = "This API is deprecated";
     }
 
     public HttpResponseWithDeprecation(ErrMessageException errMsgException) {
         super(errMsgException);
-        super.msg = "该接口已废弃";
+        super.msg = "This API is deprecated";
     }
 }

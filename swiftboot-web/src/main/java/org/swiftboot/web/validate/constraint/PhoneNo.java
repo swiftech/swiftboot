@@ -22,7 +22,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface PhoneNo {
 
-    String message() default "手机号格式错误";
+    String message() default "{org.swiftboot.constraints.PhoneNo.message}";
 
     Class<?>[] groups() default {};
 

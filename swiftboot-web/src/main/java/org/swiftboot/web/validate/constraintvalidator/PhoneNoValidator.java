@@ -24,7 +24,6 @@ public class PhoneNoValidator implements ConstraintValidator<PhoneNo, String> {
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        logger.debug("验证手机号是否正确...");
         if (StringUtils.isBlank(s)) {
             return true;
         }
