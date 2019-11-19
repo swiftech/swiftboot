@@ -38,13 +38,13 @@ public abstract class ErrorCodeSupport {
     public static final String CODE_SYS_DB_ERROR = "2001"; //数据库错误
     public static final String CODE_PARAMS_ERROR = "2002"; // 输入参数错误
     public static final String CODE_NO_PERMISSION = "2003"; // 没有权限进行操作
-    public static final String CODE_ILLEGAL_API_ACESS = "2005"; // 非法的 API 调用
+    public static final String CODE_ILLEGAL_API_ACCESS = "2005"; // 非法的 API 调用
     public static final String CODE_APP_VERSION_EXPIRED = "2006"; // 客户端版本低，请升级至新版本
     public static final String CODE_SYS_TIME_DIFF = "2007"; // 客户端时间和服务器端不一致
     public static final String CODE_FILE_UPLOAD_FAIL = "2008"; // 上传文件失败
     public static final String CODE_FILE_DOWNLOAD_FAIL = "2009"; // 下载文件失败
     public static final String CODE_FILE_NOT_EXIST = "2010"; // 文件不存在
-    public static final String CODE_TXVERSION_ERROR = "2012"; // 他人已做操作，请刷新当前页面或数据
+    public static final String CODE_TX_VERSION_ERROR = "2012"; // 他人已做操作，请刷新当前页面或数据
 
 
     /**
@@ -76,7 +76,7 @@ public abstract class ErrorCodeSupport {
     public static final String CODE_REG_USER_EXISTS = "2131";// 用户已注册
     public static final String CODE_REG_FAIL = "2133";// 用户注册失败
     // 其他
-    public static final String CODE_CHANGE_PWD_FAILD = "2141";// 修改密码失败
+    public static final String CODE_CHANGE_PWD_FAILED = "2141";// 修改密码失败
 
 
     // code -> message
