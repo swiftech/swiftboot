@@ -48,13 +48,13 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
             constructor = resultClass.getConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("%s类缺少无参数构造方法", resultClass.getName()));
+            throw new RuntimeException(String.format("%s 类缺少无参数构造方法", resultClass.getName()));
         }
         try {
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("%s构造失败，可能缺少无参数构造方法，或者没有继承 BasePopulateResult", resultClass.getName()));
+            throw new RuntimeException(String.format("%s 构造失败，可能缺少无参数构造方法，或者没有继承 %s", resultClass.getName(), BasePopulateResult.class));
         }
         ret.populateByEntity(entity);
         return ret;
@@ -79,10 +79,10 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
      */
     public static <E extends Persistent> BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
         if (entity == null) {
-            throw new RuntimeException("实体类为空");
+            throw new RuntimeException("实体类不能为空");
         }
         Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
-        log.debug("populate result from entity: " + entity);
+        log.debug(String.format("populate result from entity: %s", entity));
 
         /*
          * 先处理一对多关联（保证ID属性先被处理，后续处理时略过这些字段）

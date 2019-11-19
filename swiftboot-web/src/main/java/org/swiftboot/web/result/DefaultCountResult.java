@@ -8,10 +8,13 @@ import io.swagger.annotations.ApiModelProperty;
  *
  * @author swiftech
  **/
-@ApiModel("默认的统计结果")
+@ApiModel("Default counting result")
 public class DefaultCountResult implements Result{
 
-    @ApiModelProperty(value = "统计结果")
+    /**
+     * 统计结果
+     */
+    @ApiModelProperty(value = "Counting result")
     private long count;
 
     public DefaultCountResult() {

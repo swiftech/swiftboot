@@ -12,16 +12,25 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class BaseEntity extends BaseIdEntity implements Persistent {
 
-    @PropertyDescription(value = "创建时间", example = "1545355038524")
-    @Column(name = "CREATE_TIME", columnDefinition = "BIGINT COMMENT '创建时间'")
+    /**
+     * 创建时间
+     */
+    @PropertyDescription(value = "Creation time", example = "1545355038524")
+    @Column(name = "CREATE_TIME", columnDefinition = "BIGINT COMMENT 'Creation time'")
     private Long createTime;
 
-    @PropertyDescription(value = "修改时间", example = "1545355038524")
-    @Column(name = "UPDATE_TIME", columnDefinition = "BIGINT COMMENT '修改时间'")
+    /**
+     * 修改时间
+     */
+    @PropertyDescription(value = "Updating time", example = "1545355038524")
+    @Column(name = "UPDATE_TIME", columnDefinition = "BIGINT COMMENT 'Updating time'")
     private Long updateTime;
 
-    @PropertyDescription(value = "是否逻辑删除", example = "false")
-    @Column(name = "IS_DELETE", columnDefinition = "BIT DEFAULT FALSE COMMENT '是否逻辑删除'")
+    /**
+     * 是否逻辑删除
+     */
+    @PropertyDescription(value = "Is deleted", example = "false")
+    @Column(name = "IS_DELETE", columnDefinition = "BIT DEFAULT FALSE COMMENT 'Is deleted'")
     private Boolean isDelete = Boolean.FALSE;
 
     public BaseEntity() {

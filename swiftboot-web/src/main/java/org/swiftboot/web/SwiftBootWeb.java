@@ -1,12 +1,17 @@
-package org.swiftboot.collections;
+package org.swiftboot.web;
 
 import org.swiftboot.util.Info;
 
 import java.util.Locale;
 
-public class SwiftbootCollection {
+/**
+ * @deprecated to SpringBoot's facilities
+ *
+ */
+public class SwiftBootWeb {
+
     static {
-        Info.register("swiftboot-collection", "/swiftboot-collections");
+        Info.register("swiftboot-web", "/swiftboot-web");
     }
 
     public static void main(String[] args) {

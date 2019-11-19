@@ -32,8 +32,41 @@ public class Info {
         map.put(key, propertyFilePath);
     }
 
+    public static String get(Object... params) {
+        String format = get(Info.class, "");
+        if (StringUtils.isNotBlank(format)) {
+            return String.format(format, params);
+        }
+        else {
+            return format;
+        }
+    }
+
     public static String get() {
         return get(Info.class, "");
+    }
+
+    public static String get(String tag, Object... params) {
+        String format = get(tag);
+        if (StringUtils.isNotBlank(format)) {
+            return String.format(format, params);
+        }
+        else {
+            return format;
+        }
+    }
+
+    public static String get(String tag) {
+        if (propertiesList == null) {
+            loadAllFromClassResources();
+        }
+        for (Properties properties : propertiesList) {
+            String value = properties.getProperty(tag);
+            if (!StringUtils.isBlank(value)) {
+                return value;
+            }
+        }
+        return null;
     }
 
     public static String get(Class clazz, String tag, Object... params) {
@@ -68,7 +101,6 @@ public class Info {
     private static void loadAllFromClassResources() {
         propertiesList = new LinkedList<>();
         Locale curLocale = Locale.getDefault();
-        System.out.println(curLocale);
         // Load all registered resources
         int total = 0;
         for (String key : map.keySet()) {
@@ -98,6 +130,11 @@ public class Info {
      * Check all properties are related to a exist class, if not, maybe class package or name has been changed, it
      * may not work appropriately. This method is better to call at build-time instead of run-time.
      */
+    public static void validateProperties(Locale locale) {
+        Locale.setDefault(locale);
+        validateProperties();
+    }
+
     public static void validateProperties() {
         loadAllFromClassResources();
         for (Properties properties : propertiesList) {
@@ -118,6 +155,7 @@ public class Info {
     }
 
     public static void main(String[] args) {
-        validateProperties();
+        validateProperties(Locale.ENGLISH);
+        validateProperties(Locale.CHINESE);
     }
 }

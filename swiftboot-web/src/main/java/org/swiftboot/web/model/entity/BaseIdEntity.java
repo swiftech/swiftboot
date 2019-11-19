@@ -19,7 +19,7 @@ public abstract class BaseIdEntity implements IdPojo {
      */
     @PropertyDescription(value = "Entity ID", example = "basident20191119010450544siobnic")
     @Id()
-    @Column(name = "ID", columnDefinition = "char(32) COMMENT '唯一标识'")
+    @Column(name = "ID", columnDefinition = "char(32) COMMENT 'Entity ID'")
     private String id;
 
     public BaseIdEntity() {

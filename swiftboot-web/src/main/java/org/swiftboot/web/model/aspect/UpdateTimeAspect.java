@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.web.model.entity.BaseEntity;
+import org.swiftboot.web.model.entity.IdPojo;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -49,7 +50,7 @@ public class UpdateTimeAspect {
                     }
                 }
             } else {
-                log.debug("略过不处理: " + arg);
+                log.debug(String.format("参数 %s 没有继承类 %s，略过", BaseEntity.class.getName(), arg));
             }
         }
         return null;

@@ -71,7 +71,7 @@ public class EntityIdAspect {
                 }
             }
             else {
-                log.debug("略过不处理: " + arg);
+                log.debug(String.format("参数 %s 没有实现接口 %s，略过", IdPojo.class.getName(), arg));
             }
         }
         return null;

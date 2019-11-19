@@ -8,12 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 默认的按分类统计结果
+ *
  * @author swiftech
  **/
-@ApiModel("默认的按分类统计结果")
+@ApiModel("Default classified counting result")
 public class DefaultClassifiedCountResult<K, V> implements Result{
 
-    @ApiModelProperty(value = "统计结果，按照分类的标识存储")
+    /**
+     * 统计结果，按照分类的标识存储
+     *
+     */
+    @ApiModelProperty(value = "Counting results map")
     @JsonProperty("count_map")
     private Map<K, V> map = new HashMap<>();
 
