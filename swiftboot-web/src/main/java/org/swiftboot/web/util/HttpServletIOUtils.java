@@ -53,7 +53,7 @@ public class HttpServletIOUtils {
             writeFileToResponseStream(file, response, contentType, null);
         }
         else {
-            throw new RuntimeException("不是图片格式的文件: " + file.getPath());
+            throw new RuntimeException(String.format("不是图片格式的文件: %s", file.getPath()));
         }
     }
 

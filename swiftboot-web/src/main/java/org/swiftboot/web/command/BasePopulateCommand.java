@@ -48,7 +48,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
 //        }
 //
 //        Class<P> entityClass = (Class<P>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
-        Class<P> entityClass = (Class<P>) GenericUtils.genericClass(getClass());
+        Class<P> entityClass = (Class<P>) GenericUtils.ancestorGenericClass(getClass());
 
         if (entityClass == null) {
             throw new RuntimeException("反射错误，无法获取实体类的类型(Class)");

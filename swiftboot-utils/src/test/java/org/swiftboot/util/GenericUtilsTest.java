@@ -7,19 +7,34 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @see GenericUtils
  */
 public class GenericUtilsTest {
 
     @Test
+    public void testParentGenericClass() {
+        Assertions.assertThrows(RuntimeException.class, () -> GenericUtils.parentGenericClass(AAA.class));
+        Assertions.assertSame(LinkedList.class, GenericUtils.parentGenericClass(BBB.class));
+        Assertions.assertThrows(RuntimeException.class, () -> GenericUtils.parentGenericClass(CCC.class));
+        Assertions.assertThrows(RuntimeException.class, () -> GenericUtils.parentGenericClass(DDD.class));
+    }
+
+    @Test
+    public void testAncestorGenericClass() {
+        Assertions.assertThrows(RuntimeException.class, () -> GenericUtils.ancestorGenericClass(AAA.class));
+        Assertions.assertSame(LinkedList.class, GenericUtils.ancestorGenericClass(BBB.class));
+        Assertions.assertSame(LinkedList.class, GenericUtils.ancestorGenericClass(CCC.class));
+        Assertions.assertSame(LinkedList.class, GenericUtils.ancestorGenericClass(DDD.class));
+    }
+
+    @Test
     public void testParentsParent() {
-        Assertions.assertTrue(LinkedList.class == GenericUtils.genericClass(CCC.class));
+        Assertions.assertSame(LinkedList.class, GenericUtils.genericClass(CCC.class));
     }
 
     @Test
     public void testParent() {
-        Assertions.assertTrue(LinkedList.class == GenericUtils.genericClass(BBB.class));
+        Assertions.assertSame(LinkedList.class, GenericUtils.genericClass(BBB.class));
     }
 
     @Test
