@@ -15,21 +15,24 @@ import java.util.*;
 public class Info {
 
     static {
-        register("swiftboot-utils", "/swiftboot-utils");
+        register("/swiftboot-utils", R.class);
     }
 
-    private static Map<String, String> map;
+    /**
+     * Mapping of resource files and class.
+     */
+    private static Map<String, Class> map;
 
     private static List<Properties> propertiesList;
 
-    public static void register(String key, String propertyFilePath) {
+    public static void register(String propertyFilePath, Class usingTags) {
         if (map == null) {
             map = new HashMap<>();
         }
-        if (map.containsValue(propertyFilePath)) {
+        if (map.containsKey(propertyFilePath)) {
             throw new RuntimeException(String.format("Failed to register %s, because it is already exists", propertyFilePath));
         }
-        map.put(key, propertyFilePath);
+        map.put(propertyFilePath, usingTags);
     }
 
     public static String get(Object... params) {
@@ -102,7 +105,8 @@ public class Info {
         // Load all registered resources
         int total = 0;
         for (String key : map.keySet()) {
-            String filePath = map.get(key);
+            String filePath = key;
+            Class usingClass = map.get(key);
             String resName = String.format("%s_%s.properties", filePath, curLocale.toString());
             System.out.println("Load resource from " + resName);
             try {
@@ -162,7 +166,15 @@ public class Info {
                     throw new RuntimeException(String.format("One property %s related class is not exist, maybe it's name was changed.", classFullName));
                 }
                 if (!usingTags.containsKey(tagsName)) {
-                    System.out.printf("WARN: tag '%s' for %s is not using, consider remove it%n", tagsName, Locale.getDefault());
+                    System.out.printf("WARN: tag '[%s]%s' for is not using, consider remove it%n", Locale.getDefault(), tagsName);
+                }
+                // check params number
+                String description = (String) properties.get(name);
+                String num = name.substring(name.length() - 1);
+                if (StringUtils.isNumeric(num)) {
+                    if (Integer.parseInt(num) != StringUtils.countMatches(description, '%')) {
+                        throw new RuntimeException(String.format("Tag name '%s' is not match the placeholder numbers in '[%s]%s'", name, Locale.getDefault(), description));
+                    }
                 }
             }
         }
@@ -175,12 +187,20 @@ public class Info {
         System.out.println("All properties are validated");
     }
 
+    /**
+     * Extract all using tags from registered Resource class.
+     *
+     * @return
+     * @throws IllegalAccessException
+     */
     private static Map<String, Object> usingTags() throws IllegalAccessException {
-        List<Field> items = BeanUtils.getStaticFieldsByType(R.class, String.class);
         Map<String, Object> usingTags = new HashMap<>();
-        for (Field item : items) {
-            String tag = (String) item.get(null);
-            usingTags.put(tag, item);
+        for (Class clazz : map.values()) {
+            List<Field> items = BeanUtils.getStaticFieldsByType(clazz, String.class);
+            for (Field item : items) {
+                String tag = (String) item.get(null);
+                usingTags.put(tag, item);
+            }
         }
         return usingTags;
     }

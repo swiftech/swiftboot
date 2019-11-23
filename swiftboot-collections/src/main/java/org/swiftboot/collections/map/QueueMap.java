@@ -1,5 +1,6 @@
 package org.swiftboot.collections.map;
 
+import org.swiftboot.collections.R;
 import org.swiftboot.util.Info;
 
 import java.io.Serializable;
@@ -56,7 +57,7 @@ public class QueueMap<K extends Serializable, V extends Serializable> extends Li
     @Override
     public V put(K key, V value) {
         if (keyQ.size() != this.size()) {
-            throw new IllegalStateException(Info.get(QueueMap.class, "queue_size_not_match2", keyQ.size(), this.size()));
+            throw new IllegalStateException(Info.get(QueueMap.class, R.QUEUE_SIZE_NOT_MATCH2, keyQ.size(), this.size()));
         }
         // 处理重复情况
         if (this.containsKey(key)) {

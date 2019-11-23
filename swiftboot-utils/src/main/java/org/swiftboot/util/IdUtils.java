@@ -36,7 +36,7 @@ public class IdUtils {
         if (StringUtils.isBlank(bizCode)
                 || bizCode.length() < 2 || bizCode.length() > 8) {
 //            throw new RuntimeException(String.format("生成ID失败，参数错误: %s", bizCode));
-            throw new RuntimeException(Info.get(IdUtils.class, "id_failed1", bizCode));
+            throw new RuntimeException(Info.get(IdUtils.class, R.ID_FAILED1, bizCode));
         }
         StringBuilder buf = new StringBuilder(32);
         buf.append(bizCode, 0, bizCode.length())
@@ -61,7 +61,7 @@ public class IdUtils {
                 || bizCode.length() < 2 || bizCode.length() > 6
                 || serverId.length() < 1 || serverId.length() > 4) {
 //            throw new RuntimeException(String.format("生成ID失败，参数错误: %s %s", bizCode, serverId));
-            throw new RuntimeException(Info.get(IdUtils.class,"id_failed2", bizCode, serverId));
+            throw new RuntimeException(Info.get(IdUtils.class,R.ID_FAILED2, bizCode, serverId));
         }
         StringBuilder buf = new StringBuilder(32);
         buf.append(bizCode, 0, bizCode.length())

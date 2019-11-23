@@ -6,7 +6,7 @@ import java.util.Locale;
 
 public class SwiftbootCollection {
     static {
-        Info.register("swiftboot-collection", "/swiftboot-collections");
+        Info.register("/swiftboot-collections", R.class);
     }
 
     public static void main(String[] args) {

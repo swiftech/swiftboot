@@ -65,7 +65,7 @@ public class BeanUtils {
             }
         }
         if (ret.isEmpty()) {
-            throw new NoSuchFieldException(Info.get(BeanUtils.class, "no_field_by_type2", fieldClass, clazz.getName()));
+            throw new NoSuchFieldException(Info.get(BeanUtils.class, R.NO_FIELD_BY_TYPE2, fieldClass, clazz.getName()));
         }
         else {
             return ret;
@@ -100,7 +100,7 @@ public class BeanUtils {
                 // Field不在当前类定义，继续向上转型
             }
         }
-        throw new NoSuchFieldException(Info.get(BeanUtils.class, "no_field2", clazz.getName(), propertyName));
+        throw new NoSuchFieldException(Info.get(BeanUtils.class, R.NO_FIELD2, clazz.getName(), propertyName));
     }
 
     /**
@@ -203,7 +203,7 @@ public class BeanUtils {
      */
     public static Object forceGetProperty(Object object, Field field) {
         if (field == null || object == null) {
-            throw new IllegalArgumentException(Info.get(BeanUtils.class, "params_required"));
+            throw new IllegalArgumentException(Info.get(BeanUtils.class, R.PARAMS_REQUIRED));
         }
 
         boolean accessible = field.isAccessible();
@@ -213,7 +213,7 @@ public class BeanUtils {
         try {
             result = field.get(object);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(Info.get(BeanUtils.class, "get_value_fail1", field.getName()));
+            throw new RuntimeException(Info.get(BeanUtils.class, R.GET_VALUE_FAIL1, field.getName()));
         }
         field.setAccessible(accessible);
         return result;
@@ -236,7 +236,7 @@ public class BeanUtils {
         try {
             field.set(object, newValue);
         } catch (IllegalAccessException e) {
-            logger.info(Info.get(BeanUtils.class, "set_value_fail2", object.getClass().getName(), propertyName));
+            logger.info(Info.get(BeanUtils.class, R.SET_VALUE_FAIL2, object.getClass().getName(), propertyName));
         }
         field.setAccessible(accessible);
     }
@@ -256,7 +256,7 @@ public class BeanUtils {
         try {
             field.set(object, newValue);
         } catch (IllegalAccessException e) {
-            logger.info(Info.get(BeanUtils.class, "set_value_fail2", object.getClass().getName(), field.getName()));
+            logger.info(Info.get(BeanUtils.class, R.SET_VALUE_FAIL2, object.getClass().getName(), field.getName()));
         }
         field.setAccessible(accessible);
     }
@@ -290,7 +290,7 @@ public class BeanUtils {
         }
 
         if (method == null)
-            throw new NoSuchMethodException(Info.get(BeanUtils.class, "no_field2", clazz.getSimpleName(), methodName));
+            throw new NoSuchMethodException(Info.get(BeanUtils.class, R.NO_FIELD2, clazz.getSimpleName(), methodName));
 
         boolean accessible = method.isAccessible();
         method.setAccessible(true);

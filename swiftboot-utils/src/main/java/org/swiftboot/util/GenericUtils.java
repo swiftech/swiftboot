@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 public class GenericUtils {
 
     /**
-     *
      * @param clazz
      * @param <T>
      * @return
@@ -21,7 +20,6 @@ public class GenericUtils {
     }
 
     /**
-     *
      * @param clazz
      * @param <T>
      * @return
@@ -29,7 +27,7 @@ public class GenericUtils {
     public static <T> Class parentGenericClass(Class<T> clazz) {
         Type genericSuperclass = clazz.getGenericSuperclass();
         if (genericSuperclass == null) {
-            throw new RuntimeException(Info.get(GenericUtils.class, "no_generic_super_class"));
+            throw new RuntimeException(Info.get(GenericUtils.class, R.NO_GENERIC_SUPER_CLASS));
         }
         if (genericSuperclass instanceof ParameterizedType) {
             Class<T> genericClass = (Class<T>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
@@ -37,7 +35,7 @@ public class GenericUtils {
         }
         else {
             throw new RuntimeException(
-                    Info.get(GenericUtils.class, "no_generic_super_class", clazz.getGenericSuperclass().getTypeName()));
+                    Info.get(GenericUtils.class, R.NO_GENERIC_SUPER_CLASS, clazz.getGenericSuperclass().getTypeName()));
         }
     }
 
@@ -52,7 +50,7 @@ public class GenericUtils {
     public static <T> ParameterizedType firstParameterizedType(Class<T> clazz) {
         Type genericSuperclass = clazz.getGenericSuperclass();
         if (genericSuperclass == null) {
-            throw new RuntimeException(Info.get(GenericUtils.class, "no_generic_class_to_ancestor1", clazz.getName()));
+            throw new RuntimeException(Info.get(GenericUtils.class, R.NO_GENERIC_CLASS_TO_ANCESTOR1, clazz.getName()));
         }
         if (genericSuperclass instanceof ParameterizedType) {
             return (ParameterizedType) genericSuperclass;
@@ -64,6 +62,7 @@ public class GenericUtils {
 
     /**
      * 获取一个类的父类（及其父类）的泛型类型
+     *
      * @param clazz
      * @param <T>
      * @return
@@ -72,18 +71,18 @@ public class GenericUtils {
     public static <T> Class genericClass(Class<T> clazz) {
         Type genericSuperclass = clazz.getGenericSuperclass();
         if (genericSuperclass == null) {
-            throw new RuntimeException(Info.get(GenericUtils.class, "no_generic_super_class"));
+            throw new RuntimeException(Info.get(GenericUtils.class, R.NO_GENERIC_SUPER_CLASS));
         }
         if (!(genericSuperclass instanceof ParameterizedType)) {
             // 如果存在继承，则向上取一级
             genericSuperclass = ((Class) genericSuperclass).getGenericSuperclass();
             if (genericSuperclass == null) {
                 throw new RuntimeException(
-                        Info.get(GenericUtils.class, "no_generic_class_to_parent1", clazz.getGenericSuperclass().getTypeName()));
+                        Info.get(GenericUtils.class, R.NO_GENERIC_CLASS_TO_PARENT1, clazz.getGenericSuperclass().getTypeName()));
             }
             if (!(genericSuperclass instanceof ParameterizedType)) {
                 throw new RuntimeException(
-                        Info.get(GenericUtils.class, "no_generic_class_to_parent1", clazz.getGenericSuperclass().getTypeName()));
+                        Info.get(GenericUtils.class, R.NO_GENERIC_CLASS_TO_PARENT1, clazz.getGenericSuperclass().getTypeName()));
             }
         }
         Class<T> genericClass = (Class<T>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];

@@ -98,7 +98,7 @@ public class CollectionUtils {
                     coll = new HashSet();
                 }
                 else {
-                    throw new RuntimeException(Info.get(CollectionUtils.class, "collection_type_not_supported1", srcCollection.getClass()));
+                    throw new RuntimeException(Info.get(CollectionUtils.class, R.COLLECTION_TYPE_NOT_SUPPORTED1, srcCollection.getClass()));
                 }
                 ret.put(key, coll);
             }
