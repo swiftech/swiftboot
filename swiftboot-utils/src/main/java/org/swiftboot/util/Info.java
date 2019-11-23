@@ -4,13 +4,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
  * Any module uses this to localization information has to to:
  * 1. put a properties file names as the module name
  * 2. call Info.register() method to register the module with the properties file, file path must starts with "/".
- *
  */
 public class Info {
 
@@ -60,6 +60,10 @@ public class Info {
         if (propertiesList == null) {
             loadAllFromClassResources();
         }
+        return lookup(tag);
+    }
+
+    private static String lookup(String tag) {
         for (Properties properties : propertiesList) {
             String value = properties.getProperty(tag);
             if (!StringUtils.isBlank(value)) {
@@ -89,13 +93,7 @@ public class Info {
             key = key + "." + tag;
         }
         System.out.println("Retrieve " + key);
-        for (Properties properties : propertiesList) {
-            String value = properties.getProperty(key);
-            if (!StringUtils.isBlank(value)) {
-                return value;
-            }
-        }
-        return null;
+        return lookup(key);
     }
 
     private static void loadAllFromClassResources() {
@@ -106,21 +104,26 @@ public class Info {
         for (String key : map.keySet()) {
             String filePath = map.get(key);
             String resName = String.format("%s_%s.properties", filePath, curLocale.toString());
-            System.out.println("from " + resName);
+            System.out.println("Load resource from " + resName);
             try {
                 InputStream ins = Info.class.getResourceAsStream(resName);
-                if (ins != null) {
-                    Properties p = new Properties();
-                    p.load(ins);
-                    ins.close();
-                    total += p.size();
-                    propertiesList.add(p);
-                }
-                else {
+                if (ins == null) {
                     System.out.println("Failed to load from: " + resName);
+                    resName = String.format("%s.properties", filePath);
+                    System.out.println("Load resource from " + resName);
+                    ins = Info.class.getResourceAsStream(resName);
+                    if (ins == null) {
+                        throw new RuntimeException("No properties file found");
+                    }
                 }
+                Properties p = new Properties();
+                p.load(ins);
+                ins.close();
+                total += p.size();
+                propertiesList.add(p);
             } catch (IOException e) {
                 e.printStackTrace();
+                throw new RuntimeException(String.format("Load resource %s failed", resName), e);
             }
         }
         System.out.printf("%d items for %d registered information resources%n", total, map.size());
@@ -137,25 +140,53 @@ public class Info {
 
     public static void validateProperties() {
         loadAllFromClassResources();
+        Map<String, Object> definedTags = new HashMap<>();
+        Map<String, Object> usingTags;
+        try {
+            usingTags = usingTags();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         for (Properties properties : propertiesList) {
             Enumeration<String> enumeration = (Enumeration<String>) properties.propertyNames();
-            while(enumeration.hasMoreElements()) {
+            while (enumeration.hasMoreElements()) {
                 String name = enumeration.nextElement();
                 String classFullName = StringUtils.substringBeforeLast(name, ".");
+                String tagsName = StringUtils.substringAfterLast(name, ".");
+                definedTags.put(tagsName, classFullName);
                 try {
                     Class.forName(classFullName);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                     throw new RuntimeException(String.format("One property %s related class is not exist, maybe it's name was changed.", classFullName));
                 }
+                if (!usingTags.containsKey(tagsName)) {
+                    System.out.printf("WARN: tag '%s' for %s is not using, consider remove it%n", tagsName, Locale.getDefault());
+                }
             }
         }
-        System.out.println("All properties are validated");
+        for (String usingTag : usingTags.keySet()) {
+            if (!definedTags.containsKey(usingTag)) {
+                throw new RuntimeException(String.format("Tag '%s' is using, but not defined in properties for %s", usingTag, Locale.getDefault()));
+            }
+        }
 
+        System.out.println("All properties are validated");
+    }
+
+    private static Map<String, Object> usingTags() throws IllegalAccessException {
+        List<Field> items = BeanUtils.getStaticFieldsByType(R.class, String.class);
+        Map<String, Object> usingTags = new HashMap<>();
+        for (Field item : items) {
+            String tag = (String) item.get(null);
+            usingTags.put(tag, item);
+        }
+        return usingTags;
     }
 
     public static void main(String[] args) {
         validateProperties(Locale.ENGLISH);
-        validateProperties(Locale.CHINESE);
+        validateProperties(Locale.SIMPLIFIED_CHINESE);
     }
 }

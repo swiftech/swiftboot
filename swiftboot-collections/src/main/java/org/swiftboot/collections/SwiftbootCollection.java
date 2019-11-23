@@ -11,6 +11,6 @@ public class SwiftbootCollection {
 
     public static void main(String[] args) {
         Info.validateProperties(Locale.ENGLISH);
-        Info.validateProperties(Locale.CHINESE);
+        Info.validateProperties(Locale.SIMPLIFIED_CHINESE);
     }
 }
