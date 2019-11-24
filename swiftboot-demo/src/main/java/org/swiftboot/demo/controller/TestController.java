@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author swiftech
  **/
-@Api("测试")
+@Api("Test测试")
 @Controller
 @RequestMapping("/test")
 public class TestController {

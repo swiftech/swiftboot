@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author swiftech
  **/
-@Api("上传文件")
+@Api("UploadFile上传文件")
 @Controller
 @RequestMapping("/file")
 public class UploadFileController {

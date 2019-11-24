@@ -14,23 +14,18 @@ import java.util.*;
  */
 public class Info {
 
-    static {
-        register("/swiftboot-utils", R.class);
-    }
-
     /**
      * Mapping of resource files and class.
      */
-    private static Map<String, Class> map;
+    private static Map<String, Class> map = new HashMap<>();
 
     private static List<Properties> propertiesList;
 
     public static void register(String propertyFilePath, Class usingTags) {
-        if (map == null) {
-            map = new HashMap<>();
-        }
         if (map.containsKey(propertyFilePath)) {
-            throw new RuntimeException(String.format("Failed to register %s, because it is already exists", propertyFilePath));
+            System.out.println(String.format("%s is already registered", propertyFilePath));
+            return;
+//            throw new RuntimeException(String.format("Failed to register %s, because it is already exists", propertyFilePath));
         }
         map.put(propertyFilePath, usingTags);
     }
@@ -104,6 +99,10 @@ public class Info {
         Locale curLocale = Locale.getDefault();
         // Load all registered resources
         int total = 0;
+        if (map.isEmpty()) {
+            throw new RuntimeException("No any information resource registered");
+        }
+        System.out.printf("%d registered resource files to load%n", map.size());
         for (String key : map.keySet()) {
             String filePath = key;
             Class usingClass = map.get(key);
@@ -161,9 +160,9 @@ public class Info {
                 definedTags.put(tagsName, classFullName);
                 try {
                     Class.forName(classFullName);
-                } catch (ClassNotFoundException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
-                    throw new RuntimeException(String.format("One property %s related class is not exist, maybe it's name was changed.", classFullName));
+                    throw new RuntimeException(String.format("One property '[%s]%s' related class is not exist, maybe it's name was changed.", Locale.getDefault(), classFullName));
                 }
                 if (!usingTags.containsKey(tagsName)) {
                     System.out.printf("WARN: tag '[%s]%s' for is not using, consider remove it%n", Locale.getDefault(), tagsName);
@@ -172,7 +171,8 @@ public class Info {
                 String description = (String) properties.get(name);
                 String num = name.substring(name.length() - 1);
                 if (StringUtils.isNumeric(num)) {
-                    if (Integer.parseInt(num) != StringUtils.countMatches(description, '%')) {
+                    int placeholderCount = StringUtils.countMatches(description, "%s") + StringUtils.countMatches(description, "%d") + StringUtils.countMatches(description, "%f");
+                    if (Integer.parseInt(num) != placeholderCount) {
                         throw new RuntimeException(String.format("Tag name '%s' is not match the placeholder numbers in '[%s]%s'", name, Locale.getDefault(), description));
                     }
                 }
@@ -205,8 +205,13 @@ public class Info {
         return usingTags;
     }
 
-    public static void main(String[] args) {
+    public static void validateForAllLocale() {
         validateProperties(Locale.ENGLISH);
         validateProperties(Locale.SIMPLIFIED_CHINESE);
+    }
+
+    public static void main(String[] args) {
+        R.register();
+        validateForAllLocale();
     }
 }

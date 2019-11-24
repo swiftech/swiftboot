@@ -67,6 +67,49 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>3.1.8</version>
+                <configuration>
+                    <apiSources>
+                        <apiSource>
+                            <springmvc>true</springmvc>
+                            <locations>
+                                <location>org.swiftboot.demo</location>
+                            </locations>
+                            <schemes>
+                                <schema>http</schema>
+                            </schemes>
+                            <host>localhost</host>
+                            <basePath>/${project.name}</basePath>
+                            <info>
+                                <title>${project.name}接口</title>
+                                <version>V${project.version}</version>
+                                <description>${project.name}</description>
+                            </info>
+                            <!--<templatePath>${basedir}/src/main/swagger/template/strapdown.html.hbs</templatePath>-->
+                            <!--<outputPath>${basedir}/src/main/swagger/api-doc.html</outputPath>-->
+                            <swaggerDirectory>${project.basedir}/docs/api</swaggerDirectory>
+                            <outputFormats>json</outputFormats>
+                            <securityDefinitions>
+                                <securityDefinition>
+                                    <name>MybasicAuth</name>
+                                    <type>basic</type>
+                                </securityDefinition>
+                            </securityDefinitions>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
