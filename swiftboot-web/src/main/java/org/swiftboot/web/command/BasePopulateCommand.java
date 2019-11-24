@@ -6,6 +6,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.swiftboot.collections.CollectionUtils;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.GenericUtils;
+import org.swiftboot.util.Info;
+import org.swiftboot.web.R;
 import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.model.entity.Persistent;
 
@@ -43,7 +45,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
 //            }
 //            if (!(genericSuperclass instanceof ParameterizedType)) {
 //                throw new RuntimeException(
-//                        String.format("父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", getClass().getGenericSuperclass().getTypeName()));
+//                        Info.get(BasePopulateCommand.class, "父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", getClass().getGenericSuperclass().getTypeName()));
 //            }
 //        }
 //
@@ -51,7 +53,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
         Class<P> entityClass = (Class<P>) GenericUtils.ancestorGenericClass(getClass());
 
         if (entityClass == null) {
-            throw new RuntimeException("反射错误，无法获取实体类的类型(Class)");
+            throw new RuntimeException(Info.get(BasePopulateCommand.class, R.REFLECT_TYPE_OF_ENTITY_FAIL));
         }
 
         try {
@@ -59,7 +61,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("实例化实体类失败: %s", entityClass));
+            throw new RuntimeException(Info.get(BasePopulateCommand.class, R.CONSTRUCT_ENTITY_FAIL1, entityClass));
         }
         this.doPopulate(entityClass, ret);
         return ret;
@@ -127,10 +129,10 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                 targetField = BeanUtils.getDeclaredField(entityClass, srcField.getName());
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性 %s", entityClass, srcField.getName()));
+                throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entityClass, srcField.getName()));
             }
             if (targetField == null) {
-                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性 %s", entityClass, srcField.getName()));
+                throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entityClass, srcField.getName()));
             }
             boolean accessible = targetField.isAccessible();
             targetField.setAccessible(true);
@@ -138,7 +140,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                 Object value = PropertyUtils.getProperty(this, srcField.getName());
                 targetField.set(entity, value);
             } catch (Exception e) {
-                throw new RuntimeException(String.format("复制属性失败 %s", srcField.getName()));
+                throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
             }
             targetField.setAccessible(accessible);
         }

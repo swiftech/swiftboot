@@ -10,7 +10,6 @@ public class ErrorCode extends ErrorCodeSupport {
 
     @Override
     public void init() {
-        System.out.println("开始初始化错误代码...");
         initErrorCode();
     }
 }

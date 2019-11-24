@@ -2,6 +2,8 @@ package org.swiftboot.web.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.swiftboot.util.Info;
+import org.swiftboot.web.R;
 
 public abstract class BaseJsonable implements Jsonable {
 
@@ -12,7 +14,7 @@ public abstract class BaseJsonable implements Jsonable {
             return om.writeValueAsString(this);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new RuntimeException("转换为 JSON 字符串失败");
+            throw new RuntimeException(Info.get(BaseJsonable.class, R.CONVERT_TO_JSON_FAIL));
         }
     }
 

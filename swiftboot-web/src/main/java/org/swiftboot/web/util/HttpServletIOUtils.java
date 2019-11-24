@@ -2,8 +2,10 @@ package org.swiftboot.web.util;
 
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
-import org.swiftboot.util.IoUtils;
 import org.swiftboot.util.BufferedIoUtils;
+import org.swiftboot.util.Info;
+import org.swiftboot.util.IoUtils;
+import org.swiftboot.web.R;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
@@ -53,7 +55,7 @@ public class HttpServletIOUtils {
             writeFileToResponseStream(file, response, contentType, null);
         }
         else {
-            throw new RuntimeException(String.format("不是图片格式的文件: %s", file.getPath()));
+            throw new RuntimeException(Info.get(HttpServletIOUtils.class, R.REQUIRE_IMAGE_FILE1, file.getPath()));
         }
     }
 
@@ -102,7 +104,7 @@ public class HttpServletIOUtils {
             }
             byte[] bytes = IoUtils.readAllToBytes(inputStream);
             if (bytes == null || bytes.length == 0) {
-                throw new RuntimeException("无法从输入流中读取字节");
+                throw new RuntimeException(Info.get(HttpServletIOUtils.class, R.READ_FROM_INPUT_STREAM_FAIL));
             }
             out = response.getOutputStream();
             out.write(bytes);

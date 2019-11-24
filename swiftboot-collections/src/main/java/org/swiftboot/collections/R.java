@@ -6,9 +6,9 @@ import java.util.Locale;
 
 public class R {
 
-    static {
-        register();
-    }
+//    static {
+//        register();
+//    }
 
     public static void register() {
         org.swiftboot.util.R.register();

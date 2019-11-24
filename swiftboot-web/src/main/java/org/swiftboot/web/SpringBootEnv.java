@@ -1,13 +1,19 @@
 package org.swiftboot.web;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartingEvent;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.swiftboot.util.Info;
 
 /**
  * 判断 Spring Boot 的环境
  *
  * @author swiftech
  **/
-public class SpringBootEnv {
+public class SpringBootEnv implements ApplicationListener<ApplicationEvent> {
 
     public static boolean isProductionMode = false;
 
@@ -15,25 +21,36 @@ public class SpringBootEnv {
 
     public static boolean isDevMode = true;
 
-    static {
-        String profile = SystemUtils.getEnvironmentVariable("spring.profiles.active", "dev");
-        if ("prod".equals(profile)) {
-            System.out.println("生产模式");
-            isProductionMode = true;
-            isTestMode = false;
-            isDevMode = false;
+    @Override
+    public void onApplicationEvent(ApplicationEvent event) {
+        if (event instanceof ApplicationStartingEvent) {
+
         }
-        else if ("test".equals(profile)) {
-            System.out.println("测试模式");
-            isProductionMode = false;
-            isTestMode = true;
-            isDevMode = false;
+        else if (event instanceof ApplicationEnvironmentPreparedEvent) {
+            R.register();
         }
-        else {
-            System.out.println("开发模式");
-            isProductionMode = false;
-            isTestMode = false;
-            isDevMode = true;
+        else if (event instanceof ApplicationReadyEvent) {
+            String profile = SystemUtils.getEnvironmentVariable("spring.profiles.active", "dev");
+            if ("prod".equals(profile)) {
+                System.out.println(Info.get(SpringBootEnv.class, R.PRODUCTION));
+                isProductionMode = true;
+                isTestMode = false;
+                isDevMode = false;
+            }
+            else if ("test".equals(profile)) {
+                System.out.println(Info.get(SpringBootEnv.class, R.TESTING));
+                isProductionMode = false;
+                isTestMode = true;
+                isDevMode = false;
+            }
+            else {
+                System.out.println(Info.get(SpringBootEnv.class, R.DEVELOPMENT));
+                isProductionMode = false;
+                isTestMode = false;
+                isDevMode = true;
+            }
         }
+
+
     }
 }

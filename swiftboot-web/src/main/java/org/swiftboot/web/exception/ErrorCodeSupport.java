@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.swiftboot.util.BeanUtils;
+import org.swiftboot.util.Info;
+import org.swiftboot.web.R;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -126,7 +128,7 @@ public abstract class ErrorCodeSupport {
         try {
             msg = errorCodeMap.get(code);
         } catch (Exception e) {
-            System.out.printf("WARN: 没有找到错误代码对应的错误消息(%s)%n", code);
+            System.out.println(Info.get(ErrorCodeSupport.class, R.NO_MSG_FOR_CODE1, code));
             msg = code; // 没有则直接返回 CODE
         }
         return msg;
@@ -139,13 +141,13 @@ public abstract class ErrorCodeSupport {
         Map<String, Object> cache = new HashMap<>();
         Field[] fields = ErrorCodeSupport.class.getDeclaredFields();
         if (fields.length == 0) {
-            throw new RuntimeException("没有找到预定义的错误代码");
+            throw new RuntimeException(Info.get(ErrorCodeSupport.class, R.NO_PRE_DEFINED_MSG));
         }
         try {
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(String.class)) {
                     if (cache.containsKey(field.get(null))) {
-                        throw new RuntimeException(String.format("存在重复的错误代码: %s", field.get(null)));
+                        throw new RuntimeException(Info.get(ErrorCodeSupport.class, R.REPEAT_MSG1, field.get(null)));
                     }
                     cache.put(String.valueOf(field.get(null)), field);
                 }
@@ -159,7 +161,7 @@ public abstract class ErrorCodeSupport {
      * 从i18n资源初始化错误代码对应的错误信息
      */
     protected void initErrorCode() {
-        log.info("初始化i18n资源");
+        log.info(Info.get(ErrorCodeSupport.class, R.I18N_INIT_START));
         try {
             validate();
         } catch (Exception e) {
@@ -168,9 +170,9 @@ public abstract class ErrorCodeSupport {
         }
 
         try {
-            log.info(String.format("Init pre-defined error messages from: %s", ErrorCodeSupport.class.getName()));
+            log.info(Info.get(ErrorCodeSupport.class, R.INIT_PRE_DEFINED_MSG1, ErrorCodeSupport.class.getName()));
             List<Field> standard = BeanUtils.getStaticFieldsByType(ErrorCodeSupport.class, String.class);
-            log.info(String.format("%d error codes in total", standard.size()));
+            log.info(Info.get(ErrorCodeSupport.class, R.TOTAL_MSG_COUNT1, standard.size()));
             for (Field field : standard) {
                 if (field.getName().startsWith("CODE_")) {
                     String fieldValue = field.get(null).toString();
@@ -179,11 +181,11 @@ public abstract class ErrorCodeSupport {
                     try {
                         message = messageSource.getMessage(field.getName(), null, Locale.CHINESE); // TODO
                     } catch (NoSuchMessageException e) {
-                        log.info(String.format("Message %s ignored", field.getName()));
+                        log.info(Info.get(ErrorCodeSupport.class, R.IGNORE_MSG1, field.getName()));
                         continue;
                     }
                     if (StringUtils.isBlank(message)) {
-                        log.info(String.format("No message for '%s'", field.getName()));
+                        log.info(Info.get(ErrorCodeSupport.class, R.NOT_FOUND_MSG1, field.getName()));
                     }
                     else {
                         putErrorCodeAndMessage(field.get(null).toString(), message);
@@ -191,25 +193,25 @@ public abstract class ErrorCodeSupport {
                 }
             }
 
-            log.info(String.format("Init user-defined error messages from: %s", this.getClass().getName()));
+            log.info(Info.get(ErrorCodeSupport.class, R.INIT_USER_DEFINED_MSG1, this.getClass().getName()));
             List<Field> fields = BeanUtils.getStaticFieldsByType(this.getClass(), String.class);
             for (Field field : fields) {
                 if (field.getName().startsWith("CODE_")) {
                     String fieldValue = field.get(null).toString();
                     log.debug(String.format("  %s(%s)", field.getName(), fieldValue));
                     if (StringUtils.isNotBlank(getErrorMessage(fieldValue))) {
-                        log.warn(String.format("Error code already exist: %s(%s)", field.getName(), fieldValue));
+                        log.warn(Info.get(ErrorCodeSupport.class, R.CODE_EXIST2, field.getName(), fieldValue));
                         continue;
                     }
                     String message = null;
                     try {
                         message = messageSource.getMessage(field.getName(), null, Locale.CHINESE);
                     } catch (NoSuchMessageException e) {
-                        log.info(String.format("Message %s ignored", field.getName()));
+                        log.info(Info.get(ErrorCodeSupport.class, R.IGNORE_MSG1, field.getName()));
                         continue;
                     }
                     if (StringUtils.isBlank(message)) {
-                        log.info(String.format("No message for '%s'", field.getName()));
+                        log.info(Info.get(ErrorCodeSupport.class, R.NOT_FOUND_MSG1, field.getName()));
                     }
                     else {
                         putErrorCodeAndMessage(field.get(null).toString(), message);
@@ -218,19 +220,19 @@ public abstract class ErrorCodeSupport {
             }
 
             if (errorCodeMap == null || errorCodeMap.isEmpty()) {
-                log.warn("没有正确初始化错误代码资源");
+                log.warn(Info.get(ErrorCodeSupport.class, R.INIT_FAIL));
                 return;
             }
             else {
-                log.info(String.format("初始化 %d 个资源", errorCodeMap.size()));
+                log.info(Info.get(ErrorCodeSupport.class, R.INIT_COUNT1, errorCodeMap.size()));
             }
 
-            String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "参数化错误信息");
-            log.debug(String.format("确认参数化信息是否正常：%s", argumentedMsg));
+            String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "this is a param of message");
+            log.debug(Info.get(ErrorCodeSupport.class, R.VALIDATE_INI1T, argumentedMsg));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        log.info("i18n初始化完成");
+        log.info(Info.get(ErrorCodeSupport.class, R.I18N_INIT_DONE));
     }
 
     @PostConstruct

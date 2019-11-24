@@ -2,9 +2,9 @@ package org.swiftboot.util;
 
 public class R {
 
-    static {
-        register();
-    }
+//    static {
+//        register();
+//    }
 
     public static void register() {
         Info.register("/swiftboot-utils", R.class);

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.util.BeanUtils;
+import org.swiftboot.util.Info;
+import org.swiftboot.web.R;
 import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.model.entity.BaseEntity;
 import org.swiftboot.web.model.entity.Persistent;
@@ -39,7 +41,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
             Class<T> resultClass,
             Persistent entity) {
         if (resultClass == null || entity == null) {
-            throw new IllegalArgumentException("缺少必要的参数");
+            throw new IllegalArgumentException(Info.get(BasePopulateResult.class, R.REQUIRE_PARAMS));
         }
 
         T ret;
@@ -48,13 +50,13 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
             constructor = resultClass.getConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("%s 类缺少无参数构造方法", resultClass.getName()));
+            throw new RuntimeException(Info.get(BasePopulateResult.class, R.REQUIRE_NO_PARAM_CONSTRUCTOR1, resultClass.getName()));
         }
         try {
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("%s 构造失败，可能缺少无参数构造方法，或者没有继承 %s", resultClass.getName(), BasePopulateResult.class));
+            throw new RuntimeException(Info.get(BasePopulateResult.class, R.CONSTRUCT_FAIL2, resultClass.getName(), BasePopulateResult.class));
         }
         ret.populateByEntity(entity);
         return ret;
@@ -79,10 +81,10 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
      */
     public static <E extends Persistent> BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
         if (entity == null) {
-            throw new RuntimeException("实体类不能为空");
+            throw new RuntimeException(Info.get(BasePopulateResult.class, R.REQUIRE_ENTITY));
         }
         Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
-        log.debug(String.format("populate result from entity: %s", entity));
+        log.debug(Info.get(BasePopulateResult.class, R.POPULATE_FROM_ENTITY1, entity));
 
         /*
          * 先处理一对多关联（保证ID属性先被处理，后续处理时略过这些字段）
@@ -119,7 +121,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                 srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
-                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性: %s", entity.getClass(), targetField.getName()));
+                throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entity.getClass(), targetField.getName()));
             }
 
 
@@ -141,7 +143,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                         BeanUtils.forceSetProperty(result, targetField, subResult);
                     } catch (NoSuchFieldException e) {
                         e.printStackTrace();
-                        throw new RuntimeException(String.format("填充属性失败 %s", srcField.getName()));
+                        throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
                     }
                 }
             }
@@ -160,7 +162,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                 srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
-                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性 %s", entity.getClass(), targetField.getName()));
+                throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entity.getClass(), targetField.getName()));
             }
             // unlock
             boolean accessible = targetField.isAccessible();
@@ -192,7 +194,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new RuntimeException(String.format("填充集合属性失败 %s", srcField.getName()));
+                    throw new RuntimeException(Info.get(BasePopulateResult.class, R.POPULATE_COLLECTION_FAIL1, srcField.getName()));
                 }
             }
             else {
@@ -201,7 +203,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                     targetField.set(result, value);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new RuntimeException(String.format("填充属性失败 %s", srcField.getName()));
+                    throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
                 }
             }
             targetField.setAccessible(accessible);

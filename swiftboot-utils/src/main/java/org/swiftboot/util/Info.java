@@ -90,7 +90,7 @@ public class Info {
         if (StringUtils.isNotBlank(tag)) {
             key = key + "." + tag;
         }
-        System.out.println("Retrieve " + key);
+//        System.out.println("Retrieve " + key);
         return lookup(key);
     }
 
