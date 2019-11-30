@@ -210,8 +210,4 @@ public class Info {
         validateProperties(Locale.SIMPLIFIED_CHINESE);
     }
 
-    public static void main(String[] args) {
-        R.register();
-        validateForAllLocale();
-    }
 }

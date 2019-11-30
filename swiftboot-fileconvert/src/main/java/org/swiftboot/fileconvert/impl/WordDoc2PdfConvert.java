@@ -1,9 +1,9 @@
 package org.swiftboot.fileconvert.impl;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.swiftboot.fileconvert.Convert;
 import org.swiftboot.fileconvert.ConvertCallback;
 import org.swiftboot.fileconvert.ConvertException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +26,6 @@ public class WordDoc2PdfConvert implements Convert {
 
     @Override
     public List<OutputStream> convert(InputStream inputStream, ConvertCallback convertCallback) throws ConvertException {
-        throw new NotImplementedException();
+        throw new NotImplementedException("Not support yet");
     }
 }

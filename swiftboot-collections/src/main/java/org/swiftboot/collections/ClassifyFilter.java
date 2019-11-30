@@ -4,6 +4,7 @@ package org.swiftboot.collections;
  * 分类过滤器，用于将集合分类成Map
  *
  * @param <T> 集合中的元素类型
+ * @deprecated Classifier
  */
 public interface ClassifyFilter<T> {
 

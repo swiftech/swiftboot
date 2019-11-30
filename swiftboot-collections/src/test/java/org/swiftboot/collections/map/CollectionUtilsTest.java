@@ -53,12 +53,9 @@ public class CollectionUtilsTest {
                 add(new TestBean("b", "b3"));
             }
         };
-        Map<Object, Collection> classify = CollectionUtils.classify(list, new ClassifyFilter<TestBean>() {
-            @Override
-            public String filter(TestBean testBean) {
-                return testBean.getKey();
-            }
-        });
+        Map<Object, Collection> classify
+                = CollectionUtils.classify(list, (ClassifyFilter<TestBean>) TestBean::getKey);
+
         for (Object k : classify.keySet()) {
             System.out.println(k);
             System.out.println(classify.get(k));
@@ -78,8 +75,61 @@ public class CollectionUtilsTest {
         }
     }
 
+    @Test
+    public void testSortListCollection() {
+        List<TestBean> list = new ArrayList<TestBean>() {
+            {
+                add(new TestBean("b", "b3"));
+                add(new TestBean("b", "b1"));
+                add(new TestBean("b", "b2"));
+                add(new TestBean("a", "a2"));
+                add(new TestBean("a", "a1"));
+                add(new TestBean("a", "a3"));
+            }
+        };
+        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        for (TestBean testBean : testBeans) {
+            System.out.println(testBean);
+        }
+    }
 
-    public static class TestBean {
+    @Test
+    public void testSortHashSetCollection() {
+        Set<TestBean> list = new HashSet<TestBean>() {
+            {
+                add(new TestBean("b", "b3"));
+                add(new TestBean("b", "b1"));
+                add(new TestBean("b", "b2"));
+                add(new TestBean("a", "a2"));
+                add(new TestBean("a", "a1"));
+                add(new TestBean("a", "a3"));
+            }
+        };
+        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        for (TestBean testBean : testBeans) {
+            System.out.println(testBean);
+        }
+    }
+
+    @Test
+    public void testSortTreeSetCollection() {
+        Set<TestBean> list = new TreeSet<TestBean>((o1, o2) -> o1.getValue().compareTo(o2.getValue())) {
+            {
+                add(new TestBean("b", "b3"));
+                add(new TestBean("b", "b1"));
+                add(new TestBean("b", "b2"));
+                add(new TestBean("a", "a2"));
+                add(new TestBean("a", "a1"));
+                add(new TestBean("a", "a3"));
+            }
+        };
+        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        for (TestBean testBean : testBeans) {
+            System.out.println(testBean);
+        }
+    }
+
+    public static class TestBean {// implements Comparable<TestBean> {
         String key;
         String value;
 
@@ -111,5 +161,10 @@ public class CollectionUtilsTest {
                     ", value='" + value + '\'' +
                     '}';
         }
+
+//        @Override
+//        public int compareTo(TestBean o) {
+//            return this.key.compareTo(o.getKey());
+//        }
     }
 }

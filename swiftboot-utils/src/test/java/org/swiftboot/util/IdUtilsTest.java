@@ -25,7 +25,10 @@ public class IdUtilsTest {
 
         System.out.println(IdUtils.makeID("basedocu"));
         System.out.println(IdUtils.makeID("basident"));
+        System.out.println(IdUtils.makeID("poipicfi"));
+        System.out.println(IdUtils.makeID("poiaudfi"));
 
+        System.out.println(IdUtils.makeID("poscadfi"));
     }
 
     @Test

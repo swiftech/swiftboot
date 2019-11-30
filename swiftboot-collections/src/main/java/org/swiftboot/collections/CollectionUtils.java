@@ -84,6 +84,7 @@ public class CollectionUtils {
      * @param srcCollection
      * @param classifyFilter
      * @return
+     * @deprecated Classifier
      */
     public static <T> Map<Object, Collection> classify(Collection<T> srcCollection, ClassifyFilter classifyFilter) {
         Map<Object, Collection> ret = new HashMap<>();
@@ -126,4 +127,26 @@ public class CollectionUtils {
         }
     }
 
+    /**
+     * 按照 comparator 定义比较器排序集合，支持 List 和 Set 类型的集合
+     *
+     * @param collection
+     * @param comparator
+     * @param <T>
+     * @return
+     */
+    public static <T> Collection<T> sortCollection(Collection<T> collection, Comparator<T> comparator) {
+        if (collection instanceof List) {
+            ((List<T>) collection).sort(comparator);
+            return collection;
+        }
+        else if (collection instanceof Set) {
+            TreeSet<T> ret =  new TreeSet<T>(comparator);
+            ret.addAll(collection);
+            return ret;
+        }
+        else {
+            return collection;
+        }
+    }
 }

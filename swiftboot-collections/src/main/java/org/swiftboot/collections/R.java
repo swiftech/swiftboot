@@ -6,9 +6,9 @@ import java.util.Locale;
 
 public class R {
 
-//    static {
-//        register();
-//    }
+    static {
+        register();// Make sure standalone app or unit test registered
+    }
 
     public static void register() {
         org.swiftboot.util.R.register();

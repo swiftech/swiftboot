@@ -1,8 +1,8 @@
 package org.swiftboot.web.model.id;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.util.IdUtils;
+import org.swiftboot.util.WordUtils;
 import org.swiftboot.web.model.entity.IdPojo;
 
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class EntityIdGenerator implements IdGenerator<IdPojo> {
     public static final int MAX_CODE_LEN = 6;
 
     // 类和业务代码映射缓存
-    private Map<Class, String> classCodeMapping = new HashMap<>();
+    private Map<Class<IdPojo>, String> classCodeMapping = new HashMap<>();
 
     @Override
     public String generate(IdPojo object) {
@@ -32,27 +32,15 @@ public class EntityIdGenerator implements IdGenerator<IdPojo> {
         else {
             String simpleEntityName = entityClass.getSimpleName();
             String bizName = StringUtils.substringBefore(simpleEntityName, "Entity");
-            String[] words = StringUtils.splitByCharacterTypeCamelCase(bizName);
-            int a = MAX_CODE_LEN / words.length;
-            int b = MAX_CODE_LEN % words.length;
-            StringBuilder buf = new StringBuilder();
-            for (int i = 0; i < words.length; i++) {
-                int x = a + (i >= (words.length - b) ? 1 : 0);
-                String word = words[i];
-                buf.append(StringUtils.substring(word, 0, x).toLowerCase());
-            }
-
-            if (buf.length() < MIN_CODE_LEN) {
-                code = buf.toString() + RandomStringUtils.randomAlphabetic(MIN_CODE_LEN - buf.length());
-            }
-            else if (buf.length() > MAX_CODE_LEN) {
-                code = buf.substring(0, MAX_CODE_LEN); // 如果太长自动截掉
-            }
-            else {
-                code = buf.toString();
-            }
+            code = camelToShort(bizName, MAX_CODE_LEN);
         }
         return IdUtils.makeID(code);
     }
+
+    private String camelToShort(String camel, int len) {
+        String[] words = StringUtils.splitByCharacterTypeCamelCase(camel);
+        return WordUtils.joinWords(words, len);
+    }
+
 
 }

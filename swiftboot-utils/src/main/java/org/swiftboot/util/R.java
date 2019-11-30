@@ -2,12 +2,17 @@ package org.swiftboot.util;
 
 public class R {
 
-//    static {
-//        register();
-//    }
+    static {
+        register(); // Make sure standalone app or unit test registered
+    }
 
     public static void register() {
         Info.register("/swiftboot-utils", R.class);
+    }
+
+    public static void main(String[] args) {
+        R.register();
+        Info.validateForAllLocale();
     }
 
     public static final String ID_FAILED1 = "id_failed1";
