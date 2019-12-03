@@ -6,7 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author switech 2019-08-29
+ * @author swiftech 2019-08-29
  *
  **/
 public class HttpServletCookieUtils {

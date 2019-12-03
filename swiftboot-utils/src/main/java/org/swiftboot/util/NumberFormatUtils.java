@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 
 /**
  * 数字格式转换工具类
- * @author switech
+ * @author swiftech
  **/
 public class NumberFormatUtils {
 

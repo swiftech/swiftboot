@@ -3,7 +3,7 @@ package org.swiftboot.util;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * @author switech
+ * @author swiftech
  **/
 public class SysUtils {
 
