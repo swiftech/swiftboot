@@ -1,6 +1,7 @@
 package org.swiftboot.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -261,6 +264,61 @@ public class BeanUtils {
         field.setAccessible(accessible);
     }
 
+    /**
+     * 强制设置对象变量值，忽略private、protected修饰符的限制。
+     * 根据变量的类型强制转换
+     *
+     * @param entity    对象
+     * @param fieldName 属性名
+     * @param value     属性值
+     * @throws NoSuchFieldException
+     * @throws ParseException
+     * @since 1.1
+     */
+    public static void forceSetPropertyFromString(Object entity, String fieldName, String value)
+            throws NoSuchFieldException, ParseException {
+        Field field = BeanUtils.getDeclaredField(entity, fieldName);
+        forceSetPropertyFromString(entity, field, value);
+    }
+
+    /**
+     * 强制设置对象变量值，忽略private、protected修饰符的限制。
+     * 根据变量的类型强制转换
+     *
+     * @param entity    对象
+     * @param field     属性
+     * @param value     属性值
+     * @throws NoSuchFieldException
+     * @throws ParseException
+     * @since 1.1
+     */
+    public static void forceSetPropertyFromString(Object entity, Field field, String value)
+            throws NoSuchFieldException, ParseException {
+        if (field.getType() == Integer.class) {
+            BeanUtils.forceSetProperty(entity, field, Integer.parseInt(value));
+        }
+        else if (field.getType() == Long.class) {
+            BeanUtils.forceSetProperty(entity, field, Long.parseLong(value));
+        }
+        else if (field.getType() == Float.class) {
+            BeanUtils.forceSetProperty(entity, field, Float.parseFloat(value));
+        }
+        else if (field.getType() == Double.class) {
+            BeanUtils.forceSetProperty(entity, field, Double.parseDouble(value));
+        }
+        else if (field.getType() == BigDecimal.class) {
+            BeanUtils.forceSetProperty(entity, field, BigDecimal.valueOf(Double.parseDouble(value)));
+        }
+        else if (field.getType() == Date.class) {
+            BeanUtils.forceSetProperty(entity, field, FastDateFormat.getInstance().parse(value));
+        }
+        else if (field.getType() == Boolean.class) {
+            BeanUtils.forceSetProperty(entity, field, Boolean.valueOf(value));
+        }
+        else {
+            BeanUtils.forceSetProperty(entity, field, value);
+        }
+    }
 
     /**
      * 强制调用对象函数，忽略private、protected修饰符的限制。
