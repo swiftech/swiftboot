@@ -250,10 +250,8 @@ public class BeanUtils {
      * @param object   对象
      * @param field    属性
      * @param newValue 属性值
-     * @throws NoSuchFieldException 没有该字段时抛出
      */
-    public static void forceSetProperty(Object object, Field field, Object newValue)
-            throws NoSuchFieldException {
+    public static void forceSetProperty(Object object, Field field, Object newValue) {
         boolean accessible = field.isAccessible();
         field.setAccessible(true);
         try {
@@ -288,12 +286,11 @@ public class BeanUtils {
      * @param entity    对象
      * @param field     属性
      * @param value     属性值
-     * @throws NoSuchFieldException
      * @throws ParseException
      * @since 1.1
      */
     public static void forceSetPropertyFromString(Object entity, Field field, String value)
-            throws NoSuchFieldException, ParseException {
+            throws ParseException {
         if (field.getType() == Integer.class) {
             BeanUtils.forceSetProperty(entity, field, Integer.parseInt(value));
         }

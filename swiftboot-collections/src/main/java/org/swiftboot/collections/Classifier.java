@@ -12,6 +12,7 @@ import java.util.*;
  *
  * @author swiftech
  * @see ClassifierBuilder
+ * @since 1.1
  */
 public final class Classifier<T extends Comparable<T>, E> {
 

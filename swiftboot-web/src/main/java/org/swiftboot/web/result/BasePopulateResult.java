@@ -139,12 +139,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                 Class subResultClass = (Class) targetField.getGenericType();
                 if (subResultClass != null) {
                     BasePopulateResult<E> subResult = createResult(subResultClass, (Persistent) subEntity);
-                    try {
-                        BeanUtils.forceSetProperty(result, targetField, subResult);
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
-                    }
+                    BeanUtils.forceSetProperty(result, targetField, subResult);
                 }
             }
         }

@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * @author swiftech
+ * @since 1.1
  */
 public class CsvReader {
 
@@ -25,10 +26,12 @@ public class CsvReader {
      */
     public void readCsv(InputStream inputStream, CsvReaderHandler csvHandler) throws Exception {
         List<String> lines = IoUtils.readToStringList(inputStream);
+        inputStream.close();
         if (lines.size() < 2) {
             return;
         }
         String titleLine = lines.get(0);
+
         List<String> titles = Arrays.asList(StringUtils.split(titleLine, ','));
         csvHandler.onTitle(titles);
 

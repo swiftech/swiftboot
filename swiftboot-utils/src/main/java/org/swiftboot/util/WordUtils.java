@@ -3,8 +3,6 @@ package org.swiftboot.util;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-
 /**
  * 单词工具类 (Beta)
  *
@@ -21,7 +19,7 @@ public class WordUtils {
      * @return
      */
     public static String joinWords(String[] words, int len) {
-        if (Arrays.stream(words).count() <= len) {
+        if (countWordsTotalLength(words) <= len) {
             return StringUtils.join(words).toLowerCase();
         }
         int a = len / words.length;
@@ -42,5 +40,19 @@ public class WordUtils {
         else {
             return buf.toString();
         }
+    }
+
+    /**
+     * Count total length of all words in the array
+     *
+     * @param words
+     * @return
+     */
+    public static int countWordsTotalLength(String[] words) {
+        int ret = 0;
+        for (String word : words) {
+            ret += word.length();
+        }
+        return ret;
     }
 }
