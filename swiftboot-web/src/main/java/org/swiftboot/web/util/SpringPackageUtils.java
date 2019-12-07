@@ -30,7 +30,7 @@ public class SpringPackageUtils {
         for (String aPackage : packages) {
             String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
                     SpringUtils.resolveBasePackage(aPackage) + "/" + "*.class";
-            System.out.println("Scan classes from : " + packageSearchPath);
+//            System.out.println("Scan classes from : " + packageSearchPath);
             Resource[] resources = new Resource[0];
             try {
                 resources = resourcePatternResolver.getResources(packageSearchPath);
