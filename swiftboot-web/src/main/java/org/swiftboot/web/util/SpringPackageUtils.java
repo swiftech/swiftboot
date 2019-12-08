@@ -18,8 +18,8 @@ public class SpringPackageUtils {
     /**
      * 从指定的包中扫描所有的类
      *
-     * @param packages
-     * @param superClass
+     * @param packages   扫描的包名，例如：org.swiftboot.model
+     * @param superClass 过滤类型
      * @return
      */
     public static Set<Class<?>> scanClasses(String[] packages, Class<?> superClass) {
@@ -29,7 +29,7 @@ public class SpringPackageUtils {
 
         for (String aPackage : packages) {
             String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                    SpringUtils.resolveBasePackage(aPackage) + "/" + "*.class";
+                    SpringUtils.resolveBasePackage(aPackage) + "/*.class";
 //            System.out.println("Scan classes from : " + packageSearchPath);
             Resource[] resources = new Resource[0];
             try {

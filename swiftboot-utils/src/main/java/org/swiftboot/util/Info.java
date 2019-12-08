@@ -105,7 +105,6 @@ public class Info {
         System.out.printf("%d registered resource files to load%n", map.size());
         for (String key : map.keySet()) {
             String filePath = key;
-            Class usingClass = map.get(key);
             String resName = String.format("%s_%s.properties", filePath, curLocale.toString());
             System.out.println("Load resource from " + resName);
             try {

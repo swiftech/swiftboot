@@ -1,5 +1,6 @@
 package org.swiftboot.web.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -7,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.repository.CrudRepository;
 import org.swiftboot.util.BeanUtils;
+import org.swiftboot.util.ClasspathResourceUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
 import org.swiftboot.web.SwiftBootConfigBean;
@@ -33,6 +35,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  * 初始化执行过程中会对主键或者关键字段（必须是 unique 字段）做重复性检查
  * 要求：
  * <ul>
+ *     <li>导入的数据文件必须和实体类名称相同（不包含'Entity'）的 csv 文件</li>
  *     <li>实体类必须继承 BaseIdEntity，并且以 "Entity" 为后缀命名</li>
  *     <li>包结构必须是
  *     <pre>
@@ -46,6 +49,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  * <ul>
  *     <li>不能处理外键关系</li>
  * </ul>
+ *
  * @author swiftech
  * @since 1.1
  */
@@ -58,17 +62,36 @@ public class Initializer implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    /**
+     * 在数据文件中预生成ID， 运行带有一个参数：读取和写入 CSV 文件的目录路径
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        if (args == null || args.length < 1 || StringUtils.isBlank(args[0])) {
+            System.out.println("Folder path of data files not provided");
+            return;
+        }
+        String dataFolderPath = args[0];
+        Initializer initializer = new Initializer();
+        initializer.preAssignIdToAllDataFiles(dataFolderPath);
+    }
+
     @PostConstruct
     public void init() {
-        preAssignIdToAllDataFiles();
         initFromFiles();
     }
 
-    public void preAssignIdToAllDataFiles() {
-        File baseDir = new File(swiftBootConfigBean.getModel().getInitBaseDir());
+    /**
+     * Run in command line mode, not the web mode
+     *
+     * @param baseDirPath
+     */
+    public void preAssignIdToAllDataFiles(String baseDirPath) {
+        System.out.println("Try to pre-assign id to all csv files under: " + baseDirPath);
+        File baseDir = new File(baseDirPath);
         if (!baseDir.exists() || !baseDir.isDirectory()) {
-            System.out.println("Not exists or not a directory");
-            log.warn(String.format("Not exists or not a directory: %s", baseDir.getName()));
+            System.out.println(String.format("Not exists or not a directory: %s", baseDir.getName()));
         }
         else {
             File[] files = baseDir.listFiles((dir, name) -> name.endsWith(".csv"));
@@ -77,32 +100,39 @@ public class Initializer implements ApplicationContextAware {
                 return;
             }
             for (File file : files) {
-                log.info("Pre-assign ID to file: " + file.getName());
+                System.out.println("Pre-assign ID to file: " + file.getName());
                 try {
                     StringBuilder outputBuffer = new StringBuilder();
                     new CsvReader().readCsv(new FileInputStream(file), new CsvReaderHandler() {
+                        String code = null;
+                        int columnCount = 0;
 
                         @Override
                         public void onTitle(List<String> titles) {
-                            if (titles.contains("id")) {
-                                throw new RuntimeException(String.format("The data file %s has already contains id", file.getName()));
+                            columnCount = titles.size();
+                            if (!titles.contains("id")) {
+                                outputBuffer.append("id,");
+                                columnCount = titles.size() + 1;
                             }
-                            outputBuffer.append("id,").append(join(titles, ",")).append(System.getProperty("line.separator"));
+                            outputBuffer.append(join(titles, ",")).append(System.getProperty("line.separator"));
+                            String rawFileName = substringBeforeLast(file.getName(), ".csv");
+                            String[] words = splitByCharacterTypeCamelCase(rawFileName);
+                            code = WordUtils.joinWords(words, 8);
+
                         }
 
                         @Override
                         public void onRow(int rowNum, List<String> columns) {
                             System.out.printf("handle line %d%n", rowNum);
-                            String rawFileName = substringBeforeLast(file.getName(), ".csv");
-                            String[] words = splitByCharacterTypeCamelCase(rawFileName);
-                            String code = WordUtils.joinWords(words, 8);
-                            outputBuffer.append(IdUtils.makeID(code));
+                            if (columnCount > columns.size()) {
+                                outputBuffer.append(IdUtils.makeID(code)).append(",");
+                            }
+                            outputBuffer.append(join(columns, ","));
                         }
 
                         @Override
                         public void onCell(int colNum, String columnName, String cellValue) {
                             System.out.printf("handle data: %s=%s%n", columnName, cellValue);
-                            outputBuffer.append(",").append(cellValue);
                         }
 
                         @Override
@@ -116,7 +146,7 @@ public class Initializer implements ApplicationContextAware {
                     writer.write(outputBuffer.toString().getBytes());
                     writer.close();
                 } catch (Exception e) {
-                    log.info(e.getLocalizedMessage());
+                    System.out.println(e.getLocalizedMessage());
                 }
             }
         }
@@ -124,54 +154,47 @@ public class Initializer implements ApplicationContextAware {
 
     public void initFromFiles() {
         log.info("Init data from files: ");
-        File baseDir = new File(swiftBootConfigBean.getModel().getInitBaseDir());
-        log.info(baseDir.getPath());
         log.info("Scan entity classes from packages: ");
         String[] pkgs = swiftBootConfigBean.getModel().getInitBaseEntityPackages();
         for (String pkg : pkgs) {
             log.info(pkg);
         }
 
-        if (!baseDir.exists() || !baseDir.isDirectory()) {
-            System.out.println("not exists or not a directory");
+        File[] files = ClasspathResourceUtils.getResourceFiles(swiftBootConfigBean.getModel().getInitBaseDir(), ".csv");
+
+        if (files == null || files.length == 0) {
+            log.warn("No files found to init data");
+            return;
         }
-        else {
-            File[] files = baseDir.listFiles((dir, name) -> name.endsWith(".csv"));
 
-            if (files == null || files.length == 0) {
-                System.out.println("No files found to init data");
-                return;
+        Set<Class<?>> entityClasses
+                = SpringPackageUtils.scanClasses(
+                swiftBootConfigBean.getModel().getInitBaseEntityPackages(), BaseIdEntity.class);
+
+        if (entityClasses.isEmpty()) {
+            log.warn("No entity classes found to create instance");
+            return;
+        }
+
+        Map<String, ? extends Class<?>> classDic = entityClasses.stream().collect(
+                Collectors.toMap(clazz -> clazz.getSimpleName(), clazz -> clazz));
+
+        for (File file : files) {
+            log.info(String.format("Load data from file: %s", file.getName()));
+            String rawFileName = substringBeforeLast(file.getName(), ".csv");
+            Class<?> aClass = classDic.get(rawFileName + "Entity");
+            log.info("  for entity class: " + aClass);
+
+            if (aClass == null) {
+                log.warn(String.format("Entity class not exist: %sEntity", rawFileName));
             }
+            else {
+                try {
+                    initOne(file, rawFileName, aClass);
 
-            Set<Class<?>> entityClasses
-                    = SpringPackageUtils.scanClasses(
-                    swiftBootConfigBean.getModel().getInitBaseEntityPackages(), BaseIdEntity.class);
-
-            if (entityClasses.isEmpty()) {
-                System.out.println("No entity classes found to create instance");
-                return;
-            }
-
-            Map<String, ? extends Class<?>> classDic = entityClasses.stream().collect(
-                    Collectors.toMap(clazz -> clazz.getSimpleName(), clazz -> clazz));
-
-            for (File file : files) {
-                log.info(String.format("Load data from file: %s", file.getName()));
-                String rawFileName = substringBeforeLast(file.getName(), ".csv");
-                Class<?> aClass = classDic.get(rawFileName + "Entity");
-                log.info("  for entity class: " + aClass);
-
-                if (aClass == null) {
-                    log.warn(String.format("Entity class not exist: %sEntity", rawFileName));
-                }
-                else {
-                    try {
-                        initOne(file, rawFileName, aClass);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        log.warn(String.format("the class %s must has a non-arg constructor%n", aClass.getName()));
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log.warn(String.format("the class %s must has a non-arg constructor%n", aClass.getName()));
                 }
             }
         }
@@ -183,7 +206,7 @@ public class Initializer implements ApplicationContextAware {
         String baseName = substringBeforeLast(aClass.getName(), ".entity.");
         String daoName = String.format("%s.dao.%sDao", baseName, rawFileName);
         Class<?> daoClass = Class.forName(daoName);
-        if (daoClass==null){
+        if (daoClass == null) {
             log.warn(String.format("Dao class not exist: %s", daoName));
         }
         CrudRepository<BaseIdEntity, String> dao =
@@ -199,7 +222,6 @@ public class Initializer implements ApplicationContextAware {
 
             @Override
             public void onRow(int rowNum, List<String> columns) {
-                System.out.println("handle line " + rowNum);
                 try {
                     entity = (BaseIdEntity) aClass.getDeclaredConstructor().newInstance();
                 } catch (Exception e) {
@@ -209,7 +231,6 @@ public class Initializer implements ApplicationContextAware {
 
             @Override
             public void onCell(int colNum, String columnName, String cellValue) {
-                System.out.printf("handle data: %s=%s%n", columnName, cellValue);
                 try {
                     BeanUtils.forceSetPropertyFromString(entity, columnName, cellValue);
                 } catch (Exception e) {
@@ -219,10 +240,10 @@ public class Initializer implements ApplicationContextAware {
 
             @Override
             public void onRowFinished(int rowNow) {
-                System.out.printf("row finished: %d%n", rowNow);
                 dao.save(entity);
             }
         });
+        log.info("Initialize data done.");
     }
 
     @Override
