@@ -1,7 +1,8 @@
 package org.swiftboot.util;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * 单词工具类 (Beta)
@@ -25,22 +26,62 @@ public class WordUtils {
         int a = len / words.length;
         int b = len % words.length;
         StringBuilder buf = new StringBuilder();
-        for (int i = 0; i < words.length; i++) {
-            int x = a + (i >= (words.length - b) ? 1 : 0);
-            String word = words[i];
-            buf.append(StringUtils.substring(word, 0, x).toLowerCase());
+
+        // 挨个字符找出每个单词需要截取的位置
+        int total = 0;
+        int[] subLens = new int[words.length];
+        counting:
+        for (int j = 0; j < len; j++) {
+            for (int i = 0; i < words.length; i++) {
+                int wordLen = words[i].length();
+                if (j < wordLen) {
+                    subLens[i] = j + 1;
+                    if (++total == len) {
+                        break counting;
+                    }
+                }
+            }
         }
 
-        if (buf.length() < len) {
-            return buf.toString() + RandomStringUtils.randomAlphabetic(len - buf.length());
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            buf.append(StringUtils.substring(word, 0, subLens[i]).toLowerCase());
         }
-        else if (buf.length() > len) {
-            return buf.substring(0, len); // 如果太长自动截掉
-        }
-        else {
-            return buf.toString();
-        }
+        return buf.toString();
     }
+
+    /**
+     * 合并单词，用 separator 分隔，并给每个单词加上相同的左右填充字符串
+     * @param words
+     * @param separator
+     * @param pad
+     * @return
+     */
+    public static String joinWordsWithPad(List<String> words, String separator, String pad) {
+        return joinWordsWithPad(words, separator, pad, pad);
+    }
+
+    /**
+     * 合并单词，用 separator 分隔，并给每个单词加上左右填充字符串
+     *
+     * @param words
+     * @param separator
+     * @param leftPad
+     * @param rightPad
+     * @return
+     */
+    public static String joinWordsWithPad(List<String> words, String separator, String leftPad, String rightPad) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < words.size(); i++) {
+            String word = words.get(i);
+            buf.append(leftPad).append(word).append(rightPad);
+            if (i < words.size() - 1) {
+                buf.append(separator);
+            }
+        }
+        return buf.toString();
+    }
+
 
     /**
      * Count total length of all words in the array

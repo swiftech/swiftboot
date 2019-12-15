@@ -1,6 +1,7 @@
 package org.swiftboot.collections.map;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.collections.Classifier;
 import org.swiftboot.collections.ClassifierBuilder;
@@ -12,11 +13,11 @@ import java.util.*;
  * allen
  */
 public class ClassifierTest {
+    List<TestBean> list = null;
 
-
-    @Test
-    public void testWithList() {
-        List<TestBean> list = new ArrayList<TestBean>() {
+    @BeforeEach
+    public void setup() {
+        list = new ArrayList<TestBean>() {
             {
                 add(new TestBean("a", "a3"));
                 add(new TestBean("a", "a1"));
@@ -29,7 +30,19 @@ public class ClassifierTest {
                 add(new TestBean("b", "b3"));
             }
         };
+    }
 
+    @Test
+    public void testSimple() {
+        Classifier<String, TestBean> classifier = new ClassifierBuilder<String, TestBean>()
+                .setTrait(TestBean::getKey)
+                .createClassifier();
+        Map<String, Collection<TestBean>> result = classifier.classify(list);
+        System.out.println(result);
+    }
+
+    @Test
+    public void testWithList() {
         Classifier<String, TestBean> classifier = new ClassifierBuilder<String, TestBean>()
                 .setTrait(TestBean::getKey)
                 .setTraitComparator((Comparator<String>) (o1, o2) -> o1.compareTo(o2))
@@ -45,19 +58,6 @@ public class ClassifierTest {
 
     @Test
     public void testWithSet() {
-        Set<TestBean> list = new HashSet<TestBean>() {
-            {
-                add(new TestBean("a", "a3"));
-                add(new TestBean("a", "a1"));
-                add(new TestBean("a", "a2"));
-                add(new TestBean("c", "c3"));
-                add(new TestBean("c", "c2"));
-                add(new TestBean("c", "c1"));
-                add(new TestBean("b", "b2"));
-                add(new TestBean("b", "b1"));
-                add(new TestBean("b", "b3"));
-            }
-        };
 
         Classifier<String, TestBean> classifier = new ClassifierBuilder<String, TestBean>()
                 .setTrait(TestBean::getKey)

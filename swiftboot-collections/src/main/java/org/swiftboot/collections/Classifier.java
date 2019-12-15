@@ -10,6 +10,8 @@ import java.util.*;
  * 如果设置了比较器，则强制返回有序的子集合；
  * 否则，按照原集合中的顺序填充子集合
  *
+ * @param <T> 特征的类型
+ * @param <E> 元素类型
  * @author swiftech
  * @see ClassifierBuilder
  * @since 1.1
@@ -21,8 +23,13 @@ public final class Classifier<T extends Comparable<T>, E> {
     private SubCollection<E> subCollectionCreator;
     private Comparator<T> traitComparator;
     private Comparator<E> collectionComparator;
+    private Converter<E, ?> converter; // TODO
 
-    public Classifier(Trait<T, E> trait, Filter<E> filter, SubCollection<E> subCollectionCreator, Comparator<T> traitComparator, Comparator<E> collectionComparator) {
+    public Classifier(Trait<T, E> trait,
+                      Filter<E> filter,
+                      SubCollection<E> subCollectionCreator,
+                      Comparator<T> traitComparator,
+                      Comparator<E> collectionComparator) {
         this.trait = trait;
         this.filter = filter;
         this.subCollectionCreator = subCollectionCreator;
@@ -80,6 +87,7 @@ public final class Classifier<T extends Comparable<T>, E> {
         else {
             ret = new HashMap<>();
         }
+        // 过滤以及分类
         for (E e : collection) {
             if (this.filter != null && !this.filter.filter(e)) {
                 continue;
@@ -92,13 +100,16 @@ public final class Classifier<T extends Comparable<T>, E> {
             }
             coll.add(e);
         }
+        // 开始排序
         for (T trait : ret.keySet()) {
             Collection<E> subCollection = ret.get(trait);
             if (subCollection instanceof TreeSet) {
                 continue;// TreeSet 已经排序了
             }
-            Collection<E> sorted = CollectionUtils.sortCollection(subCollection, collectionComparator);
-            ret.put(trait, sorted);
+            if (collectionComparator != null) {
+                Collection<E> sorted = CollectionUtils.sortCollection(subCollection, collectionComparator);
+                ret.put(trait, sorted);
+            }
         }
         return ret;
     }
@@ -137,4 +148,7 @@ public final class Classifier<T extends Comparable<T>, E> {
         Collection<E> create();
     }
 
+    public interface Converter<S, T> {
+        T convert(S s);
+    }
 }

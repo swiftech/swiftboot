@@ -1,6 +1,7 @@
 package org.swiftboot.web.model;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.TextStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -13,8 +14,8 @@ import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
 import org.swiftboot.web.SwiftBootConfigBean;
 import org.swiftboot.web.model.entity.BaseIdEntity;
-import org.swiftboot.web.reader.CsvReader;
 import org.swiftboot.web.reader.CsvReaderHandler;
+import org.swiftboot.web.reader.CsvReader;
 import org.swiftboot.web.util.SpringPackageUtils;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +29,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
+import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 /**
  * 从 CSV 文件中初始化数据库，文件名对应实体类名，CSV 中的字段对应实体类的属性变量名
@@ -65,7 +67,7 @@ public class Initializer implements ApplicationContextAware {
     /**
      * 在数据文件中预生成ID， 运行带有一个参数：读取和写入 CSV 文件的目录路径
      *
-     * @param args
+     * @param args 数据文件所在路径
      */
     public static void main(String[] args) {
         if (args == null || args.length < 1 || StringUtils.isBlank(args[0])) {
@@ -102,7 +104,7 @@ public class Initializer implements ApplicationContextAware {
             for (File file : files) {
                 System.out.println("Pre-assign ID to file: " + file.getName());
                 try {
-                    StringBuilder outputBuffer = new StringBuilder();
+                    TextStringBuilder outBuffer = new TextStringBuilder();
                     new CsvReader().readCsv(new FileInputStream(file), new CsvReaderHandler() {
                         String code = null;
                         int columnCount = 0;
@@ -111,23 +113,26 @@ public class Initializer implements ApplicationContextAware {
                         public void onTitle(List<String> titles) {
                             columnCount = titles.size();
                             if (!titles.contains("id")) {
-                                outputBuffer.append("id,");
+                                outBuffer.append("\"id\",");
                                 columnCount = titles.size() + 1;
                             }
-                            outputBuffer.append(join(titles, ",")).append(System.getProperty("line.separator"));
+
+                            outBuffer.append(WordUtils.joinWordsWithPad(titles, ",", "\""));
                             String rawFileName = substringBeforeLast(file.getName(), ".csv");
                             String[] words = splitByCharacterTypeCamelCase(rawFileName);
                             code = WordUtils.joinWords(words, 8);
-
                         }
 
                         @Override
                         public void onRow(int rowNum, List<String> columns) {
+                            outBuffer.appendNewLine();
                             System.out.printf("handle line %d%n", rowNum);
-                            if (columnCount > columns.size()) {
-                                outputBuffer.append(IdUtils.makeID(code)).append(",");
+                            if (columns.size() < columnCount) {
+                                outBuffer.append("\"").append(IdUtils.makeID(code)).append("\"").append(",");
                             }
-                            outputBuffer.append(join(columns, ","));
+                            String dataRow = WordUtils.joinWordsWithPad(columns, ",", "\"");
+                            System.out.println(dataRow);
+                            outBuffer.append(dataRow);
                         }
 
                         @Override
@@ -138,17 +143,18 @@ public class Initializer implements ApplicationContextAware {
                         @Override
                         public void onRowFinished(int rowNow) {
                             System.out.printf("row finished: %d%n", rowNow);
-                            outputBuffer.append(System.getProperty("line.separator"));
                         }
                     });
-                    System.out.println(outputBuffer.toString());
+                    System.out.println(outBuffer.toString());
                     FileOutputStream writer = new FileOutputStream(file);
-                    writer.write(outputBuffer.toString().getBytes());
+                    writer.write(outBuffer.toString().getBytes());
                     writer.close();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     System.out.println(e.getLocalizedMessage());
                 }
             }
+            log.info(String.format("Initialize data from %d files is completed", files.length));
         }
     }
 

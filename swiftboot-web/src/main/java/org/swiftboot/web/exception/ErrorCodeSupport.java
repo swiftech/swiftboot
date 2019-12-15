@@ -23,6 +23,7 @@ import java.util.Map;
  * 成功代码以"1xxx"开头
  * 标准错误代码以"2xxx"开头
  * 自定义错误代码从"3000"开始
+ * 在应用启动的时候必须调用 initErrorCode() 方法对错误信息进行初始化
  *
  * @author swiftech
  **/
