@@ -2,7 +2,7 @@ package org.swiftboot.web.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.swiftboot.util.Info;
+import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
 
 public abstract class BaseJsonable implements Jsonable {

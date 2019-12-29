@@ -3,7 +3,7 @@ package org.swiftboot.web.util;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.util.BufferedIoUtils;
-import org.swiftboot.util.Info;
+import org.swiftboot.web.Info;
 import org.swiftboot.util.IoUtils;
 import org.swiftboot.web.R;
 import org.swiftboot.web.exception.ErrMessageException;

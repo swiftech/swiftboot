@@ -1,7 +1,7 @@
 package org.swiftboot.web.exception;
 
 import org.apache.commons.lang3.StringUtils;
-import org.swiftboot.util.Info;
+import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
 
 /**

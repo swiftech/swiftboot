@@ -2,15 +2,8 @@ package org.swiftboot.web;
 
 import org.swiftboot.util.Info;
 
-import java.util.Locale;
+public class R implements Info.Resource {
 
-public class R {
-
-    public static void register() {
-        org.swiftboot.collections.R.register();
-        Info.register("/swiftboot-web", R.class);
-    }
-    
     public static final String REFLECT_TYPE_OF_ENTITY_FAIL = "reflect_type_of_entity_fail";
     public static final String CONSTRUCT_ENTITY_FAIL1 = "construct_entity_fail1";
     public static final String FIELD_REQUIRED_FOR_ENTITY2 = "field_required_for_entity2";
@@ -45,10 +38,22 @@ public class R {
     public static final String TESTING = "testing";
     public static final String DEVELOPMENT = "development";
 
-
     public static void main(String[] args) {
-        R.register();
-        Info.validateProperties(Locale.ENGLISH);
-        Info.validateProperties(Locale.SIMPLIFIED_CHINESE);
+        Info.sources = getResourceClasses();
+        Info.validateForAllLocale();
     }
+
+    public static Class<?>[] getResourceClasses() {
+        return new Class<?>[]{
+                R.class,
+                org.swiftboot.collections.R.class,
+                org.swiftboot.util.R.class
+        };
+    }
+
+//    public static void main(String[] args) {
+//        R.register();
+//        Info.validateProperties(Locale.ENGLISH);
+//        Info.validateProperties(Locale.SIMPLIFIED_CHINESE);
+//    }
 }

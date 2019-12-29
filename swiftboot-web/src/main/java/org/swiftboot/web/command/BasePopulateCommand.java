@@ -6,7 +6,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.swiftboot.collections.CollectionUtils;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.GenericUtils;
-import org.swiftboot.util.Info;
+import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
 import org.swiftboot.web.annotation.PopulateIgnore;
 import org.swiftboot.web.model.entity.Persistent;

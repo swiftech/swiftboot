@@ -16,7 +16,7 @@ public class ModelConfigBean {
     private boolean initData = false;
 
     /**
-     * 初始化数据库的数据文件根目录
+     * 初始化数据库的数据文件路径
      */
     private String initBaseDir;
 

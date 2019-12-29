@@ -6,7 +6,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
-import org.swiftboot.util.Info;
 
 /**
  * 判断 Spring Boot 的环境
@@ -27,7 +26,7 @@ public class SpringBootEnv implements ApplicationListener<ApplicationEvent> {
 
         }
         else if (event instanceof ApplicationEnvironmentPreparedEvent) {
-            R.register();
+
         }
         else if (event instanceof ApplicationReadyEvent) {
             String profile = SystemUtils.getEnvironmentVariable("spring.profiles.active", "dev");

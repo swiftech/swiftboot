@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.swiftboot.util.BeanUtils;
-import org.swiftboot.util.Info;
+import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
 
 import javax.annotation.PostConstruct;
@@ -162,6 +162,7 @@ public abstract class ErrorCodeSupport {
      * 从i18n资源初始化错误代码对应的错误信息
      */
     protected void initErrorCode() {
+        log.info(StringUtils.join(Info.sources));
         log.info(Info.get(ErrorCodeSupport.class, R.I18N_INIT_START));
         try {
             validate();
