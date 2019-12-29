@@ -1,4 +1,4 @@
-package org.swiftboot.collections.map;
+package org.swiftboot.collections;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

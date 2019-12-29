@@ -1,11 +1,9 @@
-package org.swiftboot.collections.map;
+package org.swiftboot.collections;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.swiftboot.collections.Classifier;
-import org.swiftboot.collections.ClassifierBuilder;
-import org.swiftboot.collections.map.CollectionUtilsTest.TestBean;
+import org.swiftboot.collections.CollectionUtilsTest.TestBean;
 
 import java.util.*;
 
