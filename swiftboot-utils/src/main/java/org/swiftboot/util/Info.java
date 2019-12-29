@@ -9,29 +9,41 @@ import java.util.*;
 
 /**
  * Any module uses this to localization information has to to:
- * 1. put a properties file names as the module name
- * 2. call Info.register() method to register the module with the properties file, file path must starts with "/".
+ * 1. Create a resource class in module package like com.foo.bar.R which implements Resource interface and add current resource class to the getResourceClasses() return values.
+ * 2. Create a properties file names as resource class name like com.foo.bar.R.properties, this file name can be with locale.
+ * 3. Create a new Info class extends me, set the Info.sources field with this resource class:    org.swiftboot.util.Info.sources = R.getResourceClasses();
+ *
+ * @author swiftech
  */
 public class Info {
 
-    /**
-     * Mapping of resource files and class.
-     */
-    private static Map<String, Class> map = new HashMap<>();
+    public static Class<?>[] sources = R.getResourceClasses();
 
     private static List<Properties> propertiesList;
 
-    public static void register(String propertyFilePath, Class usingTags) {
-        if (map.containsKey(propertyFilePath)) {
-            System.out.println(String.format("%s is already registered", propertyFilePath));
-            return;
-//            throw new RuntimeException(String.format("Failed to register %s, because it is already exists", propertyFilePath));
-        }
-        map.put(propertyFilePath, usingTags);
+    private static boolean debug = false;
+
+    private static Info info = new Info();
+
+    /**
+     * TBD
+     *
+     * @return
+     */
+    public static String get() {
+        return get(Info.class, "");
     }
 
-    public static String get(Object... params) {
-        String format = get(Info.class, "");
+    /**
+     * Ge information by a tag with params for class
+     *
+     * @param clazz  Class for which you lookup information
+     * @param tag    Indicate which information
+     * @param params Params in the information
+     * @return
+     */
+    public static String get(Class<?> clazz, String tag, Object... params) {
+        String format = get(clazz, tag);
         if (StringUtils.isNotBlank(format)) {
             return String.format(format, params);
         }
@@ -40,8 +52,32 @@ public class Info {
         }
     }
 
-    public static String get() {
-        return get(Info.class, "");
+    /**
+     * Ge information by a tag with params for class
+     *
+     * @param clazz Class for which you lookup information
+     * @param tag   Indicate which information
+     * @return
+     */
+    public static String get(Class<?> clazz, String tag) {
+//        if (debug) {
+//            System.out.println("Information is disabled");
+//            return tag;
+//        }
+        if (propertiesList == null) {
+            try {
+                info.loadAllResourcesDeclared(sources);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String key = clazz.getName();
+        if (StringUtils.isNotBlank(tag)) {
+            key = key + "." + tag;
+        }
+//        System.out.println("Retrieve " + key);
+        return info.lookup(key);
     }
 
     public static String get(String tag, Object... params) {
@@ -55,13 +91,21 @@ public class Info {
     }
 
     public static String get(String tag) {
+//        if (disable) {
+//            System.out.println("Information is disabled");
+//            return tag;
+//        }
         if (propertiesList == null) {
-            loadAllFromClassResources();
+            try {
+                info.loadAllResourcesDeclared(sources);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return lookup(tag);
+        return info.lookup(tag);
     }
 
-    private static String lookup(String tag) {
+    private String lookup(String tag) {
         for (Properties properties : propertiesList) {
             String value = properties.getProperty(tag);
             if (!StringUtils.isBlank(value)) {
@@ -71,77 +115,88 @@ public class Info {
         return null;
     }
 
-    public static String get(Class clazz, String tag, Object... params) {
-        String format = get(clazz, tag);
-        if (StringUtils.isNotBlank(format)) {
-            return String.format(format, params);
+    /**
+     * Load all resources declared by 'sources' field of this Info class
+     *
+     * @param sources
+     * @throws IOException
+     */
+    public void loadAllResourcesDeclared(Class<?>[] sources) throws IOException {
+        if (sources == null) {
+            throw new RuntimeException("No source class defined");
         }
-        else {
-            return format;
+        int entryCount = 0;
+        for (Class<?> source : sources) {
+            entryCount += loadLocaledResource(source);
         }
+        if (debug)
+            System.out.printf("%d properties files and %d resource entries loaded.%n", propertiesList.size(), entryCount);
     }
 
-    public static String get(Class clazz, String tag) {
+    /**
+     * Load resource in root of classpath by locale
+     *
+     * @param resourceClass
+     * @return 加载的 Properties 大小
+     * @throws IOException
+     */
+    public static int loadLocaledResource(Class<?> resourceClass) throws IOException {
+        if (debug) System.out.printf("Current locale: %s%n", Locale.getDefault());
+        String localeResourceName = String.format("/%s_%s.properties", resourceClass.getName(), Locale.getDefault().toString());
+        InputStream ins = resourceClass.getResourceAsStream(localeResourceName);
+        if (ins == null) {
+            localeResourceName = String.format("/%s.properties", resourceClass.getName());
+            ins = resourceClass.getResourceAsStream(localeResourceName);
+        }
+        if (ins == null) {
+            throw new IOException(String.format("Resource file not found: %s", localeResourceName));
+        }
+        return loadOnePropertiesFile(ins);
+    }
+
+    /**
+     * 从一个输入流加载 Properties 并添加到集合中
+     *
+     * @param ins
+     * @return 加载的 Properties 大小
+     * @throws IOException
+     */
+    private static int loadOnePropertiesFile(InputStream ins) throws IOException {
+        Properties p = new Properties();
+        p.load(ins);
+        ins.close();
         if (propertiesList == null) {
-            loadAllFromClassResources();
+            propertiesList = new LinkedList<>();
         }
-
-        String key = clazz.getName();
-        if (StringUtils.isNotBlank(tag)) {
-            key = key + "." + tag;
-        }
-//        System.out.println("Retrieve " + key);
-        return lookup(key);
+        propertiesList.add(p);
+        return p.size();
     }
 
-    private static void loadAllFromClassResources() {
-        propertiesList = new LinkedList<>();
-        Locale curLocale = Locale.getDefault();
-        // Load all registered resources
-        int total = 0;
-        if (map.isEmpty()) {
-            throw new RuntimeException("No any information resource registered");
+
+    public static void validateForAllLocale() {
+        try {
+            int[] counts = validateProperties(Locale.ENGLISH);
+            System.out.printf("%d entries validated for all properties in locale %s, %d of them are using %n", counts[0], Locale.ENGLISH, counts[1]);
+            System.out.println("  ---------------  ");
+            validateProperties(Locale.SIMPLIFIED_CHINESE);
+            System.out.printf("%d entries validated for all properties in locale %s, %d of them are using %n", counts[0], Locale.ENGLISH, counts[1]);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.printf("%d registered resource files to load%n", map.size());
-        for (String key : map.keySet()) {
-            String filePath = key;
-            String resName = String.format("%s_%s.properties", filePath, curLocale.toString());
-            System.out.println("Load resource from " + resName);
-            try {
-                InputStream ins = Info.class.getResourceAsStream(resName);
-                if (ins == null) {
-                    System.out.println("Failed to load from: " + resName);
-                    resName = String.format("%s.properties", filePath);
-                    System.out.println("Load resource from " + resName);
-                    ins = Info.class.getResourceAsStream(resName);
-                    if (ins == null) {
-                        throw new RuntimeException("No properties file found");
-                    }
-                }
-                Properties p = new Properties();
-                p.load(ins);
-                ins.close();
-                total += p.size();
-                propertiesList.add(p);
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException(String.format("Load resource %s failed", resName), e);
-            }
-        }
-        System.out.printf("%d items for %d registered information resources%n", total, map.size());
     }
 
     /**
      * Check all properties are related to a exist class, if not, maybe class package or name has been changed, it
      * may not work appropriately. This method is better to call at build-time instead of run-time.
+     *
+     * @param locale
+     * @return total and using count
+     * @throws IOException
      */
-    public static void validateProperties(Locale locale) {
+    public static int[] validateProperties(Locale locale) throws IOException {
         Locale.setDefault(locale);
-        validateProperties();
-    }
-
-    public static void validateProperties() {
-        loadAllFromClassResources();
+        int[] ret = new int[2];
+        info.loadAllResourcesDeclared(sources);
         Map<String, Object> definedTags = new HashMap<>();
         Map<String, Object> usingTags;
         try {
@@ -153,6 +208,7 @@ public class Info {
         for (Properties properties : propertiesList) {
             Enumeration<String> enumeration = (Enumeration<String>) properties.propertyNames();
             while (enumeration.hasMoreElements()) {
+                ret[0]++;
                 String name = enumeration.nextElement();
                 String classFullName = StringUtils.substringBeforeLast(name, ".");
                 String tagsName = StringUtils.substringAfterLast(name, ".");
@@ -164,7 +220,10 @@ public class Info {
                     throw new RuntimeException(String.format("One property '[%s]%s' related class is not exist, maybe it's name was changed.", Locale.getDefault(), classFullName));
                 }
                 if (!usingTags.containsKey(tagsName)) {
-                    System.out.printf("WARN: tag '[%s]%s' for is not using, consider remove it%n", Locale.getDefault(), tagsName);
+                    System.out.printf("WARN: tag '[%s]%s' is not using, consider remove it%n", Locale.getDefault(), tagsName);
+                }
+                else {
+                    ret[1]++;
                 }
                 // check params number
                 String description = (String) properties.get(name);
@@ -182,8 +241,7 @@ public class Info {
                 throw new RuntimeException(String.format("Tag '%s' is using, but not defined in properties for %s", usingTag, Locale.getDefault()));
             }
         }
-
-        System.out.println("All properties are validated");
+        return ret;
     }
 
     /**
@@ -194,7 +252,7 @@ public class Info {
      */
     private static Map<String, Object> usingTags() throws IllegalAccessException {
         Map<String, Object> usingTags = new HashMap<>();
-        for (Class clazz : map.values()) {
+        for (Class<?> clazz : sources) {
             List<Field> items = BeanUtils.getStaticFieldsByType(clazz, String.class);
             for (Field item : items) {
                 String tag = (String) item.get(null);
@@ -204,9 +262,10 @@ public class Info {
         return usingTags;
     }
 
-    public static void validateForAllLocale() {
-        validateProperties(Locale.ENGLISH);
-        validateProperties(Locale.SIMPLIFIED_CHINESE);
-    }
 
+    /**
+     *
+     */
+    public interface Resource {
+    }
 }

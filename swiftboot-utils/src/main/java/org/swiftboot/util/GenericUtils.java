@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 
 /**
  *
+ * @author swiftech
  */
 public class GenericUtils {
 
@@ -13,18 +14,19 @@ public class GenericUtils {
      * @param <T>
      * @return
      */
-    public static <T> Class ancestorGenericClass(Class<T> clazz) {
+    public static <T> Class<T> ancestorGenericClass(Class<T> clazz) {
         ParameterizedType genericSuperclass = firstParameterizedType(clazz);
         Class<T> genericClass = (Class<T>) genericSuperclass.getActualTypeArguments()[0];
         return genericClass;
     }
 
     /**
+     *
      * @param clazz
      * @param <T>
      * @return
      */
-    public static <T> Class parentGenericClass(Class<T> clazz) {
+    public static <T> Class<T> parentGenericClass(Class<T> clazz) {
         Type genericSuperclass = clazz.getGenericSuperclass();
         if (genericSuperclass == null) {
             throw new RuntimeException(Info.get(GenericUtils.class, R.NO_GENERIC_SUPER_CLASS));
