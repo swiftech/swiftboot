@@ -2,6 +2,10 @@ package org.swiftboot.util;
 
 import org.swiftboot.util.Info.Resource;
 
+/**
+ * @author swiftech
+ * @since 1.1
+ */
 public class R implements Resource {
 
     public static final String ID_FAILED1 = "id_failed1";

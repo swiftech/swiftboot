@@ -8,6 +8,7 @@ import java.util.List;
  * 单词工具类 (Beta)
  *
  * @author swiftech
+ * @since 1.1
  */
 public class WordUtils {
 

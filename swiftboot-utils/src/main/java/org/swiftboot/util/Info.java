@@ -14,6 +14,7 @@ import java.util.*;
  * 3. Create a new Info class extends me, set the Info.sources field with this resource class:    org.swiftboot.util.Info.sources = R.getResourceClasses();
  *
  * @author swiftech
+ * @since 1.1
  */
 public class Info {
 
