@@ -90,7 +90,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
          * 先处理一对多关联（保证ID属性先被处理，后续处理时略过这些字段）
          */
         List<String> ignoredFieldNameList = new LinkedList<>();// 需要忽略的目标属性名称
-        List<Field> fieldsByType = BeanUtils.getFieldsByType(entity, BaseEntity.class);
+        List<Field> fieldsByType = BeanUtils.getDeclaredFieldsByType(entity, BaseEntity.class);
         for (Field srcField : fieldsByType) {
             String relationFiledNameInResultClass = srcField.getName() + "Id";
             try {
@@ -113,7 +113,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
         /*
          * 处理（一对一）关联的 Result 对象
          */
-        List<Field> fieldsOne2One = BeanUtils.getFieldsByTypeIgnore(result, BasePopulateResult.class, JsonIgnore.class, PopulateIgnore.class);
+        List<Field> fieldsOne2One = BeanUtils.getDeclaredFieldsByTypeIgnore(result, BasePopulateResult.class, JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : fieldsOne2One) {
             ignoredFieldNameList.add(targetField.getName());
             Field srcField;

@@ -33,23 +33,6 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
      */
     public P createEntity() {
         P ret;
-//        Type genericSuperclass = getClass().getGenericSuperclass();
-//        if (genericSuperclass == null) {
-//            throw new RuntimeException("反射错误");
-//        }
-//        if (!(genericSuperclass instanceof ParameterizedType)) {
-//            // 如果存在继承，则向上取一级
-//            genericSuperclass = ((Class) genericSuperclass).getGenericSuperclass();
-//            if (genericSuperclass == null) {
-//                throw new RuntimeException("反射错误");
-//            }
-//            if (!(genericSuperclass instanceof ParameterizedType)) {
-//                throw new RuntimeException(
-//                        Info.get(BasePopulateCommand.class, "父类%s及其父类都没有指定继承自Persistent的泛型对象，无法创建实体类", getClass().getGenericSuperclass().getTypeName()));
-//            }
-//        }
-//
-//        Class<P> entityClass = (Class<P>) ((ParameterizedType) genericSuperclass).getActualTypeArguments()[0];
         Class<P> entityClass = (Class<P>) GenericUtils.ancestorGenericClass(getClass());
 
         if (entityClass == null) {
@@ -63,8 +46,21 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             e.printStackTrace();
             throw new RuntimeException(Info.get(BasePopulateCommand.class, R.CONSTRUCT_ENTITY_FAIL1, entityClass));
         }
-        this.doPopulate(entityClass, ret);
+        this.doPopulate(entityClass, ret, true);
         return ret;
+    }
+
+    /**
+     * 将 Command 中的属性值填充至实体类中，包括继承自 BasePopulateCommand 的类实例和集合。
+     * 除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
+     * Command 中存在的属性实体类也必须存在，否则抛出异常。
+     *
+     * @param entity
+     * @return
+     */
+    public P populateEntity(P entity) {
+        this.doPopulate((Class<P>) entity.getClass(), entity, true);
+        return entity;
     }
 
     /**
@@ -74,53 +70,63 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
      *
      * @param entity
      * @return
+     * @since 1.1
      */
-    public P populateEntity(P entity) {
-        this.doPopulate((Class<P>) entity.getClass(), entity);
+    public P populateEntityNoRecursive(P entity) {
+        this.doPopulate((Class<P>) entity.getClass(), entity, false);
         return entity;
     }
 
     /**
-     * internal share
+     * internal populating
      *
      * @param entityClass
      * @param entity
+     * @param recursive
      */
-    private void doPopulate(Class<P> entityClass, P entity) {
+    private void doPopulate(Class<P> entityClass, P entity, boolean recursive) {
         Collection<Field> allFields = BeanUtils.getFieldsIgnore(this.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field srcField : allFields) {
             // 处理嵌套
-            if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())) {
-                BasePopulateCommand sub = (BasePopulateCommand) BeanUtils.forceGetProperty(this, srcField);
-                if (sub == null) {
-                    continue;
-                }
-                try {
-                    Persistent relEntity = sub.createEntity();
-                    BeanUtils.forceSetProperty(entity, srcField.getName(), relEntity);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    continue;
-                }
-                continue;
-            }
-            else if (Collection.class.isAssignableFrom(srcField.getType())) {
-                Collection items = (Collection) BeanUtils.forceGetProperty(this, srcField);
-                try {
-                    Field targetField = BeanUtils.getDeclaredField(entity, srcField.getName());
-                    Collection c = CollectionUtils.constructCollectionByType(targetField.getType());
-                    for (Object item : items) {
-                        if (item instanceof BasePopulateCommand) {
-                            Persistent childEntity = ((BasePopulateCommand) item).createEntity();
-                            c.add(childEntity);
-                        }
+            if (recursive) {
+                if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())) {
+                    BasePopulateCommand sub = (BasePopulateCommand) BeanUtils.forceGetProperty(this, srcField);
+                    if (sub == null) {
+                        continue;
                     }
-                    BeanUtils.forceSetProperty(entity, srcField.getName(), c);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    try {
+                        Persistent relEntity = sub.createEntity();
+                        BeanUtils.forceSetProperty(entity, srcField.getName(), relEntity);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        continue;
+                    }
                     continue;
                 }
-                continue;
+                else if (Collection.class.isAssignableFrom(srcField.getType())) {
+                    Collection items = (Collection) BeanUtils.forceGetProperty(this, srcField);
+                    try {
+                        Field targetField = BeanUtils.getDeclaredField(entity, srcField.getName());
+                        Collection c = CollectionUtils.constructCollectionByType(targetField.getType());
+                        for (Object item : items) {
+                            if (item instanceof BasePopulateCommand) {
+                                Persistent childEntity = ((BasePopulateCommand) item).createEntity();
+                                c.add(childEntity);
+                            }
+                        }
+                        BeanUtils.forceSetProperty(entity, srcField.getName(), c);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        continue;
+                    }
+                    continue;
+                }
+            }
+            else {
+                if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())
+                        || Collection.class.isAssignableFrom(srcField.getType())) {
+                    continue;
+                }
             }
 
             // 处理当前对象的值域

@@ -2,6 +2,10 @@ package org.swiftboot.web;
 
 import org.swiftboot.util.Info;
 
+/**
+ * @author swiftech
+ * @since 1.1
+ */
 public class R implements Info.Resource {
 
     public static final String REFLECT_TYPE_OF_ENTITY_FAIL = "reflect_type_of_entity_fail";

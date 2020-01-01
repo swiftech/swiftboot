@@ -113,7 +113,6 @@ public class BeanUtils {
      * @return 字段对象集合
      */
     public static Collection<Field> getAllFields(Class clazz) {
-
         Set<Field> ret = new HashSet<>();
         for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             Collections.addAll(ret, superClass.getDeclaredFields());
@@ -366,12 +365,13 @@ public class BeanUtils {
      * @param propertyType 字段类型
      * @return 字段列表
      */
-    public static List<Field> getFieldsByType(Object object, Class propertyType) {
+    public static List<Field> getDeclaredFieldsByType(Object object, Class propertyType) {
         List<Field> list = new ArrayList<>();
-        Field[] fields = object.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            if (propertyType.isAssignableFrom(field.getType())) {
-                list.add(field);
+        for (Class superClass = object.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+            for (Field field : superClass.getDeclaredFields()) {
+                if (propertyType.isAssignableFrom(field.getType())) {
+                    list.add(field);
+                }
             }
         }
         return list;
@@ -385,19 +385,20 @@ public class BeanUtils {
      * @param annoClasses  过滤的注解类型
      * @return
      */
-    public static List<Field> getFieldsByTypeIgnore(Object object, Class propertyType, Class... annoClasses) {
+    public static List<Field> getDeclaredFieldsByTypeIgnore(Object object, Class propertyType, Class... annoClasses) {
         List<Field> list = new ArrayList<>();
-        Field[] fields = object.getClass().getDeclaredFields();
-        NEXT_FIELD:
-        for (Field field : fields) {
-            for (Class annoClass : annoClasses) {
-                Annotation annotation = field.getAnnotation(annoClass);
-                if (annotation != null) {
-                    continue NEXT_FIELD;
+        for (Class superClass = object.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+            NEXT_FIELD:
+            for (Field field : superClass.getDeclaredFields()) {
+                for (Class annoClass : annoClasses) {
+                    Annotation annotation = field.getAnnotation(annoClass);
+                    if (annotation != null) {
+                        continue NEXT_FIELD;
+                    }
                 }
-            }
-            if (propertyType.isAssignableFrom(field.getType())) {
-                list.add(field);
+                if (propertyType.isAssignableFrom(field.getType())) {
+                    list.add(field);
+                }
             }
         }
         return list;
@@ -460,7 +461,7 @@ public class BeanUtils {
      * @return
      */
     public static <T> List<T> getPropertiesByType(Object bean, Class<T> fieldClass) {
-        List<Field> fieldsByType = getFieldsByType(bean.getClass(), fieldClass);
+        List<Field> fieldsByType = getDeclaredFieldsByType(bean.getClass(), fieldClass);
 
         List<T> ret = new ArrayList<>();
         for (Field field : fieldsByType) {
