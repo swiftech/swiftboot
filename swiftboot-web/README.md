@@ -47,6 +47,18 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 
 ## 如何使用
 
+### 配置
+
+* 配置
+
+	```java
+	@Configuration
+    @ComponentScan(basePackages = {"org.swiftboot.web"})
+   	public class MyConfig {
+    	...
+  	}
+	```
+ 
 ### Model层
 * Dao
 

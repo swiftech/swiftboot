@@ -41,70 +41,28 @@
 2018-12-19 1.0-SNAPSHOT
 * 初次提交
 
-### 快速指南
+### 概览
 
-* 在 `pom.xml` 文件中加入对 SwiftBoot-web 的依赖
-
-	```xml
-	<dependencies>
-		<dependency>
-			<groupId>com.github.swiftech</groupId>
-			<artifactId>swiftboot-web</artifactId>
-			<version>1.0.14</version>
-		</dependency>
-	</dependencies>
-
-	```
-
-* 配置
+	
+* 从接口的 Command 对象创建 Entity 实例并自动填充传递进来的值：
 
 	```java
-	@Configuration
-    @ComponentScan(basePackages = {"org.swiftboot.web"})
-   	public class MyConfig {
-    	...
-  	}
+	OrderEntity p = orderCommand.createEntity();
 	```
-	
-* 实体类
-	继承 `BaseEntity` 或者 `BaseIdEntity`
-	
-	```java
-	  @Entity
-      @Table(name = "DEMO_ORDER")
-      public class OrderEntity extends BaseEntity {
-    	...
-      }
-	```
-	
-* Command 对象
+ 
+    > 一对一或一对多关联的实体类（集合）也会被自动创建和填充
+
+* 从 Entity 实例创建返回值对象并自动填充值：
 
 	```java
-	public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {
-    	...
-	}
+	OrderResult r = OrderResult.createResult(OrderResult.class, optEntity.get());
 	```
+ 
+    > 一对一或一对多关联的实体类（集合）也会自动填充返回值对象的关联类（集合）
 
-* 返回对象类定义：
+* 全局唯一 ID 生成器，长度 32 字节，比 UUID 有更好的插入性能且易于识别出所对应的业务对象以及创建时间，例如：
+    ```
+    order20191231000850307uxplsioasi
+    ```
 
-	```java
-	public class OrderResult extends BasePopulateResult {
-		...
-	}
-	```
-
-* 控制器
-	
-	```java
-	@RequestMapping(value = "order/create", method = RequestMethod.POST)
-	public
-	@ResponseBody HttpResponse<OrderCreateResult> orderCreate(
-		  @RequestBody @Validated @ApiParam("创建订单参数") OrderCreateCommand command) {
-    	OrderEntity p = command.createEntity();
-		OrderCreateResult ret;
-		...
-		return new HttpResponse<>(ret);
-	}
-	```
-	
-	
+    > 创建 Entity 实例时无需调用生成器生成 ID，SwiftBoot 会自动创建并填充。
