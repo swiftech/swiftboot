@@ -35,11 +35,7 @@
 * 重构一些代码以及更新文档
 * 重构了Demo
 
-2019-07-20 1.0.13 release
-* 第一个稳定版本发布
-
-2018-12-19 1.0-SNAPSHOT
-* 初次提交
+[完整记录](changelog.md)
 
 ### 概览
 
@@ -55,7 +51,7 @@
 * 从 Entity 实例创建返回值对象并自动填充值：
 
 	```java
-	OrderResult r = OrderResult.createResult(OrderResult.class, optEntity.get());
+	OrderResult r = OrderResult.createResult(OrderResult.class, orderEntity);
 	```
  
     > 一对一或一对多关联的实体类（集合）也会自动填充返回值对象的关联类（集合）
