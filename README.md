@@ -22,8 +22,9 @@
 * [swiftboot-web](swiftboot-web/): 企业Web应用基础框架
 * [swiftboot-collections](swiftboot-collections/): 企业应用集合类
 * [swiftboot-utils](swiftboot-utils/): 企业应用工具类
-* [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验）
-* [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中）
+* [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验 experimental）
+* [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中 development）
+* [swiftboot-service](swiftboot-service/): 企业应用基础服务（试验 experimental）
 * [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
 
 
