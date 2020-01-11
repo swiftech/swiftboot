@@ -49,7 +49,7 @@ public class OrderEntity extends BaseEntity {
     /**
      * 订单明细
      */
-    @PropertyDescription(value = "订单明细", example = "599227bfa643128f06656ea3270835f2")
+    @PropertyDescription(value = "订单明细")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
     private Set<OrderDetailEntity> orderDetails;
 

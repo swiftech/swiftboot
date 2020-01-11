@@ -3,6 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.swiftboot.demo.model.entity.GoodsDetailEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
 /**
@@ -11,7 +12,7 @@ import org.swiftboot.web.result.BasePopulateResult;
  * @author swiftech 2019-04-07
  **/
 @ApiModel
-public class GoodsDetailResult extends BasePopulateResult {
+public class GoodsDetailResult extends BasePopulateResult<GoodsDetailEntity> {
 
     @ApiModelProperty(value = "商品图片URI", example = "/image/goods/1029")
     @JsonProperty("image_uri")

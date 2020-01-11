@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.swiftboot.demo.command.GoodsCreateCommand;
 import org.swiftboot.demo.command.GoodsSaveCommand;
+import org.swiftboot.demo.command.GoodsWithDetailCreateCommand;
 import org.swiftboot.demo.model.dao.GoodsDao;
 import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.demo.result.GoodsCreateResult;
@@ -15,8 +16,9 @@ import org.swiftboot.demo.result.GoodsListResult;
 import org.swiftboot.demo.result.GoodsResult;
 import org.swiftboot.demo.result.GoodsSaveResult;
 import org.swiftboot.demo.service.GoodsService;
-import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.exception.ErrMessageException;
+import org.swiftboot.web.exception.ErrorCodeSupport;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -45,6 +47,26 @@ public class GoodsServiceImpl implements GoodsService {
     public GoodsCreateResult createGoods(GoodsCreateCommand cmd) {
         GoodsEntity p = cmd.createEntity();
         GoodsEntity saved = goodsDao.save(p);
+        log.debug("创建商品: " + saved.getId());
+        return new GoodsCreateResult(saved.getId());
+    }
+
+    @Override
+    public GoodsCreateResult createWithException(GoodsCreateCommand cmd) {
+        GoodsEntity p1 = cmd.createEntity();
+        goodsDao.save(p1);
+        log.debug("创建商品: " + p1.getId());
+
+        if (true) {
+            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR);
+        }
+        return new GoodsCreateResult(p1.getId());
+    }
+
+    @Override
+    public GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateCommand cmd) {
+        GoodsEntity entity = cmd.createEntity();
+        GoodsEntity saved = goodsDao.save(entity);
         log.debug("创建商品: " + saved.getId());
         return new GoodsCreateResult(saved.getId());
     }
@@ -171,7 +193,7 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 分页查询商品
      *
-     * @param page 页数，从0开始
+     * @param page     页数，从0开始
      * @param pageSize 页大小
      * @return
      */

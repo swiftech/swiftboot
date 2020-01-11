@@ -26,7 +26,7 @@ public class OrderDetailEntity extends BaseEntity {
     /**
      * 订单
      */
-    @PropertyDescription(value = "订单", example = "f80dc17d1b744a38a438e47c8d95cbd1")
+    @PropertyDescription(value = "订单")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_ID", nullable = false)
     private OrderEntity order;

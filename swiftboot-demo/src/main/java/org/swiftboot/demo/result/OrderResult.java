@@ -3,7 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.swiftboot.web.annotation.PopulateIgnore;
+import org.swiftboot.demo.model.entity.OrderEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
 import java.util.Set;
@@ -14,7 +14,7 @@ import java.util.Set;
  * @author swiftech 2019-04-07
  **/
 @ApiModel
-public class OrderResult extends BasePopulateResult {
+public class OrderResult extends BasePopulateResult<OrderEntity> {
 
     @ApiModelProperty(value = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")

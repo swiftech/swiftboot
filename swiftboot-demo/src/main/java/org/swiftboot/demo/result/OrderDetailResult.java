@@ -3,7 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.swiftboot.web.annotation.PopulateIgnore;
+import org.swiftboot.demo.model.entity.OrderDetailEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
 /**
@@ -12,7 +12,7 @@ import org.swiftboot.web.result.BasePopulateResult;
  * @author swiftech 2019-04-07
  **/
 @ApiModel
-public class OrderDetailResult extends BasePopulateResult {
+public class OrderDetailResult extends BasePopulateResult<OrderDetailEntity> {
 
     @ApiModelProperty(value = "订单ID", example = "f80dc17d1b744a38a438e47c8d95cbd1")
     @JsonProperty("order_id")
@@ -39,7 +39,7 @@ public class OrderDetailResult extends BasePopulateResult {
     private String id;
 
     /**
-     * 获取订单ID
+     * 获取订单 ID
      *
      * @return
      */
@@ -48,7 +48,7 @@ public class OrderDetailResult extends BasePopulateResult {
     }
 
     /**
-     * 设置订单ID
+     * 设置订单 ID
      *
      * @param orderId
      */
