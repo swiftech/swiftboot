@@ -11,6 +11,9 @@
 
     <artifactId>swiftboot-collections</artifactId>
     <description>企业开发常用集合类</description>
+    <properties>
+        <junit.version>5.5.2</junit.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -19,6 +22,12 @@
             <version>${swiftboot.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,0 +1,8 @@
+swiftboot:
+  auth:
+    session:
+      type: redis
+      group: swiftboot_session
+      tokenKey: swiftboot_token
+      expireTime: 1800
+

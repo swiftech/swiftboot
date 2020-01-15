@@ -8,13 +8,11 @@
 ### Maven
 
 ```xml
-<dependencies>
-	<dependency>
-		<groupId>com.github.swiftech</groupId>
-		<artifactId>swiftboot-service</artifactId>
-		<version>1.1</version>
-	</dependency>
-</dependencies>
+<dependency>
+    <groupId>com.github.swiftech</groupId>
+    <artifactId>swiftboot-service</artifactId>
+    <version>1.1</version>
+</dependency>
 
 ```
 	

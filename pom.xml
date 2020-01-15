@@ -22,12 +22,14 @@
         <module>swiftboot-fileconvert</module>
         <module>swiftboot-web</module>
         <module>swiftboot-rpc</module>
+        <module>swiftboot-service</module>
+        <module>swiftboot-auth</module>
     </modules>
 
     <properties>
         <swiftboot.version>${project.version}</swiftboot.version>
         <java.version>1.8</java.version>
-        <slf4j.version>1.7.29</slf4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
         <jackson.version>2.9.10</jackson.version>
         <jackson.databind.version>2.9.10.1</jackson.databind.version>
         <commons.lang.version>3.9</commons.lang.version>
@@ -68,16 +70,15 @@
             <version>${commons.codec.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.junit.jupiter</groupId>-->
+<!--            <artifactId>junit-jupiter</artifactId>-->
+<!--            <version>${junit.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <dependencyManagement>
-
         <dependencies>
             <dependency>
                 <groupId>org.slf4j</groupId>
