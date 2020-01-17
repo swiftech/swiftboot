@@ -181,7 +181,7 @@ public class SessionServiceRedisImpl implements SessionService {
         if (session == null) {
             throw new ErrMessageException(ErrorCodeSupport.CODE_USER_SESSION_NOT_EXIST);
         }
-        else if (session.getExpireTime() < System.currentTimeMillis()) {
+        else if (session.getExpireTime() != null && session.getExpireTime() < System.currentTimeMillis()) {
             this.removeSession(group, token);
             throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
         }

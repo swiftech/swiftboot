@@ -32,7 +32,7 @@ public class SwiftBootModelConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(IdGenerator.class)
-    IdGenerator defaultIdGenerator() {
+    IdGenerator<?> defaultIdGenerator() {
         return new DefaultIdGenerator();
     }
 
