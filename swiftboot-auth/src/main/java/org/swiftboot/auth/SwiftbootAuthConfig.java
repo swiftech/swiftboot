@@ -29,7 +29,7 @@ public class SwiftbootAuthConfig {
 
     @Bean
     @ConditionalOnProperty(value = "swiftboot.auth.enabled", havingValue = "true")
-    public AuthFilter securityFilter() {
+    public AuthFilter authFilter() {
         return new AuthFilter();
     }
 
