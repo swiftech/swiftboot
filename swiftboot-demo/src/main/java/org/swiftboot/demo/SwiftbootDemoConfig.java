@@ -1,16 +1,15 @@
 package org.swiftboot.demo;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.swiftboot.demo.filter.SwiftbootDemoFilter;
-import org.swiftboot.web.filter.CorsFilter;
 import org.swiftboot.web.model.id.EntityIdGenerator;
 import org.swiftboot.web.model.id.IdGenerator;
 
@@ -22,34 +21,21 @@ import org.swiftboot.web.model.id.IdGenerator;
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {
-        "org.swiftboot.demo",
-        "org.swiftboot.web"
+        "org.swiftboot.web",
+        "org.swiftboot.service",
+        "org.swiftboot.auth",
+        "org.swiftboot.demo"
+})
+// 和org.swiftboot.demo在同一个包下面的可以不配置
+@EntityScan(basePackages = {
+        "org.swiftboot.demo.model.entity",
+        "org.swiftboot.service.model.entity",
+})
+@EnableJpaRepositories(basePackages = {
+        "org.swiftboot.demo.model.dao",
+        "org.swiftboot.service.model.dao",
 })
 public class SwiftbootDemoConfig {
-
-    @Bean
-    public CorsFilter corsFilter() {
-        return new CorsFilter();
-    }
-
-    @Bean
-    public FilterRegistrationBean<CorsFilter> regCorsFilter(CorsFilter filter) {
-        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>(filter);
-//        registrationBean.setEnabled(false);
-        return registrationBean;
-    }
-
-    @Bean
-    public SwiftbootDemoFilter swiftbootDemoFilter() {
-        return new SwiftbootDemoFilter();
-    }
-
-    @Bean
-    public FilterRegistrationBean<SwiftbootDemoFilter> regTenantContextFilter(SwiftbootDemoFilter filter) {
-        FilterRegistrationBean<SwiftbootDemoFilter> registrationBean = new FilterRegistrationBean<>(filter);
-//        registrationBean.setEnabled(false);
-        return registrationBean;
-    }
 
     @Bean
     public IdGenerator idGenerator() {
@@ -63,7 +49,6 @@ public class SwiftbootDemoConfig {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
-
 
 //
 //    @Bean

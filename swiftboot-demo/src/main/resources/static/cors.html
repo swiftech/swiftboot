@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CORS test</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<script>
+    function performGetRequest1() {
+        var resultElement = document.getElementById('result');
+        resultElement.innerHTML = '';
+
+        var a = 'http://localhost:8080/goods/list';
+        var cfg = {
+            headers: {
+                'swiftboot_token': 'xxx'
+            }
+        };
+        axios.get(a, cfg)
+            .then(function (response) {
+                console.log(response);
+                resultElement.innerHTML = response.status
+                    + '  ' + response.data.code
+                    + '  ' + (response.data.msg? response.data.msg: '');
+            })
+            .catch(function (error) {
+                resultElement.innerHTML = error;
+            });
+    }
+</script>
+
+<div class="container">
+
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <button class="btn btn-primary" onclick="performGetRequest1()">Get to test cors </button>
+            <div class="panel-body" id="getResult1"></div>
+        </div>
+    </div>
+    <div id="result">
+
+    </div>
+</div>
+</body>
+</html>
