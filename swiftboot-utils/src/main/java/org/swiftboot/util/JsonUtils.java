@@ -124,7 +124,6 @@ public class JsonUtils {
      *
      * @param obj
      * @return
-     * @throws IOException
      */
     public static String object2PrettyJson(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
