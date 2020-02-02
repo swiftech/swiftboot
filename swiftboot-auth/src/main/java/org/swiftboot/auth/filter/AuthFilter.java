@@ -73,6 +73,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 e.printStackTrace();
                 this.responseWithError(response, e.getErrorCode());
             } catch (Exception e) {
+                e.printStackTrace();
                 this.responseWithError(response, ErrorCodeSupport.CODE_SYS_ERR);
             }
         }
