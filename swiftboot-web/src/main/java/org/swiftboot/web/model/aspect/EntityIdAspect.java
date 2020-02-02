@@ -73,7 +73,7 @@ public class EntityIdAspect {
                 }
             }
             else {
-                log.debug(Info.get(EntityIdAspect.class, R.PARAM_NOT_IMPLEMENT_INTERFACE2, IdPojo.class.getName(), arg));
+                log.debug(Info.get(EntityIdAspect.class, R.PARAM_NOT_IMPLEMENT_INTERFACE2, arg, IdPojo.class.getName()));
             }
         }
         return null;

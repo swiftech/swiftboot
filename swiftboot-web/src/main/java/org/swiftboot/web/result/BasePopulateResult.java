@@ -84,6 +84,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
             throw new RuntimeException(Info.get(BasePopulateResult.class, R.REQUIRE_ENTITY));
         }
         Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
+        // TODO too many log info
         log.debug(Info.get(BasePopulateResult.class, R.POPULATE_FROM_ENTITY1, entity));
 
         /*
