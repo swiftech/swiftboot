@@ -1,9 +1,9 @@
 # SwiftBoot
 
-基于Spring Framework，Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
+基于 Spring Framework，Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
 
 ### 为什么要有 SwiftBoot
-* 虽然用 Spring Boot 搭建框架进行开发已经简化了很多配置的工作，但是对于大多数中小型的项目来说来，还是有一些重复性的工作。
+* 虽然用 SpringBoot 搭建框架进行开发已经简化了很多配置的工作，但是对于大多数中小型的项目来说来，还是有一些重复性的工作。
 * 开源社区中已经有很多快速开发框架，它们功能很多但是太过于臃肿并且侵入性很强。
 * SwiftBoot 采用一种折中的理念，它并不会覆盖到开发的方方面面，但是它提供必要的和常见的功能支持，以减少重复性的工作和提高开发质量。
 
@@ -15,6 +15,7 @@
 * 自动验证输入参数并自动转换为统一的返回格式。
 * 主键UUID自动生成机制。
 * 企业 Web 开发常用的工具类和集合类。
+* 实现了常见的服务（例如 Redis服务，用户认证等等），减少不必要的重复开发工作，关注核心业务逻辑。
 * 常见文档格式转换（开发中）。
 
 
@@ -22,13 +23,23 @@
 * [swiftboot-web](swiftboot-web/): 企业Web应用基础框架
 * [swiftboot-collections](swiftboot-collections/): 企业应用集合类
 * [swiftboot-utils](swiftboot-utils/): 企业应用工具类
+* [swiftboot-service](swiftboot-service/): 企业应用基础服务（试验 experimental）
+* [swiftboot-auth](swiftboot-auth/): 用户认证服务（试验 experimental）
 * [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验 experimental）
 * [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中 development）
-* [swiftboot-service](swiftboot-service/): 企业应用基础服务（试验 experimental）
 * [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
 
 
 ### 发布
+
+2020-02-02 1.1 release
+* 新增 `swiftboot-service` 和 `swiftboot-auth` 模块，提供常用的服务和简单的用户认证机制
+* 新增输入日志多语言化
+* 优化自动填充对象
+* 新增一些工具类和工具方法
+* 升级依赖的库
+* 修复了很多bug
+* 完善 demo 项目
 
 2019-09-08 1.0.14 release
 * 新增了一些工具类
@@ -63,3 +74,4 @@
     ```
 
     > 创建 Entity 实例时无需调用生成器生成 ID，SwiftBoot 会自动创建并填充。
+

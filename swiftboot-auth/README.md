@@ -1,4 +1,4 @@
-# swiftboot-auth（开发中）
+# swiftboot-auth（试验）
 提供企业开发中的基本的用户认证功能（1.1版本加入）
 
 ### 特性
