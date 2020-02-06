@@ -4,20 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
-import org.swiftboot.demo.model.entity.AdminUserEntity;
+import org.swiftboot.demo.model.entity.AppUserEntity;
 import org.swiftboot.web.command.BasePopulateCommand;
 
 import javax.validation.constraints.NotBlank;
 
 /**
- * Admin user signin command
+ * App user signin command
  *
- * @author Allen 2019-11-28
+ * @author Allen 2020-02-05
  **/
 @ApiModel
-public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity> {
+public class AppUserSigninCommand extends BasePopulateCommand<AppUserEntity> {
 
-    @ApiModelProperty(value = "Login name of administrator", required = true, example = "admin")
+    @ApiModelProperty(value = "Login name of app user", required = true, example = "13866669999")
     @JsonProperty("login_name")
     @Length(max = 32)
     @NotBlank
@@ -30,7 +30,7 @@ public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity>
     private String loginPwd;
 
     /**
-     * Get Login name of administrator
+     * Get Login name of app user
      *
      * @return
      */
@@ -39,7 +39,7 @@ public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity>
     }
 
     /**
-     * Set Login name of administrator
+     * Set Login name of app user
      *
      * @param loginName
      */
