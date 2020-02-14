@@ -1,6 +1,7 @@
 package org.swiftboot.demo.model.entity;
 
 import org.springframework.context.annotation.Description;
+import org.swiftboot.shiro.model.entity.UserEntityStub;
 import org.swiftboot.web.annotation.PropertyDescription;
 import org.swiftboot.web.model.entity.BaseEntity;
 
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 @Description("管理员")
 @Entity
 @Table(name = "DEMO_ADMIN_USER")
-public class AdminUserEntity extends BaseEntity {
+public class AdminUserEntity extends BaseEntity implements UserEntityStub {
 
     /**
      * Login name of administrator
@@ -31,6 +32,13 @@ public class AdminUserEntity extends BaseEntity {
     @PropertyDescription(value = "Login password to login name", notes = "MD5 with salt", example = "a865a7e0ddbf35fa6f6a232e0893bea4")
     @Column(name = "LOGIN_PWD", length = 64, nullable = false, columnDefinition = "VARCHAR(64) NOT NULL COMMENT 'Login password to login name(MD5 with salt)'")
     private String loginPwd;
+
+    /**
+     * Name of the user
+     */
+    @PropertyDescription(value = "Name of the user", example = "James Bond")
+    @Column(name = "USER_NAME", length = 64, columnDefinition = "VARCHAR(64) COMMENT 'Name of the user'")
+    private String userName;
 
 
     public AdminUserEntity() {
@@ -66,6 +74,20 @@ public class AdminUserEntity extends BaseEntity {
      */
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
+    }
+
+    /**
+     * 获取Name of the user
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * 设置Name of the user
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

@@ -1,5 +1,6 @@
 package org.swiftboot.demo.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.BindingResult;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
@@ -88,6 +89,7 @@ public class OrderController {
 
     @ApiOperation(notes = "逻辑删除订单", value = "逻辑删除订单")
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    @RequiresPermissions("order:delete")
     public HttpResponse<Void> orderDelete(
             @RequestBody @Validated @ApiParam("订单ID") IdCommand command) {
         log.info("> /order/delete");
@@ -109,6 +111,7 @@ public class OrderController {
 
     @ApiOperation(notes = "永久删除订单", value = "永久删除订单")
     @RequestMapping(value = "purge", method = RequestMethod.DELETE)
+    @RequiresPermissions("order:purge")
     public HttpResponse<Void> orderPurge(
             @RequestBody @Validated @ApiParam("订单ID") IdCommand command) {
         log.info("> /order/purge");

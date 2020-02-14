@@ -1,27 +1,35 @@
 package org.swiftboot.demo.controller;
 
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
-import org.swiftboot.demo.command.AdminUserCreateCommand;
-import org.swiftboot.demo.command.AdminUserSaveCommand;
-import org.swiftboot.demo.command.AdminUserSigninCommand;
-import org.swiftboot.demo.result.*;
-import org.swiftboot.demo.service.AdminUserService;
-import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.result.HttpResponse;
-import org.swiftboot.web.command.IdCommand;
-import org.swiftboot.web.command.IdListCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.demo.command.AdminUserCreateCommand;
+import org.swiftboot.demo.command.AdminUserSaveCommand;
+import org.swiftboot.demo.config.PermissionConfigBean;
+import org.swiftboot.demo.result.AdminUserCreateResult;
+import org.swiftboot.demo.result.AdminUserListResult;
+import org.swiftboot.demo.result.AdminUserResult;
+import org.swiftboot.demo.result.AdminUserSaveResult;
+import org.swiftboot.demo.service.AdminPermissionService;
+import org.swiftboot.demo.service.AdminUserService;
+import org.swiftboot.shiro.constant.ShiroSessionConstants;
+import org.swiftboot.util.JsonUtils;
+import org.swiftboot.web.command.IdCommand;
+import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.exception.ErrMessageException;
+import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.result.HttpResponse;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /**
  * 管理员
@@ -40,19 +48,11 @@ public class AdminUserController {
     private AdminUserService adminUserService;
 
     @Resource
+    private AdminPermissionService adminPermissionService;
+
+    @Resource
     private SwiftbootAuthConfigBean authConfigBean;
 
-    @ApiOperation(notes = "Admin user signin", value = "Admin user signin")
-    @RequestMapping(value = "signin", method = RequestMethod.POST)
-    public HttpResponse<AdminUserSigninResult> adminUserSign(
-            @RequestBody AdminUserSigninCommand command,
-            HttpServletResponse response) {
-        log.info("> /admin/user/signin");
-        AdminUserSigninResult adminUserResult = adminUserService.adminUserSignin(command);
-        Cookie cookie  = new Cookie(authConfigBean.getSession().getTokenKey(), adminUserResult.getToken());
-        response.addCookie(cookie);
-        return new HttpResponse<>(adminUserResult);
-    }
 
     @ApiOperation(notes = "创建管理员", value = "创建管理员")
     @RequestMapping(value = "create", method = RequestMethod.POST)
@@ -89,6 +89,22 @@ public class AdminUserController {
     public HttpResponse<AdminUserListResult> adminUserList() {
         log.info("> /admin/user/list");
         AdminUserListResult ret = adminUserService.queryAdminUserList();
+        return new HttpResponse<>(ret);
+    }
+
+    @ApiOperation(notes = "查询管理员权限列表", value = "查询管理员权限列表")
+    @RequestMapping(value = "permissions", method = RequestMethod.GET)
+    public HttpResponse<Set<PermissionConfigBean>> adminUserPermissionList() {
+        log.info("> /admin/user/permissions");
+        Session session = SecurityUtils.getSubject().getSession();
+        if (session == null) {
+            throw new ErrMessageException(ErrorCodeSupport.CODE_USER_SESSION_NOT_EXIST);
+        }
+        if (session.getAttribute(ShiroSessionConstants.SESSION_KEY_LOGIN_NAME) == null) {
+            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, "No login name found");
+        }
+        Set<PermissionConfigBean> ret = adminPermissionService.queryAllPermissionForUser(
+                session.getAttribute(ShiroSessionConstants.SESSION_KEY_LOGIN_NAME).toString());
         return new HttpResponse<>(ret);
     }
 

@@ -23,6 +23,9 @@ public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRe
     @NotBlank
     private String goodsId;
 
+    /**
+     * TODO 此处类型和Entity不一致，参考 GoodsCreateCommand 修改
+     */
     @ApiModelProperty(value = "订单ID", required = true, example = "527d36e654f9eaea6a9b46380d253fc9")
     @JsonProperty("order_id")
     @Length(max = 32)

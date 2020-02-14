@@ -93,4 +93,6 @@ public interface AdminUserService {
      * @return
      */
     AdminUserListResult queryAdminUserList(int page, int pageSize);
+
+
 }

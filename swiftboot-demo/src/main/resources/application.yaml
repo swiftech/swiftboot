@@ -11,7 +11,7 @@ spring:
     properties:
       hibernate:
         current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-    show-sql: true
+    show-sql: false
     open-in-view: false
 logging:
   file: /var/log/swiftboot-demo.log
@@ -39,9 +39,9 @@ swiftboot:
     redis:
       host: localhost
       port: 6379
-  auth:
-    enabled: true
-    session:
-      type: redis
-      expireTime: 1800
-      tokenKey: swiftboot_token
+#  auth:
+#    enabled: true
+#    session:
+#      type: redis
+#      expireTime: 1800
+#      tokenKey: swiftboot_token
