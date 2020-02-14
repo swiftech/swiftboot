@@ -9,39 +9,36 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>swiftboot-service</artifactId>
-
+    <artifactId>swiftboot-shiro</artifactId>
 
     <properties>
-<!--        <spring.boot.version>2.1.11.RELEASE</spring.boot.version>-->
-        <spring.data.jpa>2.1.15.RELEASE</spring.data.jpa>
-        <jedis.version>3.2.0</jedis.version>
-        <json.version>20190722</json.version>
+        <shiro.version>1.5.0</shiro.version>
     </properties>
 
-
     <dependencies>
+        <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-collections</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.github.swiftech</groupId>
             <artifactId>swiftboot-web</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>${spring.data.jpa}</version>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${jedis.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>${json.version}</version>
-        </dependency>
 
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring-boot-web-starter</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,8 +1,7 @@
 package org.swiftboot.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +19,6 @@ import org.swiftboot.service.service.RedisService;
 @Configuration
 @EnableConfigurationProperties
 public class SwiftbootAuthConfig {
-    private Logger log = LoggerFactory.getLogger(SwiftbootAuthConfig.class);
 
     @Bean
     public SwiftbootAuthConfigBean swiftbootAuthConfigBean() {
@@ -46,13 +44,12 @@ public class SwiftbootAuthConfig {
     }
 
     /**
-     * 模拟用户会话，仅用于开发（dev）模式
+     * 默认的会话管理
      *
      * @return
      */
     @Bean
-    @ConditionalOnBean(RedisService.class)
-    @ConditionalOnProperty(value = "swiftboot.auth.session.type", havingValue = "mock")
+    @ConditionalOnMissingBean(SessionService.class)
     public SessionService mockSessionService() {
         return new MockSessionServiceImpl();
     }

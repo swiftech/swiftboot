@@ -1,0 +1,11 @@
+swiftboot:
+  shiro:
+    cookie:
+      domain: localhost
+      path: /
+      name: swiftboot_shiro_token
+      maxAge: 1800
+    session:
+      timeout: 1800
+      forceDisableRedirect: false
+      redisGroup: shiro-session
