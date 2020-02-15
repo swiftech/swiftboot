@@ -1,6 +1,5 @@
 package org.swiftboot.shiro.realm;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -100,12 +99,11 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
         try {
             AuthorizationInfo simpleAuthorizationInfo = shiroSecurityService.makeAuthInfoFromView(principalCollection);
             if (simpleAuthorizationInfo == null
-                    || simpleAuthorizationInfo.getStringPermissions() == null) {
+                    || simpleAuthorizationInfo.getStringPermissions() == null
+                    || simpleAuthorizationInfo.getStringPermissions().isEmpty()) {
+                log.warn("User haven't been granted any permissions");
                 return null;
             }
-
-            log.debug(String.format("  has %d permissions", simpleAuthorizationInfo.getStringPermissions().size()));
-            log.debug(StringUtils.join(simpleAuthorizationInfo.getStringPermissions(), ','));
             return simpleAuthorizationInfo;
         } catch (Exception e) {
             log.error(e.getMessage(), e);

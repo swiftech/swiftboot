@@ -16,9 +16,9 @@ public class ShiroSessionConfigBean {
     private boolean forceDisableRedirect = false;
 
     /**
-     * Redis 分组名称,默认为 shiro-session
+     * Redis 分组名称,默认为 swiftboot-shiro-session
      */
-    private String redisGroup = "shiro-session";
+    private String redisGroup = "swiftboot-shiro-session";
 
     public int getTimeout() {
         return timeout;

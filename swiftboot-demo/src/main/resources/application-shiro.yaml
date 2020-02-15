@@ -26,7 +26,7 @@ swiftboot:
     session:
       timeout: 300
       forceDisableRedirect: false
-      redisGroup: shiro-session
+      redisGroup: swiftboot-shiro-session
   demo:
     init:
       users:
@@ -39,6 +39,9 @@ swiftboot:
         -
           loginName: luke
           loginPwd: 12345678
+        -
+          loginName: dath
+          loginPwd: 12345678
       roles:
         -
           name: admin
@@ -49,7 +52,17 @@ swiftboot:
         -
           name: staff
           desc: Staff
+        -
+          name: guest
+          desc: Guest
       permissions:
+        -
+          code: 'admin'
+          desc: '管理员'
+          permissions:
+            -
+              code: 'admin:user'
+              desc: '管理员用户'
         -
           code: 'goods'
           desc: '商品'
@@ -98,3 +111,5 @@ swiftboot:
           - 'yoda'
         staff:
           - 'luke'
+        guest:
+          - 'dath'

@@ -60,7 +60,7 @@ try {
 
 ### 密码处理
 
-默认使用 DefaultPasswordManager 来创建密码, 它采用 md5 算法, 
+默认使用 `DefaultPasswordManager` 来创建密码, 它采用 md5 算法, 
 * 如果调用参数为 `UserNamePasswordToken` 的方法创建密码，那么会取用 `UserNamePasswordToken.host` 作为加盐值。
 * 否则可以调参数为两个 `String` 的方法，自己指定加盐值。
 

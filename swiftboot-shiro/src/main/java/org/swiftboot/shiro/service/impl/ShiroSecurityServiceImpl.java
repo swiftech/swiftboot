@@ -1,5 +1,6 @@
 package org.swiftboot.shiro.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -82,6 +83,7 @@ public class ShiroSecurityServiceImpl implements ShiroSecurityService, Applicati
 
         if (simpleAuthorizationInfo.getStringPermissions() != null) {
             log.info(String.format("    has %d permissions", simpleAuthorizationInfo.getStringPermissions().size()));
+            log.debug(StringUtils.join(simpleAuthorizationInfo.getStringPermissions(), ','));
         }
         else {
             log.warn("    No permissions");

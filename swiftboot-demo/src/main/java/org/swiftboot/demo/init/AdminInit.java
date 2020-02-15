@@ -1,5 +1,6 @@
 package org.swiftboot.demo.init;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,7 @@ import org.swiftboot.demo.SwiftbootDemoConfigBean;
 import org.swiftboot.demo.config.PermissionConfigBean;
 import org.swiftboot.demo.config.RoleConfigBean;
 import org.swiftboot.demo.config.UserConfigBean;
+import org.swiftboot.demo.constant.AuthConstants;
 import org.swiftboot.demo.model.dao.*;
 import org.swiftboot.demo.model.entity.*;
 import org.swiftboot.shiro.service.PasswordManager;
@@ -54,6 +56,9 @@ public class AdminInit {
     private void createPermissionAndSubPermissions(AdminPermissionEntity parent, PermissionConfigBean permConfig) {
         if (parent == null) {
             throw new RuntimeException("必须有父权限");
+        }
+        if (StringUtils.isAnyBlank(permConfig.getCode(), permConfig.getDesc())) {
+            throw new RuntimeException(String.format("权限 %s 配置缺少", permConfig.getCode()));
         }
         // 所有code都以 ':*' 结尾
         permConfig.setCode(PermissionCodeUtils.standardPermCode(permConfig.getCode()));
@@ -152,7 +157,7 @@ public class AdminInit {
                     log.info("  创建用户：" + user.getLoginName());
                     AdminUserEntity userEntity = new AdminUserEntity();
                     userEntity.setLoginName(user.getLoginName());
-                    userEntity.setLoginPwd(passwordManager.encryptPassword(user.getLoginPwd(), "swiftboot-shiro"));
+                    userEntity.setLoginPwd(passwordManager.encryptPassword(user.getLoginPwd(), AuthConstants.MY_AUTH_SERVICE_NAME));
                     adminUserDao.save(userEntity);
                 }
             }

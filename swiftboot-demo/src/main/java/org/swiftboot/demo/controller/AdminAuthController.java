@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
 import org.swiftboot.demo.command.AdminUserSigninCommand;
 import org.swiftboot.demo.result.AdminUserSigninResult;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
+import org.swiftboot.shiro.SwiftbootShiroConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 
 import javax.annotation.Resource;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Api(tags = {"AdminUserAuth管理员认证"})
 @Controller
-@RequestMapping("/admin/user")
+@RequestMapping("/admin/auth")
 @ResponseBody
 public class AdminAuthController {
     private Logger log = LoggerFactory.getLogger(AdminAuthController.class);
@@ -37,7 +37,7 @@ public class AdminAuthController {
     private AdminPermissionService adminPermissionService;
 
     @Resource
-    private SwiftbootAuthConfigBean authConfigBean;
+    private SwiftbootShiroConfigBean shiroConfigBean;
 
 
     @ApiOperation(notes = "Admin user signin", value = "Admin user signin")
@@ -45,9 +45,12 @@ public class AdminAuthController {
     public HttpResponse<AdminUserSigninResult> adminUserSign(
             @RequestBody AdminUserSigninCommand command,
             HttpServletResponse response) {
-        log.info("> /admin/user/signin");
+        log.info("> /admin/auth/signin");
         AdminUserSigninResult adminUserResult = adminUserService.adminUserSignin(command);
-        Cookie cookie  = new Cookie(authConfigBean.getSession().getTokenKey(), adminUserResult.getToken());
+        String tokenKey = shiroConfigBean.getCookie().getName();
+        Cookie cookie  = new Cookie(tokenKey, adminUserResult.getToken());
+        cookie.setDomain(shiroConfigBean.getCookie().getDomain());
+        cookie.setMaxAge(shiroConfigBean.getCookie().getMaxAge());
         response.addCookie(cookie);
         return new HttpResponse<>(adminUserResult);
     }

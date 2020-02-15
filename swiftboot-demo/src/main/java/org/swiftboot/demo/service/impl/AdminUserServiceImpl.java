@@ -20,15 +20,15 @@ import org.swiftboot.demo.model.dao.AdminUserDao;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 import org.swiftboot.demo.result.*;
 import org.swiftboot.demo.service.AdminUserService;
-import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.command.IdListCommand;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+
+import static org.swiftboot.demo.constant.AuthConstants.MY_AUTH_SERVICE_NAME;
 
 /**
  * 管理员服务接口实现
@@ -49,16 +49,17 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Resource
     private SwiftbootAuthConfigBean authConfigBean;
 
-    @PostConstruct
-    public void initData() {
-        Optional<AdminUserEntity> optAdmin = adminUserDao.findByLoginName("admin");
-        if (!optAdmin.isPresent()) {
-            AdminUserEntity newEntity = new AdminUserEntity();
-            newEntity.setLoginName("admin");
-            newEntity.setLoginPwd(PasswordUtils.createPassword("12345678", "my-auth-service-name"));
-            adminUserDao.save(newEntity);
-        }
-    }
+// Use AdminInit instead
+//    @PostConstruct
+//    public void initData() {
+//        Optional<AdminUserEntity> optAdmin = adminUserDao.findByLoginName("admin");
+//        if (!optAdmin.isPresent()) {
+//            AdminUserEntity newEntity = new AdminUserEntity();
+//            newEntity.setLoginName("admin");
+//            newEntity.setLoginPwd(PasswordUtils.createPassword("12345678", "my-auth-service-name"));
+//            adminUserDao.save(newEntity);
+//        }
+//    }
 
     @Override
     public AdminUserSigninResult adminUserSignin(AdminUserSigninCommand command) {
@@ -66,7 +67,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
         Subject currentUser = SecurityUtils.getSubject();
         try {
-            currentUser.login(new UsernamePasswordToken(command.getLoginName(), command.getLoginPwd(), "my-auth-service-name"));
+            currentUser.login(new UsernamePasswordToken(command.getLoginName(), command.getLoginPwd(), MY_AUTH_SERVICE_NAME));
             Session session = SecurityUtils.getSubject().getSession();
             ret.setSuccess(true);
             ret.setLoginName(command.getLoginName());

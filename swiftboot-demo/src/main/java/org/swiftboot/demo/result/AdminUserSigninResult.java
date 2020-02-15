@@ -30,7 +30,7 @@ public class AdminUserSigninResult extends BasePopulateResult<AdminUserEntity> {
     private boolean success = false;
 
     @ApiModelProperty(value = "Token for admin user", example = "772eb2add9b64e40972468c779b3b952")
-    @JsonProperty("swiftboot_token")
+    @JsonProperty("swiftboot_shiro_token")
     private String token;
 
 
