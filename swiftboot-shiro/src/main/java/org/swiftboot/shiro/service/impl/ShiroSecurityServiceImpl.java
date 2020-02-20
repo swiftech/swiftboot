@@ -44,7 +44,7 @@ public class ShiroSecurityServiceImpl implements ShiroSecurityService, Applicati
         UserEntityStub user = null;
         try {
             UserAuthDaoStub<?> dao = (UserAuthDaoStub<?>) applicationContext.getBean(usernamePasswordToken.getHost());
-            log.info("The DAO implementation to do user authentication: " + dao.getClass().getName());
+            log.info(String.format("The DAO implementation to do user authentication: %s", dao.getClass().getName()));
             String loginName = usernamePasswordToken.getUsername();
             String loginPwd = String.valueOf(usernamePasswordToken.getPassword());
             log.info(String.format("Authenticate user %s(%s)", usernamePasswordToken.getUsername(), usernamePasswordToken.getHost()));

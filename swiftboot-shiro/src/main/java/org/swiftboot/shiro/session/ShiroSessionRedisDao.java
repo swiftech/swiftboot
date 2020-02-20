@@ -69,7 +69,7 @@ public class ShiroSessionRedisDao extends AbstractSessionDAO {
     public void delete(Session session) {
         String token = (String) session.getId();
         if (StringUtils.isBlank(token)) {
-            log.warn("Delete session fail, token=: " + token);
+            log.warn(String.format("Delete session failed, token=: %s", token));
             return;
         }
         Session loadSession = loadSession(token);

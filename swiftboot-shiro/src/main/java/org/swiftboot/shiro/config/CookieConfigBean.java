@@ -12,7 +12,7 @@ public class CookieConfigBean {
     private String name = "swiftboot_shiro_token";
 
     /**
-     * Cookie 过期时间，默认半小时
+     * Cookie 过期时间，单位秒，默认半小时
      */
     private int maxAge = 1800;
 
