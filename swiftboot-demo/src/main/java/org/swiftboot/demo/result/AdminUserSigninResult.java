@@ -9,7 +9,7 @@ import org.swiftboot.web.result.BasePopulateResult;
 /**
  * Admin user
  *
- * @author Allen 2019-11-28
+ * @author swiftech 2019-11-28
  **/
 @ApiModel
 public class AdminUserSigninResult extends BasePopulateResult<AdminUserEntity> {

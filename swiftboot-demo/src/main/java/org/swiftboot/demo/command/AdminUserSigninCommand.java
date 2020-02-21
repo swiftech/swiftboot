@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * Admin user signin command
  *
- * @author Allen 2019-11-28
+ * @author swiftech
  **/
 @ApiModel
 public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity> {

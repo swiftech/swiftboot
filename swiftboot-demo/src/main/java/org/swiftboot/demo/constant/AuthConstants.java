@@ -1,7 +1,7 @@
 package org.swiftboot.demo.constant;
 
 /**
- * allen
+ * @author swiftech
  */
 public class AuthConstants {
 

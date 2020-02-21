@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * @author Allen 2019-04-08
+ * @author swiftech 2019-04-08
  **/
 @Description("测试实体类")
 @Entity

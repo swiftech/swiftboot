@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
 /**
- * @author Allen 2019-03-05
+ * @author swiftech 2019-03-05
  **/
 @Component
 public class ErrorCode extends ErrorCodeSupport {

@@ -1,8 +1,9 @@
 package org.swiftboot.collections;
 
 /**
- * allen
+ *
  * 通过实现一个新的 Info 类来暂时解决静态代码无法执行的问题
+ * @author swiftech
  */
 public final class Info extends org.swiftboot.util.Info {
 

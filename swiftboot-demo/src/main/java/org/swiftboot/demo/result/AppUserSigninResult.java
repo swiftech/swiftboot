@@ -9,7 +9,7 @@ import org.swiftboot.web.result.BasePopulateResult;
 /**
  * App user
  *
- * @author Allen 2020-02-05
+ * @author swiftech 2020-02-05
  **/
 @ApiModel
 public class AppUserSigninResult extends BasePopulateResult<AppUserEntity> {
