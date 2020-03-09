@@ -103,9 +103,9 @@ public class EntityIdAspect {
      * @param clazz
      */
     private void tryToSetRelEntities(IdPojo parentEntity, Class<? extends Annotation> clazz) {
-        List<Field> otoList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), clazz);
-        for (Field oto : otoList) {
-            Object relEntity = BeanUtils.forceGetProperty(parentEntity, oto);
+        List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), clazz);
+        for (Field subObject : subObjectList) {
+            Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObject);
             if (relEntity instanceof BaseIdEntity) {
                 tryToSetIdAndSubIds((BaseIdEntity) relEntity); // - 递归 -
             }

@@ -172,19 +172,27 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                         Collection srcCollection = (Collection) BeanUtils.forceGetProperty(entity, srcField.getName());
                         if (srcCollection != null && !srcCollection.isEmpty()) {
                             Collection targetCollection = (Collection) BeanUtils.forceGetProperty(result, targetField.getName());
+                            Class elementClass = (Class) actualTypeArguments[0];
                             if (targetCollection == null) {
                                 if (Set.class.isAssignableFrom(targetField.getType())) {
-                                    targetCollection = new HashSet();
+                                    // 如果集合为 TreeSet 并且其中的元素的类型实现了 Comparable 接口，那么返回 TreeSet
+                                    if (TreeSet.class.isAssignableFrom(targetField.getType())
+                                            && Comparable.class.isAssignableFrom((Class<?>) elementClass)) {
+                                        targetCollection = new TreeSet();
+                                    }
+                                    else {
+                                        targetCollection = new HashSet();
+                                    }
                                 }
                                 else if (List.class.isAssignableFrom(targetField.getType())) {
-                                    targetCollection = new ArrayList();
+                                    targetCollection = new LinkedList();
                                 }
                                 targetField.set(result, targetCollection);
                             }
-                            Class clazz = (Class) actualTypeArguments[0];
+
                             for (Object subEntity : srcCollection) {
                                 if (subEntity instanceof Persistent) {
-                                    BasePopulateResult<E> subResult = createResult(clazz, (Persistent) subEntity);
+                                    BasePopulateResult<E> subResult = createResult(elementClass, (Persistent) subEntity);
                                     targetCollection.add(subResult);
                                 }
                             }
