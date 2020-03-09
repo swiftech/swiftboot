@@ -22,6 +22,10 @@ public class AdminUserResult extends BasePopulateResult<AdminUserEntity> {
     @JsonProperty("login_pwd")
     private String loginPwd;
 
+    @ApiModelProperty(value = "Name of the user", example = "James Bond")
+    @JsonProperty("user_name")
+    private String userName;
+
     @ApiModelProperty(value = "Updating time", example = "1545355038524")
     @JsonProperty("update_time")
     private Long updateTime;
@@ -72,6 +76,24 @@ public class AdminUserResult extends BasePopulateResult<AdminUserEntity> {
      */
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
+    }
+
+    /**
+     * 获取Name of the user
+     *
+     * @return
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * 设置Name of the user
+     *
+     * @param userName
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     /**

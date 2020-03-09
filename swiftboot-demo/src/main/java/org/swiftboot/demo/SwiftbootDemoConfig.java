@@ -24,6 +24,7 @@ import org.swiftboot.web.model.id.IdGenerator;
         "org.swiftboot.web",
         "org.swiftboot.service",
         "org.swiftboot.auth",
+        "org.swiftboot.shiro",
         "org.swiftboot.demo"
 })
 // 和org.swiftboot.demo在同一个包下面的可以不配置
@@ -33,6 +34,7 @@ import org.swiftboot.web.model.id.IdGenerator;
 })
 @EnableJpaRepositories(basePackages = {
         "org.swiftboot.demo.model.dao",
+        "org.swiftboot.demo.shiro",
         "org.swiftboot.service.model.dao",
 })
 public class SwiftbootDemoConfig {

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * allen
+ * @author swiftech
  */
 public class WordUtilsTest {
 

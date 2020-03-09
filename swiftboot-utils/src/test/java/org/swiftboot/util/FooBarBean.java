@@ -3,7 +3,7 @@ package org.swiftboot.util;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * @author Allen 2019-04-01
+ * @author swiftech 2019-04-01
  **/
 class FooBarBean {
 

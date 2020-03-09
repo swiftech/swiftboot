@@ -14,29 +14,29 @@ import java.util.Optional;
 public interface AdminUserDao extends PagingAndSortingRepository<AdminUserEntity, String>, AdminUserCustomizeDao {
 
     /**
-     * Query Admin user by Login name and password of administrator
+     * 按照登录名,登录密码查询管理员
      *
-     * @param loginName Login name of administrator
-     * @param loginPwd  Login pwd
+     * @param loginName 登录名
+     * @param loginPwd  登录密码
      * @return
      */
     Optional<AdminUserEntity> findByLoginNameAndLoginPwd(String loginName, String loginPwd);
 
     /**
-     * 按照Login name of administrator查询管理员
+     * 按照登录名查询管理员
      *
-     * @param loginName Login name of administrator
+     * @param loginName 登录名
      * @return
      */
     Optional<AdminUserEntity> findByLoginName(String loginName);
 
     /**
-     * 按照Login name of administrator查询未逻辑删除的管理员
+     * 按照登录名查询未逻辑删除的管理员
      *
-     * @param loginName Login name of administrator
+     * @param loginName 登录名
      * @return
      */
-    List<AdminUserEntity> findByIsDeleteFalseAndLoginName(String loginName);
+    Optional<AdminUserEntity> findByIsDeleteFalseAndLoginName(String loginName);
 
     /**
      * 批量按照ID查询管理员

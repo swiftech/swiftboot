@@ -7,7 +7,7 @@ import org.swiftboot.util.IdUtils;
 import java.util.Locale;
 
 /**
- * allen
+ * @author swiftech
  */
 public class InfoTest {
 

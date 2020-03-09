@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author Allen 2019-04-01
+ * @author swiftech 2019-04-01
  **/
 public class BeanUtilsTest {
 

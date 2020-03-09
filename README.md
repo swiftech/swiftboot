@@ -23,8 +23,9 @@
 * [swiftboot-web](swiftboot-web/): 企业Web应用基础框架
 * [swiftboot-collections](swiftboot-collections/): 企业应用集合类
 * [swiftboot-utils](swiftboot-utils/): 企业应用工具类
-* [swiftboot-service](swiftboot-service/): 企业应用基础服务（试验 experimental）
+* [swiftboot-service](swiftboot-service/): 企业应用基础服务
 * [swiftboot-auth](swiftboot-auth/): 用户认证服务（试验 experimental）
+* [swiftboot-shiro](swiftboot-shiro/): 集成 Shiro 用户认证和鉴权（开发中 development）
 * [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验 experimental）
 * [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中 development）
 * [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
@@ -32,7 +33,7 @@
 
 ### 发布
 
-2020-02-02 1.1 release
+v1.1 release (2020-02-02) 
 * 新增 `swiftboot-service` 和 `swiftboot-auth` 模块，提供常用的服务和简单的用户认证机制
 * 新增输入日志多语言化
 * 优化自动填充对象
@@ -41,7 +42,7 @@
 * 修复了很多bug
 * 完善 demo 项目
 
-2019-09-08 1.0.14 release
+v1.0.14 release (2019-09-08) 
 * 新增了一些工具类
 * 升级了依赖的库
 * 重构一些代码以及更新文档

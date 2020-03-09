@@ -3,7 +3,7 @@ package org.swiftboot.demo;
 import org.swiftboot.web.model.Initializer;
 
 /**
- * allen
+ * @author swiftech
  * @deprecated
  */
 public class DemoDataInitializer {

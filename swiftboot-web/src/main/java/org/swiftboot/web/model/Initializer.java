@@ -6,19 +6,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.ClasspathResourceUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
 import org.swiftboot.web.SwiftBootConfigBean;
 import org.swiftboot.web.model.entity.BaseIdEntity;
-import org.swiftboot.web.reader.CsvReaderHandler;
 import org.swiftboot.web.reader.CsvReader;
+import org.swiftboot.web.reader.CsvReaderHandler;
 import org.swiftboot.web.util.SpringPackageUtils;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.io.File;
@@ -33,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 /**
+ * [Experimental]
  * 从 CSV 文件中初始化数据库，文件名对应实体类名，CSV 中的字段对应实体类的属性变量名
  * 初始化执行过程中会对主键或者关键字段（必须是 unique 字段）做重复性检查
  * 要求：
@@ -55,7 +55,8 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  * @author swiftech
  * @since 1.1
  */
-public class Initializer implements ApplicationContextAware {
+@Component
+public class Initializer{// implements ApplicationContextAware {
 
     private Logger log = LoggerFactory.getLogger(Initializer.class);
 
@@ -79,12 +80,13 @@ public class Initializer implements ApplicationContextAware {
         initializer.preAssignIdToAllDataFiles(dataFolderPath);
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         initFromFiles();
     }
 
     /**
+     * Pre-assign IDs to all data rows before they are imported.
      * Run in command line mode, not the web mode
      *
      * @param baseDirPath
@@ -129,6 +131,9 @@ public class Initializer implements ApplicationContextAware {
                             System.out.printf("handle line %d%n", rowNum);
                             if (columns.size() < columnCount) {
                                 outBuffer.append("\"").append(IdUtils.makeID(code)).append("\"").append(",");
+                            }
+                            else if (StringUtils.isBlank(columns.get(0))) {
+                                columns.set(0, IdUtils.makeID(code));
                             }
                             String dataRow = WordUtils.joinWordsWithPad(columns, ",", "\"");
                             System.out.println(dataRow);
@@ -197,10 +202,9 @@ public class Initializer implements ApplicationContextAware {
             else {
                 try {
                     initOne(file, rawFileName, aClass);
-
                 } catch (Exception e) {
                     e.printStackTrace();
-                    log.warn(String.format("the class %s must has a non-arg constructor%n", aClass.getName()));
+                    log.warn(String.format("Make sure the class %s doesn't have a non-arg constructor%n", aClass.getName()));
                 }
             }
         }
@@ -214,9 +218,17 @@ public class Initializer implements ApplicationContextAware {
         Class<?> daoClass = Class.forName(daoName);
         if (daoClass == null) {
             log.warn(String.format("Dao class not exist: %s", daoName));
+            return;
         }
+        else {
+            log.info("Dao class: " + daoClass);
+        }
+
+        Object daoBean = this.applicationContext.getBean(daoClass);
+
         CrudRepository<BaseIdEntity, String> dao =
-                (CrudRepository<BaseIdEntity, String>) this.applicationContext.getBean(daoClass);
+                (CrudRepository<BaseIdEntity, String>) daoBean;
+        log.info(String.format("Use DAO %s to create entities", dao));
 
         new CsvReader().readCsv(new FileInputStream(file), new CsvReaderHandler() {
             BaseIdEntity entity;
@@ -252,8 +264,9 @@ public class Initializer implements ApplicationContextAware {
         log.info("Initialize data done.");
     }
 
-    @Override
+//    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        System.out.println("### Application Context in Initializer" + applicationContext);
         this.applicationContext = applicationContext;
     }
 

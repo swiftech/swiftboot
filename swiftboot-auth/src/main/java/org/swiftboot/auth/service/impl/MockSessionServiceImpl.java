@@ -9,7 +9,7 @@ import org.swiftboot.auth.service.SessionService;
  * Mock session management for development.
  * No matter what session token provided from caller client, the same session will be used,
  * unless addSession() called with a new mock session.
- * Restart application will invalid the mock session.
+ * Restart application will invalid the mock sessions.
  * TODO
  *
  * @author swiftech
