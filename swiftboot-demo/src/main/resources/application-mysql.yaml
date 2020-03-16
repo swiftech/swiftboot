@@ -25,12 +25,12 @@ logging:
 swiftboot:
   web:
     filter:
-      # 跨域允许的范围
-      corsAllowOrigin: 'localhost'
-      # 允许的头
-      allowHeaders:
-        - sso_token
-        - my_header
+#      # 跨域允许的范围
+#      corsAllowOrigin: 'localhost'
+#      # 允许的头
+#      allowHeaders:
+#        - sso_token
+#        - my_header
     model:
       autoGenerateId: true
       initData: true

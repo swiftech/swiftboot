@@ -21,7 +21,7 @@ logging:
 swiftboot:
   web:
     filter:
-      cors: false
+      cors: true
 #      # 跨域允许的范围
 #      corsAllowOrigin: 'localhost'
 #      # 允许的头
