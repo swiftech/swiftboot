@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -18,7 +15,7 @@ import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.ClasspathResourceUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
-import org.swiftboot.web.SwiftBootConfigBean;
+import org.swiftboot.web.SwiftBootWebConfigBean;
 import org.swiftboot.web.model.dao.GenericDao;
 import org.swiftboot.web.model.entity.BaseIdEntity;
 import org.swiftboot.web.reader.CsvReader;
@@ -66,7 +63,7 @@ public class Initializer implements ApplicationContextAware {
     private Logger log = LoggerFactory.getLogger(Initializer.class);
 
     @Resource
-    private SwiftBootConfigBean swiftBootConfigBean;
+    private SwiftBootWebConfigBean swiftBootConfigBean;
 
     private ApplicationContext applicationContext;
 

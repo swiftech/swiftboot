@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
-import org.swiftboot.web.SwiftBootConfigBean;
+import org.swiftboot.web.SwiftBootWebConfigBean;
 import org.swiftboot.web.model.entity.BaseIdEntity;
 import org.swiftboot.web.model.entity.IdPojo;
 import org.swiftboot.web.model.id.IdGenerator;
@@ -35,7 +35,7 @@ public class EntityIdAspect {
     private Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
 
     @Resource
-    private SwiftBootConfigBean swiftBootConfigBean;
+    private SwiftBootWebConfigBean swiftBootConfigBean;
 
     @Resource
     private IdGenerator<IdPojo> idGenerator;
