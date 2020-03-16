@@ -2,9 +2,6 @@ package org.swiftboot.collections;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
-import org.swiftboot.collections.ClassifyFilter;
-import org.swiftboot.collections.CollectionUtils;
 
 import java.util.*;
 
@@ -20,7 +17,7 @@ public class CollectionUtilsTest {
                 add("list");
             }
         };
-        String[] objects = (String[]) l.toArray(new String[]{});
+        String[] objects = l.toArray(new String[]{});
         for (String object : objects) {
             System.out.println(object);
         }
@@ -29,15 +26,12 @@ public class CollectionUtilsTest {
 
     @Test
     public void testConstructByType() {
-        Assertions.assertDoesNotThrow(new Executable() {
-            @Override
-            public void execute() {
-                List list = CollectionUtils.constructCollectionByType(List.class);
-                Assertions.assertNotNull(list);
+        Assertions.assertDoesNotThrow(() -> {
+            List list = CollectionUtils.constructCollectionByType(List.class);
+            Assertions.assertNotNull(list);
 
-                Set set = CollectionUtils.constructCollectionByType(Set.class);
-                Assertions.assertNotNull(set);
-            }
+            Set set = CollectionUtils.constructCollectionByType(Set.class);
+            Assertions.assertNotNull(set);
         });
     }
 
@@ -87,7 +81,7 @@ public class CollectionUtilsTest {
                 add(new TestBean("a", "a3"));
             }
         };
-        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, Comparator.comparing(TestBean::getValue));
         for (TestBean testBean : testBeans) {
             System.out.println(testBean);
         }
@@ -105,7 +99,7 @@ public class CollectionUtilsTest {
                 add(new TestBean("a", "a3"));
             }
         };
-        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, Comparator.comparing(TestBean::getValue));
         for (TestBean testBean : testBeans) {
             System.out.println(testBean);
         }
@@ -113,7 +107,7 @@ public class CollectionUtilsTest {
 
     @Test
     public void testSortTreeSetCollection() {
-        Set<TestBean> list = new TreeSet<TestBean>((o1, o2) -> o1.getValue().compareTo(o2.getValue())) {
+        Set<TestBean> list = new TreeSet<TestBean>(Comparator.comparing(TestBean::getValue)) {
             {
                 add(new TestBean("b", "b3"));
                 add(new TestBean("b", "b1"));
@@ -123,7 +117,7 @@ public class CollectionUtilsTest {
                 add(new TestBean("a", "a3"));
             }
         };
-        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, (o1, o2) -> o1.getValue().compareTo(o2.getValue()));
+        Collection<TestBean> testBeans = CollectionUtils.sortCollection(list, Comparator.comparing(TestBean::getValue));
         for (TestBean testBean : testBeans) {
             System.out.println(testBean);
         }
