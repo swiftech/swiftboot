@@ -16,6 +16,7 @@
 * 主键UUID自动生成机制。
 * 企业 Web 开发常用的工具类和集合类。
 * 实现了常见的服务（例如 Redis服务，用户认证等等），减少不必要的重复开发工作，关注核心业务逻辑。
+* 实现了基本的用户认证（基于 Redis），可用于 Web 和移动应用的用户认证。
 * 常见文档格式转换（开发中）。
 
 
@@ -23,8 +24,8 @@
 * [swiftboot-web](swiftboot-web/): 企业Web应用基础框架
 * [swiftboot-collections](swiftboot-collections/): 企业应用集合类
 * [swiftboot-utils](swiftboot-utils/): 企业应用工具类
-* [swiftboot-service](swiftboot-service/): 企业应用基础服务（试验 experimental）
-* [swiftboot-auth](swiftboot-auth/): 用户认证服务（试验 experimental）
+* [swiftboot-service](swiftboot-service/): 企业应用基础服务
+* [swiftboot-auth](swiftboot-auth/): 用户认证服务
 * [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验 experimental）
 * [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中 development）
 * [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
@@ -32,7 +33,13 @@
 
 ### 发布
 
-2020-02-02 1.1 release
+1.1.1 release (2020-03-15)
+* bug 修复
+* 依赖库升级
+* 新增 OnlyNumber 校验
+* 重构代码
+
+1.1 release (2020-02-02) 
 * 新增 `swiftboot-service` 和 `swiftboot-auth` 模块，提供常用的服务和简单的用户认证机制
 * 新增输入日志多语言化
 * 优化自动填充对象
@@ -41,11 +48,6 @@
 * 修复了很多bug
 * 完善 demo 项目
 
-2019-09-08 1.0.14 release
-* 新增了一些工具类
-* 升级了依赖的库
-* 重构一些代码以及更新文档
-* 重构了Demo
 
 [完整记录](changelog.md)
 
