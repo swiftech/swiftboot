@@ -9,6 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 /**
  *
  * @author swiftech
+ * @since 1.1.1
  */
 public class OnlyNumberValidator implements ConstraintValidator<OnlyNumber, String> {
 

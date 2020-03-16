@@ -15,6 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * 字符串中全部都是数字
  *
  * @author swiftech
+ * @since 1.1.1
  */
 @Documented
 @Constraint(validatedBy = {ContainsSymbolValidator.class})
