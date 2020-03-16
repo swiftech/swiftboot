@@ -6,23 +6,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.ClasspathResourceUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
 import org.swiftboot.web.SwiftBootConfigBean;
+import org.swiftboot.web.model.dao.GenericDao;
 import org.swiftboot.web.model.entity.BaseIdEntity;
 import org.swiftboot.web.reader.CsvReader;
 import org.swiftboot.web.reader.CsvReaderHandler;
 import org.swiftboot.web.util.SpringPackageUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +39,6 @@ import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 /**
- * [Experimental]
  * 从 CSV 文件中初始化数据库，文件名对应实体类名，CSV 中的字段对应实体类的属性变量名
  * 初始化执行过程中会对主键或者关键字段（必须是 unique 字段）做重复性检查
  * 要求：
@@ -55,8 +61,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  * @author swiftech
  * @since 1.1
  */
-@Component
-public class Initializer{// implements ApplicationContextAware {
+public class Initializer implements ApplicationContextAware {
 
     private Logger log = LoggerFactory.getLogger(Initializer.class);
 
@@ -64,6 +69,20 @@ public class Initializer{// implements ApplicationContextAware {
     private SwiftBootConfigBean swiftBootConfigBean;
 
     private ApplicationContext applicationContext;
+
+    @Resource
+    protected PlatformTransactionManager txManager;
+
+    @Resource
+    private EntityManager entityManager;
+
+    @Resource
+    private GenericDao genericDao;
+//
+//    @Resource
+//    private EntityManagerFactory entityManagerFactory;
+//
+//    private JpaRepositoryFactory jpaRepositoryFactory;
 
     /**
      * 在数据文件中预生成ID， 运行带有一个参数：读取和写入 CSV 文件的目录路径
@@ -80,19 +99,18 @@ public class Initializer{// implements ApplicationContextAware {
         initializer.preAssignIdToAllDataFiles(dataFolderPath);
     }
 
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         initFromFiles();
     }
 
     /**
-     * Pre-assign IDs to all data rows before they are imported.
      * Run in command line mode, not the web mode
      *
      * @param baseDirPath
      */
     public void preAssignIdToAllDataFiles(String baseDirPath) {
-        System.out.println("Try to pre-assign id to all csv files under: " + baseDirPath);
+        System.out.printf("Try to pre-assign id to all csv files under: %s%n", baseDirPath);
         File baseDir = new File(baseDirPath);
         if (!baseDir.exists() || !baseDir.isDirectory()) {
             System.out.println(String.format("Not exists or not a directory: %s", baseDir.getName()));
@@ -205,6 +223,7 @@ public class Initializer{// implements ApplicationContextAware {
                 } catch (Exception e) {
                     e.printStackTrace();
                     log.warn(String.format("Make sure the class %s doesn't have a non-arg constructor%n", aClass.getName()));
+                    break;
                 }
             }
         }
@@ -224,49 +243,64 @@ public class Initializer{// implements ApplicationContextAware {
             log.info("Dao class: " + daoClass);
         }
 
-        Object daoBean = this.applicationContext.getBean(daoClass);
+//        Object daoBean = this.applicationContext.getBean(daoClass);
+//
+//        CrudRepository<BaseIdEntity, String> dao =
+//                (CrudRepository<BaseIdEntity, String>) daoBean;
+//        log.info(String.format("Use DAO %s to create entities", dao));
 
-        CrudRepository<BaseIdEntity, String> dao =
-                (CrudRepository<BaseIdEntity, String>) daoBean;
-        log.info(String.format("Use DAO %s to create entities", dao));
-
-        new CsvReader().readCsv(new FileInputStream(file), new CsvReaderHandler() {
-            BaseIdEntity entity;
-
+        TransactionTemplate transactionTemplate = new TransactionTemplate(txManager);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void onTitle(List<String> titles) {
-
-            }
-
-            @Override
-            public void onRow(int rowNum, List<String> columns) {
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                FileInputStream fileInputStream = null;
                 try {
-                    entity = (BaseIdEntity) aClass.getDeclaredConstructor().newInstance();
+                    fileInputStream = new FileInputStream(file);
+                    new CsvReader().readCsv(fileInputStream, new CsvReaderHandler() {
+                        private BaseIdEntity entity;
+
+                        @Override
+                        public void onTitle(List<String> titles) {
+
+                        }
+
+                        @Override
+                        public void onRow(int rowNum, List<String> columns) {
+                            try {
+                                entity = (BaseIdEntity) aClass.getDeclaredConstructor().newInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onCell(int colNum, String columnName, String cellValue) {
+                            try {
+                                BeanUtils.forceSetPropertyFromString(entity, columnName, cellValue);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onRowFinished(int rowNow) {
+//                            entityManager.persist(entity);
+//                dao.save(entity);
+                            genericDao.saveEntity(entity);
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
-            }
-
-            @Override
-            public void onCell(int colNum, String columnName, String cellValue) {
-                try {
-                    BeanUtils.forceSetPropertyFromString(entity, columnName, cellValue);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onRowFinished(int rowNow) {
-                dao.save(entity);
             }
         });
-        log.info("Initialize data done.");
+
+        log.info("Initialize data of one table done.");
     }
 
-//    @Override
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        System.out.println("### Application Context in Initializer" + applicationContext);
         this.applicationContext = applicationContext;
     }
 
