@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.annotation.Resource;
 
 /**
- * @author Allen 2019-03-05
+ * @author swiftech 2019-03-05
  **/
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration({"/error_code_test.xml"})

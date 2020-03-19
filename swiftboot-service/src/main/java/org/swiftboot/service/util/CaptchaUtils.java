@@ -3,7 +3,7 @@ package org.swiftboot.service.util;
 import java.util.Random;
 
 /**
- * @author Allen 2019-01-18
+ * @author swiftech 2019-01-18
  **/
 public class CaptchaUtils {
 

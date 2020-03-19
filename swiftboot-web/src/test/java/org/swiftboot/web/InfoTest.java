@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.swiftboot.web.command.BasePopulateCommand;
 
 /**
- * allen
+ * @author swiftech
  */
 public class InfoTest {
 

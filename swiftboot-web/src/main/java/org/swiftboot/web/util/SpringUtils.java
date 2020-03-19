@@ -4,7 +4,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 
 /**
- * @author Allen 2019-02-10
+ * @author swiftech 2019-02-10
  **/
 public class SpringUtils {
 

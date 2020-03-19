@@ -1,4 +1,4 @@
-# swiftboot-auth（试验）
+# swiftboot-auth
 提供企业开发中的基本的用户认证功能（1.1版本加入）
 
 ### 特性
@@ -14,7 +14,7 @@
 <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-auth</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
 </dependency>
 
 ```

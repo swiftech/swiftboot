@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github.swiftech</groupId>
             <artifactId>swiftboot-utils</artifactId>
-            <version>${swiftboot.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

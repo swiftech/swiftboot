@@ -3,7 +3,7 @@ package org.swiftboot.util.constant;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
- * @author Allen 2019-05-22
+ * @author swiftech 2019-05-22
  **/
 public class FileConstants {
 

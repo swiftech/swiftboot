@@ -8,7 +8,7 @@ import org.swiftboot.collections.CollectionUtilsTest.TestBean;
 import java.util.*;
 
 /**
- * allen
+ * @author swiftech
  */
 public class ClassifierTest {
     List<TestBean> list = null;

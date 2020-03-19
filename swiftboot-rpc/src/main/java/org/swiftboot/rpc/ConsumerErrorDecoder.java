@@ -16,7 +16,7 @@ import java.util.Map;
  * 转换服务提供者因异常返回的错误信息为通用的异常，下一步由 ExceptionProcessor 处理转换后的异常。
  * 依赖于 hibernate-validator 框架
  *
- * @author Allen 2019-02-14
+ * @author swiftech 2019-02-14
  * @see org.swiftboot.web.exception.ExceptionProcessor
  **/
 @Component

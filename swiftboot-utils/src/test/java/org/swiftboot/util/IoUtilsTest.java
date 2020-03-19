@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.InputStream;
 
 /**
- * @author Allen 2019-03-26
+ * @author swiftech 2019-03-26
  **/
 public class IoUtilsTest {
 
