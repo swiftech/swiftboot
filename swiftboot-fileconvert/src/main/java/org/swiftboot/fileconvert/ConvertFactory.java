@@ -1,10 +1,7 @@
 package org.swiftboot.fileconvert;
 
 import org.apache.commons.collections4.map.MultiKeyMap;
-import org.swiftboot.fileconvert.impl.Html2PdfConvert;
-import org.swiftboot.fileconvert.impl.Pdf2ImageConvert;
-import org.swiftboot.fileconvert.impl.Word2ImageConvert;
-import org.swiftboot.fileconvert.impl.WordDocx2PdfConvert;
+import org.swiftboot.fileconvert.impl.*;
 import org.swiftboot.util.constant.FileConstants;
 
 /**
@@ -48,6 +45,9 @@ public class ConvertFactory {
             else {
                 throw new RuntimeException("输出文件格式不支持: " + target.getFileType());
             }
+        }
+        else if ("jpg".equals(source.getFileType())) {
+            return new Image2ImageConvert();
         }
         else {
             throw new RuntimeException("输入文件格式不支持: " + source.getFileType());

@@ -54,7 +54,7 @@ public class SessionServiceRedisImpl implements SessionService {
     @Override
     public void addSession(String token, Session session) throws RuntimeException {
         if (isBlank(token) || session == null) {
-            throw new RuntimeException("会话参数无效");
+            throw new RuntimeException("Params for session not provided");
         }
         try {
             // Session 中的超时时间覆盖配置中的超时时间
@@ -65,28 +65,39 @@ public class SessionServiceRedisImpl implements SessionService {
             }
             else {
                 if (session.getExpireTime() <= 0) {
+                    // session 没有超时时间
                     session.setExpireTime(null);
                 }
             }
-            byte[] bytes = mapper.writeValueAsBytes(session);
-            try (Jedis jedis = redisService.getJedis()) {
-                if (!isBlank(session.getGroup())) {
-                    jedis.hset(session.getGroup(), token, new String(bytes));// group -> token ->  会话
-                }
-                else {
-                    if (StringUtils.isNotBlank(config.getSession().getGroup())) {
-                        jedis.hset(config.getSession().getGroup(), token, new String(bytes));// group -> token ->  会话
-                    }
-                    else {
-                        jedis.set(token.getBytes(), bytes); // token ->  会话
-                    }
-                }
-            }
+            this.saveSession(token, session);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
         }
     }
+
+    private void saveSession(String token, Session session) throws JsonProcessingException {
+        byte[] bytes = mapper.writeValueAsBytes(session);
+        long ret;
+        try (Jedis jedis = redisService.getJedis()) {
+            if (isBlank(session.getGroup())) {
+                if (StringUtils.isNotBlank(config.getSession().getGroup())) {
+                    ret = jedis.hset(config.getSession().getGroup(), token, new String(bytes));// group -> token ->  会话
+                    log.info(String.format("Session %s %s", token,
+                            ret == 0 ? "updated" : "created"));
+                }
+                else {
+                    jedis.set(token.getBytes(), bytes); // token ->  会话
+                }
+            }
+            else {
+                ret = jedis.hset(session.getGroup(), token, new String(bytes));// group -> token ->  会话
+                log.info(String.format("Session %s %s", token,
+                        ret == 0 ? "updated" : "created"));
+            }
+        }
+    }
+
 
     @Override
     public Session getSession(String token) {
@@ -181,12 +192,24 @@ public class SessionServiceRedisImpl implements SessionService {
         if (session == null) {
             throw new ErrMessageException(ErrorCodeSupport.CODE_USER_SESSION_NOT_EXIST);
         }
-        else if (session.getExpireTime() != null && session.getExpireTime() < System.currentTimeMillis()) {
-            this.removeSession(group, token);
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
+        if (session.getExpireTime() != null) {
+            if (session.getExpireTime() < System.currentTimeMillis()) {
+                this.removeSession(group, token);
+                throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
+            }
+            else {
+                // 更新超时时间
+                session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000));
+                try {
+                    this.saveSession(token, session);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
+                }
+                return session;
+            }
         }
-        else {
-            return session;
-        }
+        return session;
     }
+
 }

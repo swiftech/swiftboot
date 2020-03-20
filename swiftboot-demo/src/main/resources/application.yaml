@@ -43,5 +43,6 @@ swiftboot:
     enabled: true
     session:
       type: redis
-      expireTime: 1800
+      group: swiftboot-session
+      expireTime: 300
       tokenKey: swiftboot_token
