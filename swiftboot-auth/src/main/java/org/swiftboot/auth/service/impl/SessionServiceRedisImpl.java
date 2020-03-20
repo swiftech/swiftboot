@@ -3,6 +3,7 @@ package org.swiftboot.auth.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.auth.SwiftbootAuthConfigBean;
@@ -83,8 +84,9 @@ public class SessionServiceRedisImpl implements SessionService {
             if (isBlank(session.getGroup())) {
                 if (StringUtils.isNotBlank(config.getSession().getGroup())) {
                     ret = jedis.hset(config.getSession().getGroup(), token, new String(bytes));// group -> token ->  会话
-                    log.info(String.format("Session %s %s", token,
-                            ret == 0 ? "updated" : "created"));
+                    log.debug(String.format("Session %s %s, expired at %s", token,
+                            ret == 0 ? "updated" : "created",
+                            session.getExpireTime() == null ? "never" : DateFormatUtils.format(session.getExpireTime(), "yyyy-MM-dd HH:mm:ss")));
                 }
                 else {
                     jedis.set(token.getBytes(), bytes); // token ->  会话
@@ -92,12 +94,12 @@ public class SessionServiceRedisImpl implements SessionService {
             }
             else {
                 ret = jedis.hset(session.getGroup(), token, new String(bytes));// group -> token ->  会话
-                log.info(String.format("Session %s %s", token,
-                        ret == 0 ? "updated" : "created"));
+                log.debug(String.format("Session %s %s, expired at %s", token,
+                        ret == 0 ? "updated" : "created",
+                        session.getExpireTime() == null ? "never" : DateFormatUtils.format(session.getExpireTime(), "yyyy-MM-dd HH:mm:ss")));
             }
         }
     }
-
 
     @Override
     public Session getSession(String token) {
@@ -192,13 +194,15 @@ public class SessionServiceRedisImpl implements SessionService {
         if (session == null) {
             throw new ErrMessageException(ErrorCodeSupport.CODE_USER_SESSION_NOT_EXIST);
         }
+
         if (session.getExpireTime() != null) {
             if (session.getExpireTime() < System.currentTimeMillis()) {
+                // Delete session if it is already timeout
                 this.removeSession(group, token);
                 throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
             }
             else {
-                // 更新超时时间
+                // Update expire time if there is expire time in session
                 session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000));
                 try {
                     this.saveSession(token, session);
