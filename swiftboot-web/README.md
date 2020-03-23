@@ -41,7 +41,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>1.0.14</version>
+    <version>1.2</version>
   </dependency>
   ```
 
@@ -263,3 +263,14 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
     private String description;
   }
   ```
+
+
+### 其他
+* 开启 CORS 跨域
+```yaml
+swiftboot:
+  web:
+    filter:
+      cors: true
+```
+> 开启后跨域访问不受限制，仅用于开发调试，生产环境如果需要跨域访问则必须自行配置 Spring 的跨域过滤器 `CorsFilter`
