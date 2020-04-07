@@ -7,15 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * allen
+ * @author swiftech
  */
 class PropertiesUtilsTest {
 
     @Test
     void filterPropertiesByLocale() {
-        File[] resourceFiles = ClasspathResourceUtils.getResourceFilesForce(R.class, ".properties");
+//        File[] resourceFiles = ClasspathResourceUtils.getResourceFilesForce(R.class, ".properties");
+        File[] resourceFiles = ClasspathResourceUtils.getResourceFiles("", ".properties");
         if (resourceFiles == null || resourceFiles.length == 0) {
-            throw new RuntimeException(String.format("Loading resources aborted, unable to find any resource files with %s", R.class));
+//            throw new RuntimeException(String.format("Loading resources aborted, unable to find any resource files with %s", R.class));
+            throw new RuntimeException(String.format("Loading resources aborted, unable to find any resource files"));
         }
         List<File> resourceFileList = Arrays.asList(resourceFiles);
         System.out.println("resourceFileList: " + resourceFileList.size());
