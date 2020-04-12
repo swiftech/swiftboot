@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.demo.command.AdminUserSigninCommand;
+import org.swiftboot.demo.command.AdminUserSignoutCommand;
 import org.swiftboot.demo.result.AdminUserSigninResult;
+import org.swiftboot.demo.result.AdminUserSignoutResult;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
 import org.swiftboot.shiro.SwiftbootShiroConfigBean;
@@ -42,7 +44,7 @@ public class AdminAuthController {
 
     @ApiOperation(notes = "Admin user signin", value = "Admin user signin")
     @RequestMapping(value = "signin", method = RequestMethod.POST)
-    public HttpResponse<AdminUserSigninResult> adminUserSign(
+    public HttpResponse<AdminUserSigninResult> adminUserSignin(
             @RequestBody AdminUserSigninCommand command,
             HttpServletResponse response) {
         log.info("> /admin/auth/signin");
@@ -55,5 +57,18 @@ public class AdminAuthController {
         return new HttpResponse<>(adminUserResult);
     }
 
-
+    @ApiOperation(notes = "Admin user signout", value = "Admin user signout")
+    @RequestMapping(value = "signout", method = RequestMethod.POST)
+    public HttpResponse<AdminUserSignoutResult> adminUserSignout(
+            @RequestBody AdminUserSignoutCommand command,
+            HttpServletResponse response) {
+        log.info("> /admin/auth/signout");
+        AdminUserSignoutResult adminUserResult = adminUserService.adminUserSignout(command);
+        String tokenKey = shiroConfigBean.getCookie().getName();
+        Cookie cookie  = new Cookie(tokenKey, null);
+        cookie.setDomain(shiroConfigBean.getCookie().getDomain());
+        cookie.setMaxAge(shiroConfigBean.getCookie().getMaxAge());
+        response.addCookie(cookie);
+        return new HttpResponse<>(adminUserResult);
+    }
 }

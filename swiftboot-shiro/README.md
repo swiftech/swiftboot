@@ -1,8 +1,8 @@
 # SwiftBoot-shiro （开发中）
 
 SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授权（Authorization）
-
-配置好了 Shiro 相关的类, 并且实现了一个通用的 Realm 类, 它可以同时处理不同的帐号体系的认证和授权.
+只需要简单的配置和少量的代码即可继承 Shiro 进行用户认证和权限控制。
+它实现了一个通用的 Realm 类, 可以同时处理不同的帐号体系的认证和授权。
 
 ---
 

@@ -3,6 +3,7 @@ package org.swiftboot.demo.service;
 import org.swiftboot.demo.command.AdminUserCreateCommand;
 import org.swiftboot.demo.command.AdminUserSaveCommand;
 import org.swiftboot.demo.command.AdminUserSigninCommand;
+import org.swiftboot.demo.command.AdminUserSignoutCommand;
 import org.swiftboot.demo.result.*;
 import org.swiftboot.web.command.IdListCommand;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,13 @@ public interface AdminUserService {
      */
     AdminUserSigninResult adminUserSignin(AdminUserSigninCommand command);
 
+    /**
+     * Admin user signin
+     *
+     * @param command
+     * @return
+     */
+    AdminUserSignoutResult adminUserSignout(AdminUserSignoutCommand command);
 
     /**
      * 创建管理员

@@ -16,6 +16,7 @@ import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.demo.command.AdminUserCreateCommand;
 import org.swiftboot.demo.command.AdminUserSaveCommand;
 import org.swiftboot.demo.command.AdminUserSigninCommand;
+import org.swiftboot.demo.command.AdminUserSignoutCommand;
 import org.swiftboot.demo.model.dao.AdminUserDao;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 import org.swiftboot.demo.result.*;
@@ -78,6 +79,13 @@ public class AdminUserServiceImpl implements AdminUserService {
             throw new ErrMessageException(ErrorCodeSupport.CODE_SIGNIN_FAIL, e.getMessage());
         }
         return ret;
+    }
+
+    @Override
+    public AdminUserSignoutResult adminUserSignout(AdminUserSignoutCommand command) {
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
+        return new AdminUserSignoutResult();
     }
 
     /**

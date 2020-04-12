@@ -16,8 +16,15 @@ logging:
     root: INFO
     org.swiftboot: DEBUG
     org.apache.shiro: DEBUG
+shiro:
+  enabled: true
+  annotations:
+    enabled: true
 swiftboot:
+  auth:
+    enabled: false
   shiro:
+    enabled: true
     cookie:
       domain: localhost
       path: /

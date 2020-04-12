@@ -25,6 +25,7 @@ logging:
 swiftboot:
   web:
     filter:
+      cors: true
 #      # 跨域允许的范围
 #      corsAllowOrigin: 'localhost'
 #      # 允许的头
@@ -49,5 +50,5 @@ swiftboot:
     enabled: true
     session:
       type: redis
-      expireTime: 1800
       tokenKey: swiftboot_token
+      expiresIn: 0
