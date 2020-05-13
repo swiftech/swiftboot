@@ -2,6 +2,8 @@ package org.swiftboot.shiro;
 
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.SessionListener;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.swiftboot.service.service.RedisService;
+import org.swiftboot.shiro.constant.ShiroSessionStorageType;
 import org.swiftboot.shiro.realm.UserAuthorizingRealm;
 import org.swiftboot.shiro.service.ShiroSecurityService;
 import org.swiftboot.shiro.service.impl.ShiroSecurityServiceImpl;
@@ -64,7 +67,12 @@ public class SwiftbootShiroConfig {
         DefaultWebSessionManager ret = new DefaultWebSessionManager();
         ret.setSessionIdCookieEnabled(true);
         ret.setSessionIdUrlRewritingEnabled(false);
-        ret.setSessionDAO(shiroSessionRedisDao());
+        if (ShiroSessionStorageType.redis == swiftbootShiroConfigBean.getSession().getStorageType()){
+            ret.setSessionDAO(shiroSessionRedisDao());
+        }
+        else {
+            ret.setSessionDAO(shiroSessionMemoryDao());
+        }
         ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000);
         ret.setSessionIdCookie(sessionIdCookie());
         ret.setSessionListeners(new ArrayList<SessionListener>() {
@@ -89,8 +97,15 @@ public class SwiftbootShiroConfig {
 
     @Bean
     @ConditionalOnBean(RedisService.class)
-    public ShiroSessionRedisDao shiroSessionRedisDao() {
+    @ConditionalOnProperty(value = "swiftboot.shiro.session.type", havingValue = "redis")
+    public SessionDAO shiroSessionRedisDao() {
         return new ShiroSessionRedisDao();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(SessionDAO.class)
+    public SessionDAO shiroSessionMemoryDao() {
+        return new MemorySessionDAO();
     }
 
     @Bean
@@ -120,7 +135,7 @@ public class SwiftbootShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager());
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinition.getFilterChainMap());
         shiroFilterFactoryBean.setFilters(filterMap);
-        shiroFilterFactoryBean.setLoginUrl("/login");
+        shiroFilterFactoryBean.setLoginUrl(swiftbootShiroConfigBean.getLoginUrl());
         return shiroFilterFactoryBean;
     }
 

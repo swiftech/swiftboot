@@ -26,12 +26,6 @@ swiftboot:
   web:
     filter:
       cors: true
-#      # 跨域允许的范围
-#      corsAllowOrigin: 'localhost'
-#      # 允许的头
-#      allowHeaders:
-#        - sso_token
-#        - my_header
     model:
       autoGenerateId: true
       initData: true
@@ -49,6 +43,6 @@ swiftboot:
   auth:
     enabled: true
     session:
-      type: redis
+      storageType: redis
       tokenKey: swiftboot_token
       expiresIn: 0

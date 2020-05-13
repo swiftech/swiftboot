@@ -1,8 +1,8 @@
 # SwiftBoot-shiro （开发中）
 
 SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授权（Authorization）
-只需要简单的配置和少量的代码即可继承 Shiro 进行用户认证和权限控制。
-它实现了一个通用的 Realm 类, 可以同时处理不同的帐号体系的认证和授权。
+只需要简单的配置和少量的代码即可集成 Shiro 进行用户认证和权限控制。
+它实现了一个通用的 `Realm` 类, 可以同时处理不同的帐号体系的认证和授权。
 
 ---
 
@@ -13,6 +13,31 @@ SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授
 
 
 ### 常规
+* 启用对于 Shiro 的支持
+
+```yaml
+swiftboot:
+  shiro:
+    enabled: true
+```
+
+* 设置会话管理
+
+```yaml
+swiftboot:
+  shiro:
+    session:
+      storageType: redis
+      timeout: 1800
+      forceDisableRedirect: false
+      redisGroup: shiro-session
+```
+    
+  * storageType: 会话存储方式，可选项为 `memory`（默认） 或者 `redis`，如果需要用 redis 来存储，那么需要配置 redis 服务器
+  * timeout: 会话超时时间,单位秒,默认`1800`秒即`30`分钟
+  * redisGroup: Redis 分组名称,默认为 `swiftboot-shiro-session`
+
+
 * 定义用户（认证）实体类，实现 `UserEntityStub` 接口，
 
 
@@ -47,13 +72,13 @@ try {
     throw new ErrMessageException(ErrorCodeSupport.CODE_SIGNIN_FAIL, e.getMessage());
 }
 ```
-注意 `UserNamePasswordToken` 第三个参数必须和前面认证实现的名字一致，否则无法找到对应的认证类.
+注意: `UserNamePasswordToken` 第三个参数必须和前面认证实现的名字一致，否则无法找到对应的认证类.
 
 
 
 ### 授权
 
-* 实现 `UserPermissionViewDaoStub` 接口
+* 实现 `UserPermissionDaoStub` 接口的 `findPermissionsByLoginName(String loginName)` 方法，通过用户登录名获取其所以的权限对象。可以用表连接查询，也可以用视图来实现，或者通过缓存来获取。
 
 
 

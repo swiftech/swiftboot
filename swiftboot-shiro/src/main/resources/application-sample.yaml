@@ -1,11 +1,16 @@
+shiro:
+  enabled: true
+  annotations:
+    enabled: true
 swiftboot:
   shiro:
+    enabled: true
     cookie:
       domain: localhost
       path: /
       name: swiftboot_shiro_token
       maxAge: 1800
     session:
+      storageType: redis
       timeout: 1800
-      forceDisableRedirect: false
       redisGroup: shiro-session

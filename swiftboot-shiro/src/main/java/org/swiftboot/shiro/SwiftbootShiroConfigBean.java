@@ -21,7 +21,11 @@ public class SwiftbootShiroConfigBean {
     @NestedConfigurationProperty
     private ShiroSessionConfigBean session = new ShiroSessionConfigBean();
 
-    private String loginUrl;
+    /**
+     * 登录 URL，在认证失败的时候会跳转
+     */
+    private String loginUrl = "/login";
+
 
     private String returnUrl;
 

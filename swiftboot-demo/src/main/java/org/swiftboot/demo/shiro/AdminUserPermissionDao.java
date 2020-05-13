@@ -7,5 +7,6 @@ import org.swiftboot.shiro.model.dao.UserPermissionDaoStub;
 /**
  * @author swiftech
  */
-public interface AdminUserPermissionViewDao extends CrudRepository<AdminUserPermissionView, String>, UserPermissionDaoStub<AdminUserPermissionView> {
+public interface AdminUserPermissionDao
+        extends CrudRepository<AdminUserPermissionView, String>, UserPermissionDaoStub<AdminUserPermissionView> {
 }

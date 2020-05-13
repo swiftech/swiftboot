@@ -14,7 +14,7 @@ import java.util.List;
 public interface UserPermissionDaoStub<T extends PermissionEntityStub> {
 
     /**
-     * 通过用户查找他的权限列表
+     * 通过用户登录名查找他的权限列表
      *
      * @param loginName
      * @return

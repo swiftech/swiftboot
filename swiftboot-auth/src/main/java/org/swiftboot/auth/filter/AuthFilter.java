@@ -51,7 +51,9 @@ public class AuthFilter extends OncePerRequestFilter {
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
                 String key = headerNames.nextElement();
-                log.debug(String.format("  %s = %s", key, request.getHeader(key)));
+                if (log.isDebugEnabled()) {
+                    log.debug(String.format("  %s = %s", key, request.getHeader(key)));
+                }
             }
         }
 
@@ -62,7 +64,9 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         if (isBlank(token)) {
-            log.warn(String.format("No token '%s' in the Header or Cookie", tokenKey));
+            if (log.isWarnEnabled()) {
+                log.warn(String.format("No token '%s' in the Header or Cookie", tokenKey));
+            }
             this.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
         }
         else {

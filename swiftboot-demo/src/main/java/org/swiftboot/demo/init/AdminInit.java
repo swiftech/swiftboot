@@ -3,7 +3,12 @@ package org.swiftboot.demo.init;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.swiftboot.demo.SwiftbootDemoConfigBean;
 import org.swiftboot.demo.config.PermissionConfigBean;
 import org.swiftboot.demo.config.RoleConfigBean;
@@ -19,10 +24,12 @@ import java.util.*;
 
 /**
  * 初始化管理用户数据, 例如角色, 权限等
+ * 依赖于 Swiftboot-Shiro 模块并且必须启用
  *
  * @author swiftech
  */
 @Component
+@ConditionalOnProperty(value = "swiftboot.shiro.enabled", havingValue = "true")
 public class AdminInit {
 
     private Logger log = LoggerFactory.getLogger(AdminInit.class);
@@ -53,9 +60,12 @@ public class AdminInit {
     @Resource
     private PasswordManager passwordManager;
 
+    @Resource
+    protected PlatformTransactionManager txManager;
+
     private void createPermissionAndSubPermissions(AdminPermissionEntity parent, PermissionConfigBean permConfig) {
         if (parent == null) {
-            throw new RuntimeException("必须有父权限");
+            throw new RuntimeException(String.format("%s 必须有父权限", permConfig.getCode()));
         }
         if (StringUtils.isAnyBlank(permConfig.getCode(), permConfig.getDesc())) {
             throw new RuntimeException(String.format("权限 %s 配置缺少", permConfig.getCode()));
@@ -98,10 +108,24 @@ public class AdminInit {
     public void init() {
         log.info("初始化用户权限角色(RBAC)数据");
 
-        // 权限
+        TransactionTemplate transactionTemplate = new TransactionTemplate(txManager);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                doInit();
+            }
+        });
+    }
+
+    private void doInit() {
+
+        // 权限（至少有一个所有权限）
         Optional<AdminPermissionEntity> optRootPerm = adminPermissionDao.findByPermCode("*");
         AdminPermissionEntity rootPermission = null;
-        if (!optRootPerm.isPresent()) {
+        if (optRootPerm.isPresent()) {
+            rootPermission = optRootPerm.get();
+        }
+        else {
             rootPermission = new AdminPermissionEntity();
             rootPermission.setPermCode("*");
             rootPermission.setPermDesc("所有权限");
