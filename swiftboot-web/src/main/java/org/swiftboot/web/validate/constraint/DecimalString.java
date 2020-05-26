@@ -1,6 +1,6 @@
 package org.swiftboot.web.validate.constraint;
 
-import org.swiftboot.web.validate.constraintvalidator.OnlyNumberValidator;
+import org.swiftboot.web.validate.constraintvalidator.DecimalStringValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,19 +12,18 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 字符串中全部都是数字（不包括浮点数）
+ * 浮点数字符串
  *
  * @author swiftech
- * @since 1.1.1
+ * @since 1.2
  */
 @Documented
-@Constraint(validatedBy = {OnlyNumberValidator.class})
+@Constraint(validatedBy = {DecimalStringValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
-public @interface OnlyNumber {
+public @interface DecimalString {
 
-
-    String message() default "{org.swiftboot.constraints.OnlyNumber.message}";
+    String message() default "{org.swiftboot.constraints.DecimalString.message}";
 
     Class<?>[] groups() default {};
 
