@@ -20,12 +20,14 @@
         axios.get(a, cfg)
             .then(function (response) {
                 console.log(response);
-                resultElement.innerHTML = response.status
-                    + '  ' + response.data.code
-                    + '  ' + (response.data.msg? response.data.msg: '');
+                resultElement.innerHTML = 'The CORS works!'
+                    + '<br/>  Http Code: ' + response.status
+                    + '<br/>  Code: ' + response.data.code
+                    + '<br/>  Message: ' + (response.data.msg? response.data.msg: '');
             })
             .catch(function (error) {
-                resultElement.innerHTML = error;
+                resultElement.innerHTML = error
+                + '<br/>  Maybe the CORS is not appropriate configured';
             });
     }
 </script>

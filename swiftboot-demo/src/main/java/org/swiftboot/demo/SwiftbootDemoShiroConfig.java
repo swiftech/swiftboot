@@ -2,6 +2,7 @@ package org.swiftboot.demo;
 
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.2
  */
 @Configuration
+@ConditionalOnProperty(value = "swiftboot.shiro.enabled", havingValue = "true")
 public class SwiftbootDemoShiroConfig {
 
     @Bean

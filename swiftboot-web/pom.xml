@@ -13,9 +13,9 @@
     <description>企业Web应用基础框架</description>
 
     <properties>
-        <spring.version>5.1.13.RELEASE</spring.version>
-        <spring.boot.version>2.1.12.RELEASE</spring.boot.version>
-        <spring.data.version>2.1.15.RELEASE</spring.data.version>
+        <spring.version>5.1.14.RELEASE</spring.version>
+        <spring.boot.version>2.1.13.RELEASE</spring.boot.version>
+        <spring.data.version>2.1.16.RELEASE</spring.data.version>
         <servlet.version>3.1.0</servlet.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.text.version>1.8</commons.text.version>
@@ -67,6 +67,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -175,6 +180,13 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet.version}</version>
             <scope>compile</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring.data.version}</version>
         </dependency>
 
         <!--测试-->

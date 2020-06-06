@@ -2,6 +2,8 @@ package org.swiftboot.shiro;
 
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.SessionListener;
+import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
@@ -17,10 +19,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.swiftboot.service.service.RedisService;
+import org.swiftboot.shiro.constant.ShiroSessionStorageType;
 import org.swiftboot.shiro.realm.UserAuthorizingRealm;
-import org.swiftboot.shiro.service.PasswordManager;
 import org.swiftboot.shiro.service.ShiroSecurityService;
-import org.swiftboot.shiro.service.impl.DefaultPasswordManager;
 import org.swiftboot.shiro.service.impl.ShiroSecurityServiceImpl;
 import org.swiftboot.shiro.session.ShiroSessionListener;
 import org.swiftboot.shiro.session.ShiroSessionRedisDao;
@@ -36,19 +37,13 @@ import java.util.Map;
  **/
 @Configuration
 @EnableConfigurationProperties
+@ConditionalOnProperty(value = "swiftboot.shiro.enabled", havingValue = "true")
 public class SwiftbootShiroConfig {
 
     @Resource
     private SwiftbootShiroConfigBean swiftbootShiroConfigBean;
 
     @Bean
-    @ConditionalOnMissingBean(PasswordManager.class)
-    public PasswordManager passwordManager() {
-        return new DefaultPasswordManager();
-    }
-
-    @Bean
-    @ConditionalOnBean(DefaultWebSecurityManager.class)
     AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
         advisor.setSecurityManager(defaultWebSecurityManager());
@@ -72,12 +67,17 @@ public class SwiftbootShiroConfig {
         DefaultWebSessionManager ret = new DefaultWebSessionManager();
         ret.setSessionIdCookieEnabled(true);
         ret.setSessionIdUrlRewritingEnabled(false);
-        ret.setSessionDAO(shiroSessionRedisDao());
+        if (ShiroSessionStorageType.redis == swiftbootShiroConfigBean.getSession().getStorageType()){
+            ret.setSessionDAO(shiroSessionRedisDao());
+        }
+        else {
+            ret.setSessionDAO(shiroSessionMemoryDao());
+        }
         ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000);
         ret.setSessionIdCookie(sessionIdCookie());
-        ret.setSessionListeners(new ArrayList<SessionListener>(){
+        ret.setSessionListeners(new ArrayList<SessionListener>() {
             {
-                add( shiroSessionListener());
+                add(shiroSessionListener());
             }
         });
         return ret;
@@ -97,12 +97,18 @@ public class SwiftbootShiroConfig {
 
     @Bean
     @ConditionalOnBean(RedisService.class)
-    public ShiroSessionRedisDao shiroSessionRedisDao() {
+    @ConditionalOnProperty(value = "swiftboot.shiro.session.type", havingValue = "redis")
+    public SessionDAO shiroSessionRedisDao() {
         return new ShiroSessionRedisDao();
     }
 
     @Bean
-//    @ConditionalOnBean(UserAuthorizingRealm.class)
+    @ConditionalOnMissingBean(SessionDAO.class)
+    public SessionDAO shiroSessionMemoryDao() {
+        return new MemorySessionDAO();
+    }
+
+    @Bean
     ShiroSecurityService shiroSecurityService() {
         return new ShiroSecurityServiceImpl();
     }
@@ -113,8 +119,8 @@ public class SwiftbootShiroConfig {
      * @return
      */
     @Bean
-    @ConditionalOnMissingBean(Realm.class)
-    public UserAuthorizingRealm userAuthorizingRealm() {
+    @ConditionalOnMissingBean
+    public Realm userAuthorizingRealm() {
         return new UserAuthorizingRealm();
     }
 
@@ -129,20 +135,21 @@ public class SwiftbootShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager());
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinition.getFilterChainMap());
         shiroFilterFactoryBean.setFilters(filterMap);
-        shiroFilterFactoryBean.setLoginUrl("/login");
+        shiroFilterFactoryBean.setLoginUrl(swiftbootShiroConfigBean.getLoginUrl());
         return shiroFilterFactoryBean;
     }
 
     //  以下定义是为了 Shiro 的注解生效问题（否则连接口都不能访问404）
     @Bean
     @DependsOn({"lifecycleBeanPostProcessor"})
-    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
+    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
         return advisorAutoProxyCreator;
     }
 
 //    @Bean
+//    @ConditionalOnMissingBean
 //    LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
 //        return new LifecycleBeanPostProcessor();
 //    }

@@ -7,7 +7,7 @@ package org.swiftboot.service.config;
  **/
 public class RedisConfigBean {
 
-    private String host = "localhost";
+    private String host = "";
 
     private int port = 6379;
 

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.swiftboot.web.SwiftBootConfigBean;
+import org.swiftboot.web.SwiftBootWebConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ValidationResult;
 import org.swiftboot.web.validate.ValidationResult.InputError;
@@ -29,7 +29,7 @@ public class ValidationExceptionProcessor {
     private static Logger log = LoggerFactory.getLogger(ValidationExceptionProcessor.class);
 
     @Resource
-    SwiftBootConfigBean swiftBootConfigBean;
+    SwiftBootWebConfigBean swiftBootConfigBean;
 
     /**
      * 处理 Validation 框架抛出的验证异常，在 {@link org.swiftboot.web.validate.ValidateResultAspect} 不生效的时候(在控制器方法没有 BindingResult 参数的时候)做处理。

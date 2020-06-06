@@ -1,9 +1,9 @@
-# swiftboot-auth（试验）
+# swiftboot-auth
 提供企业开发中的基本的用户认证功能（1.1版本加入）
 
 ### 特性
-* 一旦启用， swiftboot-auth 内建的过滤器就会检查请求 header 或 cookie 中是否存在令牌（token）以及令牌对应的会话（session）是否有效，
-令牌的名称用 `swiftboot.auth.session.tokenKey` 来设定，过滤器需要过滤哪些 API 在配置中通过 `FilterRegistrationBean` 注册相应的 URI 来指定
+* 一旦引用了 swiftboot-auth，其内建的过滤器就会检查请求 header 或 cookie 中是否存在令牌（token）以及令牌对应的会话（session）是否有效，
+令牌的名称通过 `swiftboot.auth.session.tokenKey` 来设定，过滤器需要过滤哪些 API 通过在配置 `FilterRegistrationBean` 中注册相应的 URI 来指定（例子请看后面的章节）
 
 * 在实现了用户身份校验之后，生成一个全局唯一的 token（建议用 UUID），调用 `SessionService.addSession(String token, Session session)` 来缓存用户的会话。
 成功之后将 token 值写入到 cookie 中或者返回给客户端，由客户端保存并加入到请求的 header 中。
@@ -14,7 +14,7 @@
 <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-auth</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 </dependency>
 
 ```

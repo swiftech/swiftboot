@@ -20,9 +20,6 @@ public class ContainsNumberValidator implements ConstraintValidator<ContainsNumb
 
     @Override
     public boolean isValid(String pwd, ConstraintValidatorContext constraintValidatorContext) {
-        if (!StringUtils.containsAny(pwd, "1234567890")) {
-            return false;
-        }
-        return true;
+        return StringUtils.containsAny(pwd, "1234567890");
     }
 }

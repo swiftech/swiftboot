@@ -9,8 +9,13 @@ http:
 swiftboot:
   web:
     filter:
-      # 跨域允许的范围
-      cors-allow-origin: '*'
+      cors: true
+#      # 跨域允许的范围
+#      corsAllowOrigin: 'localhost'
+#      # 允许的头
+#      allowHeaders:
+#        - sso_token
+#        - my_header
     model:
       # 是否自动生成实体类的 ID
       autoGenerateId: true

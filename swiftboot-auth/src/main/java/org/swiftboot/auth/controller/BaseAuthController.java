@@ -37,11 +37,14 @@ public class BaseAuthController {
      * @return
      */
     public String fetchUserIdFromSession(String token) {
+        if (StringUtils.isBlank(token)) {
+            throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, "Token is not provided for this request");
+        }
         Session session = sessionService.getSession(token);
         if (session != null) {
             String userId = session.getUserId();
             if (StringUtils.isBlank(userId)) {
-                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User session not exist: %s", token));
+                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User ID not exist in session: %s", token));
             }
             else {
                 return userId;
@@ -60,11 +63,20 @@ public class BaseAuthController {
      * @return
      */
     public String fetchUserIdFromSession(HttpServletRequest request) {
-        String token = request.getHeader(authConfigBean.getSession().getTokenKey());
+        String tokenKey = authConfigBean.getSession().getTokenKey();
+        String token = request.getHeader(tokenKey);
         if (StringUtils.isBlank(token)) {
-            Cookie cookie = WebUtils.getCookie(request, authConfigBean.getSession().getTokenKey());
+            Cookie cookie = WebUtils.getCookie(request, tokenKey);
             if (cookie != null) {
                 token = cookie.getValue();
+                if (StringUtils.isBlank(token)) {
+                    throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN,
+                            String.format("Token '%s' is not provided neither in header nor in cookie for this request", tokenKey));
+                }
+            }
+            else {
+                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN,
+                        String.format("Token '%s' is not provided neither in header nor in cookie for this request", tokenKey));
             }
         }
 
@@ -72,7 +84,7 @@ public class BaseAuthController {
         if (session != null) {
             String userId = session.getUserId();
             if (StringUtils.isBlank(userId)) {
-                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User session not exist: %s", token));
+                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User ID not exist in session: %s", token));
             }
             else {
                 return userId;

@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: swiftboot-demo
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/swiftboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
@@ -9,23 +11,31 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       dialect: org.hibernate.dialect.MySQL8Dialect
-      ddl-auto: create
+      ddl-auto: update
       import_files: import.sql
 logging:
   level:
     root: INFO
     org.swiftboot: DEBUG
     org.apache.shiro: DEBUG
+shiro:
+  enabled: true
+  annotations:
+    enabled: true
 swiftboot:
+  auth:
+    enabled: false
   shiro:
+    enabled: true
+    loginUrl: "/login"
     cookie:
       domain: localhost
       path: /
       name: swiftboot_shiro_token
       maxAge: 300
     session:
+      storageType: memory
       timeout: 300
-      forceDisableRedirect: false
       redisGroup: swiftboot-shiro-session
   demo:
     init:

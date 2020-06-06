@@ -10,7 +10,7 @@ import org.swiftboot.web.config.ValidationResultConfigBean;
  * @author swiftech
  **/
 @ConfigurationProperties("swiftboot.web")
-public class SwiftBootConfigBean {
+public class SwiftBootWebConfigBean {
 
     /**
      * Model 配置

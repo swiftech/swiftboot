@@ -13,7 +13,6 @@ import redis.clients.jedis.Jedis;
 import javax.annotation.Resource;
 import java.io.*;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * 用 Redis 来实现会话的存储（或者说缓存）
@@ -31,22 +30,32 @@ public class ShiroSessionRedisDao extends AbstractSessionDAO {
     @Resource
     private SwiftbootShiroConfigBean config;
 
+    public ShiroSessionRedisDao() {
+        log.info("Store session in Redis");
+    }
+
     @Override
     protected Serializable doCreate(Session session) {
         // 通过 Shiro 的机制生成会话 ID
         Serializable sessionId = generateSessionId(session);
         assignSessionId(session, sessionId);
 
-        log.info(String.format("[%s] Create session for token %s", Thread.currentThread().getId(), sessionId));
+        if (log.isInfoEnabled()) {
+            log.info(String.format("[%s] Create session for token %s", Thread.currentThread().getId(), sessionId));
+        }
         // 将会话存入 Redis, 以会话 ID 作为 key 保存
         this.saveSession(String.valueOf(sessionId), session);
-        log.info("  - " + session);
+        if (log.isInfoEnabled()) {
+            log.info("  - " + session);
+        }
         return sessionId;
     }
 
     @Override
     protected Session doReadSession(Serializable sessionId) {
-        log.debug(String.format("[%s] Read session：%s", Thread.currentThread().getId(), sessionId));
+        if (log.isTraceEnabled()) {
+            log.trace(String.format("[%s] Read session：%s", Thread.currentThread().getId(), sessionId));
+        }
         String token = sessionId.toString();
         try {
             return this.loadSession(token);
@@ -58,9 +67,13 @@ public class ShiroSessionRedisDao extends AbstractSessionDAO {
 
     @Override
     public void update(Session session) throws UnknownSessionException {
-        log.info(String.format("[%s] Update session for %s", Thread.currentThread().getId(), session.getId()));
+        if (log.isTraceEnabled()) {
+            log.trace(String.format("[%s] Update session for %s", Thread.currentThread().getId(), session.getId()));
+        }
         for (Object attributeKey : session.getAttributeKeys()) {
-            log.debug(String.format("  Session attr: %s - %s", attributeKey, session.getAttribute(attributeKey)));
+            if (log.isTraceEnabled()) {
+                log.trace(String.format("  Session attr: %s - %s", attributeKey, session.getAttribute(attributeKey)));
+            }
         }
         this.saveSession((String) session.getId(), session);
     }
@@ -77,7 +90,9 @@ public class ShiroSessionRedisDao extends AbstractSessionDAO {
             log.warn("Session not exist to delete");
             return;
         }
-        log.info(String.format("[%s] Delete session：%s", Thread.currentThread().getId(), session.getId()));
+        if (log.isInfoEnabled()) {
+            log.info(String.format("[%s] Delete session：%s", Thread.currentThread().getId(), session.getId()));
+        }
         Jedis jedis = redisService.getJedis();
         jedis.hdel(config.getSession().getRedisGroup().getBytes(), token.getBytes());
         jedis.close();
@@ -101,12 +116,14 @@ public class ShiroSessionRedisDao extends AbstractSessionDAO {
         }
 //        log.debug(String.format("Session, host: %s, timeout: %s", session.getHost(), session.getTimeout()));
 
-        if (session.getTimeout() <= 0) {
-            log.info(String.format("  Store session %s (no expiration)", sessionId));
-        }
-        else {
-            log.info(String.format("  Store session %s, which expired after %d (%s) minutes", sessionId,
-                    ShiroSessionUtils.expiresInMinutes(session), ShiroSessionUtils.expiresAt(session)));
+        if (log.isTraceEnabled()) {
+            if (session.getTimeout() <= 0) {
+                log.trace(String.format("  Store session %s (no expiration)", sessionId));
+            }
+            else {
+                log.trace(String.format("  Store session %s, which expired after %d (%s) minutes", sessionId,
+                        ShiroSessionUtils.expiresInMinutes(session), ShiroSessionUtils.expiresAt(session)));
+            }
         }
 
         byte[] bSession = null;
@@ -130,12 +147,16 @@ public class ShiroSessionRedisDao extends AbstractSessionDAO {
         jedis.close();
 
         if (bSession == null || bSession.length == 0) {
-            log.warn(String.format("Load session %s fail", token));
+            if (log.isWarnEnabled()) {
+                log.warn(String.format("Load session %s fail", token));
+            }
             return null;
         }
         try {
             Session session = parseSession(bSession);
-            ShiroSessionUtils.printSession(session);
+            if (log.isTraceEnabled()) {
+                ShiroSessionUtils.printSession(session);
+            }
             return session;
         } catch (Exception e) {
             e.printStackTrace();

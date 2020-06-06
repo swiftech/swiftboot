@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import org.swiftboot.demo.config.PermissionConfigBean;
 import org.swiftboot.demo.model.entity.AdminUserPermissionView;
 import org.swiftboot.demo.service.AdminPermissionService;
-import org.swiftboot.shiro.model.dao.UserPermissionDaoStub;
-import org.swiftboot.shiro.model.entity.PermissionEntityStub;
+import org.swiftboot.demo.shiro.AdminUserPermissionDao;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author swiftech
  */
 @Service
@@ -23,18 +21,18 @@ public class AdminPermissionServiceImpl implements AdminPermissionService {
     Logger log = LoggerFactory.getLogger(AdminPermissionServiceImpl.class);
 
     @Resource
-    private UserPermissionDaoStub<? extends PermissionEntityStub> userPermissionDao;
+    private AdminUserPermissionDao userPermissionDao;
 
     @Override
     public Set<PermissionConfigBean> queryAllPermissionForUser(String loginName) {
         Set<PermissionConfigBean> ret = new HashSet<>();
         List<? extends AdminUserPermissionView> allUserPermEntities =
-                (List<? extends AdminUserPermissionView>) userPermissionDao.findPermissionsByLoginName(loginName);
+                userPermissionDao.findPermissionsByLoginName(loginName);
         log.info(String.format("User %s has %d permissions found", loginName, allUserPermEntities.size()));
         for (AdminUserPermissionView userPermEntity : allUserPermEntities) {
             PermissionConfigBean permBean = new PermissionConfigBean(userPermEntity.getPermissionCode(), userPermEntity.getPermDesc());
             // 排除子权限（没有必要）
-            if (ret.isEmpty()){
+            if (ret.isEmpty()) {
                 ret.add(permBean);
             }
             else {

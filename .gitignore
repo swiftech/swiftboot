@@ -81,3 +81,7 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
+/.idea/
+/swiftboot.iml
+/swiftboot-auth/swiftboot-auth.iml
+/swiftboot-collections/swiftboot-collections.iml
