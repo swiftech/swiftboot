@@ -1,6 +1,6 @@
 # SwiftBoot
 
-基于 Spring Framework，Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
+基于 Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
 
 ### 为什么要有 SwiftBoot
 * 虽然用 SpringBoot 搭建框架进行开发已经简化了很多配置的工作，但是对于大多数中小型的项目来说来，还是有一些重复性的工作。
@@ -10,7 +10,7 @@
 ### 特性
 * 开箱即用，只需要很少的配置即可使用，用更少的代码完成更多的工作。
 * 无侵入性，你可以只使用其中的一部分功能，也可以随时去掉它或者切换为别的框架。
-* 统一的 Restful 接口格式（JSON）和错误代码。
+* 统一的接口格式（JSON）和错误代码，默认采用前后端分离。
 * 接口的返回值对象，实体对象自动填充。
 * 自动验证输入参数并自动转换为统一的返回格式。
 * 主键UUID自动生成机制。
@@ -26,12 +26,21 @@
 * [swiftboot-utils](swiftboot-utils/): 企业应用工具类
 * [swiftboot-service](swiftboot-service/): 企业应用基础服务
 * [swiftboot-auth](swiftboot-auth/): 用户认证服务
+* [swiftboot-shiro](swiftboot-shiro/): 集成 Shiro 用户认证和鉴权（试验 experimental）
 * [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验 experimental）
 * [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中 development）
 * [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
 
 
-### 发布
+### 版本发布
+1.2 release (2020-06-6)
+* 新增 `swiftboot-shiro` 模块，通过集成 Shiro 提供用户认证和授权
+* 新增浮点数字符串校验 `DecimalString`
+* 会话存储可选内存模式或者 Redis 模式
+* 日志输出优化
+* 改用 Spring 自带的跨域过滤器
+* 依赖库升级
+* bug 修复
 
 1.1.1 release (2020-03-15)
 * bug 修复
@@ -39,17 +48,8 @@
 * 新增 OnlyNumber 校验
 * 重构代码
 
-1.1 release (2020-02-02) 
-* 新增 `swiftboot-service` 和 `swiftboot-auth` 模块，提供常用的服务和简单的用户认证机制
-* 新增输入日志多语言化
-* 优化自动填充对象
-* 新增一些工具类和工具方法
-* 升级依赖的库
-* 修复了很多bug
-* 完善 demo 项目
 
-
-[完整记录](changelog.md)
+[完整更新记录](changelog.md)
 
 ### 概览
 
@@ -77,3 +77,8 @@
 
     > 创建 Entity 实例时无需调用生成器生成 ID，SwiftBoot 会自动创建并填充。
 
+* 认证和授权：
+    * 如果仅需要认证机制，那么集成 [swiftboot-auth](swiftboot-auth/) 模块
+    * 如果不仅需要认证，还需要授权，那么集成 [swiftboot-shiro](swiftboot-shiro/) 模块
+    
+    > 两个模块不能同时启用，且他们的认证实现机制不同

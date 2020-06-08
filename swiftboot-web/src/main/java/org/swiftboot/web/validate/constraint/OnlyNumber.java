@@ -1,6 +1,6 @@
 package org.swiftboot.web.validate.constraint;
 
-import org.swiftboot.web.validate.constraintvalidator.ContainsSymbolValidator;
+import org.swiftboot.web.validate.constraintvalidator.OnlyNumberValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,13 +12,13 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 字符串中全部都是数字
+ * 字符串中全部都是数字（不包括浮点数）
  *
  * @author swiftech
  * @since 1.1.1
  */
 @Documented
-@Constraint(validatedBy = {ContainsSymbolValidator.class})
+@Constraint(validatedBy = {OnlyNumberValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
 public @interface OnlyNumber {

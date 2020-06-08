@@ -1,6 +1,5 @@
 package org.swiftboot.demo.command;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,9 +28,6 @@ public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity>
     @Length(max = 64)
     @NotBlank
     private String loginPwd;
-
-//    @JsonIgnore
-//    private String group;
 
     /**
      * Get Login name of administrator
@@ -69,11 +65,4 @@ public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity>
         this.loginPwd = loginPwd;
     }
 
-//    public String getGroup() {
-//        return group;
-//    }
-//
-//    public void setGroup(String group) {
-//        this.group = group;
-//    }
 }

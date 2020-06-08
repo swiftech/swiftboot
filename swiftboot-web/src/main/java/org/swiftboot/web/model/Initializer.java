@@ -7,23 +7,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.ClasspathResourceUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
-import org.swiftboot.web.SwiftBootConfigBean;
+import org.swiftboot.web.SwiftBootWebConfigBean;
+import org.swiftboot.web.model.dao.GenericDao;
 import org.swiftboot.web.model.entity.BaseIdEntity;
-import org.swiftboot.web.reader.CsvReaderHandler;
 import org.swiftboot.web.reader.CsvReader;
+import org.swiftboot.web.reader.CsvReaderHandler;
 import org.swiftboot.web.util.SpringPackageUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,9 +63,23 @@ public class Initializer implements ApplicationContextAware {
     private Logger log = LoggerFactory.getLogger(Initializer.class);
 
     @Resource
-    private SwiftBootConfigBean swiftBootConfigBean;
+    private SwiftBootWebConfigBean swiftBootConfigBean;
 
     private ApplicationContext applicationContext;
+
+    @Resource
+    protected PlatformTransactionManager txManager;
+
+    @Resource
+    private EntityManager entityManager;
+
+    @Resource
+    private GenericDao genericDao;
+//
+//    @Resource
+//    private EntityManagerFactory entityManagerFactory;
+//
+//    private JpaRepositoryFactory jpaRepositoryFactory;
 
     /**
      * 在数据文件中预生成ID， 运行带有一个参数：读取和写入 CSV 文件的目录路径
@@ -90,7 +107,7 @@ public class Initializer implements ApplicationContextAware {
      * @param baseDirPath
      */
     public void preAssignIdToAllDataFiles(String baseDirPath) {
-        System.out.println("Try to pre-assign id to all csv files under: " + baseDirPath);
+        System.out.printf("Try to pre-assign id to all csv files under: %s%n", baseDirPath);
         File baseDir = new File(baseDirPath);
         if (!baseDir.exists() || !baseDir.isDirectory()) {
             System.out.println(String.format("Not exists or not a directory: %s", baseDir.getName()));
@@ -129,6 +146,9 @@ public class Initializer implements ApplicationContextAware {
                             System.out.printf("handle line %d%n", rowNum);
                             if (columns.size() < columnCount) {
                                 outBuffer.append("\"").append(IdUtils.makeID(code)).append("\"").append(",");
+                            }
+                            else if (StringUtils.isBlank(columns.get(0))) {
+                                columns.set(0, IdUtils.makeID(code));
                             }
                             String dataRow = WordUtils.joinWordsWithPad(columns, ",", "\"");
                             System.out.println(dataRow);
@@ -197,10 +217,10 @@ public class Initializer implements ApplicationContextAware {
             else {
                 try {
                     initOne(file, rawFileName, aClass);
-
                 } catch (Exception e) {
                     e.printStackTrace();
-                    log.warn(String.format("the class %s must has a non-arg constructor%n", aClass.getName()));
+                    log.warn(String.format("Make sure the class %s doesn't have a non-arg constructor%n", aClass.getName()));
+                    break;
                 }
             }
         }
@@ -214,42 +234,66 @@ public class Initializer implements ApplicationContextAware {
         Class<?> daoClass = Class.forName(daoName);
         if (daoClass == null) {
             log.warn(String.format("Dao class not exist: %s", daoName));
+            return;
         }
-        CrudRepository<BaseIdEntity, String> dao =
-                (CrudRepository<BaseIdEntity, String>) this.applicationContext.getBean(daoClass);
+        else {
+            log.info("Dao class: " + daoClass);
+        }
 
-        new CsvReader().readCsv(new FileInputStream(file), new CsvReaderHandler() {
-            BaseIdEntity entity;
+//        Object daoBean = this.applicationContext.getBean(daoClass);
+//
+//        CrudRepository<BaseIdEntity, String> dao =
+//                (CrudRepository<BaseIdEntity, String>) daoBean;
+//        log.info(String.format("Use DAO %s to create entities", dao));
 
+        TransactionTemplate transactionTemplate = new TransactionTemplate(txManager);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
-            public void onTitle(List<String> titles) {
-
-            }
-
-            @Override
-            public void onRow(int rowNum, List<String> columns) {
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                FileInputStream fileInputStream = null;
                 try {
-                    entity = (BaseIdEntity) aClass.getDeclaredConstructor().newInstance();
+                    fileInputStream = new FileInputStream(file);
+                    new CsvReader().readCsv(fileInputStream, new CsvReaderHandler() {
+                        private BaseIdEntity entity;
+
+                        @Override
+                        public void onTitle(List<String> titles) {
+
+                        }
+
+                        @Override
+                        public void onRow(int rowNum, List<String> columns) {
+                            try {
+                                entity = (BaseIdEntity) aClass.getDeclaredConstructor().newInstance();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onCell(int colNum, String columnName, String cellValue) {
+                            try {
+                                BeanUtils.forceSetPropertyFromString(entity, columnName, cellValue);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onRowFinished(int rowNow) {
+//                            entityManager.persist(entity);
+//                dao.save(entity);
+                            genericDao.saveEntity(entity);
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
-            }
-
-            @Override
-            public void onCell(int colNum, String columnName, String cellValue) {
-                try {
-                    BeanUtils.forceSetPropertyFromString(entity, columnName, cellValue);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onRowFinished(int rowNow) {
-                dao.save(entity);
             }
         });
-        log.info("Initialize data done.");
+
+        log.info("Initialize data of one table done.");
     }
 
     @Override

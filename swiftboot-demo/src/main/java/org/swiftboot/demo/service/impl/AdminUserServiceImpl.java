@@ -1,31 +1,35 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
-import org.swiftboot.auth.service.Session;
-import org.swiftboot.auth.service.SessionBuilder;
-import org.swiftboot.auth.service.SessionService;
-import org.swiftboot.demo.command.AdminUserCreateCommand;
-import org.swiftboot.demo.command.AdminUserSaveCommand;
-import org.swiftboot.demo.command.AdminUserSigninCommand;
-import org.swiftboot.demo.model.dao.AdminUserDao;
-import org.swiftboot.demo.model.entity.AdminUserEntity;
-import org.swiftboot.demo.result.*;
-import org.swiftboot.demo.service.AdminUserService;
-import org.swiftboot.util.CryptoUtils;
-import org.swiftboot.util.IdUtils;
-import org.swiftboot.util.PasswordUtils;
-import org.swiftboot.web.command.IdListCommand;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.service.SessionService;
+import org.swiftboot.demo.command.AdminUserCreateCommand;
+import org.swiftboot.demo.command.AdminUserSaveCommand;
+import org.swiftboot.demo.command.AdminUserSigninCommand;
+import org.swiftboot.demo.command.AdminUserSignoutCommand;
+import org.swiftboot.demo.model.dao.AdminUserDao;
+import org.swiftboot.demo.model.entity.AdminUserEntity;
+import org.swiftboot.demo.result.*;
+import org.swiftboot.demo.service.AdminUserService;
+import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.exception.ErrMessageException;
+import org.swiftboot.web.exception.ErrorCodeSupport;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+
+import static org.swiftboot.demo.constant.AuthConstants.MY_AUTH_SERVICE_NAME;
 
 /**
  * 管理员服务接口实现
@@ -46,42 +50,42 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Resource
     private SwiftbootAuthConfigBean authConfigBean;
 
-    @PostConstruct
-    public void initData() {
-        Optional<AdminUserEntity> optAdmin = adminUserDao.findByLoginName("admin");
-        if (!optAdmin.isPresent()){
-            AdminUserEntity newEntity = new AdminUserEntity();
-            newEntity.setLoginName("admin");
-            newEntity.setLoginPwd(PasswordUtils.createPassword("12345678"));
-            adminUserDao.save(newEntity);
-        }
-    }
+// Use AdminInit instead
+//    @PostConstruct
+//    public void initData() {
+//        Optional<AdminUserEntity> optAdmin = adminUserDao.findByLoginName("admin");
+//        if (!optAdmin.isPresent()) {
+//            AdminUserEntity newEntity = new AdminUserEntity();
+//            newEntity.setLoginName("admin");
+//            newEntity.setLoginPwd(PasswordUtils.createPassword("12345678", "my-auth-service-name"));
+//            adminUserDao.save(newEntity);
+//        }
+//    }
 
     @Override
     public AdminUserSigninResult adminUserSignin(AdminUserSigninCommand command) {
         AdminUserSigninResult ret = new AdminUserSigninResult();
-        String encryptedPwd = CryptoUtils.md5(command.getLoginPwd());
-        Optional<AdminUserEntity> optAdminUser = adminUserDao.findByLoginNameAndLoginPwd(command.getLoginName(), encryptedPwd);
-        if (optAdminUser.isPresent()) {
-            log.debug(optAdminUser.get().getId());
-            ret.setLoginName(optAdminUser.get().getLoginName());
-            ret.setId(optAdminUser.get().getId());
-            ret.setUpdateTime(optAdminUser.get().getUpdateTime());
-            ret.setSuccess(true);
 
-            // session
-            Session session = new SessionBuilder().createSession();
-            session.setUserName(ret.getLoginName());
-            session.setUserId(ret.getId());
-            session.setGroup(authConfigBean.getSession().getGroup());
-            String token = IdUtils.makeUUID();
-            sessionService.addSession(token, session);
-            ret.setToken(token);
-        }
-        else {
-            log.debug("Signin failed: " + command.getLoginName());
+        Subject currentUser = SecurityUtils.getSubject();
+        try {
+            currentUser.login(new UsernamePasswordToken(command.getLoginName(), command.getLoginPwd(), MY_AUTH_SERVICE_NAME));
+            Session session = SecurityUtils.getSubject().getSession();
+            ret.setSuccess(true);
+            ret.setLoginName(command.getLoginName());
+            ret.setToken(session.getId().toString());
+            ret.setId(session.getAttribute("user_id").toString());
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            throw new ErrMessageException(ErrorCodeSupport.CODE_SIGNIN_FAIL, e.getMessage());
         }
         return ret;
+    }
+
+    @Override
+    public AdminUserSignoutResult adminUserSignout(AdminUserSignoutCommand command) {
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
+        return new AdminUserSignoutResult();
     }
 
     /**
@@ -220,7 +224,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     /**
      * 分页查询管理员
      *
-     * @param page 页数，从0开始
+     * @param page     页数，从0开始
      * @param pageSize 页大小
      * @return
      */

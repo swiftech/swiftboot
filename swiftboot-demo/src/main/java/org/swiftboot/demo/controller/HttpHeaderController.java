@@ -23,7 +23,7 @@ public class HttpHeaderController {
 
     private Logger log = LoggerFactory.getLogger(HttpHeaderController.class);
 
-    @ApiOperation(notes = "自动获取http header值", value = "自动获取http header值")
+    @ApiOperation(notes = "自动获取 http header 值", value = "自动获取 http header 值")
     @RequestMapping(value = "post", method = RequestMethod.POST)
     @ConvertValidateResult
     public

@@ -3,7 +3,7 @@ package org.swiftboot.web.model.dao;
 import org.swiftboot.web.model.entity.BaseIdEntity;
 
 /**
- * allen
+ * @author swiftech
  */
 public interface GenericCustomizeDao<T extends BaseIdEntity> {
 

@@ -5,7 +5,7 @@ import org.swiftboot.web.model.dao.GenericCustomizeDao;
 import org.swiftboot.web.model.entity.BaseIdEntity;
 
 /**
- * allen
+ * @author swiftech
  */
 public class GenericCustomizeDaoImpl<T extends BaseIdEntity> extends BaseCustomizeDaoImpl<T> implements GenericCustomizeDao<T> {
 

@@ -41,7 +41,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>1.1.1</version>
+    <version>1.2</version>
   </dependency>
   ```
 

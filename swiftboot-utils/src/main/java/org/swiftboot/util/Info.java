@@ -11,7 +11,8 @@ import java.util.*;
  * Any module uses this to localization information has to to:
  * 1. Create a resource class in module package like com.foo.bar.R which implements Resource interface and add current resource class to the getResourceClasses() return values.
  * 2. Create a properties file names as resource class name like com.foo.bar.R.properties, this file name can be with locale.
- * 3. Create a new Info class extends me, set the Info.sources field with this resource class:    org.swiftboot.util.Info.sources = R.getResourceClasses();
+ * 3. Create a new Info class extends me, set the Info.sources field with this resource class:
+ *      org.swiftboot.util.Info.sources = R.getResourceClasses();
  *
  * @author swiftech
  * @since 1.1

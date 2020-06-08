@@ -12,7 +12,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  * @author swiftech
- * @since 1.1
+ * @since 1.2
  */
 public class ZipUtils {
 
@@ -37,39 +37,6 @@ public class ZipUtils {
                 ret.add(ze);
             }
             return ret;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to search file entries in zip");
-        }
-    }
-
-    /**
-     * @param ins        Zip file input stream
-     * @param suffix
-     * @param recursive
-     * @param zipHandler
-     * @deprecated TBD
-     */
-    public static void readFileInZip(InputStream ins, String suffix, boolean recursive,
-                                     ZipHandler zipHandler) {
-        try (BufferedInputStream bis = new BufferedInputStream(ins);
-             ZipInputStream zis = new ZipInputStream(bis)) {
-            ZipEntry ze;
-            byte[] buffer = new byte[1024];
-            while ((ze = zis.getNextEntry()) != null) {
-                if (!recursive && ze.getName().contains("/")) {
-                    continue;
-                }
-                if (!ze.getName().endsWith(suffix)) {
-                    continue;
-                }
-                zipHandler.onEntry(ze);
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    zipHandler.onReadBuffer(ze, ArrayUtils.subarray(buffer, 0, len));
-                }
-                zipHandler.onEntryExit(ze);
-            }
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to search file entries in zip");
@@ -150,20 +117,6 @@ public class ZipUtils {
         }
     }
 
-
-    /**
-     * @deprecated not friendly to Closure
-     */
-    public interface ZipHandler {
-//        boolean filter(ZipEntry zipEntry);
-
-        void onEntry(ZipEntry zipEntry);
-
-        void onReadBuffer(ZipEntry zipEntry, byte[] buffer);
-
-        void onEntryExit(ZipEntry zipEntry);
-    }
-
     /**
      * 读取文件部分内容
      */
@@ -184,20 +137,4 @@ public class ZipUtils {
     public interface OneFileCompleted {
         void onCompleted(ZipEntry zipEntry);
     }
-
-//    public static void main(String[] args) {
-//        try {
-//            InputStream inputStream = StringUtils.class.getProtectionDomain().getCodeSource().getLocation().openStream();
-//            List<ZipEntry> zipEntries = ZipUtils.searchInZip(inputStream, "", true);
-//            for (ZipEntry ze : zipEntries) {
-//                System.out.println(System.out.format("File: %s Size: %d Last Modified %s %n",
-//                        ze.getName(), ze.getSize(),
-//                        LocalDate.ofEpochDay(ze.getTime() / MILLS_IN_DAY)));
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    private final static Long MILLS_IN_DAY = 86400000L;
 }
