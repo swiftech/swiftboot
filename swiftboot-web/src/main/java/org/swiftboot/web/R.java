@@ -27,9 +27,6 @@ public class R implements Info.Resource {
     public static final String VALIDATE_INI1T = "validate_ini1t";
     public static final String I18N_INIT_START = "i18n_init_start";
     public static final String I18N_INIT_DONE = "i18n_init_done";
-    public static final String PARAM_NOT_IMPLEMENT_INTERFACE2 = "param_not_implement_interface2";
-    public static final String PARAM_NOT_EXTEND_CLASS2 = "param_not_extend_class2";
-    public static final String CONVERT_TO_JSON_FAIL = "convert_to_json_fail";
     public static final String REQUIRE_PARAMS = "require_params";
     public static final String REQUIRE_NO_PARAM_CONSTRUCTOR1 = "require_no_param_constructor1";
     public static final String REQUIRE_ENTITY = "require_entity";
@@ -50,6 +47,7 @@ public class R implements Info.Resource {
     public static Class<?>[] getResourceClasses() {
         return new Class<?>[]{
                 R.class,
+                org.swiftboot.data.R.class,
                 org.swiftboot.collections.R.class,
                 org.swiftboot.util.R.class
         };

@@ -1,8 +1,8 @@
 package org.swiftboot.demo.model.entity;
 
 import org.springframework.data.annotation.Immutable;
+import org.swiftboot.data.model.entity.BaseIdEntity;
 import org.swiftboot.shiro.model.entity.PermissionEntityStub;
-import org.swiftboot.web.model.entity.BaseIdEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

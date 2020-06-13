@@ -1,8 +1,9 @@
 package org.swiftboot.web.model.entity;
 
+import org.swiftboot.data.model.entity.BaseEntity;
+
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**

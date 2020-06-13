@@ -2,8 +2,8 @@ package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
+import org.swiftboot.data.model.entity.Persistent;
 import org.swiftboot.web.constant.HttpConstants;
-import org.swiftboot.web.model.entity.Persistent;
 
 /**
  * @param <E>

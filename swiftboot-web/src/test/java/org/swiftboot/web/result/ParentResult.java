@@ -3,7 +3,6 @@ package org.swiftboot.web.result;
 import org.swiftboot.web.model.entity.ParentEntity;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author swiftech

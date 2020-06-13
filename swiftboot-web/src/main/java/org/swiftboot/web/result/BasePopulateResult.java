@@ -3,12 +3,12 @@ package org.swiftboot.web.result;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.data.model.entity.BaseEntity;
+import org.swiftboot.data.model.entity.Persistent;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
 import org.swiftboot.web.annotation.PopulateIgnore;
-import org.swiftboot.web.model.entity.BaseEntity;
-import org.swiftboot.web.model.entity.Persistent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

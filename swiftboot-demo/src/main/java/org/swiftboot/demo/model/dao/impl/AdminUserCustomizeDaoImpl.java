@@ -1,7 +1,7 @@
 package org.swiftboot.demo.model.dao.impl;
 
+import org.swiftboot.data.model.dao.impl.BaseCustomizeDaoImpl;
 import org.swiftboot.demo.model.dao.AdminUserCustomizeDao;
-import org.swiftboot.web.model.dao.impl.BaseCustomizeDaoImpl;
 
 /**
  * 管理员数据查询接口实现
