@@ -5,8 +5,17 @@ SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授
 它实现了一个通用的 `Realm` 类, 可以同时处理不同的帐号体系的认证和授权。
 
 ---
+## Maven:
 
-# 使用
+  ```xml
+  <dependency>
+    <groupId>com.github.swiftech</groupId>
+    <artifactId>swiftboot-shiro</artifactId>
+    <version>1.2</version>
+  </dependency>
+  ```
+
+## 使用
 
 ### 依赖
 * redis
