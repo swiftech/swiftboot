@@ -5,7 +5,7 @@
     <parent>
         <artifactId>swiftboot</artifactId>
         <groupId>com.github.swiftech</groupId>
-        <version>1.2</version>
+        <version>1.2.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,8 +13,8 @@
     <description>企业Web应用基础框架</description>
 
     <properties>
-        <spring.version>5.1.14.RELEASE</spring.version>
-        <spring.boot.version>2.1.13.RELEASE</spring.boot.version>
+        <spring.version>5.1.17.RELEASE</spring.version>
+        <spring.boot.version>2.1.16.RELEASE</spring.boot.version>
         <spring.data.version>2.1.16.RELEASE</spring.data.version>
         <servlet.version>3.1.0</servlet.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
@@ -22,7 +22,7 @@
         <swagger.version>1.6.0</swagger.version>
         <aspectj.version>1.9.4</aspectj.version>
         <validation.api.version>2.0.1.Final</validation.api.version>
-        <hibernate.version>5.3.15.Final</hibernate.version>
+        <hibernate.version>5.3.17.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <hibernate.validator.version>6.1.0.Final</hibernate.validator.version>
         <log4j2.version>2.13.0</log4j2.version>

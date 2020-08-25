@@ -90,7 +90,7 @@ public class JsonUtils {
      * @return
      * @throws IOException
      */
-    public static <T> T jsonTo(String strJson, TypeReference type) throws IOException {
+    public static <T> T jsonTo(String strJson, TypeReference<T> type) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(strJson, type);
     }

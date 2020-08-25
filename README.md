@@ -26,13 +26,17 @@
 * [swiftboot-utils](swiftboot-utils/): 企业应用工具类
 * [swiftboot-service](swiftboot-service/): 企业应用基础服务
 * [swiftboot-auth](swiftboot-auth/): 用户认证服务
-* [swiftboot-shiro](swiftboot-shiro/): 集成 Shiro 用户认证和鉴权（试验 experimental）
+* [swiftboot-shiro](swiftboot-shiro/): 集成 Shiro 用户认证和鉴权
 * [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验 experimental）
 * [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中 development）
 * [swiftboot-demo](swiftboot-demo/)：演示项目，可以作为脚手架快速搭建新项目
 
 
 ### 版本发布
+1.2.1 release (2020-08-25)
+* 修复了 `swiftboot-shiro` 配置加载的bug
+* 依赖库升级
+
 1.2 release (2020-06-6)
 * 新增 `swiftboot-shiro` 模块，通过集成 Shiro 提供用户认证和授权
 * 新增浮点数字符串校验 `DecimalString`
