@@ -20,12 +20,12 @@
         <module>swiftboot-utils</module>
         <module>swiftboot-collections</module>
         <module>swiftboot-fileconvert</module>
+        <module>swiftboot-data</module>
         <module>swiftboot-web</module>
         <module>swiftboot-rpc</module>
         <module>swiftboot-service</module>
         <module>swiftboot-auth</module>
         <module>swiftboot-shiro</module>
-        <module>swiftboot-data</module>
     </modules>
 
     <properties>

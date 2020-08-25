@@ -40,6 +40,11 @@ swiftboot:
       timeout: 1800
       forceDisableRedirect: false
       redisGroup: shiro-session
+    cookie:
+      domain: localhost
+      path: /
+      name: <you cookie name for shiro token>
+      maxAge: 1800
 ```
     
   * storageType: 会话存储方式，可选项为 `memory`（默认） 或者 `redis`，如果需要用 redis 来存储，那么需要配置 redis 服务器
