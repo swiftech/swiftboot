@@ -14,7 +14,7 @@
 <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-auth</artifactId>
-    <version>1.2</version>
+    <version>1.2.1</version>
 </dependency>
 
 ```
