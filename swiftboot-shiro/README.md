@@ -1,4 +1,4 @@
-# SwiftBoot-shiro （试验）
+# SwiftBoot-shiro
 
 SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授权（Authorization）
 只需要简单的配置和少量的代码即可集成 Shiro 进行用户认证和权限控制。
@@ -11,7 +11,7 @@ SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-shiro</artifactId>
-    <version>1.2</version>
+    <version>1.2.1</version>
   </dependency>
   ```
 
@@ -40,6 +40,11 @@ swiftboot:
       timeout: 1800
       forceDisableRedirect: false
       redisGroup: shiro-session
+    cookie:
+      domain: localhost
+      path: /
+      name: <you cookie name for shiro token>
+      maxAge: 1800
 ```
     
   * storageType: 会话存储方式，可选项为 `memory`（默认） 或者 `redis`，如果需要用 redis 来存储，那么需要配置 redis 服务器
