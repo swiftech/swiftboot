@@ -11,13 +11,6 @@
 
     <artifactId>swiftboot-service</artifactId>
 
-
-    <properties>
-        <jedis.version>3.3.0</jedis.version>
-        <json.version>20200518</json.version>
-    </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>com.github.swiftech</groupId>

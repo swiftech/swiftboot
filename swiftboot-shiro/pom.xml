@@ -11,10 +11,6 @@
 
     <artifactId>swiftboot-shiro</artifactId>
 
-    <properties>
-        <shiro.version>1.6.0</shiro.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.github.swiftech</groupId>

@@ -51,6 +51,9 @@
         <hibernate.version>5.4.20.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <hibernate.validator.version>6.1.5.Final</hibernate.validator.version>
+        <shiro.version>1.6.0</shiro.version>
+        <jedis.version>3.3.0</jedis.version>
+        <json.version>20200518</json.version>
     </properties>
 
 
