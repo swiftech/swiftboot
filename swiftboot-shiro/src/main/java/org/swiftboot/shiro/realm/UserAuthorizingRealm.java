@@ -79,9 +79,9 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
             // 保存操作人的 ID 等信息
             session.setAttribute(SESSION_KEY_USER_ID, userId);
             session.setAttribute(SESSION_KEY_LOGIN_NAME, userPasswordToken.getUsername());
-//            log.info("保存用户信息至 Shiro 会话中：" + session.getId());
+//            log.info("Save user info to Shiro session: ：" + session.getId());
         } catch (Exception e) {
-//            log.warn("保存用户信息至 Shiro 会话失败");
+//            log.warn("Failed to save user info to Shiro session");
             log.error(e.getMessage(), e);
         }
         return simpleAuthenticationInfo;

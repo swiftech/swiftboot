@@ -97,7 +97,7 @@ public class SwiftbootShiroConfig {
 
     @Bean
     @ConditionalOnBean(RedisService.class)
-    @ConditionalOnProperty(value = "swiftboot.shiro.session.type", havingValue = "redis")
+    @ConditionalOnProperty(value = "swiftboot.shiro.session.storageType", havingValue = "redis")
     public SessionDAO shiroSessionRedisDao() {
         return new ShiroSessionRedisDao();
     }
@@ -130,6 +130,7 @@ public class SwiftbootShiroConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean(ShiroFilterFactoryBean.class)
     public ShiroFilterFactoryBean shiroFilterFactoryBean(ShiroFilterChainDefinition filterChainDefinition, Map<String, Filter> filterMap) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager());

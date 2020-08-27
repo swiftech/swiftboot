@@ -23,7 +23,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-fileconvert</artifactId>
-		<version>1.0.11-SNAPSHOT</version>
+		<version>1.2.1</version>
 	</dependency>
 </dependencies>
 
