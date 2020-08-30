@@ -1,4 +1,4 @@
-# SwiftBoot-shiro （试验）
+# SwiftBoot-shiro
 
 SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授权（Authorization）
 只需要简单的配置和少量的代码即可集成 Shiro 进行用户认证和权限控制。

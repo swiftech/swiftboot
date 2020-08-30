@@ -26,7 +26,14 @@ public class SwiftbootShiroConfigBean {
      */
     private String loginUrl = "/login";
 
+    /**
+     * 登录认证成功之后跳转的 URL
+     */
+    private String successUrl = "";
 
+    /**
+     * @deprecated to successUrl
+     */
     private String returnUrl;
 
     public CookieConfigBean getCookie() {
@@ -43,6 +50,14 @@ public class SwiftbootShiroConfigBean {
 
     public void setSession(ShiroSessionConfigBean session) {
         this.session = session;
+    }
+
+    public String getSuccessUrl() {
+        return successUrl;
+    }
+
+    public void setSuccessUrl(String successUrl) {
+        this.successUrl = successUrl;
     }
 
     public String getLoginUrl() {
