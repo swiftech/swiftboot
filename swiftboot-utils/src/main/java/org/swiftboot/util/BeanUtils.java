@@ -42,7 +42,7 @@ public class BeanUtils {
      * @return 字段对象
      * @throws NoSuchFieldException 没有该字段时抛出
      */
-    public static List<Field> getDeclaredFields(Object object, Class fieldClass) throws NoSuchFieldException {
+    public static List<Field> getDeclaredFields(Object object, Class<?> fieldClass) throws NoSuchFieldException {
         return getDeclaredFields(object.getClass(), fieldClass);
     }
 
@@ -54,9 +54,9 @@ public class BeanUtils {
      * @return 字段对象
      * @throws NoSuchFieldException 没有该字段时抛出
      */
-    public static List<Field> getDeclaredFields(Class clazz, Class fieldClass) throws NoSuchFieldException {
+    public static List<Field> getDeclaredFields(Class<?> clazz, Class<?> fieldClass) throws NoSuchFieldException {
         List<Field> ret = new LinkedList<>();
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 for (Field declaredField : superClass.getDeclaredFields()) {
                     if (declaredField.getType() == fieldClass) {
@@ -95,8 +95,8 @@ public class BeanUtils {
      * @return 字段对象
      * @throws NoSuchFieldException 没有该字段时抛出
      */
-    public static Field getDeclaredField(Class clazz, String propertyName) throws NoSuchFieldException {
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+    public static Field getDeclaredField(Class<?> clazz, String propertyName) throws NoSuchFieldException {
+        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 return superClass.getDeclaredField(propertyName);
             } catch (NoSuchFieldException e) {
@@ -112,9 +112,9 @@ public class BeanUtils {
      * @param clazz 类
      * @return 字段对象集合
      */
-    public static Collection<Field> getAllFields(Class clazz) {
+    public static Collection<Field> getAllFields(Class<?> clazz) {
         Set<Field> ret = new HashSet<>();
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             Collections.addAll(ret, superClass.getDeclaredFields());
         }
         return ret;
@@ -127,9 +127,9 @@ public class BeanUtils {
      * @param ignores 不包含的字段
      * @return 字段对象集合
      */
-    public static Collection<Field> getFieldsIgnore(Class clazz, Collection<String> ignores) {
+    public static Collection<Field> getFieldsIgnore(Class<?> clazz, Collection<String> ignores) {
         Set<Field> ret = new HashSet<>();
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Field declaredField : superClass.getDeclaredFields()) {
                 if (!ignores.contains(declaredField.getName())) {
                     ret.add(declaredField);
@@ -146,12 +146,12 @@ public class BeanUtils {
      * @param annoClasses
      * @return
      */
-    public static Collection<Field> getFieldsIgnore(Class clazz, Class... annoClasses) {
+    public static Collection<Field> getFieldsIgnore(Class<?> clazz, Class<? extends Annotation>... annoClasses) {
         Set<Field> ret = new HashSet<>();
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             field:
             for (Field declaredField : superClass.getDeclaredFields()) {
-                for (Class aClass : annoClasses) {
+                for (Class<? extends Annotation> aClass : annoClasses) {
                     Annotation annotation = declaredField.getAnnotation(aClass);
                     if (annotation != null) {
                         continue field;
@@ -327,14 +327,14 @@ public class BeanUtils {
      */
     public static Object forceInvokeMethod(Object object, String methodName, Object... params)
             throws NoSuchMethodException {
-        Class[] types = new Class[params.length];
+        Class<?>[] types = new Class<?>[params.length];
         for (int i = 0; i < params.length; i++) {
             types[i] = params[i].getClass();
         }
 
-        Class clazz = object.getClass();
+        Class<?> clazz = object.getClass();
         Method method = null;
-        for (Class superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 method = superClass.getDeclaredMethod(methodName, types);
                 break;
@@ -358,6 +358,19 @@ public class BeanUtils {
         return result;
     }
 
+    public static List<Field> getDeclaredFieldsByAnnotation(Class<?> targetClass, Class<? extends Annotation> annoClass) {
+        List<Field> ret = new ArrayList<>();
+        for (Class<?> superClass = targetClass; superClass != Object.class; superClass = superClass.getSuperclass()) {
+            for (Field field : superClass.getDeclaredFields()) {
+                if (field.getAnnotation(annoClass) == null){
+                    continue;
+                }
+                ret.add(field);
+            }
+        }
+        return ret;
+    }
+
     /**
      * 按类型取得字段列表。
      *
@@ -365,9 +378,9 @@ public class BeanUtils {
      * @param propertyType 字段类型
      * @return 字段列表
      */
-    public static List<Field> getDeclaredFieldsByType(Object object, Class propertyType) {
+    public static List<Field> getDeclaredFieldsByType(Object object, Class<?> propertyType) {
         List<Field> list = new ArrayList<>();
-        for (Class superClass = object.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = object.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Field field : superClass.getDeclaredFields()) {
                 if (propertyType.isAssignableFrom(field.getType())) {
                     list.add(field);
@@ -385,12 +398,12 @@ public class BeanUtils {
      * @param annoClasses  过滤的注解类型
      * @return
      */
-    public static List<Field> getDeclaredFieldsByTypeIgnore(Object object, Class propertyType, Class... annoClasses) {
+    public static List<Field> getDeclaredFieldsByTypeIgnore(Object object, Class<?> propertyType, Class<? extends Annotation>... annoClasses) {
         List<Field> list = new ArrayList<>();
-        for (Class superClass = object.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = object.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
             NEXT_FIELD:
             for (Field field : superClass.getDeclaredFields()) {
-                for (Class annoClass : annoClasses) {
+                for (Class<? extends Annotation> annoClass : annoClasses) {
                     Annotation annotation = field.getAnnotation(annoClass);
                     if (annotation != null) {
                         continue NEXT_FIELD;
@@ -410,7 +423,7 @@ public class BeanUtils {
      * @param clazz
      * @return
      */
-    public static List<Field> getStaticFields(Class clazz) {
+    public static List<Field> getStaticFields(Class<?> clazz) {
         List<Field> list = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -428,7 +441,7 @@ public class BeanUtils {
      * @param propertyType
      * @return
      */
-    public static List<Field> getStaticFieldsByType(Class clazz, Class propertyType) {
+    public static List<Field> getStaticFieldsByType(Class<?> clazz, Class<?> propertyType) {
         List<Field> list = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -448,7 +461,7 @@ public class BeanUtils {
      * @return 属性类型
      * @throws NoSuchFieldException 没有该Field时抛出
      */
-    public static Class getPropertyType(Class clazz, String propertyName) throws NoSuchFieldException {
+    public static Class<?> getPropertyType(Class<?> clazz, String propertyName) throws NoSuchFieldException {
         return getDeclaredField(clazz, propertyName).getType();
     }
 
@@ -486,9 +499,9 @@ public class BeanUtils {
      * @return 函数名称
      * @throws NoSuchFieldException 没有该Field时抛出
      */
-    public static String getGetterName(Class clazz, String fieldName) throws NoSuchFieldException {
-        Class type = getPropertyType(clazz, fieldName);
-        if (type.getSimpleName().toLowerCase().equals("boolean")) {
+    public static String getGetterName(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        Class<?> type = getPropertyType(clazz, fieldName);
+        if (type.getSimpleName().equalsIgnoreCase("boolean")) {
             return "is" + StringUtils.capitalize(fieldName);
         }
         else {
