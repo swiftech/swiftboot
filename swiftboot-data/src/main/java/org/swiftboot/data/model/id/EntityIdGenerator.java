@@ -1,9 +1,9 @@
 package org.swiftboot.data.model.id;
 
 import org.apache.commons.lang3.StringUtils;
+import org.swiftboot.data.model.entity.IdPojo;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
-import org.swiftboot.data.model.entity.IdPojo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class EntityIdGenerator implements IdGenerator<IdPojo> {
     public static final int MAX_CODE_LEN = 6;
 
     // 类和业务代码映射缓存
-    private Map<Class<IdPojo>, String> classCodeMapping = new HashMap<>();
+    private final Map<Class<? extends IdPojo>, String> classCodeMapping = new HashMap<>();
 
     @Override
     public String generate(IdPojo object) {
@@ -32,7 +32,13 @@ public class EntityIdGenerator implements IdGenerator<IdPojo> {
         else {
             String simpleEntityName = entityClass.getSimpleName();
             String bizName = StringUtils.substringBefore(simpleEntityName, "Entity");
-            code = camelToShort(bizName, MAX_CODE_LEN);
+            if (bizName.length() < MIN_CODE_LEN) {
+                code = StringUtils.rightPad(bizName.toLowerCase(), MIN_CODE_LEN, "entity");
+            }
+            else {
+                code = camelToShort(bizName, MAX_CODE_LEN);
+            }
+            classCodeMapping.put(entityClass, code);
         }
         return IdUtils.makeID(code);
     }
