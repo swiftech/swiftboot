@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Mapping between cell(s) in worksheet and one field of data object.
+ *
  * @author allen
  */
 @Target({ElementType.FIELD})

@@ -3,6 +3,7 @@ package org.swiftboot.sheet.meta;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.swiftboot.sheet.exception.NotSupportedExpressionException;
 import org.swiftboot.sheet.util.LetterUtils;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.*;
+import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
 
 /**
  * Translate expression to area of cells in sheet.
@@ -21,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  * 2E:H or E:H2 means cells from column 5 to 8 in row 2.
  * E2:H3 means cells from row 2 to 3 and from column 5 to 8.
  * E2-3 or 2E-3 means cells from column 5 to column 8 in row 2.
- * E2|3 or 2E|3 means cells from rom 2 to 12 in column 5.
+ * E2|3 or 2E|3 means cells from rom 2 to 3 in column 5.
  *
  * @author allen
  */
@@ -29,7 +31,7 @@ public class Translator {
 
     public Area toArea(String exp) {
         Expression expression = new Expression(exp);
-        if (expression.isSinglePoint()) {
+        if (expression.isSinglePosition()) {
             return new Area(this.toSinglePosition(exp));
         }
         else if (expression.isFreeRange()) {
@@ -43,10 +45,14 @@ public class Translator {
         }
     }
 
-
+    /**
+     * TODO 需要支持 ? 的形式的表达
+     * @param exp2
+     * @return
+     */
     private Area freeRange(String[] exp2) {
         if (exp2 == null || exp2.length != 2) {
-            throw new RuntimeException("Not supported expression: " + Arrays.toString(exp2));
+            throw new NotSupportedExpressionException(Arrays.toString(exp2));
         }
         String[] seg1 = splitByCharacterType(exp2[0].toUpperCase());
         String[] seg2 = splitByCharacterType(exp2[1].toUpperCase());
@@ -62,7 +68,7 @@ public class Translator {
             }
         }
         if (letters.isEmpty() || numbers.isEmpty()) {
-            throw new RuntimeException("Not supported expression: " + Arrays.toString(exp2));
+            throw new NotSupportedExpressionException(Arrays.toString(exp2));
         }
         letters.sort(String::compareTo);
         numbers.sort(String::compareTo);
@@ -117,7 +123,13 @@ public class Translator {
         return toPosition(split);
     }
 
-    public String toExpression(Position position) {
+    /**
+     * TBD
+     *
+     * @param position
+     * @return
+     */
+    String toExpression(Position position) {
         return indexToExp(position.getColumn()) + (position.getRow() + 1);
     }
 
@@ -128,16 +140,35 @@ public class Translator {
     Position toPosition(String[] split) {
         Integer row = null;
         Integer column = null;
-        if (isNumeric(split[0])) {
-            row = NumberUtils.toInt(split[0]) - 1;
-            if (split.length > 1) {
-                column = expToIndex(split[1]);
+        String left = split[0];
+        String right = split.length > 1 ? split[1] : null;
+        if (isNumeric(left)) {
+            row = NumberUtils.toInt(left) - 1;
+            if (isNotBlank(right)) {
+                if (!"?".equals(right)) {
+                    column = expToIndex(right);
+                }
             }
         }
-        else {
-            column = expToIndex(split[0]);
-            if (split.length > 1) {
-                row = NumberUtils.toInt(split[1]) - 1;
+        else if (isAlpha(left)) {
+            column = expToIndex(left);
+            if (isNotBlank(right)) {
+                if (!"?".equals(right)) {
+                    row = NumberUtils.toInt(right) - 1;
+                }
+            }
+        }
+        else if ("?".equals(left)) {
+            if (isNotBlank(right)){
+                if (isNumeric(right)){
+                    row = NumberUtils.toInt(right) - 1;
+                }
+                else if (isAlpha(right)){
+                    column = expToIndex(right);
+                }
+                else {
+                    throw new RuntimeException("");
+                }
             }
         }
         return new Position(row, column);
@@ -159,7 +190,7 @@ public class Translator {
             xxx.add(letterIdx);
             cutoff += letterIdx * s;
         }
-        System.out.println(index + " - " + StringUtils.join(xxx));
+        System.out.printf("%d - %s%n", index, StringUtils.join(xxx));
         StringBuilder ret = new StringBuilder();
         boolean isUpgrade = false;
         // from lowest to highest
@@ -174,7 +205,7 @@ public class Translator {
                     ret.append('Z');
                 }
                 else {
-                    ret.append(LetterUtils.letter(letterNum));
+                    ret.append(LetterUtils.numberToLetter(letterNum));
                 }
             }
             else {
@@ -189,7 +220,7 @@ public class Translator {
                 if (letterNum == 0) {
                     continue;
                 }
-                ret.append(LetterUtils.letter(letterNum));
+                ret.append(LetterUtils.numberToLetter(letterNum));
             }
         }
         ret.reverse();
@@ -214,45 +245,16 @@ public class Translator {
         char[] charArray = reversed.toCharArray();
         for (int i = 0; i < charArray.length; i++) {
             if (i == 0) {
-                ret += letterToNumber(charArray[i]);
+                ret += LetterUtils.letterToIndex(charArray[i]);
             }
             else {
-                ret += ((letterToNumber(charArray[i]) + 1) * powForExcel(i));
+                ret += ((LetterUtils.letterToIndex(charArray[i]) + 1) * powForExcel(i));
             }
         }
         return ret;
     }
 
-    /**
-     * Convert a letter (ignore case) to number in alphabet.
-     *
-     * @param letter
-     * @return
-     */
-    int letterToNumber(char letter) {
-        return Character.toUpperCase(letter) - 'A';
-    }
-
-    /**
-     * Multiply 26 with 26 in specified count.
-     *
-     * @param count
-     * @return
-     */
-    int powForExcel(int count) {
-        if (count == 0) {
-            return 0;
-        }
-        int ret = 1;
-        for (int i = 0; i < count; i++) {
-            ret = ret * 26;
-        }
-        return ret;
-    }
 
     private int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
 
-    public static void main(String[] args) {
-        System.out.println(StringUtils.isNumeric("a9"));
-    }
 }

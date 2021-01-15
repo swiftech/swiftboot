@@ -27,14 +27,14 @@ public class Expression {
         return contains(expression, "|");
     }
 
-    public boolean isSinglePoint() {
+    public boolean isSinglePosition() {
         return !isFreeRange() && !isHorizontalRange() && !isVerticalRange();
     }
 
     public String[] splitAsFreeRange() {
         String[] split = split(this.expression, ':');
         if (split == null || split.length != 2) {
-            throw new RuntimeException("Illegal expression: " + this.expression);
+            throw new RuntimeException(String.format("Illegal expression: %s", this.expression));
         }
         return split;
     }
@@ -42,7 +42,7 @@ public class Expression {
     public String[] splitAsHorizontalRange() {
         String[] split = split(this.expression, '-');
         if (split == null || split.length != 2 || !StringUtils.isNumeric(split[1])) {
-            throw new RuntimeException("Illegal expression: " + this.expression);
+            throw new RuntimeException(String.format("Illegal expression: %s", this.expression));
         }
         return split;
     }
@@ -50,7 +50,7 @@ public class Expression {
     public String[] splitAsVerticalRange() {
         String[] split = split(this.expression, '|');
         if (split == null || split.length != 2 || !StringUtils.isNumeric(split[1])) {
-            throw new RuntimeException("Illegal expression: " + this.expression);
+            throw new RuntimeException(String.format("Illegal expression: %s", this.expression));
         }
         return split;
     }

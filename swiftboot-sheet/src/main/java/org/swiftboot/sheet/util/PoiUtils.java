@@ -21,6 +21,14 @@ import java.util.Date;
  */
 public class PoiUtils {
 
+    /**
+     * Get first sheet from a worksheet file by it's suffix
+     *
+     * @param templateFileStream
+     * @param fileSuffix
+     * @return
+     * @throws IOException
+     */
     public static Sheet firstSheet(InputStream templateFileStream, String fileSuffix) throws IOException {
         Workbook workbook = initWorkbook(templateFileStream, fileSuffix);
         return firstSheet(workbook);
