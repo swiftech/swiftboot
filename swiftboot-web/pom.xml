@@ -5,7 +5,7 @@
     <parent>
         <artifactId>swiftboot</artifactId>
         <groupId>com.github.swiftech</groupId>
-        <version>1.3-beta1</version>
+        <version>1.3-beta2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -93,11 +93,11 @@
             <version>${validation.api.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.annotation</groupId>-->
+<!--            <artifactId>javax.annotation-api</artifactId>-->
+<!--            <version>${javax.annotations.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -208,7 +208,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.197</version>
+            <version>${h2.version}</version>
             <scope>test</scope>
         </dependency>
 

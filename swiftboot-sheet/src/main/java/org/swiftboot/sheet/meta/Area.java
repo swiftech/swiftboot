@@ -39,22 +39,28 @@ public class Area {
         this.endPosition = new Position(row2, column2);
     }
 
-    public int rowCount() {
+    public Integer rowCount() {
         if (startPosition == null) {
             return 0;
         }
         if (isSingleCell()) {
             return 1;
+        }
+        if (endPosition.row == null) {
+            return null;
         }
         return Math.abs(endPosition.row - startPosition.row) + 1;
     }
 
-    public int columnCount() {
+    public Integer columnCount() {
         if (startPosition == null) {
             return 0;
         }
         if (isSingleCell()) {
             return 1;
+        }
+        if (endPosition.column == null) {
+            return null; // must be uncertain size
         }
         return Math.abs(endPosition.column - startPosition.column) + 1;
     }
@@ -76,6 +82,18 @@ public class Area {
     public boolean isLine() {
         return startPosition.getRow().equals(endPosition.getRow())
                 || startPosition.getColumn().equals(endPosition.getColumn());
+    }
+
+    /**
+     * Calculate overlay, uncertain row or column index will be ignored.
+     *
+     * @param area
+     */
+    public Area overlay(Area area) {
+        return new Area(
+                Position.narrow(this.startPosition, area.getStartPosition()),
+                Position.enlarge(this.endPosition, area.getEndPosition())
+        );
     }
 
     public Position getStartPosition() {

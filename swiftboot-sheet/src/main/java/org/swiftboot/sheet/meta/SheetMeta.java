@@ -17,19 +17,21 @@ public class SheetMeta {
     /**
      * meta item -> export value
      */
-    private Map<MetaItem, Object> metas = new HashMap<>();
+    private Map<MetaItem, Object> metaItems = new HashMap<>();
 
     private final Translator translator = new Translator();
+
+    private boolean isAllowFreeSize = false;
 
     public SheetMeta() {
     }
 
-    public SheetMeta(Map<MetaItem, Object> metas) {
-        this.metas = metas;
+    public SheetMeta(Map<MetaItem, Object> metaItems) {
+        this.metaItems = metaItems;
     }
 
     public void fromExpression(String key, String expression) {
-        this.metas.put(new MetaItem(key, translator.toArea(expression)), null);
+        this.metaItems.put(new MetaItem(key, translator.toArea(expression)), null);
     }
 
     /**
@@ -40,7 +42,7 @@ public class SheetMeta {
      * @param value      null if no value data
      */
     public void fromExpression(String key, String expression, Object value) {
-        this.metas.put(new MetaItem(key, translator.toArea(expression)), value);
+        this.metaItems.put(new MetaItem(key, translator.toArea(expression)), value);
     }
 
     /**
@@ -74,10 +76,16 @@ public class SheetMeta {
         return fields; // TODO to be refactored
     }
 
+    /**
+     * Get value by key
+     *
+     * @param key
+     * @return
+     */
     public Object getValue(String key) {
-        for (MetaItem metaItem : metas.keySet()) {
+        for (MetaItem metaItem : metaItems.keySet()) {
             if (metaItem.getKey().equals(key)) {
-                return metas.get(metaItem);
+                return metaItems.get(metaItem);
             }
         }
         return null;
@@ -89,24 +97,28 @@ public class SheetMeta {
      * @param visitor
      */
     public void accept(MetaVisitor visitor) {
-        if (this.metas == null || this.metas.isEmpty()) {
+        if (this.metaItems == null || this.metaItems.isEmpty()) {
             throw new RuntimeException("Setup meta first");
         }
-        for (MetaItem meta : this.metas.keySet()) {
+        for (MetaItem meta : this.metaItems.keySet()) {
             Area area = meta.getArea();
             Position startingPos = area.getStartPosition();
+            System.out.printf("%s -> %s%n", meta.getKey(), meta.getArea());
             if (area.isSingleCell()) {
                 visitor.visitSingleCell(meta.getKey(), startingPos);
             }
             else {
-                int rowCount = area.rowCount();
-                int columnCount = area.columnCount();
+                Integer rowCount = area.rowCount();
+                Integer columnCount = area.columnCount();
+                if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
+                    throw new RuntimeException("Free size expression is not allowed");
+                }
                 if (area.isLine()) {
                     // Only one row is horizontal
-                    if (rowCount == 1) {
+                    if (rowCount != null && rowCount == 1) {
                         visitor.visitHorizontalLine(meta.getKey(), startingPos, columnCount);
                     }
-                    else if (columnCount == 1) { // Only one column is vertical
+                    else if (columnCount != null && columnCount == 1) { // Only one column is vertical
                         visitor.visitVerticalLine(meta.getKey(), startingPos, rowCount);
                     }
                 }
@@ -117,4 +129,26 @@ public class SheetMeta {
         }
     }
 
+    /**
+     * Find max (end) position from all areas.
+     *
+     * @return
+     */
+    public Position findMaxPosition() {
+        Area overlayedArea = new Area(new Position(0, 0));
+        for (MetaItem metaItem : metaItems.keySet()) {
+            overlayedArea = overlayedArea.overlay(metaItem.getArea());
+        }
+        System.out.println(overlayedArea);
+        return overlayedArea.getEndPosition();
+    }
+
+    public boolean isAllowFreeSize() {
+        return isAllowFreeSize;
+    }
+
+    public SheetMeta setAllowFreeSize(boolean allowFreeSize) {
+        isAllowFreeSize = allowFreeSize;
+        return this;
+    }
 }

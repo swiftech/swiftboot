@@ -46,7 +46,7 @@ public class CsvImporter extends BaseImporter {
             }
 
             @Override
-            public void visitHorizontalLine(String key, Position startPos, int columnCount) {
+            public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
                 String row = lines.get(startPos.getRow());
                 StringTokenizer valueTokenizer = StringTokenizer.getCSVInstance(row);
                 List<String> values = new ArrayList<>();
@@ -62,7 +62,7 @@ public class CsvImporter extends BaseImporter {
             }
 
             @Override
-            public void visitVerticalLine(String key, Position startPos, int rowCount) {
+            public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
                 List<String> values = new ArrayList<>();
                 for (int i = 0; i < rowCount; i++) {
                     String row = lines.get(startPos.getRow() + i);
@@ -81,7 +81,7 @@ public class CsvImporter extends BaseImporter {
             }
 
             @Override
-            public void visitMatrix(String key, Position startPos, int rowCount, int columnCount) {
+            public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
                 List<List<String>> matrix = new ArrayList<>();
                 for (int i = 0; i < rowCount; i++) {
                     String row = lines.get(startPos.getRow() + i);

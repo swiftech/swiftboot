@@ -45,13 +45,13 @@ public class ExcelImporter extends BaseImporter {
                 }
 
                 @Override
-                public void visitHorizontalLine(String key, Position startPos, int columnCount) {
+                public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
                     Row row = dataSheet.getRow(startPos.getRow());
                     ret.put(key, getValuesInRow(row, startPos, columnCount));
                 }
 
                 @Override
-                public void visitVerticalLine(String key, Position startPos, int rowCount) {
+                public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
                     List<Object> values = new ArrayList<>();
                     for (int i = 0; i < rowCount; i++) {
                         Row row = dataSheet.getRow(startPos.getRow() + i);
@@ -64,7 +64,7 @@ public class ExcelImporter extends BaseImporter {
                 }
 
                 @Override
-                public void visitMatrix(String key, Position startPos, int rowCount, int columnCount) {
+                public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
                     List<List<Object>> matrix = new ArrayList<>();
                     for (int i = 0; i < rowCount; i++) {
                         Row row = dataSheet.getRow(startPos.getRow() + i);

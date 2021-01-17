@@ -29,7 +29,7 @@ public class SwiftBootSheetFactory {
             importer = new CsvImporter(TYPE_CSV);
         }
         else {
-            throw new RuntimeException("No supported type: " + suffix);
+            throw new RuntimeException("Not supported file type: " + suffix);
         }
         return importer;
     }
@@ -49,7 +49,7 @@ public class SwiftBootSheetFactory {
             exporter = new CsvExporter(TYPE_CSV);
         }
         else {
-            throw new RuntimeException("No supported type: " + suffix);
+            throw new RuntimeException("Not supported file type: " + suffix);
         }
         return exporter;
     }

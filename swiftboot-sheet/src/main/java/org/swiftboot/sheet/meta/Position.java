@@ -1,6 +1,9 @@
 package org.swiftboot.sheet.meta;
 
+import org.swiftboot.sheet.util.CalculateUtils;
+
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Position in sheet
@@ -29,15 +32,67 @@ public class Position {
         return new Position(row, column);
     }
 
+    /**
+     * Add more rows to row index
+     *
+     * @param rows
+     * @return
+     */
     public Position moveRows(int rows) {
         this.row += rows;
         return this;
     }
 
+    /**
+     * Add more columns to column index.
+     *
+     * @param columns
+     * @return
+     */
     public Position moveColumns(int columns) {
         this.column += columns;
         return this;
     }
+
+    /**
+     * Create a enlarged position by 2 positions, uncertain row or column index will be ignored.
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static Position enlarge(Position p1, Position p2) {
+        return overlay(p1, p2, CalculateUtils::max);
+    }
+
+    /**
+     * Create a narrowed position by 2 positions, uncertain row or column index will be ignored.
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
+    public static Position narrow(Position p1, Position p2) {
+        return overlay(p1, p2, CalculateUtils::min);
+    }
+
+
+    /**
+     * overlay 2 positions and return new position by 'function'
+     * @param p1
+     * @param p2
+     * @param function
+     * @return
+     */
+    static Position overlay(Position p1, Position p2, BiFunction<Integer, Integer, Integer> function) {
+        if (p1 == null && p2 == null) {
+            return null;
+        }
+        Integer maxRow = p1 == null ? p2.getRow() : (p2 == null ? p1.getRow() : function.apply(p1.getRow(), p2.getRow()));
+        Integer maxCol = p1 == null ? p2.getColumn() : (p2 == null ? p1.getColumn() : function.apply(p1.getColumn(), p2.getColumn()));
+        return new Position(maxRow, maxCol);
+    }
+
 
     public Integer getRow() {
         return row;

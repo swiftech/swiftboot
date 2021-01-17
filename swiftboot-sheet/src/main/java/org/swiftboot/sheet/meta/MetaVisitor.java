@@ -20,7 +20,7 @@ public interface MetaVisitor {
      * @param startPos
      * @param columnCount
      */
-    void visitHorizontalLine(String key, Position startPos, int columnCount);
+    void visitHorizontalLine(String key, Position startPos, Integer columnCount);
 
     /**
      * Visit a vertical line of cells.
@@ -29,7 +29,7 @@ public interface MetaVisitor {
      * @param startPos
      * @param rowCount
      */
-    void visitVerticalLine(String key, Position startPos, int rowCount);
+    void visitVerticalLine(String key, Position startPos, Integer rowCount);
 
     /**
      * Visit a matrix of cells.
@@ -39,5 +39,5 @@ public interface MetaVisitor {
      * @param rowCount
      * @param columnCount
      */
-    void visitMatrix(String key, Position startPos, int rowCount, int columnCount);
+    void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount);
 }

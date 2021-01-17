@@ -29,6 +29,8 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
  */
 public class Translator {
 
+    private int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
+
     public Area toArea(String exp) {
         Expression expression = new Expression(exp);
         if (expression.isSinglePosition()) {
@@ -46,65 +48,75 @@ public class Translator {
     }
 
     /**
-     * TODO 需要支持 ? 的形式的表达
-     * @param exp2
+     *
+     * @param startEnd expression array for start and end positions
      * @return
      */
-    private Area freeRange(String[] exp2) {
-        if (exp2 == null || exp2.length != 2) {
-            throw new NotSupportedExpressionException(Arrays.toString(exp2));
+    private Area freeRange(String[] startEnd) {
+        if (startEnd == null || startEnd.length != 2) {
+            throw new NotSupportedExpressionException(Arrays.toString(startEnd));
         }
-        String[] seg1 = splitByCharacterType(exp2[0].toUpperCase());
-        String[] seg2 = splitByCharacterType(exp2[1].toUpperCase());
+        String startExp = startEnd[0];
+        String endExp = startEnd[1];
+        String[] seg1 = splitByCharacterType(startExp.toUpperCase());
+        String[] seg2 = splitByCharacterType(endExp.toUpperCase());
         String[] all = ArrayUtils.addAll(seg1, seg2);
-        List<String> letters = new ArrayList<>();
-        List<String> numbers = new ArrayList<>();
+        List<Integer> colIndexes = new ArrayList<>();
+        List<Integer> rowIndexes = new ArrayList<>();
+        boolean hasUncertainSize = false;
         for (String e : all) {
             if (isNumeric(e)) {
-                numbers.add(e);
+                rowIndexes.add(NumberUtils.toInt(e) - 1);
             }
-            else {
-                letters.add(e);
+            else if (isAlpha(e)) {
+                colIndexes.add(expToIndex(e));
+            }
+            else if (contains(e, '?')) {
+                hasUncertainSize = true;
             }
         }
-        if (letters.isEmpty() || numbers.isEmpty()) {
-            throw new NotSupportedExpressionException(Arrays.toString(exp2));
+        if (colIndexes.isEmpty() || rowIndexes.isEmpty()) {
+            throw new NotSupportedExpressionException(Arrays.toString(startEnd));
         }
-        letters.sort(String::compareTo);
-        numbers.sort(String::compareTo);
+        colIndexes.sort(Integer::compareTo);
+        rowIndexes.sort(Integer::compareTo);
 
-        Position startPos = new Position(
-                NumberUtils.toInt((numbers.get(0))) - 1,
-                expToIndex(letters.get(0))
-        );
-        Position endPos = new Position(
-                NumberUtils.toInt((numbers.size() > 1 ? numbers.get(1) : numbers.get(0))) - 1,
-                expToIndex(letters.size() > 1 ? letters.get(1) : letters.get(0))
-        );
+        Position startPos = new Position(rowIndexes.get(0), colIndexes.get(0));
+
+        Integer endRow = rowIndexes.size() > 1
+                ? rowIndexes.get(1)
+                : (hasUncertainSize ? null : rowIndexes.get(0));
+        Integer endColumn = colIndexes.size() > 1
+                ? colIndexes.get(1)
+                : hasUncertainSize ? null : colIndexes.get(0);
+        Position endPos = new Position(endRow, endColumn);
         return new Area(startPos, endPos);
     }
-
 
     private Area lineRange(Expression expression) {
         boolean isVertical = expression.isVerticalRange();
         boolean isHorizontal = expression.isHorizontalRange();
-        String[] exp2 = isVertical ? expression.splitAsVerticalRange() : expression.splitAsHorizontalRange();
-        int len;
+        String[] startEnd = isVertical ? expression.splitAsVerticalRange() : expression.splitAsHorizontalRange();
+        String startExp = startEnd[0];
+        String endExp = startEnd[1];
+        int rangeSize;
+        // Determine start position
         Position startPos;
-        if (StringUtils.isNumeric(exp2[0])) {
-            len = NumberUtils.toInt(exp2[0]);
-            startPos = this.toSinglePosition(exp2[1]);
+        if (StringUtils.isNumeric(startExp)) {
+            rangeSize = NumberUtils.toInt(startExp);
+            startPos = this.toSinglePosition(endExp);
         }
         else {
-            startPos = this.toSinglePosition(exp2[0]);
-            len = NumberUtils.toInt(exp2[1]);
+            startPos = this.toSinglePosition(startExp);
+            rangeSize = NumberUtils.toInt(endExp);
         }
+        // Determine end position
         Position endPos;
         if (isHorizontal) {
-            endPos = new Position(startPos.getRow(), startPos.getColumn() + len);
+            endPos = new Position(startPos.getRow(), startPos.getColumn() + rangeSize);
         }
         else {
-            endPos = new Position(startPos.getRow() + len, startPos.getColumn());
+            endPos = new Position(startPos.getRow() + rangeSize, startPos.getColumn());
         }
         return new Area(startPos, endPos);
     }
@@ -123,15 +135,6 @@ public class Translator {
         return toPosition(split);
     }
 
-    /**
-     * TBD
-     *
-     * @param position
-     * @return
-     */
-    String toExpression(Position position) {
-        return indexToExp(position.getColumn()) + (position.getRow() + 1);
-    }
 
     /**
      * @param split
@@ -159,11 +162,11 @@ public class Translator {
             }
         }
         else if ("?".equals(left)) {
-            if (isNotBlank(right)){
-                if (isNumeric(right)){
+            if (isNotBlank(right)) {
+                if (isNumeric(right)) {
                     row = NumberUtils.toInt(right) - 1;
                 }
-                else if (isAlpha(right)){
+                else if (isAlpha(right)) {
                     column = expToIndex(right);
                 }
                 else {
@@ -173,6 +176,43 @@ public class Translator {
         }
         return new Position(row, column);
     }
+
+
+    /**
+     * Parse column expression like 'BA' to actual column number.
+     *
+     * @param exp
+     * @return
+     */
+    int expToIndex(String exp) {
+        if (exp.length() > 4) {
+            throw new RuntimeException("Length must be less than 4");
+        }
+        int ret = 0;
+        String reversed = reverse(exp);
+        char[] charArray = reversed.toCharArray();
+        for (int i = 0; i < charArray.length; i++) {
+            if (i == 0) {
+                ret += LetterUtils.letterToIndex(charArray[i]);
+            }
+            else {
+                ret += ((LetterUtils.letterToIndex(charArray[i]) + 1) * powForExcel(i));
+            }
+        }
+        return ret;
+    }
+
+
+    /**
+     * TBD
+     *
+     * @param position
+     * @return
+     */
+    String toExpression(Position position) {
+        return indexToExp(position.getColumn()) + (position.getRow() + 1);
+    }
+
 
     String indexToExp(int index) {
         System.out.println();
@@ -228,33 +268,4 @@ public class Translator {
         System.out.println(s);
         return s;
     }
-
-
-    /**
-     * Parse column expression like 'BA' to actual column number.
-     *
-     * @param exp
-     * @return
-     */
-    int expToIndex(String exp) {
-        if (exp.length() > 4) {
-            throw new RuntimeException("Length must be less than 4");
-        }
-        int ret = 0;
-        String reversed = reverse(exp);
-        char[] charArray = reversed.toCharArray();
-        for (int i = 0; i < charArray.length; i++) {
-            if (i == 0) {
-                ret += LetterUtils.letterToIndex(charArray[i]);
-            }
-            else {
-                ret += ((LetterUtils.letterToIndex(charArray[i]) + 1) * powForExcel(i));
-            }
-        }
-        return ret;
-    }
-
-
-    private int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
-
 }

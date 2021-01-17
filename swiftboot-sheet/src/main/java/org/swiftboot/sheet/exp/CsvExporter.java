@@ -2,9 +2,9 @@ package org.swiftboot.sheet.exp;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringTokenizer;
-import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.MetaVisitor;
 import org.swiftboot.sheet.meta.Position;
+import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.util.IoUtils;
 
 import java.io.BufferedOutputStream;
@@ -53,26 +53,27 @@ public class CsvExporter extends BaseExporter {
         else {
             rows = IoUtils.readToStringList(templateFileStream);
         }
+        this.extendSheet(rows, exportMeta.findMaxPosition());
+        exportMeta.setAllowFreeSize(true);
         exportMeta.accept(new MetaVisitor() {
             @Override
             public void visitSingleCell(String key, Position position) {
-                extendSheet(rows, position);
                 Object value = exportMeta.getValue(key);
                 setValueToCell(rows, position, value);
             }
 
             @Override
-            public void visitHorizontalLine(String key, Position startPos, int columnCount) {
-                extendSheet(rows, startPos.clone().moveColumns(columnCount));
+            public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
                 List<Object> values = (List<Object>) exportMeta.getValue(key);
-                setValuesToRow(rows, startPos, columnCount, values);
+                int actualCount = columnCount == null ? values.size() : Math.min(columnCount, values.size());
+                setValuesToRow(rows, startPos, actualCount, values);
             }
 
             @Override
-            public void visitVerticalLine(String key, Position startPos, int rowCount) {
-                extendSheet(rows, startPos.clone().moveRows(rowCount));
+            public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
                 List<Object> values = (List<Object>) exportMeta.getValue(key);
-                for (int i = 0; i < rowCount; i++) {
+                int actualCount = rowCount == null ? values.size() : Math.min(rowCount, values.size());
+                for (int i = 0; i < actualCount; i++) {
                     int iRow = startPos.getRow() + i;
                     String row = rows.get(iRow);
                     if (row != null) {
@@ -83,15 +84,14 @@ public class CsvExporter extends BaseExporter {
             }
 
             @Override
-            public void visitMatrix(String key, Position startPos, int rowCount, int columnCount) {
-                extendSheet(rows, startPos.clone().moveRows(rowCount));
-                extendSheet(rows, startPos.clone().moveColumns(columnCount));
+            public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
                 List<List<Object>> matrix = (List<List<Object>>) exportMeta.getValue(key);
-                int actualRowCount = Math.min(rowCount, matrix.size());
+                int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
+                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
                 for (int i = 0; i < actualRowCount; i++) {
                     List<Object> values = matrix.get(i);
                     System.out.println(StringUtils.join(values));
-                    setValuesToRow(rows, startPos.moveRows(i), columnCount, values);
+                    setValuesToRow(rows, startPos.clone().moveRows(i), actualColumnCount, values);
                 }
             }
         });
@@ -104,6 +104,12 @@ public class CsvExporter extends BaseExporter {
         bos.close();
     }
 
+    /**
+     * Extends sheet
+     *
+     * @param lines    String lines that represents a sheet
+     * @param position end position this sheet should extends to
+     */
     void extendSheet(List<String> lines, Position position) {
         if (lines == null) {
             return;
@@ -116,25 +122,23 @@ public class CsvExporter extends BaseExporter {
             originRowSize = valueTokenizer.size();
         }
 
-        int moreCols = originRowSize - position.getColumn();
-        int moreRows = lines.size() - position.getRow();
+        int moreCols = position.getColumn() + 1 - originRowSize;
         // extend columns first
-        if (moreCols <= 0) {
-            int columnCount = position.getColumn() - originRowSize;
+        if (moreCols > 0) {
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
                 String newLine = new StringBuilder()
                         .append(line)
-                        .append(StringUtils.repeat(',', columnCount))
+                        .append(StringUtils.repeat(',', moreCols))
                         .toString();
                 lines.set(i, newLine);
             }
         }
         // extend rows
-        if (moreRows <= 0) {
-            int rowCount = position.getRow() + 1 - lines.size();
+        int moreRows = position.getRow() + 1 - lines.size();
+        if (moreRows > 0) {
             int rowSize = Math.max(originRowSize, position.getColumn() + 1);
-            for (int i = 0; i < rowCount; i++) {
+            for (int i = 0; i < moreRows; i++) {
                 lines.add(StringUtils.repeat(',', rowSize - 1));
             }
         }
