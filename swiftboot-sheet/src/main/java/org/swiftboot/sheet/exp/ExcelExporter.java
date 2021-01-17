@@ -49,10 +49,12 @@ public class ExcelExporter extends BaseExporter {
         Workbook wb = PoiUtils.initWorkbook(templateFileStream, super.getFileType());
         Sheet sheet = PoiUtils.firstSheet(wb);
 
+        this.extendSheet(sheet, exportMeta.findMaxPosition());
+
+        exportMeta.setAllowFreeSize(true);
         exportMeta.accept(new MetaVisitor() {
             @Override
             public void visitSingleCell(String key, Position position) {
-                extendSheet(sheet, position);
                 Row row = sheet.getRow(position.getRow());
                 Cell cell = row.getCell(position.getColumn());
                 Object value = exportMeta.getValue(key);
@@ -60,18 +62,19 @@ public class ExcelExporter extends BaseExporter {
             }
 
             @Override
-            public void visitHorizontalLine(String key, Position startPos, int columnCount) {
-                extendSheet(sheet, startPos.clone().moveColumns(columnCount));
-                Row row = sheet.getRow(startPos.getRow());
+            public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
                 List<Object> values = (List<Object>) exportMeta.getValue(key);
-                setValuesToRow(row, startPos, columnCount, values);
+                System.out.println(columnCount);
+                int actualCount = columnCount == null ? values.size() : Math.min(columnCount, values.size());
+                Row row = sheet.getRow(startPos.getRow());
+                setValuesToRow(row, startPos, actualCount, values);
             }
 
             @Override
-            public void visitVerticalLine(String key, Position startPos, int rowCount) {
-                extendSheet(sheet, startPos.clone().moveRows(rowCount));
+            public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
                 List<Object> values = (List<Object>) exportMeta.getValue(key);
-                for (int i = 0; i < rowCount; i++) {
+                int actualCount = rowCount == null ? values.size() : Math.min(rowCount, values.size());
+                for (int i = 0; i < actualCount; i++) {
                     Row row = sheet.getRow(startPos.getRow() + i);
                     if (row != null) {
                         Cell cell = row.getCell(startPos.getColumn());
@@ -81,14 +84,14 @@ public class ExcelExporter extends BaseExporter {
             }
 
             @Override
-            public void visitMatrix(String key, Position startPos, int rowCount, int columnCount) {
-                extendSheet(sheet, startPos.clone().moveRows(rowCount));
-                extendSheet(sheet, startPos.clone().moveColumns(columnCount));
+            public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
                 List<List<Object>> matrix = (List<List<Object>>) exportMeta.getValue(key);
-                for (int i = 0; i < rowCount; i++) {
+                int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
+                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
+                for (int i = 0; i < actualRowCount; i++) {
                     List<Object> values = matrix.get(i);
                     Row row = sheet.getRow(startPos.getRow() + i);
-                    setValuesToRow(row, startPos, columnCount, values);
+                    setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values);
                 }
             }
         });
@@ -96,40 +99,55 @@ public class ExcelExporter extends BaseExporter {
     }
 
     void extendSheet(Sheet sheet, Position position) {
-        System.out.println("Last row num " + sheet.getLastRowNum());
-        System.out.println("Physical number of rows " + sheet.getPhysicalNumberOfRows());
-        System.out.println("Extend sheet to " + position);
+        System.out.println("Try to extend sheet to " + position);
         // Calculate the original size of a row.
+        int originRowCount = sheet.getLastRowNum() + 1;
         int originRowSize = 0;
         if (sheet.getRow(0) != null) {
             Row row = sheet.getRow(0);
             originRowSize = row.getLastCellNum() + 1;
         }
-
-        int moreCols = originRowSize - position.getColumn();
-        int moreRows = sheet.getLastRowNum() - position.getRow();
+        System.out.println("Original row count: " + originRowCount);
+        System.out.println("Physical number of rows: " + sheet.getPhysicalNumberOfRows());
+        System.out.println("Original row size: " + originRowSize);
 
         // Extend columns TODO 需要考虑row=0的情况
-        if (moreCols <= 0) {
-            int columnCount = position.getColumn() - originRowSize;
-            for (int i = 0; i < sheet.getLastRowNum(); i++) {
+        int moreCols = position.getColumn() + 1 - originRowSize;
+        if (moreCols > 0) {
+            for (int i = 0; i < originRowCount; i++) {
                 Row row = sheet.getRow(i);
                 // Append more columns to a row
-                for (int j = 0; j < columnCount; j++) {
+                for (int j = 0; j < moreCols; j++) {
                     row.createCell(originRowSize + j);
                 }
             }
         }
 
         // Extend rows
-        if (moreRows <= 0) {
-            int rowCount = position.getRow() + 1 - sheet.getPhysicalNumberOfRows();
-            int rowSize = Math.max(originRowSize, position.getColumn() + 1);
-            for (int i = 0; i < rowCount; i++) {
-                Row newRow = sheet.createRow(i);
-                for (int j = 0; j < rowSize; j++) {
+        int moreRows = position.getRow() + 1 - originRowCount;
+        if (moreRows > 0) {
+            int actualRowSize = Math.max(originRowSize, position.getColumn() + 1);
+            for (int i = 0; i < moreRows; i++) {
+                Row newRow = sheet.createRow(originRowCount + i);
+                for (int j = 0; j < actualRowSize; j++) {
                     newRow.createCell(j);
                 }
+            }
+        }
+
+        // Check extending result
+        if (sheet.getLastRowNum() < 0 || sheet.getLastRowNum() < position.getRow()) {
+            throw new RuntimeException(String.format("Extending sheet rows inappropriate: %d", sheet.getLastRowNum()));
+        }
+        else {
+            if (sheet.getRow(0) != null) {
+                short lastCellNum = sheet.getRow(0).getLastCellNum();
+                if (lastCellNum < position.getColumn() + 1) {
+                    throw new RuntimeException(String.format("Extending sheet column inappropriate: %d", lastCellNum));
+                }
+            }
+            else {
+                throw new RuntimeException(String.format("Extending sheet rows inappropriate: %d", sheet.getLastRowNum()));
             }
         }
     }
