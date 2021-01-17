@@ -5,6 +5,8 @@ import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -37,6 +39,14 @@ public class GoodsEntity extends BaseEntity {
     @PropertyDescription(value = "商品价格", example = "12.5")
     @Column(name = "PRICE", scale = 8, precision = 2)//, columnDefinition = "DOUBLE(8.2) COMMENT '商品价格'")
     private Double price;
+
+    @PropertyDescription(value = "生产时间", example = "2020-01-16 00:00:00")
+    @Column(name = "PRODUCTION_TIME", columnDefinition = "TIMESTAMP COMMENT '生产时间'")
+    private LocalDateTime productionTime;
+
+    @PropertyDescription(value = "过期日期", example = "2021-01-16")
+    @Column(name = "EXPIRE_DATE", columnDefinition = "DATE COMMENT '过期日期'")
+    private LocalDate expireDate;
 
     /**
      * 商品详情
@@ -101,6 +111,23 @@ public class GoodsEntity extends BaseEntity {
      */
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public LocalDateTime getProductionTime() {
+        return productionTime;
+    }
+
+    public void setProductionTime(LocalDateTime productionTime) {
+        this.productionTime = productionTime;
+    }
+
+    public LocalDate getExpireDate() {
+        return expireDate;
+    }
+
+    public GoodsEntity setExpireDate(LocalDate expireDate) {
+        this.expireDate = expireDate;
+        return this;
     }
 
     /**

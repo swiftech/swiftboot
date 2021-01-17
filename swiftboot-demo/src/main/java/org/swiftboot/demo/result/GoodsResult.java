@@ -1,10 +1,14 @@
 package org.swiftboot.demo.result;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.web.result.BasePopulateResult;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 商品
@@ -41,6 +45,16 @@ public class GoodsResult extends BasePopulateResult<GoodsEntity> {
     @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @JsonProperty("id")
     private String id;
+
+    @ApiModelProperty(value = "生产时间", example = "2020-01-16 00:00:00")
+    @JsonProperty("production_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime productionTime;
+
+    @ApiModelProperty(value = "过期日期", example = "2021-01-16")
+    @JsonProperty("expire_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expireDate;
 
     @ApiModelProperty(value = "商品详情")
     @JsonProperty("goods_detail")
@@ -170,6 +184,24 @@ public class GoodsResult extends BasePopulateResult<GoodsEntity> {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    public LocalDateTime getProductionTime() {
+        return productionTime;
+    }
+
+    public GoodsResult setProductionTime(LocalDateTime productionTime) {
+        this.productionTime = productionTime;
+        return this;
+    }
+
+    public LocalDate getExpireDate() {
+        return expireDate;
+    }
+
+    public GoodsResult setExpireDate(LocalDate expireDate) {
+        this.expireDate = expireDate;
+        return this;
     }
 
     public GoodsDetailResult getGoodsDetail() {
