@@ -28,10 +28,11 @@
 * [swiftboot-rpc](swiftboot-rpc/): Spring Cloud RPC（试验 experimental）
   
 ##### 扩展模块:
+* [swiftboot-data](swiftboot-data/): 数据访问层模块
 * [swiftboot-service](swiftboot-service/): 企业应用基础服务
 * [swiftboot-auth](swiftboot-auth/): 用户认证服务
 * [swiftboot-shiro](swiftboot-shiro/): 集成 Shiro 用户认证和鉴权
-* [swiftboot-sheet](swiftboot-sheet/): 表格数据导入导出（支持 Excel, CSV)
+* [swiftboot-sheet](swiftboot-sheet/): 表格数据模版化导入导出（支持 Excel, CSV)
 * [swiftboot-fileconvert](swiftboot-fileconvert/): 文档格式转换（开发中 development）
 
 ##### Demo:
@@ -39,6 +40,15 @@
 
 
 ### 版本发布
+1.3-beta2 (2021-01-18)
+* `swiftboot-data` 新增 snowflake ID 生成器
+* 新增 `swiftboot-sheet` 提供了模版化的表格数据导出和导入的功能
+* 依赖库升级和bug修复
+
+1.3-beta1 (2020-09-29)
+* 将数据访问层从 `swiftboot-web` 独立出来成为 `swiftboot-data` 模块，方便用于任何 JPA 应用程序使用
+* 依赖库升级和bug修复
+
 1.2.1 release (2020-08-25)
 * 修复了 `swiftboot-shiro` 配置加载的bug
 * 依赖库升级
@@ -51,12 +61,6 @@
 * 改用 Spring 自带的跨域过滤器
 * 依赖库升级
 * bug 修复
-
-1.1.1 release (2020-03-15)
-* bug 修复
-* 依赖库升级
-* 新增 OnlyNumber 校验
-* 重构代码
 
 
 [完整更新记录](changelog.md)

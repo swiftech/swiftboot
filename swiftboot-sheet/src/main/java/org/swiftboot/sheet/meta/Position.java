@@ -38,8 +38,10 @@ public class Position {
      * @param rows
      * @return
      */
-    public Position moveRows(int rows) {
-        this.row += rows;
+    public Position moveRows(Integer rows) {
+        if (rows != null) {
+            this.row += rows;
+        }
         return this;
     }
 
@@ -49,9 +51,15 @@ public class Position {
      * @param columns
      * @return
      */
-    public Position moveColumns(int columns) {
-        this.column += columns;
+    public Position moveColumns(Integer columns) {
+        if (columns != null) {
+            this.column += columns;
+        }
         return this;
+    }
+
+    public boolean isUncertain() {
+        return this.row == null || this.column == null;
     }
 
     /**
@@ -79,6 +87,7 @@ public class Position {
 
     /**
      * overlay 2 positions and return new position by 'function'
+     *
      * @param p1
      * @param p2
      * @param function

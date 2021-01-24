@@ -1,5 +1,6 @@
 package org.swiftboot.sheet.meta;
 
+import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.sheet.annatation.Mapping;
 import org.swiftboot.util.BeanUtils;
 
@@ -55,8 +56,12 @@ public class SheetMeta {
         List<Field> fields = BeanUtils.getDeclaredFieldsByAnnotation(object.getClass(), Mapping.class);
         fields.forEach(field -> {
             Mapping annotation = field.getAnnotation(Mapping.class);
+            String expression = annotation.value();
+            if (StringUtils.isBlank(expression)) {
+                return;// Ignore
+            }
             Object value = BeanUtils.forceGetProperty(object, field);
-            fromExpression(field.getName(), annotation.value(), value);
+            fromExpression(field.getName(), expression, value);
         });
         return fields; // TODO to be refactored
     }
@@ -71,7 +76,11 @@ public class SheetMeta {
         List<Field> fields = BeanUtils.getDeclaredFieldsByAnnotation(clazz, Mapping.class);
         fields.forEach(field -> {
             Mapping annotation = field.getAnnotation(Mapping.class);
-            fromExpression(field.getName(), annotation.value(), null);
+            String expression = annotation.value();
+            if (StringUtils.isBlank(expression)) {
+                return;// Ignore
+            }
+            fromExpression(field.getName(), expression, null);
         });
         return fields; // TODO to be refactored
     }
@@ -103,7 +112,7 @@ public class SheetMeta {
         for (MetaItem meta : this.metaItems.keySet()) {
             Area area = meta.getArea();
             Position startingPos = area.getStartPosition();
-            System.out.printf("%s -> %s%n", meta.getKey(), meta.getArea());
+            System.out.printf("'%s' -> %s%n", meta.getKey(), meta.getArea());
             if (area.isSingleCell()) {
                 visitor.visitSingleCell(meta.getKey(), startingPos);
             }
@@ -113,7 +122,7 @@ public class SheetMeta {
                 if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
                     throw new RuntimeException("Free size expression is not allowed");
                 }
-                if (area.isLine()) {
+                else if (area.isLine()) {
                     // Only one row is horizontal
                     if (rowCount != null && rowCount == 1) {
                         visitor.visitHorizontalLine(meta.getKey(), startingPos, columnCount);
@@ -132,14 +141,14 @@ public class SheetMeta {
     /**
      * Find max (end) position from all areas.
      *
-     * @return
+     * @return not null
      */
     public Position findMaxPosition() {
-        Area overlayedArea = new Area(new Position(0, 0));
+        Area overlayedArea = new Area(0, 0, 0, 0);
         for (MetaItem metaItem : metaItems.keySet()) {
             overlayedArea = overlayedArea.overlay(metaItem.getArea());
         }
-        System.out.println(overlayedArea);
+        System.out.println("Overlayed area: " + overlayedArea);
         return overlayedArea.getEndPosition();
     }
 
@@ -147,8 +156,7 @@ public class SheetMeta {
         return isAllowFreeSize;
     }
 
-    public SheetMeta setAllowFreeSize(boolean allowFreeSize) {
+    public void setAllowFreeSize(boolean allowFreeSize) {
         isAllowFreeSize = allowFreeSize;
-        return this;
     }
 }

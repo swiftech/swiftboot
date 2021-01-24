@@ -9,7 +9,7 @@ public interface MetaVisitor {
      * Visit a single cell.
      *
      * @param key
-     * @param position
+     * @param position expect position
      */
     void visitSingleCell(String key, Position position);
 
@@ -18,7 +18,7 @@ public interface MetaVisitor {
      *
      * @param key
      * @param startPos
-     * @param columnCount
+     * @param columnCount   expect column count
      */
     void visitHorizontalLine(String key, Position startPos, Integer columnCount);
 
@@ -27,7 +27,7 @@ public interface MetaVisitor {
      *
      * @param key
      * @param startPos
-     * @param rowCount
+     * @param rowCount expect row count
      */
     void visitVerticalLine(String key, Position startPos, Integer rowCount);
 
@@ -36,8 +36,8 @@ public interface MetaVisitor {
      *
      * @param key
      * @param startPos
-     * @param rowCount
-     * @param columnCount
+     * @param rowCount expect row count
+     * @param columnCount expect column count
      */
     void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount);
 }

@@ -8,12 +8,13 @@ import java.util.Objects;
 public class Area {
 
     /**
-     * Start position of this area
+     * Start position of this area, this cannot be null.
      */
     Position startPosition;
 
     /**
      * End position of this area, inclusive.
+     * this can be null means
      */
     Position endPosition;
 
@@ -39,6 +40,11 @@ public class Area {
         this.endPosition = new Position(row2, column2);
     }
 
+    /**
+     * Row count from start position to end position
+     *
+     * @return
+     */
     public Integer rowCount() {
         if (startPosition == null) {
             return 0;
@@ -47,11 +53,16 @@ public class Area {
             return 1;
         }
         if (endPosition.row == null) {
-            return null;
+            return null; // must be uncertain size
         }
         return Math.abs(endPosition.row - startPosition.row) + 1;
     }
 
+    /**
+     * Column count from start position to end position.
+     *
+     * @return
+     */
     public Integer columnCount() {
         if (startPosition == null) {
             return 0;
@@ -90,10 +101,12 @@ public class Area {
      * @param area
      */
     public Area overlay(Area area) {
-        return new Area(
-                Position.narrow(this.startPosition, area.getStartPosition()),
-                Position.enlarge(this.endPosition, area.getEndPosition())
-        );
+        Position nearest = Position.narrow(this.startPosition, area.getStartPosition());
+        // Enlarge with start position if no end position
+        Position farthest = Position.enlarge(
+                this.endPosition == null ? this.startPosition : this.endPosition,
+                area.getEndPosition() == null ? area.getStartPosition() : area.getEndPosition());
+        return new Area(nearest, farthest);
     }
 
     public Position getStartPosition() {

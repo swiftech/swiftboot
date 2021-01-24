@@ -2,12 +2,11 @@ package org.swiftboot.sheet.util;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.swiftboot.sheet.constant.SheetFileType;
+import org.swiftboot.sheet.meta.Picture;
+import org.swiftboot.sheet.meta.Position;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,6 +118,61 @@ public class PoiUtils {
         }
         else {
             System.out.printf("Cell or value is null: %s - %s%n", cell, value);
+        }
+    }
+
+    /**
+     * Write picture (in bytes) to a sheet in cells area (if specifically),
+     * otherwise, the picture will be anchored to the start position cell and draws as is (actually be stretched somehow).
+     *
+     * @param sheet
+     * @param startPos
+     * @param endPosition   end position of area, not null.
+     * @param pictureValue
+     */
+    public static void writePicture(Sheet sheet, Position startPos, Position endPosition, Picture pictureValue) {
+        if (ObjectUtils.allNotNull(sheet, startPos, pictureValue)) {
+            System.out.printf("Write picture from %s to %s%n", startPos, endPosition);
+            Workbook wb = sheet.getWorkbook();
+
+            int pictureIdx = wb.addPicture(pictureValue.getData(), pictureValue.getPoiPictureType());
+
+            CreationHelper helper = wb.getCreationHelper();
+            Drawing drawing = sheet.createDrawingPatriarch();
+            ClientAnchor anchor = helper.createClientAnchor();
+
+            boolean isRestrictedInArea = true;
+            if (endPosition == null || endPosition.isUncertain()) {
+                isRestrictedInArea = false;
+            }
+            System.out.printf("%s restrict in area%n", isRestrictedInArea ? "" : "not ");
+
+            // set top-left corner of the picture,
+            // subsequent call of Picture#resize() will operate relative to it
+            anchor.setCol1(startPos.getColumn());
+            anchor.setRow1(startPos.getRow());
+            if (isRestrictedInArea) {
+                anchor.setCol2(endPosition.getColumn() + 1); // exclusive
+                anchor.setRow2(endPosition.getRow() + 1); // eclusive
+            }
+            anchor.setDx1(0);
+            anchor.setDy1(0);
+            anchor.setDx2(1023);
+            anchor.setDy2(255);
+            if (isRestrictedInArea) {
+                anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE); // dynamic size
+            }
+            else {
+                anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_DONT_RESIZE); // absolute size, should resize POI Picture.
+            }
+//            System.out.println(anchor);
+            org.apache.poi.ss.usermodel.Picture pict = drawing.createPicture(anchor, pictureIdx);
+            if (!isRestrictedInArea) {
+                pict.resize();
+            }
+        }
+        else {
+            System.out.printf("Sheet or position or value is null: %s - %s - %s%n", sheet, startPos, pictureValue);
         }
     }
 }

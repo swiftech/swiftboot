@@ -3,6 +3,7 @@ package org.swiftboot.sheet.exp;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringTokenizer;
 import org.swiftboot.sheet.meta.MetaVisitor;
+import org.swiftboot.sheet.meta.PictureLoader;
 import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.util.IoUtils;
@@ -15,9 +16,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Export data into a new or a templated CSV file.
+ * Note:
+ * not support export pictures, the exporter will ignore pictures if provides.
  *
  * @author allen
  */
@@ -56,43 +60,69 @@ public class CsvExporter extends BaseExporter {
         this.extendSheet(rows, exportMeta.findMaxPosition());
         exportMeta.setAllowFreeSize(true);
         exportMeta.accept(new MetaVisitor() {
+
+            private void tryPictureElse(Object value, Function<Object, Object> doNonPicture) {
+                if (value instanceof PictureLoader) {
+                    System.out.println("Picture is not supported to export to CSV, just ignore ");
+                }
+                else {
+                    doNonPicture.apply(value);
+                }
+            }
+
             @Override
             public void visitSingleCell(String key, Position position) {
                 Object value = exportMeta.getValue(key);
-                setValueToCell(rows, position, value);
+                tryPictureElse(value, (nonPicValue) -> {
+                    setValueToCell(rows, position, value);
+                    return null;
+                });
             }
 
             @Override
             public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
-                List<Object> values = (List<Object>) exportMeta.getValue(key);
-                int actualCount = columnCount == null ? values.size() : Math.min(columnCount, values.size());
-                setValuesToRow(rows, startPos, actualCount, values);
+                Object value = exportMeta.getValue(key);
+                tryPictureElse(value, (nonPicValue) -> {
+                    List<Object> values = (List<Object>) value;
+                    int actualCount = columnCount == null ? values.size() : Math.min(columnCount, values.size());
+                    setValuesToRow(rows, startPos, actualCount, values);
+                    return null;
+                });
             }
 
             @Override
             public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
-                List<Object> values = (List<Object>) exportMeta.getValue(key);
-                int actualCount = rowCount == null ? values.size() : Math.min(rowCount, values.size());
-                for (int i = 0; i < actualCount; i++) {
-                    int iRow = startPos.getRow() + i;
-                    String row = rows.get(iRow);
-                    if (row != null) {
-                        // TODO refactor
-                        setValueToCell(rows, new Position(iRow, startPos.getColumn()), values.get(i));
+                Object value = exportMeta.getValue(key);
+                tryPictureElse(value, (nonPicValue) -> {
+                    List<Object> values = (List<Object>) value;
+                    int actualCount = rowCount == null ? values.size() : Math.min(rowCount, values.size());
+                    for (int i = 0; i < actualCount; i++) {
+                        int iRow = startPos.getRow() + i;
+                        String row = rows.get(iRow);
+                        if (row != null) {
+                            // TODO refactor
+                            setValueToCell(rows, new Position(iRow, startPos.getColumn()), values.get(i));
+                        }
                     }
-                }
+                    return null;
+                });
             }
 
             @Override
             public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
-                List<List<Object>> matrix = (List<List<Object>>) exportMeta.getValue(key);
-                int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
-                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
-                for (int i = 0; i < actualRowCount; i++) {
-                    List<Object> values = matrix.get(i);
-                    System.out.println(StringUtils.join(values));
-                    setValuesToRow(rows, startPos.clone().moveRows(i), actualColumnCount, values);
-                }
+                Object value = exportMeta.getValue(key);
+                tryPictureElse(value, (nonPicValue) -> {
+                    List<List<Object>> matrix = (List<List<Object>>) value;
+                    int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
+                    int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
+                    for (int i = 0; i < actualRowCount; i++) {
+                        List<Object> values = matrix.get(i);
+                        System.out.println(StringUtils.join(values));
+                        setValuesToRow(rows, startPos.clone().moveRows(i), actualColumnCount, values);
+                    }
+                    return null;
+                });
+
             }
         });
         BufferedOutputStream bos = new BufferedOutputStream(outputStream);
