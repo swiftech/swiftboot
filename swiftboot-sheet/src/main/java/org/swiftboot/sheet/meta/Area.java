@@ -14,7 +14,7 @@ public class Area {
 
     /**
      * End position of this area, inclusive.
-     * this can be null means
+     * this can be null which means uncertain rows and columns of this area.
      */
     Position endPosition;
 

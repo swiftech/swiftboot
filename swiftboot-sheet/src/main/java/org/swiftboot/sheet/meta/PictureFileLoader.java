@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
+ * Simple picture loader which read from a local file.
+ *
  * @author allen
  */
 public class PictureFileLoader implements PictureLoader {

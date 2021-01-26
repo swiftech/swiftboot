@@ -1,8 +1,6 @@
 package org.swiftboot.sheet.imp;
 
 import org.apache.commons.text.StringTokenizer;
-import org.swiftboot.sheet.meta.MetaVisitor;
-import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.util.IoUtils;
 
@@ -29,76 +27,25 @@ public class CsvImporter extends BaseImporter {
         // read lines
         List<String> lines = IoUtils.readToStringList(templateFileStream);
         Map<String, Object> ret = new HashMap<>();
-        meta.accept(new MetaVisitor() {
-            @Override
-            public void visitSingleCell(String key, Position position) {
-                String row = lines.get(position.getRow());
+        meta.accept((key, startPos, rowCount, columnCount) -> {
+            List<List<Object>> matrix = new ArrayList<>();
+            for (int i = 0; i < rowCount; i++) {
+                String row = lines.get(startPos.getRow() + i);
                 StringTokenizer valueTokenizer = StringTokenizer.getCSVInstance(row);
-                int cursor = 0;
-                while (valueTokenizer.hasNext()) {
-                    String token = valueTokenizer.next();
-                    if (cursor == position.getColumn()) {
-                        ret.put(key, token);
-                        break;
-                    }
-                    cursor += 1;
-                }
-            }
-
-            @Override
-            public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
-                String row = lines.get(startPos.getRow());
-                StringTokenizer valueTokenizer = StringTokenizer.getCSVInstance(row);
-                List<String> values = new ArrayList<>();
+                List<Object> values = new ArrayList<>();
                 int cursor = 0;
                 while (valueTokenizer.hasNext()) {
                     String next = valueTokenizer.next();
-                    if (cursor >= startPos.getColumn() && cursor < startPos.getColumn() + columnCount) {
+                    if (cursor >= startPos.getColumn()
+                            && cursor < startPos.getColumn() + columnCount) {
                         values.add(next);
                     }
                     cursor += 1;
                 }
-                ret.put(key, values);
+                matrix.add(values);
             }
-
-            @Override
-            public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
-                List<String> values = new ArrayList<>();
-                for (int i = 0; i < rowCount; i++) {
-                    String row = lines.get(startPos.getRow() + i);
-                    StringTokenizer valueTokenizer = StringTokenizer.getCSVInstance(row);
-                    int cursor = 0;
-                    while (valueTokenizer.hasNext()) {
-                        String next = valueTokenizer.next();
-                        if (cursor == startPos.getColumn()) {
-                            values.add(next);
-                            break;
-                        }
-                        cursor += 1;
-                    }
-                }
-                ret.put(key, values);
-            }
-
-            @Override
-            public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
-                List<List<String>> matrix = new ArrayList<>();
-                for (int i = 0; i < rowCount; i++) {
-                    String row = lines.get(startPos.getRow() + i);
-                    StringTokenizer valueTokenizer = StringTokenizer.getCSVInstance(row);
-                    List<String> values = new ArrayList<>();
-                    int cursor = 0;
-                    while (valueTokenizer.hasNext()) {
-                        String next = valueTokenizer.next();
-                        if (cursor >= startPos.getColumn() && cursor < startPos.getColumn() + columnCount) {
-                            values.add(next);
-                        }
-                        cursor += 1;
-                    }
-                    matrix.add(values);
-                }
-                ret.put(key, matrix);
-            }
+            Object value = shrinkMatrix(matrix, rowCount, columnCount);
+            ret.put(key, value);
         });
         return ret;
     }

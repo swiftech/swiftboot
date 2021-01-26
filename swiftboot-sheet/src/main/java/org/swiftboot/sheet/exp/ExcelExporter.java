@@ -4,14 +4,16 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.swiftboot.sheet.meta.*;
+import org.swiftboot.sheet.meta.Picture;
+import org.swiftboot.sheet.meta.PictureLoader;
+import org.swiftboot.sheet.meta.Position;
+import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.util.PoiUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.function.Function;
 
 import static org.swiftboot.sheet.util.PoiUtils.setValueToCell;
 
@@ -51,97 +53,26 @@ public class ExcelExporter extends BaseExporter {
         this.extendSheet(sheet, exportMeta.findMaxPosition());
 
         exportMeta.setAllowFreeSize(true);
-        exportMeta.accept(new MetaVisitor() {
-
-            private void tryPictureElse(Object value, Position startPos, Position endPos, Function<Object, Object> doNonPicture) {
-                if (value instanceof PictureLoader) {
-                    try {
-                        Picture pictureValue = ((PictureLoader) value).get();
-                        PoiUtils.writePicture(sheet, startPos, endPos, pictureValue);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else {
-                    doNonPicture.apply(value);
+        exportMeta.accept((key, startPos, rowCount, columnCount) -> {
+            Object value = exportMeta.getValue(key);
+            if (value instanceof PictureLoader) {
+                try {
+                    Picture pictureValue = ((PictureLoader) value).get();
+                    PoiUtils.writePicture(sheet, startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
+            else {
+                List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
+                int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
+                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
+                for (int i = 0; i < actualRowCount; i++) {
+                    List<Object> values = matrix.get(i);
+                    Row row = sheet.getRow(startPos.getRow() + i);
+                    setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values);
+                }
 
-            @Override
-            public void visitSingleCell(String key, Position position) {
-                Row row = sheet.getRow(position.getRow());
-                Object value = exportMeta.getValue(key);
-                this.tryPictureElse(value, position, position.clone(),
-                        (nonPicValue) -> {
-                            Cell cell = row.getCell(position.getColumn());
-                            setValueToCell(cell, value);
-                            return null;
-                        });
-            }
-
-            @Override
-            public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
-                Object value = exportMeta.getValue(key);
-                this.tryPictureElse(value, startPos, startPos.clone().moveColumns(columnCount),
-                        (nonPicValue) -> {
-                            if (value instanceof List) {
-                                List<Object> values = (List<Object>) value;
-                                System.out.println(columnCount);
-                                int actualCount = columnCount == null ? values.size() : Math.min(columnCount, values.size());
-                                Row row = sheet.getRow(startPos.getRow());
-                                setValuesToRow(row, startPos, actualCount, values);
-                            }
-                            else {
-                                throw new RuntimeException(String.format("Value type should be List, %s is not supported", value.getClass()));
-                            }
-                            return null;
-                        });
-            }
-
-            @Override
-            public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
-                Object value = exportMeta.getValue(key);
-                this.tryPictureElse(value, startPos, startPos.clone().moveRows(rowCount),
-                        (nonPicValue) -> {
-                            if (value instanceof List) {
-                                List<Object> values = (List<Object>) value;
-                                int actualCount = rowCount == null ? values.size() : Math.min(rowCount, values.size());
-                                for (int i = 0; i < actualCount; i++) {
-                                    Row row = sheet.getRow(startPos.getRow() + i);
-                                    if (row != null) {
-                                        Cell cell = row.getCell(startPos.getColumn());
-                                        setValueToCell(cell, values.get(i));
-                                    }
-                                }
-                            }
-                            else {
-                                throw new RuntimeException(String.format("Value type should be List, %s is not supported", value.getClass()));
-                            }
-                            return null;
-                        });
-
-            }
-
-            @Override
-            public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
-                Object value = exportMeta.getValue(key);
-                this.tryPictureElse(value, startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount),
-                        (nonPicValue) -> {
-                            if (value instanceof List) {
-                                List<List<Object>> matrix = (List<List<Object>>) value;
-                                int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
-                                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
-                                for (int i = 0; i < actualRowCount; i++) {
-                                    List<Object> values = matrix.get(i);
-                                    Row row = sheet.getRow(startPos.getRow() + i);
-                                    setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values);
-                                }
-                            }
-                            else {
-                                throw new RuntimeException(String.format("Value type should be List<list>, %s is not supported", value.getClass()));
-                            }
-                            return null;
-                        });
             }
         });
         wb.write(outputStream);

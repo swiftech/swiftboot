@@ -4,7 +4,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.swiftboot.sheet.meta.MetaVisitor;
 import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.util.PoiUtils;
@@ -37,41 +36,14 @@ public class ExcelImporter extends BaseImporter {
             Map<String, Object> ret = new HashMap<>();
             Sheet dataSheet = wb.getSheetAt(0);
 
-            meta.accept(new MetaVisitor() {
-                @Override
-                public void visitSingleCell(String key, Position position) {
-                    Cell cell = dataSheet.getRow(position.getRow()).getCell(position.getColumn());
-                    ret.put(key, getValueFromCell(cell));
+            meta.accept((key, startPos, rowCount, columnCount) -> {
+                List<List<Object>> matrix = new ArrayList<>();
+                for (int i = 0; i < rowCount; i++) {
+                    Row row = dataSheet.getRow(startPos.getRow() + i);
+                    matrix.add(getValuesInRow(row, startPos, columnCount));
                 }
-
-                @Override
-                public void visitHorizontalLine(String key, Position startPos, Integer columnCount) {
-                    Row row = dataSheet.getRow(startPos.getRow());
-                    ret.put(key, getValuesInRow(row, startPos, columnCount));
-                }
-
-                @Override
-                public void visitVerticalLine(String key, Position startPos, Integer rowCount) {
-                    List<Object> values = new ArrayList<>();
-                    for (int i = 0; i < rowCount; i++) {
-                        Row row = dataSheet.getRow(startPos.getRow() + i);
-                        if (row != null) {
-                            Cell cell = row.getCell(startPos.getColumn());
-                            values.add(getValueFromCell(cell));
-                        }
-                    }
-                    ret.put(key, values);
-                }
-
-                @Override
-                public void visitMatrix(String key, Position startPos, Integer rowCount, Integer columnCount) {
-                    List<List<Object>> matrix = new ArrayList<>();
-                    for (int i = 0; i < rowCount; i++) {
-                        Row row = dataSheet.getRow(startPos.getRow() + i);
-                        matrix.add(getValuesInRow(row, startPos, columnCount));
-                    }
-                    ret.put(key, matrix);
-                }
+                Object value = shrinkMatrix(matrix, rowCount, columnCount);
+                ret.put(key, value);
             });
             return ret;
         }

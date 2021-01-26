@@ -114,25 +114,26 @@ public class SheetMeta {
             Position startingPos = area.getStartPosition();
             System.out.printf("'%s' -> %s%n", meta.getKey(), meta.getArea());
             if (area.isSingleCell()) {
-                visitor.visitSingleCell(meta.getKey(), startingPos);
+                visitor.visitMetaItem(meta.getKey(), startingPos, 1, 1);
             }
             else {
                 Integer rowCount = area.rowCount();
                 Integer columnCount = area.columnCount();
+                System.out.printf("row count %d, column count %d%n", rowCount, columnCount);
                 if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
                     throw new RuntimeException("Free size expression is not allowed");
                 }
                 else if (area.isLine()) {
                     // Only one row is horizontal
                     if (rowCount != null && rowCount == 1) {
-                        visitor.visitHorizontalLine(meta.getKey(), startingPos, columnCount);
+                        visitor.visitMetaItem(meta.getKey(), startingPos, 1, columnCount);
                     }
                     else if (columnCount != null && columnCount == 1) { // Only one column is vertical
-                        visitor.visitVerticalLine(meta.getKey(), startingPos, rowCount);
+                        visitor.visitMetaItem(meta.getKey(), startingPos, rowCount, 1);
                     }
                 }
                 else {
-                    visitor.visitMatrix(meta.getKey(), startingPos, rowCount, columnCount);
+                    visitor.visitMetaItem(meta.getKey(), startingPos, rowCount, columnCount);
                 }
             }
         }

@@ -1,5 +1,6 @@
 package org.swiftboot.sheet.imp;
 
+import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.util.BeanUtils;
 
@@ -9,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author allen
@@ -40,6 +42,35 @@ public abstract class BaseImporter implements Importer {
             BeanUtils.forceSetProperty(ret, field, result.get(field.getName()));
         }
         return ret;
+    }
+
+    /**
+     * Shrink a matrix which is from import file to it's inner data type.
+     *
+     * @param matrix
+     * @param rowCount
+     * @param colCount
+     * @return
+     */
+    protected Object shrinkMatrix(List<List<Object>> matrix, Integer rowCount, Integer colCount) {
+        if (matrix == null || matrix.isEmpty() || matrix.get(0).isEmpty()) {
+            return null;
+        }
+        boolean isHorizontal = rowCount != null && rowCount == 1;
+        boolean isVertical = colCount != null && colCount == 1;
+        System.out.println(StringUtils.join(matrix));
+        if (isHorizontal && isVertical) {
+            return matrix.get(0).get(0);
+        }
+        else if (isHorizontal) {
+            return matrix.get(0);
+        }
+        else if (isVertical) {
+            return matrix.stream().map(rows -> rows.get(0)).collect(Collectors.toList());
+        }
+        else {
+            return matrix;
+        }
     }
 
     public String getFileType() {
