@@ -1,6 +1,6 @@
 package org.swiftboot.demo;
 
-import org.swiftboot.web.model.Initializer;
+import org.swiftboot.data.model.Initializer;
 
 /**
  * @author swiftech

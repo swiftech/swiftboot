@@ -2,8 +2,8 @@ package org.swiftboot.demo.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.annotation.Description;
-import org.swiftboot.web.annotation.PropertyDescription;
-import org.swiftboot.web.model.entity.BaseEntity;
+import org.swiftboot.data.annotation.PropertyDescription;
+import org.swiftboot.data.model.entity.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Set;

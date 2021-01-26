@@ -1,0 +1,5 @@
+swiftboot:
+  data:
+    model:
+      # 是否自动生成实体类的 ID
+      autoGenerateId: true

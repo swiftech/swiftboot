@@ -1,6 +1,6 @@
 package org.swiftboot.web.result;
 
-import org.swiftboot.web.model.entity.Persistent;
+import org.swiftboot.data.model.entity.Persistent;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

@@ -5,28 +5,12 @@
     <parent>
         <artifactId>swiftboot</artifactId>
         <groupId>com.github.swiftech</groupId>
-        <version>1.2.1</version>
+        <version>1.3-beta3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>swiftboot-web</artifactId>
-    <description>企业Web应用基础框架</description>
-
-    <properties>
-        <spring.version>5.1.17.RELEASE</spring.version>
-        <spring.boot.version>2.1.16.RELEASE</spring.boot.version>
-        <spring.data.version>2.1.16.RELEASE</spring.data.version>
-        <servlet.version>3.1.0</servlet.version>
-        <commons.beanutils.version>1.9.4</commons.beanutils.version>
-        <commons.text.version>1.8</commons.text.version>
-        <swagger.version>1.6.0</swagger.version>
-        <aspectj.version>1.9.4</aspectj.version>
-        <validation.api.version>2.0.1.Final</validation.api.version>
-        <hibernate.version>5.3.17.Final</hibernate.version>
-        <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
-        <hibernate.validator.version>6.1.0.Final</hibernate.validator.version>
-        <log4j2.version>2.13.0</log4j2.version>
-    </properties>
+    <description>Base module for enterprise web applications</description>
 
     <dependencies>
         <dependency>
@@ -34,23 +18,28 @@
             <artifactId>swiftboot-utils</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.swiftech</groupId>
             <artifactId>swiftboot-collections</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${commons.beanutils.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${commons.text.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.commons</groupId>-->
+            <!--<artifactId>commons-text</artifactId>-->
+            <!--<version>${commons.text.version}</version>-->
+        <!--</dependency>-->
 
 <!--        <dependency>-->
 <!--            <groupId>com.fasterxml.jackson.core</groupId>-->
@@ -63,7 +52,6 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -74,51 +62,30 @@
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>compile</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot</artifactId>-->
+            <!--<version>${spring.boot.version}</version>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <version>${spring.boot.version}</version>
             <optional>true</optional>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-autoconfigure</artifactId>-->
+            <!--<version>${spring.boot.version}</version>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
-
-        <!-- since 1.1 -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>javax.transaction-api</artifactId>
-            <version>1.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-            <version>${spring.data.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${hibernate.jpa.version}</version>
-            <scope>compile</scope>
-        </dependency>
 
         <dependency>
             <groupId>javax.validation</groupId>
@@ -126,11 +93,11 @@
             <version>${validation.api.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.annotation</groupId>-->
+<!--            <artifactId>javax.annotation-api</artifactId>-->
+<!--            <version>${javax.annotations.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -150,13 +117,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>${swagger.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jaxrs</artifactId>
@@ -168,7 +133,6 @@
             <artifactId>aspectjrt</artifactId>
             <version>${aspectj.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -182,12 +146,6 @@
             <scope>compile</scope>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>${spring.data.version}</version>
-        </dependency>
 
         <!--测试-->
         <dependency>
@@ -250,7 +208,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.197</version>
+            <version>${h2.version}</version>
             <scope>test</scope>
         </dependency>
 

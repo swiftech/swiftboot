@@ -10,8 +10,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.swiftboot.web.model.id.EntityIdGenerator;
-import org.swiftboot.web.model.id.IdGenerator;
+import org.swiftboot.data.model.id.EntityIdGenerator;
+import org.swiftboot.data.model.id.IdGenerator;
 
 /**
  * @author swiftech
@@ -22,6 +22,7 @@ import org.swiftboot.web.model.id.IdGenerator;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {
         "org.swiftboot.web",
+        "org.swiftboot.data",
         "org.swiftboot.service",
         "org.swiftboot.auth",
         "org.swiftboot.shiro",
@@ -35,7 +36,6 @@ import org.swiftboot.web.model.id.IdGenerator;
 @EnableJpaRepositories(basePackages = {
         "org.swiftboot.demo.model.dao",
         "org.swiftboot.demo.shiro",
-        "org.swiftboot.service.model.dao",
 })
 public class SwiftbootDemoConfig {
 

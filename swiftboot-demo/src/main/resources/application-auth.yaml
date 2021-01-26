@@ -26,6 +26,9 @@ swiftboot:
   web:
     filter:
       cors: true
+    validation:
+      resultInJson: false
+  data:
     model:
       autoGenerateId: true
       initData: true
@@ -34,8 +37,6 @@ swiftboot:
         - org.swiftboot.demo.model.dao
       initBaseEntityPackages:
         - org.swiftboot.demo.model.entity
-    validation:
-      resultInJson: false
   service:
     redis:
       host: localhost

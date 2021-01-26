@@ -1,9 +1,9 @@
 package org.swiftboot.demo.model.entity;
 
 import org.springframework.context.annotation.Description;
+import org.swiftboot.data.annotation.PropertyDescription;
+import org.swiftboot.data.model.entity.BaseEntity;
 import org.swiftboot.shiro.model.entity.UserEntityStub;
-import org.swiftboot.web.annotation.PropertyDescription;
-import org.swiftboot.web.model.entity.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
