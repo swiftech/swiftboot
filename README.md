@@ -40,6 +40,10 @@
 
 
 ### 版本发布
+1.3-beta3
+* `swiftboot-sheet` 重构并增加文档
+* 依赖库升级和bug修复
+
 1.3-beta2 (2021-01-18)
 * `swiftboot-data` 新增 snowflake ID 生成器
 * 新增 `swiftboot-sheet` 提供了模版化的表格数据导出和导入的功能

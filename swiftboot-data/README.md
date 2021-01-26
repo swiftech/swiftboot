@@ -15,7 +15,7 @@ Maven:
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-data</artifactId>
-    <version>1.3-beta2</version>
+    <version>1.3-beta3</version>
   </dependency>
   ```
 
