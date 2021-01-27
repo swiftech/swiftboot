@@ -149,6 +149,14 @@
 
         <!--测试-->
         <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-data</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
 <!--            <version>${junit.version}</version>-->

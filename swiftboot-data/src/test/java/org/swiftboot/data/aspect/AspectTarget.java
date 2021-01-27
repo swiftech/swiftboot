@@ -1,4 +1,4 @@
-package org.swiftboot.web.aspect;
+package org.swiftboot.data.aspect;
 
 /**
  * @author swiftech

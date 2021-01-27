@@ -1,6 +1,6 @@
 package org.swiftboot.web.command;
 
-import org.swiftboot.web.model.entity.ParentEntity;
+import org.swiftboot.data.model.entity.ParentEntity;
 
 import java.util.Set;
 

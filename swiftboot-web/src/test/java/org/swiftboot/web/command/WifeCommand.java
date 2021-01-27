@@ -1,6 +1,6 @@
 package org.swiftboot.web.command;
 
-import org.swiftboot.web.model.entity.WifeEntity;
+import org.swiftboot.data.model.entity.WifeEntity;
 
 import javax.persistence.*;
 

@@ -1,4 +1,4 @@
-package org.swiftboot.web.model.entity;
+package org.swiftboot.data.model.entity;
 
 import org.swiftboot.data.model.entity.BaseEntity;
 

@@ -1,6 +1,4 @@
-package org.swiftboot.web.model.entity;
-
-import org.swiftboot.data.model.entity.BaseEntity;
+package org.swiftboot.data.model.entity;
 
 import javax.persistence.*;
 

@@ -15,11 +15,7 @@ logging:
     root: INFO
     org.swiftboot: DEBUG
 swiftboot:
-  web:
-    filter:
-      cors-allow-origin: '*'
+  data:
     model:
       autoGenerateId: true
       autoUpdateTime: true
-    validation:
-      resultInJson: false

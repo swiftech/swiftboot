@@ -1,7 +1,7 @@
 package org.swiftboot.web.command;
 
 import io.swagger.annotations.ApiModel;
-import org.swiftboot.web.model.entity.OrphanEntity;
+import org.swiftboot.data.model.entity.OrphanEntity;
 
 /**
  * @author swiftech

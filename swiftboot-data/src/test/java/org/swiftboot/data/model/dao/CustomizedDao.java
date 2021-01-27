@@ -1,8 +1,8 @@
-package org.swiftboot.web.model.dao;
+package org.swiftboot.data.model.dao;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
-import org.swiftboot.web.model.entity.CustomizedEntity;
+import org.swiftboot.data.model.entity.CustomizedEntity;
 
 /**
  * @author swiftech

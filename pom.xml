@@ -53,7 +53,7 @@
         <hibernate.version>5.4.27.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <hibernate.validator.version>6.1.7.Final</hibernate.validator.version>
-        <shiro.version>1.7.0</shiro.version>
+        <shiro.version>1.5.3</shiro.version>
         <jedis.version>3.4.1</jedis.version>
         <json.version>20201115</json.version>
         <h2.version>1.4.200</h2.version>

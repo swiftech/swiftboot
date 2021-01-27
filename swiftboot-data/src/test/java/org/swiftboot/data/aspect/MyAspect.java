@@ -1,4 +1,4 @@
-package org.swiftboot.web.aspect;
+package org.swiftboot.data.aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,7 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
  **/
 @Aspect
 public class MyAspect {
-    @Pointcut(value = "execution(public * org.swiftboot.web.aspect.AspectTarget.*(..))")
+    @Pointcut(value = "execution(public * org.swiftboot.data.aspect.AspectTarget.*(..))")
     public void pointcut() {
     }
 

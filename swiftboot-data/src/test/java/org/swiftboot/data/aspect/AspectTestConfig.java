@@ -1,4 +1,4 @@
-package org.swiftboot.web.aspect;
+package org.swiftboot.data.aspect;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

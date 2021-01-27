@@ -1,6 +1,6 @@
 package org.swiftboot.web.result;
 
-import org.swiftboot.web.model.entity.ParentEntity;
+import org.swiftboot.data.model.entity.ParentEntity;
 
 /**
  * @author swiftech

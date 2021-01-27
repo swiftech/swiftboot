@@ -33,6 +33,7 @@ public class SwiftBootDataConfig {
 
     /**
      * 加载默认的 ID 生成器，采用 UUID 生成主键ID
+     *
      * @return
      */
     @Bean
@@ -42,11 +43,11 @@ public class SwiftBootDataConfig {
     }
 
     /**
-     * 根据 swiftboot.data.model 加载实体类更新时间的切面
+     * 根据 swiftboot.data.model.autoUpdateTime=true 加载实体类更新时间的切面
      * @return
      */
     @Bean
-    @ConditionalOnProperty(value = "swiftboot.data.model")
+    @ConditionalOnProperty(value = "swiftboot.data.model.autoUpdateTime", havingValue = "true")
     UpdateTimeAspect updateTimeAspect() {
         return new UpdateTimeAspect();
     }

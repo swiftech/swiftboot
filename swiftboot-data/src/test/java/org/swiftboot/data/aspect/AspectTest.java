@@ -1,4 +1,4 @@
-package org.swiftboot.web.aspect;
+package org.swiftboot.data.aspect;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
