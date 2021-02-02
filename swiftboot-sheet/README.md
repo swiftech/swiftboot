@@ -1,9 +1,9 @@
 # SwiftBoot-Sheet
 
 SwiftBoot-Sheet
-提供了一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。使用它只需要给导入和导出指定数据对应的位置，而无需关心导入或者导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
+提供了一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。只需要给导入或导出指定数据对应的位置，而无需关心导入或导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
 
-SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data from and export data to sheet files (including xlsx, xls, csv), regardless of the style of the sheet. In other words, users can edit the style of template sheet file whatever he/she likes without affecting the import or export of data.
+SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data from or export data to sheet files (including xlsx, xls, csv), regardless of the style of the sheet. In other words, users can edit the style of template sheet file whatever he/she likes without affecting the import or export of data.
 
 ### 支持的文件格式：
 
@@ -67,10 +67,10 @@ public class SheetEntity {
 ```
 
 * 导出图片
-  可以导出 JPG, PNG 图片至 Excel 表格中，如果
-  * 指定一个单元格，则图片充满这个单元格
-  * 指定一行，一列或矩阵，则图片充满这一行，一列或矩阵
-  * 指定起始单元格，但是行、列有任一是不定长度的，则图片锚定起始单元格，但是宽高不受单元格限制。
+  支持导出 JPG, PNG 图片至 Excel 表格中的特定位置，并按照给出的范围进行伸缩，如果
+  * 指定导出至一个单元格，则图片充满这个单元格
+  * 指定导出至一行，一列或矩阵，则图片充满这一行，一列或矩阵
+  * 指定导出至起始单元格，但是行、列有任一是不定长度的，则图片锚定起始单元格，但是宽高不受单元格限制。
 
 示例：
 
@@ -87,9 +87,9 @@ exportEntity.setPictureToExport(() -> {
     byte[] bytesPic = ... // 加载图片
     return new Picture(Workbook.PICTURE_TYPE_JPEG, bytesPic);
 });
+exporter.export(templateFileInputStream, exportEntity, outputStream);
 ```
 
-> 导出图片只支持 Excel，不支持 CSV
 
 
 ### 表达式
@@ -130,7 +130,7 @@ exportEntity.setPictureToExport(() -> {
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-sheet</artifactId>
-    <version>1.3-beta2</version>
+    <version>1.3-beta3</version>
   </dependency>
   ```
 

@@ -16,14 +16,17 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
 /**
  * Translate expression to area of cells in sheet.
  * <p>
- * Expression rules:
+ * Expression rules example:
  * <p>
  * E2 or 2E means single cell in row 2 column 5.
  * E2:E3, 2:E3, E2:3, 2E:3 or 2:3E means cells from row 2 to 3 in column 5.
  * 2E:H or E:H2 means cells from column 5 to 8 in row 2.
- * E2:H3 means cells from row 2 to 3 and from column 5 to 8.
  * E2-3 or 2E-3 means cells from column 5 to column 8 in row 2.
  * E2|3 or 2E|3 means cells from rom 2 to 3 in column 5.
+ * E2:H3 means cells from row 2 to 3 and from column 5 to 8.
+ * E2:E? means export specified rows starts from row 2 in column 5.
+ * E2:?2 means export specified columns starts from column 5 in row 2.
+ * E2:? means export specified rows and columns starts from row 2 column 5.
  *
  * @author allen
  */
@@ -31,13 +34,19 @@ public class Translator {
 
     private int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
 
+    /**
+     * Translate expression to {@code Area}.
+     *
+     * @param exp
+     * @return
+     */
     public Area toArea(String exp) {
         Expression expression = new Expression(exp);
         if (expression.isSinglePosition()) {
             return new Area(this.toSinglePosition(exp));
         }
-        else if (expression.isFreeRange()) {
-            return freeRange(expression.splitAsFreeRange());
+        else if (expression.isRange()) {
+            return this.freeRange(expression.splitAsFreeRange());
         }
         else if (expression.isVerticalRange() || expression.isHorizontalRange()) {
             return this.lineRange(expression);
@@ -48,6 +57,7 @@ public class Translator {
     }
 
     /**
+     *
      *
      * @param startEnd expression array for start and end positions
      * @return
@@ -93,6 +103,11 @@ public class Translator {
         return new Area(startPos, endPos);
     }
 
+    /**
+     *
+     * @param expression
+     * @return
+     */
     private Area lineRange(Expression expression) {
         boolean isVertical = expression.isVerticalRange();
         boolean isHorizontal = expression.isHorizontalRange();
@@ -122,7 +137,7 @@ public class Translator {
     }
 
     /**
-     * translate single position expression.
+     * Translate single position expression.
      *
      * @param exp
      * @return
@@ -137,14 +152,16 @@ public class Translator {
 
 
     /**
-     * @param split
+     * Translate parts of expression to {@code Position}.
+     *
+     * @param expParts expression parts for single position expression.
      * @return
      */
-    Position toPosition(String[] split) {
+    Position toPosition(String[] expParts) {
         Integer row = null;
         Integer column = null;
-        String left = split[0];
-        String right = split.length > 1 ? split[1] : null;
+        String left = expParts[0];
+        String right = expParts.length > 1 ? expParts[1] : null;
         if (isNumeric(left)) {
             row = NumberUtils.toInt(left) - 1;
             if (isNotBlank(right)) {
@@ -213,7 +230,12 @@ public class Translator {
         return indexToExp(position.getColumn()) + (position.getRow() + 1);
     }
 
-
+    /**
+     * TBD
+     *
+     * @param index
+     * @return
+     */
     String indexToExp(int index) {
         System.out.println();
         int x = index;

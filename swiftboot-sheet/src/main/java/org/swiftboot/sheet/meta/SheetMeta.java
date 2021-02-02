@@ -31,6 +31,14 @@ public class SheetMeta {
         this.metaItems = metaItems;
     }
 
+    public void addItem(String key, Position startPos, Position endPos) {
+        this.metaItems.put(new MetaItem(key, new Area(startPos, endPos)), null);
+    }
+
+    public void addItem(String key, Position startPos, Position endPos, Object value) {
+        this.metaItems.put(new MetaItem(key, new Area(startPos, endPos)), value);
+    }
+
     public void fromExpression(String key, String expression) {
         this.metaItems.put(new MetaItem(key, translator.toArea(expression)), null);
     }

@@ -9,13 +9,13 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class Expression {
 
-    private String expression;
+    private final String expression;
 
     public Expression(String expression) {
         this.expression = expression;
     }
 
-    public boolean isFreeRange() {
+    public boolean isRange() {
         return contains(expression, ":");
     }
 
@@ -28,7 +28,7 @@ public class Expression {
     }
 
     public boolean isSinglePosition() {
-        return !isFreeRange() && !isHorizontalRange() && !isVerticalRange();
+        return !isRange() && !isHorizontalRange() && !isVerticalRange();
     }
 
     public String[] splitAsFreeRange() {
