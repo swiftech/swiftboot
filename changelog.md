@@ -1,4 +1,8 @@
-1.2 release (2020-06-6)
+2020-08-25 1.2.1 release
+* 修复了 `swiftboot-shiro` 配置加载的bug
+* 依赖库升级
+
+2020-06-6 1.2 release
 * 新增 `swiftboot-shiro` 模块，通过集成 Shiro 提供用户认证和授权
 * 新增浮点数字符串校验 `DecimalString`
 * 会话存储可选内存或者 Redis
@@ -13,7 +17,7 @@
 * 新增 OnlyNumber 校验
 * 重构代码
 
-1.1 release (2020-02-02) 
+2020-02-02 1.1 release 
 * 新增 `swiftboot-service` 和 `swiftboot-auth` 模块，提供常用的服务和简单的用户认证机制
 * 新增输入日志多语言化
 * 优化自动填充对象

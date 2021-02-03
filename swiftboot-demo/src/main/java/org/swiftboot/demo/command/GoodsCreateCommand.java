@@ -1,5 +1,6 @@
 package org.swiftboot.demo.command;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,6 +9,8 @@ import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.web.command.BasePopulateCommand;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 创建商品
@@ -32,6 +35,15 @@ public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
     @NotNull
     private Double price;
 
+    @ApiModelProperty(value = "生产时间", example = "2020-01-16 00:00:00")
+    @JsonProperty("production_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime productionTime;
+
+    @ApiModelProperty(value = "过期日期", example = "2021-01-16")
+    @JsonProperty("expire_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expireDate;
 
     /**
      * 获取商品名称
@@ -87,4 +99,21 @@ public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
         this.price = price;
     }
 
+    public LocalDateTime getProductionTime() {
+        return productionTime;
+    }
+
+    public GoodsCreateCommand setProductionTime(LocalDateTime productionTime) {
+        this.productionTime = productionTime;
+        return this;
+    }
+
+    public LocalDate getExpireDate() {
+        return expireDate;
+    }
+
+    public GoodsCreateCommand setExpireDate(LocalDate expireDate) {
+        this.expireDate = expireDate;
+        return this;
+    }
 }

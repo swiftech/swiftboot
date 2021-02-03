@@ -3,8 +3,8 @@ package org.swiftboot.web.exception;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.swiftboot.web.model.entity.ChildEntity;
-import org.swiftboot.web.model.entity.ParentEntity;
+import org.swiftboot.data.model.entity.ChildEntity;
+import org.swiftboot.data.model.entity.ParentEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
 import java.util.HashSet;

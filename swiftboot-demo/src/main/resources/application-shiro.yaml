@@ -27,7 +27,8 @@ swiftboot:
     enabled: false
   shiro:
     enabled: true
-    loginUrl: "/login"
+    loginUrl: /login
+    successUrl: /main
     cookie:
       domain: localhost
       path: /

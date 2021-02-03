@@ -1,14 +1,12 @@
 package org.swiftboot.demo.model.entity;
 
 import org.springframework.context.annotation.Description;
-import org.swiftboot.web.annotation.PropertyDescription;
-import org.swiftboot.web.model.entity.BaseEntity;
+import org.swiftboot.data.annotation.PropertyDescription;
+import org.swiftboot.data.model.entity.BaseEntity;
 
-import javax.persistence.*;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 商品详情

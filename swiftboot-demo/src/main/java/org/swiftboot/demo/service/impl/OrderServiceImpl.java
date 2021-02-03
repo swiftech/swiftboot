@@ -1,7 +1,14 @@
 package org.swiftboot.demo.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
+import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
 import org.swiftboot.demo.model.dao.OrderDao;
 import org.swiftboot.demo.model.dao.OrderDetailDao;
 import org.swiftboot.demo.model.entity.OrderDetailEntity;
@@ -12,12 +19,6 @@ import org.swiftboot.demo.result.OrderResult;
 import org.swiftboot.demo.result.OrderSaveResult;
 import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.web.command.IdListCommand;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashSet;
@@ -60,6 +61,19 @@ public class OrderServiceImpl implements OrderService {
         });
         OrderEntity saved = orderDao.save(p);
         log.debug("创建订单: " + saved.getId());
+        return new OrderCreateResult(saved.getId());
+    }
+
+    /**
+     * 创建带有详情的订单
+     *
+     * @param cmd
+     * @return
+     */
+    @Override
+    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateCommand cmd) {
+        OrderEntity entity = cmd.createEntity();
+        OrderEntity saved = orderDao.save(entity);
         return new OrderCreateResult(saved.getId());
     }
 

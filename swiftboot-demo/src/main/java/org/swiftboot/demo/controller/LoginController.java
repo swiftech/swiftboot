@@ -20,7 +20,7 @@ public class LoginController {
 
     @ApiOperation(notes = "登录页面", value = "登录页面")
     @RequestMapping(value = "login", method = RequestMethod.GET)
-    public HttpResponse<Void> adminUserQuery() {
+    public HttpResponse<Void> loginPage() {
         HttpResponse<Void> resp = new HttpResponse<>();
         resp.setMsg("Implement a URL page for user login if you see this message");
         return resp;

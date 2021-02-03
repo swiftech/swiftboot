@@ -3,10 +3,10 @@ package org.swiftboot.web.command;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.model.entity.ChildEntity;
-import org.swiftboot.web.model.entity.HusbandEntity;
-import org.swiftboot.web.model.entity.OrphanEntity;
-import org.swiftboot.web.model.entity.ParentEntity;
+import org.swiftboot.data.model.entity.ChildEntity;
+import org.swiftboot.data.model.entity.HusbandEntity;
+import org.swiftboot.data.model.entity.OrphanEntity;
+import org.swiftboot.data.model.entity.ParentEntity;
 
 import java.util.HashSet;
 

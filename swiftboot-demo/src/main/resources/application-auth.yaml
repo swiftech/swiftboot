@@ -26,16 +26,18 @@ swiftboot:
   web:
     filter:
       cors: true
+    validation:
+      resultInJson: false
+  data:
     model:
       autoGenerateId: true
+      autoUpdateTime: true
       initData: true
       initBaseDir: init
       initBaseDaoPackages:
         - org.swiftboot.demo.model.dao
       initBaseEntityPackages:
         - org.swiftboot.demo.model.entity
-    validation:
-      resultInJson: false
   service:
     redis:
       host: localhost

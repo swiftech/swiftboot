@@ -24,12 +24,6 @@ public class SwiftBootWebConfig implements WebMvcConfigurer {
         return new SwiftBootWebConfigBean();
     }
 
-//    @Bean
-//    @ConditionalOnProperty("swiftboot.web.model.initData")
-//    public Initializer initializer() {
-//        return new Initializer();
-//    }
-
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
