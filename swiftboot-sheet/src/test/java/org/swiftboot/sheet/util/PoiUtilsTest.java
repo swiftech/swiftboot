@@ -44,7 +44,7 @@ public class PoiUtilsTest extends BaseTest {
         PoiUtils.writePicture(sAnchorToLeftTopCel, new Position(1, 8), new Position(1, null), pictureValue);
         PoiUtils.writePicture(sAnchorToLeftTopCel, new Position(1, 16), new Position(null, 1), pictureValue);
 
-        try (OutputStream outputStream = super.makeOutputStream(false, SheetFileType.TYPE_XLSX)) {
+        try (OutputStream outputStream = super.createOutputStream(false, SheetFileType.TYPE_XLSX)) {
             workbook.write(outputStream);
         } catch (Exception e) {
             e.printStackTrace();
