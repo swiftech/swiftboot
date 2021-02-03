@@ -2,6 +2,7 @@ package org.swiftboot.demo.service;
 
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
+import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
 import org.swiftboot.demo.result.OrderResult;
@@ -24,6 +25,14 @@ public interface OrderService {
      * @return
      */
     OrderCreateResult createOrder(OrderCreateCommand cmd);
+
+    /**
+     * 创建带有详情的订单
+     *
+     * @param cmd
+     * @return
+     */
+    OrderCreateResult createOrderWithDetail(OrderWithDetailCreateCommand cmd);
 
     /**
      * 保存对订单的修改

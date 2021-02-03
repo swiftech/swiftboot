@@ -27,6 +27,7 @@ swiftboot:
   data:
     model:
       autoGenerateId: true
+      autoUpdateTime: true
       initData: true
       initBaseDir: /Users/allen/Workspace/github/swiftboot/swiftboot-web/src/test/resources/init/
       initBasePackages:

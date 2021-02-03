@@ -16,6 +16,7 @@ import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.util.BeanUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.lang.annotation.Annotation;
@@ -31,7 +32,7 @@ import java.util.List;
 @Aspect
 public class EntityIdAspect {
 
-    private Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
+    private final Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
 
     @Resource
     private SwiftBootDataConfigBean dataConfigBean;
@@ -60,11 +61,11 @@ public class EntityIdAspect {
         }
 
         for (Object arg : args) {
-            if (arg instanceof IdPojo) {
+            if (arg instanceof IdPojo) { // for saving single entity
                 IdPojo idEntity = (IdPojo) arg;
                 this.tryToSetIdAndSubIds(idEntity);
             }
-            else if (arg instanceof Iterable) {
+            else if (arg instanceof Iterable) { // for saving entities
                 for (Object idEntity : ((Iterable) arg)) {
                     if (idEntity instanceof IdPojo) {
                         this.tryToSetIdAndSubIds((IdPojo) idEntity);
@@ -90,9 +91,11 @@ public class EntityIdAspect {
             idEntity.setId(id);
         }
 
-        tryToSetRelEntities(idEntity, OneToOne.class);
+//        tryToSetRelEntities(idEntity, OneToOne.class);
+//        tryToSetRelEntities(idEntity, OneToMany.class);
 
-        tryToSetRelEntities(idEntity, OneToMany.class);
+        this.tryToSetOneToOneEntities(idEntity);
+        this.tryToSetOneToManyEntities(idEntity);
     }
 
     /**
@@ -100,6 +103,7 @@ public class EntityIdAspect {
      *
      * @param parentEntity
      * @param clazz
+     * @deprecated
      */
     private void tryToSetRelEntities(IdPojo parentEntity, Class<? extends Annotation> clazz) {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), clazz);
@@ -111,6 +115,41 @@ public class EntityIdAspect {
             else if (relEntity instanceof Iterable) {
                 for (Object subEntity : ((Iterable) relEntity)) {
                     tryToSetIdAndSubIds((IdPojo) subEntity); // - 递归 -
+                }
+            }
+        }
+    }
+
+    /**
+     * Try to set id of one to one relation.
+     *
+     * @param parentEntity
+     */
+    private void tryToSetOneToOneEntities(IdPojo parentEntity) {
+        List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToOne.class);
+        for (Field subObjectField : subObjectList) {
+            Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObjectField);
+            tryToSetIdAndSubIds((IdPojo) relEntity);
+        }
+    }
+
+    /**
+     * Try to set id of one to many relation
+     *
+     * @param parentEntity
+     */
+    private void tryToSetOneToManyEntities(IdPojo parentEntity) {
+        List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToMany.class);
+        for (Field subObjectField : subObjectList) {
+            Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObjectField);
+            for (Object subEntity : ((Iterable<?>) relEntity)) {
+                tryToSetIdAndSubIds((IdPojo) subEntity); // - 递归 -
+                // 反向处理 ManyToOne 的属性
+                List<Field> m2oFields = FieldUtils.getFieldsListWithAnnotation(subEntity.getClass(), ManyToOne.class);
+                for (Field m2oField : m2oFields) {
+                    if (m2oField.getType() == parentEntity.getClass()) {
+                        BeanUtils.forceSetProperty(subEntity, m2oField, parentEntity);
+                    }
                 }
             }
         }
