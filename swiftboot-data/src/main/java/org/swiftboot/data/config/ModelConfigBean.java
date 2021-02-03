@@ -11,6 +11,11 @@ public class ModelConfigBean {
     private boolean autoGenerateId = false;
 
     /**
+     * 是否自动设置更新时间
+     */
+    private boolean autoUpdateTime = false;
+
+    /**
      * 是否初始化数据库
      */
     private boolean initData = false;
@@ -36,6 +41,14 @@ public class ModelConfigBean {
 
     public void setAutoGenerateId(boolean autoGenerateId) {
         this.autoGenerateId = autoGenerateId;
+    }
+
+    public boolean isAutoUpdateTime() {
+        return autoUpdateTime;
+    }
+
+    public void setAutoUpdateTime(boolean autoUpdateTime) {
+        this.autoUpdateTime = autoUpdateTime;
     }
 
     public boolean isInitData() {

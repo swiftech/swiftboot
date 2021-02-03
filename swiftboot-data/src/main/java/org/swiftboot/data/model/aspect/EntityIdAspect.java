@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.data.Info;
 import org.swiftboot.data.R;
 import org.swiftboot.data.SwiftBootDataConfigBean;
-import org.swiftboot.data.model.entity.BaseIdEntity;
 import org.swiftboot.data.model.entity.IdPojo;
 import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.util.BeanUtils;
@@ -106,12 +105,12 @@ public class EntityIdAspect {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), clazz);
         for (Field subObject : subObjectList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObject);
-            if (relEntity instanceof BaseIdEntity) {
-                tryToSetIdAndSubIds((BaseIdEntity) relEntity); // - 递归 -
+            if (relEntity instanceof IdPojo) {
+                tryToSetIdAndSubIds((IdPojo) relEntity); // - 递归 -
             }
             else if (relEntity instanceof Iterable) {
                 for (Object subEntity : ((Iterable) relEntity)) {
-                    tryToSetIdAndSubIds((BaseIdEntity) subEntity); // - 递归 -
+                    tryToSetIdAndSubIds((IdPojo) subEntity); // - 递归 -
                 }
             }
         }
