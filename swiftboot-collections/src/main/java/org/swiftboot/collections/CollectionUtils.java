@@ -22,13 +22,13 @@ public class CollectionUtils {
     }
 
     /**
-     * 集合中是否包含指定类型
+     * 集合中是否包含指定类型的元素
      *
      * @param collection
      * @param clazz
      * @return
      */
-    public static boolean contains(Collection collection, Class clazz) {
+    public static boolean contains(Collection<?> collection, Class<?> clazz) {
         if (collection == null || clazz == null) {
             return false;
         }
@@ -47,7 +47,7 @@ public class CollectionUtils {
      * @param clazz
      * @return
      */
-    public static Object getFirstMatch(Object[] collection, Class clazz) {
+    public static Object getFirstMatch(Object[] collection, Class<?> clazz) {
         if (collection == null || clazz == null) {
             return null;
         }
@@ -66,7 +66,7 @@ public class CollectionUtils {
      * @param clazz
      * @return
      */
-    public static Object getFirstMatch(List collection, Class clazz) {
+    public static Object getFirstMatch(List<?> collection, Class<?> clazz) {
         if (collection == null || clazz == null) {
             return null;
         }
@@ -115,12 +115,12 @@ public class CollectionUtils {
      * @param <T>
      * @return
      */
-    public static <T extends Collection> T constructCollectionByType(Class collectionType) {
+    public static <T extends Collection<?>> T constructCollectionByType(Class<T> collectionType) {
         if (Set.class.isAssignableFrom(collectionType)) {
-            return (T) new HashSet();
+            return (T) new HashSet<>();
         }
         else if (List.class.isAssignableFrom(collectionType)) {
-            return (T) new ArrayList();
+            return (T) new ArrayList<>();
         }
         else {
             return null;
@@ -141,7 +141,7 @@ public class CollectionUtils {
             return collection;
         }
         else if (collection instanceof Set) {
-            TreeSet<T> ret =  new TreeSet<T>(comparator);
+            TreeSet<T> ret = new TreeSet<T>(comparator);
             ret.addAll(collection);
             return ret;
         }

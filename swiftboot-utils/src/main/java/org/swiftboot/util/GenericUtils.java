@@ -4,12 +4,15 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
+ * Generic type utils
  *
  * @author swiftech
  */
 public class GenericUtils {
 
     /**
+     * Get generic type of one class's all ancestor classes.
+     *
      * @param clazz
      * @param <T>
      * @return
@@ -21,6 +24,7 @@ public class GenericUtils {
     }
 
     /**
+     * Get generic type of one class's direct parent class.
      *
      * @param clazz
      * @param <T>
