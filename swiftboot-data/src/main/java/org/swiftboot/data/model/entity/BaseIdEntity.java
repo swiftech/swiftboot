@@ -5,6 +5,7 @@ import org.swiftboot.data.annotation.PropertyDescription;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.util.Objects;
 
 /**
  * 带有 ID 字段的实体类
@@ -35,5 +36,19 @@ public abstract class BaseIdEntity implements IdPojo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (id == null) return false;
+        BaseIdEntity that = (BaseIdEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

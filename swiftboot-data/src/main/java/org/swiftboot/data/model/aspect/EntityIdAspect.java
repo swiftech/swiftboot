@@ -91,9 +91,6 @@ public class EntityIdAspect {
             idEntity.setId(id);
         }
 
-//        tryToSetRelEntities(idEntity, OneToOne.class);
-//        tryToSetRelEntities(idEntity, OneToMany.class);
-
         this.tryToSetOneToOneEntities(idEntity);
         this.tryToSetOneToManyEntities(idEntity);
     }
@@ -129,6 +126,7 @@ public class EntityIdAspect {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToOne.class);
         for (Field subObjectField : subObjectList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObjectField);
+            if (relEntity == null) continue;
             tryToSetIdAndSubIds((IdPojo) relEntity);
         }
     }
@@ -142,6 +140,7 @@ public class EntityIdAspect {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToMany.class);
         for (Field subObjectField : subObjectList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObjectField);
+            if (relEntity == null) continue;
             for (Object subEntity : ((Iterable<?>) relEntity)) {
                 tryToSetIdAndSubIds((IdPojo) subEntity); // - 递归 -
                 // 反向处理 ManyToOne 的属性

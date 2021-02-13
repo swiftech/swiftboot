@@ -3,7 +3,5 @@ swiftboot:
     model:
       # 是否自动生成实体类的 ID
       autoGenerateId: true
-      # 是否强制使用生成的 ID 而忽略用户设置的 ID
-      forceId: true
-      # 是否自动设置更新时间
-      autoUpdateTime: true
+      # 自动设置更新时间策略 'not-set' | 'on-change' | 'always'
+      autoUpdateTimeStrategy: not-set

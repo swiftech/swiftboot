@@ -1,5 +1,7 @@
 package org.swiftboot.data;
 
+import org.hibernate.EmptyInterceptor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +10,8 @@ import org.swiftboot.data.model.aspect.EntityIdAspect;
 import org.swiftboot.data.model.aspect.UpdateTimeAspect;
 import org.swiftboot.data.model.id.DefaultIdGenerator;
 import org.swiftboot.data.model.id.IdGenerator;
+import org.swiftboot.data.model.interceptor.TimeInterceptor;
+import org.swiftboot.data.model.interceptor.TimeInterceptorRegisterBean;
 
 /**
  * @author swiftech
@@ -44,12 +48,23 @@ public class SwiftBootDataConfig {
 
     /**
      * 根据 swiftboot.data.model.autoUpdateTime=true 加载实体类更新时间的切面
+     *
      * @return
      */
     @Bean
-    @ConditionalOnProperty(value = "swiftboot.data.model.autoUpdateTime", havingValue = "true")
     UpdateTimeAspect updateTimeAspect() {
         return new UpdateTimeAspect();
+    }
+
+    @Bean
+    TimeInterceptor timeInterceptor() {
+        return new TimeInterceptor();
+    }
+
+    @Bean
+    @ConditionalOnBean(EmptyInterceptor.class)
+    TimeInterceptorRegisterBean timeInterceptorRegisterBean() {
+        return new TimeInterceptorRegisterBean();
     }
 
 

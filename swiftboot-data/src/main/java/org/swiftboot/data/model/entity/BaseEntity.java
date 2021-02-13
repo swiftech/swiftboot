@@ -34,12 +34,10 @@ public abstract class BaseEntity extends BaseIdEntity implements Persistent {
     private Boolean isDelete = Boolean.FALSE;
 
     public BaseEntity() {
-        this.createTime = System.currentTimeMillis();
     }
 
     public BaseEntity(String id) {
         super(id);
-        this.createTime = System.currentTimeMillis();
     }
 
     @Override
