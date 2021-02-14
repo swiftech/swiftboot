@@ -9,7 +9,6 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -31,7 +30,7 @@ swiftboot:
   data:
     model:
       autoGenerateId: true
-      autoUpdateTime: true
+      autoUpdateTimeStrategy: on-change
       initData: true
       initBaseDir: init
       initBaseDaoPackages:

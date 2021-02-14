@@ -27,7 +27,7 @@ public class OrderDetailEntity extends BaseEntity {
      * 订单
      */
     @PropertyDescription(value = "订单")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_ID", nullable = false)
     private OrderEntity order;
 
@@ -37,6 +37,13 @@ public class OrderDetailEntity extends BaseEntity {
 
     public OrderDetailEntity(String id) {
         super(id);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDetailEntity{" +
+                "description='" + description + '\'' +
+                '}';
     }
 
     /**

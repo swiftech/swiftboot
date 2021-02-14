@@ -3,6 +3,7 @@ package org.swiftboot.demo.service;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
 import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
+import org.swiftboot.demo.command.OrderWithDetailSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
 import org.swiftboot.demo.result.OrderResult;
@@ -41,6 +42,10 @@ public interface OrderService {
      * @return
      */
     OrderSaveResult saveOrder(OrderSaveCommand cmd);
+
+    OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveCommand cmd);
+
+    OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveCommand cmd);
 
     /**
      * 逻辑删除订单
