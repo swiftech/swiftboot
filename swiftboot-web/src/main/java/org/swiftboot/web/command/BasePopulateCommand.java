@@ -2,7 +2,6 @@ package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.swiftboot.collections.CollectionUtils;
 import org.swiftboot.data.model.entity.Persistent;
 import org.swiftboot.util.BeanUtils;
@@ -14,6 +13,8 @@ import org.swiftboot.web.annotation.PopulateIgnore;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * 提供将参数填入实体类的方法 populateEntity() 和创建 Command 类所对应的实体类的方法 createEntity()
@@ -89,14 +90,32 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
         for (Field srcField : allFields) {
             // 处理嵌套
             if (recursive) {
+                Field targetField;
+                Object target;
+                try {
+                    targetField = BeanUtils.getDeclaredField(entity, srcField.getName());
+                    target = BeanUtils.forceGetProperty(entity, targetField);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
                 if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())) {
-                    BasePopulateCommand sub = (BasePopulateCommand) BeanUtils.forceGetProperty(this, srcField);
+                    BasePopulateCommand<Persistent> sub = (BasePopulateCommand<Persistent>) BeanUtils.forceGetProperty(this, srcField);
                     if (sub == null) {
+                        // System.out.printf("Ignore populate field: %s%n", srcField);
                         continue;
                     }
                     try {
-                        Persistent relEntity = sub.createEntity();
-                        BeanUtils.forceSetProperty(entity, srcField.getName(), relEntity);
+                        if (target == null) {
+                            // System.out.println("Create sub entity");
+                            Persistent relEntity = sub.createEntity();
+                            BeanUtils.forceSetProperty(entity, targetField, relEntity);
+                        }
+                        else {
+                            // System.out.println("Populate sub entity");
+                            Persistent relEntity = (Persistent) target;
+                            sub.populateEntity(relEntity);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         continue;
@@ -104,17 +123,44 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                     continue;
                 }
                 else if (Collection.class.isAssignableFrom(srcField.getType())) {
-                    Collection items = (Collection) BeanUtils.forceGetProperty(this, srcField);
+                    Collection<?> items = (Collection<?>) BeanUtils.forceGetProperty(this, srcField);
                     try {
-                        Field targetField = BeanUtils.getDeclaredField(entity, srcField.getName());
-                        Collection c = CollectionUtils.constructCollectionByType(targetField.getType());
-                        for (Object item : items) {
-                            if (item instanceof BasePopulateCommand) {
-                                Persistent childEntity = ((BasePopulateCommand) item).createEntity();
-                                c.add(childEntity);
+                        if (target == null) {
+                            // Populate collections for new created entity.
+                            Collection<Object> newEntities = CollectionUtils.constructCollectionByType((Class<Collection<Object>>) targetField.getType());
+                            items.stream().forEach(item -> {
+                                if (!(item instanceof BasePopulateCommand)) return;// exclude non populatable elements;
+                                newEntities.add(((BasePopulateCommand) item).createEntity());
+                            });
+                            BeanUtils.forceSetProperty(entity, targetField, newEntities);
+                        }
+                        else {
+                            if (target instanceof Collection) { // populate collections for existed entities.
+                                Collection subEntities = (Collection) target;
+                                items.forEach(item -> {
+                                    if (!(item instanceof BasePopulateCommand))
+                                        return; // exclude non populate-able elements;
+                                    BasePopulateCommand<?> populateableItem = (BasePopulateCommand<?>) item;
+                                    Persistent subEntity = populateableItem.createEntity();
+                                    if (subEntities.contains(subEntity)) { // populate to existed entity to merge (for updating sub entities)
+                                        Optional<Persistent> optMatched = subEntities.stream().filter(
+                                                (Predicate<Persistent>) o -> subEntity.getId().equals(o.getId())
+                                        )
+                                                .findFirst();
+                                        if (optMatched.isPresent()) {
+                                            Persistent oldEntity = optMatched.get();
+                                            ((BasePopulateCommand) item).populateEntity(oldEntity);
+                                        }
+                                    }
+                                    else { // New sub entity
+                                        subEntities.add(subEntity);
+                                    }
+                                });
+                            }
+                            else {// src type is collection but target type isn't.
+                                continue;
                             }
                         }
-                        BeanUtils.forceSetProperty(entity, srcField.getName(), c);
                     } catch (Exception e) {
                         e.printStackTrace();
                         continue;
@@ -122,10 +168,10 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                     continue;
                 }
             }
-            else {
+            else { // no recursive
                 if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())
                         || Collection.class.isAssignableFrom(srcField.getType())) {
-                    continue;
+                    continue; // Ignore nested commands if no recursive.
                 }
             }
 
@@ -140,15 +186,13 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
             if (targetField == null) {
                 throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entityClass, srcField.getName()));
             }
-            boolean accessible = targetField.isAccessible();
-            targetField.setAccessible(true);
             try {
-                Object value = PropertyUtils.getProperty(this, srcField.getName());
-                targetField.set(entity, value);
+                Object value = BeanUtils.forceGetProperty(this, srcField);
+                BeanUtils.forceSetProperty(entity, targetField, value);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
             }
-            targetField.setAccessible(accessible);
         }
     }
 
