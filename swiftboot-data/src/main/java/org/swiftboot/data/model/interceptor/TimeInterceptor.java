@@ -34,8 +34,8 @@ public class TimeInterceptor extends EmptyInterceptor {
 
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        log.debug(this.getClass().getSimpleName() + ".onSave()");
-        log.debug(String.format(" %s - %s%n", entity, id));
+//        log.debug(this.getClass().getSimpleName() + ".onSave()");
+//        log.debug(String.format(" %s - %s%n", entity, id));
         boolean changed = false;
         if (entity instanceof Persistent) {
             for (int i = 0; i < propertyNames.length; i++) {
@@ -51,8 +51,8 @@ public class TimeInterceptor extends EmptyInterceptor {
 
     @Override
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-        log.debug(this.getClass().getSimpleName() + ".onFlushDirty()");
-        log.debug(String.format(" %s - %s%n", entity, id));
+//        log.debug(this.getClass().getSimpleName() + ".onFlushDirty()");
+//        log.debug(String.format(" %s - %s%n", entity, id));
 //        System.out.println(StringUtils.join(propertyNames, ", "));
 //        System.out.println(StringUtils.join(previousState, ", "));
 //        System.out.println(StringUtils.join(currentState, ", "));
@@ -96,7 +96,7 @@ public class TimeInterceptor extends EmptyInterceptor {
             }
         }
         else {
-            log.debug("Entity without updateTime: " + entity);
+//            log.debug("Entity without updateTime: " + entity);
         }
         return changed;
     }
