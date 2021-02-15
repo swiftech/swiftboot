@@ -8,6 +8,17 @@
 * Spring Data JPA >= 2.1.x.RELEASE
 * Hibernate >= 5.4.x.Final
 
+
+### 特性
+* 保存新增实体时自动创建主键 ID，预定义多种不同的 ID 生成策略。
+* 保存新增实体时自动设置实体的（包括关联对象）创建时间。
+* 保存修改实体时自动设置实体的（包括关联对象）更新时间。
+* 定义了实体类基类，包含了必要的 ID 字段和大多数表都需要的字段：
+  * 主键：`ID`
+  * 创建时间：`CREATE_TIME`
+  * 更新时间：`UPDATE_TIME`
+  * 是否逻辑删除：`IS_DELETE`
+
 ## 引用 jar 包：
 
 Maven:
@@ -23,10 +34,12 @@ Maven:
 ## 如何使用
 #### 配置
 
-```java
 
+```java
 @Configuration
 @ComponentScan(basePackages = {"org.swiftboot.data"})
+@EntityScan(basePackages = {"x.x.x"})
+@EnableJpaRepositories(basePackages = {"x.x.x"})
 public class MyConfig {
 }
 ```
