@@ -1,6 +1,7 @@
 package org.swiftboot.sheet.imp;
 
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.util.BeanUtils;
 
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
  * @author allen
  */
 public abstract class BaseImporter implements Importer {
+
+    protected Logger log = LoggerFactory.getLogger(BaseImporter.class);
 
     private String fileType;
 
@@ -52,13 +55,13 @@ public abstract class BaseImporter implements Importer {
      * @param colCount
      * @return
      */
-    protected Object shrinkMatrix(List<List<Object>> matrix, Integer rowCount, Integer colCount) {
+    public static Object shrinkMatrix(List<List<Object>> matrix, Integer rowCount, Integer colCount) {
         if (matrix == null || matrix.isEmpty() || matrix.get(0).isEmpty()) {
             return null;
         }
         boolean isHorizontal = rowCount != null && rowCount == 1;
         boolean isVertical = colCount != null && colCount == 1;
-        System.out.println(StringUtils.join(matrix));
+        // System.out.println(StringUtils.join(matrix));
         if (isHorizontal && isVertical) {
             return matrix.get(0).get(0);
         }

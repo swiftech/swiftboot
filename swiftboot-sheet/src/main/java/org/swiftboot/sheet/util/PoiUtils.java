@@ -33,6 +33,12 @@ public class PoiUtils {
         return firstSheet(workbook);
     }
 
+    /**
+     * Get first sheet of workbook, create new if not existed.
+     *
+     * @param workbook
+     * @return
+     */
     public static Sheet firstSheet(Workbook workbook) {
         int sheetCount = workbook.getNumberOfSheets();
         if (sheetCount <= 0) {
@@ -132,7 +138,7 @@ public class PoiUtils {
      */
     public static void writePicture(Sheet sheet, Position startPos, Position endPosition, Picture pictureValue) {
         if (ObjectUtils.allNotNull(sheet, startPos, pictureValue)) {
-            System.out.printf("Write picture from %s to %s%n", startPos, endPosition);
+            // System.out.printf("Write picture from %s to %s%n", startPos, endPosition);
             Workbook wb = sheet.getWorkbook();
 
             int pictureIdx = wb.addPicture(pictureValue.getData(), pictureValue.getPoiPictureType());
@@ -145,7 +151,7 @@ public class PoiUtils {
             if (endPosition == null || endPosition.isUncertain()) {
                 isRestrictedInArea = false;
             }
-            System.out.printf("%s restrict in area%n", isRestrictedInArea ? "" : "not ");
+            // System.out.printf("%s restrict in area%n", isRestrictedInArea ? "" : "not ");
 
             // set top-left corner of the picture,
             // subsequent call of Picture#resize() will operate relative to it

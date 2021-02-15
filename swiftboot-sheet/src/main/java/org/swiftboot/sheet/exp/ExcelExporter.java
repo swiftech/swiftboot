@@ -88,7 +88,7 @@ public class ExcelExporter extends BaseExporter {
         if (lastPosition == null || lastPosition.isUncertain()) {
             return;
         }
-        System.out.printf("Try to extend sheet to %s%n", lastPosition);
+        log.debug(String.format("Try to extend sheet to %s%n", lastPosition));
         // Calculate the original size of a row.
         int originRowCount = sheet.getLastRowNum() + 1;
         int originRowSize = 0;
@@ -96,9 +96,9 @@ public class ExcelExporter extends BaseExporter {
             Row row = sheet.getRow(0);
             originRowSize = row.getLastCellNum() + 1;
         }
-        System.out.printf("Original row count: %d%n", originRowCount);
-        System.out.printf("Original physical number of rows: %d%n", sheet.getPhysicalNumberOfRows());
-        System.out.printf("Original row size: %d%n", originRowSize);
+        log.debug(String.format("Original row count: %d%n", originRowCount));
+        log.debug(String.format("Original physical number of rows: %d%n", sheet.getPhysicalNumberOfRows()));
+        log.debug(String.format("Original row size: %d%n", originRowSize));
 
         // Extend columns
         int moreCols = lastPosition.getColumn() + 1 - originRowSize;

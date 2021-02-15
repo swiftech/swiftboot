@@ -13,6 +13,9 @@ import java.net.URL;
  * @author allen
  */
 public class BaseTest {
+
+    public static final String TEMP_DIR_URI = "Temp/swiftboot/";
+
     /**
      * Load template file from "/exp"
      *
@@ -42,7 +45,7 @@ public class BaseTest {
     protected OutputStream createOutputStream(boolean fromTemplate, String fileType) throws FileNotFoundException {
         String fileName = String.format("exported%s.%s", fromTemplate ? "_template" : "", fileType);
 
-        File dir = new File(SystemUtils.getUserHome(), "Temp/swiftboot/swiftboot-sheet/");
+        File dir = new File(SystemUtils.getUserHome(), TEMP_DIR_URI + "swiftboot-sheet/");
         if (!dir.exists()) {
             dir.mkdirs();
         }

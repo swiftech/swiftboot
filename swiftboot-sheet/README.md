@@ -40,7 +40,8 @@ public class SheetEntity {
 ```
 
 * 导出
-  创建指定文件类型的 `Exporter` 并将实体对象中的数据导出到数据表格文件中，例如：
+  创建指定文件类型的 `Exporter` ，调用 `export()` 方法将实体对象中的数据导出到数据表格文件中，例如：
+
 
 ```java
     Exporter exporter = new SwiftBootSheetFactory().createExporter(SheetFileType.TYPE_XLSX);
@@ -54,10 +55,12 @@ public class SheetEntity {
         e.printStackTrace();
     }
 ```
+
+> 导出文件类型有 `TYPE_XLSX`，`TYPE_XLS` 和 `TYPE_CSV`。
 > `templateFileInputStream` 是导出时指定的模版文件，在这个文件里你可以任意的修改表格的样式，SwiftBoot-Sheet 只处理数据，表格样式会被原封不动的复制到 `outputStream` 中
 > 如果没有模版，那么可以调用 `exporter.export(exportEntity, outputStream);` 直接导出到一个新的无样式的表格文件中。
 
-* 导入
+* 导入  
   实现方式和导出类似，数据会从表格文件导入到实体对象中，例如
 
 ```java
@@ -66,7 +69,7 @@ public class SheetEntity {
 
 ```
 
-* 导出图片
+* 导出图片  
   支持导出 JPG, PNG 图片至 Excel 表格中的特定位置，并按照给出的范围进行伸缩，如果
   * 指定导出至一个单元格，则图片充满这个单元格
   * 指定导出至一行，一列或矩阵，则图片充满这一行，一列或矩阵
@@ -90,16 +93,16 @@ exportEntity.setPictureToExport(() -> {
 exporter.export(templateFileInputStream, exportEntity, outputStream);
 ```
 
-
-
 ### 表达式
+
 * 表达式中字母表示列，数字表示行，例如 `E2` 表示第二行第五列
 * 表达式字母和数字顺序可颠倒，例如`E2` 和 `2E` 是一样的。
 * 表达式中字母可为大写或小写，例如`E2` 和 `e2` 是一样的。
 * 用 '-' 或 '|' 加上数字代表行或列
 * 用 '?' 表示不确定
 * 起始点和终止点的顺序可以颠倒，也就是说终止点写在起始点前面效果是一样的，最终都是由小至大。
-* 导出：如果表达式的范围低于给出的数据大小，则只导出表达式给定的范围的数据。
+* 导出：如果表达式的范围小于给出的数据大小，则只导出表达式给定的范围的数据。
+* 对于合并单元格，只需要给出合并范围内的任一单元格位置即可。
 
 | 表达式示例                                                      | 解释                                       |
 | --------------------------------------------------------------- | ------------------------------------------ |
@@ -126,13 +129,13 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 ### Maven:
 
-  ```xml
-  <dependency>
-    <groupId>com.github.swiftech</groupId>
-    <artifactId>swiftboot-sheet</artifactId>
-    <version>1.3-beta3</version>
-  </dependency>
-  ```
+```xml
+<dependency>
+  <groupId>com.github.swiftech</groupId>
+  <artifactId>swiftboot-sheet</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
 
 
 ### 限制
