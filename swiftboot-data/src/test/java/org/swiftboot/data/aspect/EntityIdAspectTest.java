@@ -1,7 +1,6 @@
 package org.swiftboot.data.aspect;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,12 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.swiftboot.util.JsonUtils;
 import org.swiftboot.data.model.dao.CustomizedDao;
 import org.swiftboot.data.model.dao.ParentDao;
 import org.swiftboot.data.model.entity.ChildEntity;
 import org.swiftboot.data.model.entity.CustomizedEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
+import org.swiftboot.util.JsonUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -58,6 +57,7 @@ public class EntityIdAspectTest {
         entity.setItems(new ArrayList<>());
         entity.getItems().add(childEntity);
         parentDao.save(entity);
+        System.out.println(entity.toString());
         // Assertions
         Optional<ParentEntity> optParent = parentDao.findById(entity.getId());
         Assertions.assertNotNull(optParent);
@@ -70,17 +70,6 @@ public class EntityIdAspectTest {
             Assertions.assertFalse(StringUtils.isBlank(item.getId()));
             Assertions.assertEquals("臣子", item.getName());
         }
-        System.out.println(JsonUtils.object2PrettyJson(parentEntity));
-        // assert auto update time
-        parentEntity.setName("逊位");
-        parentDao.save(parentEntity);
-        Optional<ParentEntity> optUpdatedEntity = parentDao.findById(parentEntity.getId());
-        Assertions.assertTrue(optUpdatedEntity.isPresent());
-        ParentEntity updatedEntity = optUpdatedEntity.get();
-        Assertions.assertNotNull(updatedEntity);
-        Assertions.assertNotNull(updatedEntity.getUpdateTime());
-        Assertions.assertEquals("逊位", updatedEntity.getName());
-        System.out.println(parentEntity);
         System.out.println(JsonUtils.object2PrettyJson(parentEntity));
     }
 

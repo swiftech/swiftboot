@@ -62,7 +62,7 @@ public class SwiftBootDataConfig {
     }
 
     @Bean
-    @ConditionalOnBean(EmptyInterceptor.class)
+    @ConditionalOnBean(TimeInterceptor.class)
     TimeInterceptorRegisterBean timeInterceptorRegisterBean() {
         return new TimeInterceptorRegisterBean();
     }

@@ -34,4 +34,5 @@ public class ParentEntity extends BaseEntity {
     public void setItems(List<ChildEntity> items) {
         this.items = items;
     }
+
 }

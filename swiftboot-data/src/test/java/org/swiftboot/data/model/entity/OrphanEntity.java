@@ -1,7 +1,5 @@
 package org.swiftboot.data.model.entity;
 
-import org.swiftboot.data.model.entity.BaseEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;

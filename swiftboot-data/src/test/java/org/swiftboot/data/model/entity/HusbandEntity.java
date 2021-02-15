@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "HUSBAND_TABLE")
 public class HusbandEntity extends BaseEntity {
+
     @Column
     private
     String name;
