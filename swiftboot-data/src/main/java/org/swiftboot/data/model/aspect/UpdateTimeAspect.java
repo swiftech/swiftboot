@@ -10,11 +10,16 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.data.Info;
 import org.swiftboot.data.R;
 import org.swiftboot.data.SwiftBootDataConfigBean;
-import org.swiftboot.data.model.entity.BaseEntity;
-import org.swiftboot.data.model.entity.Persistent;
+import org.swiftboot.data.model.entity.TimePersistable;
+import org.swiftboot.util.GenericUtils;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ON_CHANGE;
 import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_NOT_SET;
@@ -56,29 +61,49 @@ public class UpdateTimeAspect {
         }
 
         for (Object arg : args) {
-            if (arg instanceof Persistent) {
-                Persistent entity = (Persistent) arg;
+            if (arg instanceof TimePersistable) {
+                TimePersistable<?> entity = (TimePersistable<?>) arg;
                 this.tryToSetUpdateTime(entity);
             }
             else if (arg instanceof Iterable) {
                 for (Object entity : ((Iterable) arg)) {
-                    if (entity instanceof Persistent) {
-                        this.tryToSetUpdateTime((Persistent) entity);
+                    if (entity instanceof TimePersistable) {
+                        this.tryToSetUpdateTime((TimePersistable<?>) entity);
                     }
                 }
             }
             else {
-                log.debug(Info.get(UpdateTimeAspect.class, R.PARAM_NOT_EXTEND_CLASS2, BaseEntity.class.getName(), arg));
+                log.debug(Info.get(UpdateTimeAspect.class, R.PARAM_NOT_EXTEND_CLASS2, TimePersistable.class.getName(), arg));
             }
         }
         return null;
     }
 
-    private void tryToSetUpdateTime(Persistent entity) {
+    private void tryToSetUpdateTime(TimePersistable entity) {
         // Only persisted entity will be set updateTime;
         if (StringUtils.isNotBlank(entity.getId()) && entityManager.contains(entity)) {
-            entity.setUpdateTime(System.currentTimeMillis());
+            Class<? extends TimePersistable<?>> clazz = (Class<? extends TimePersistable<?>>) entity.getClass();
+            entity.setUpdateTime(this.nowByParameterizedType(clazz));
         }
+    }
+
+    Object nowByParameterizedType(Class<? extends TimePersistable<?>> clazz) {
+        ParameterizedType parameterizedType = GenericUtils.firstParameterizedType(clazz, TimePersistable.class);
+        if (parameterizedType.getActualTypeArguments().length == 0) {
+            return null;
+        }
+        Type type = parameterizedType.getActualTypeArguments()[0];
+        System.out.println(type);
+        if (type == Long.class) {
+            return Long.valueOf(System.currentTimeMillis());
+        }
+        else if (type == Date.class) {
+            return new Date();
+        }
+        else if (type == LocalDateTime.class) {
+            return LocalDateTime.now();
+        }
+        return null;
     }
 
 }

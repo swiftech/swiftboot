@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.data.model.entity.BaseEntity;
-import org.swiftboot.data.model.entity.Persistent;
+import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
@@ -20,14 +20,14 @@ import java.util.*;
  * 提供将入实体类的属性值填入返回值的方法。如果 Result 存在的属性名称在实体类中不存在的话，则抛出异常。
  * <code>populateByEntity(E entity)</code> 方法将实体类的属性填充到当前对象实例中。
  * 静态方法<code>populateByEntity(E entity, BasePopulateResult<E> result)</code>将指定实体类属性值填充至指定的 Result 实例中。
- * 填充方法支持将实体类的 OneToOne 和 OneToMany 的属性填充到 Result 实例中，前提是 Result 实例中对应的属性类型必须也是继承自 BasePopulateResult 的类。
+ * 填充方法支持将实体类的 <code>@OneToOne</code> 和 </code>@OneToMany</code> 的属性填充到 Result 实例中，前提是 Result 实例中对应的属性类型必须也是继承自 BasePopulateResult 的类。
  * 注意：一对一关系如果需要填充，则必须使用 fetch = FetchType.LAZY 来标注，否则将无法通过反射获取到带有属性值的子类。
  * 标记 {@link JsonIgnore} 注解的 Result 类属性不会被处理。
  * 如果希望某个实体类中不存在的属性也能出现在 Result 类中，那么可以用 {@link PopulateIgnore} 来标注这个属性。
  *
  * @author swiftech
  **/
-public abstract class BasePopulateResult<E extends Persistent> implements Result {
+public abstract class BasePopulateResult<E extends IdPersistable> implements Result {
 
     /**
      * 按照返回值类型创建返回值对象，并从实体类填充返回值
@@ -39,7 +39,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
      */
     public static <T extends BasePopulateResult> T createResult(
             Class<T> resultClass,
-            Persistent entity) {
+            IdPersistable entity) {
         if (resultClass == null || entity == null) {
             throw new IllegalArgumentException(Info.get(BasePopulateResult.class, R.REQUIRE_PARAMS));
         }
@@ -79,7 +79,7 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
      * @param result
      * @return
      */
-    public static <E extends Persistent> BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
+    public static <E extends IdPersistable> BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
         if (entity == null) {
             throw new RuntimeException(Info.get(BasePopulateResult.class, R.REQUIRE_ENTITY));
         }
@@ -135,10 +135,10 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
 //            }
 
             Object subEntity = BeanUtils.forceGetProperty(entity, srcField);
-            if (subEntity instanceof Persistent) {
+            if (subEntity instanceof IdPersistable) {
                 Class subResultClass = (Class) targetField.getGenericType();
                 if (subResultClass != null) {
-                    BasePopulateResult<E> subResult = createResult(subResultClass, (Persistent) subEntity);
+                    BasePopulateResult<E> subResult = createResult(subResultClass, (IdPersistable) subEntity);
                     BeanUtils.forceSetProperty(result, targetField, subResult);
                 }
             }
@@ -177,21 +177,21 @@ public abstract class BasePopulateResult<E extends Persistent> implements Result
                                     // 如果集合为 TreeSet 并且其中的元素的类型实现了 Comparable 接口，那么返回 TreeSet
                                     if (TreeSet.class.isAssignableFrom(targetField.getType())
                                             && Comparable.class.isAssignableFrom((Class<?>) elementClass)) {
-                                        targetCollection = new TreeSet();
+                                        targetCollection = new TreeSet<>();
                                     }
                                     else {
-                                        targetCollection = new HashSet();
+                                        targetCollection = new HashSet<>();
                                     }
                                 }
                                 else if (List.class.isAssignableFrom(targetField.getType())) {
-                                    targetCollection = new LinkedList();
+                                    targetCollection = new LinkedList<>();
                                 }
                                 targetField.set(result, targetCollection);
                             }
 
                             for (Object subEntity : srcCollection) {
-                                if (subEntity instanceof Persistent) {
-                                    BasePopulateResult<E> subResult = createResult(elementClass, (Persistent) subEntity);
+                                if (subEntity instanceof IdPersistable) {
+                                    BasePopulateResult<E> subResult = createResult(elementClass, (IdPersistable) subEntity);
                                     targetCollection.add(subResult);
                                 }
                             }

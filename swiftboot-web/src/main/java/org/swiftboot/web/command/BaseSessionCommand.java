@@ -2,7 +2,7 @@ package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
-import org.swiftboot.data.model.entity.Persistent;
+import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.web.constant.HttpConstants;
 
 /**
@@ -10,7 +10,7 @@ import org.swiftboot.web.constant.HttpConstants;
  * @author swiftech
  */
 @ApiModel
-public abstract class BaseSessionCommand<E extends Persistent> extends BasePopulateCommand<E> {
+public abstract class BaseSessionCommand<E extends IdPersistable> extends BasePopulateCommand<E> {
 
     @JsonIgnore
     public void setSessionId(String sessionId) {

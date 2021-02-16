@@ -1,7 +1,6 @@
 package org.swiftboot.data.model.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +8,9 @@ import java.util.List;
  * @author swiftech
  **/
 @Entity
-@Table(name = "PARENT_TABLE")
-public class ParentEntity extends BaseLongTimeEntity implements Serializable {
+@Table(name = "PARENT_DATE_TIME_TABLE")
+public class ParentDateTimeEntity extends BaseDateTimeEntity {
+
     @Column
     private
     String name;
@@ -18,7 +18,7 @@ public class ParentEntity extends BaseLongTimeEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     private
-    List<ChildEntity> items = new ArrayList<>();
+    List<ChildDateTimeEntity> items = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -28,11 +28,11 @@ public class ParentEntity extends BaseLongTimeEntity implements Serializable {
         this.name = name;
     }
 
-    public List<ChildEntity> getItems() {
+    public List<ChildDateTimeEntity> getItems() {
         return items;
     }
 
-    public void setItems(List<ChildEntity> items) {
+    public void setItems(List<ChildDateTimeEntity> items) {
         this.items = items;
     }
 

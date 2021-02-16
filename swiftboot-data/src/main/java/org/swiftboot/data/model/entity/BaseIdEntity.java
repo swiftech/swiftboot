@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author swiftech
  **/
 @MappedSuperclass
-public abstract class BaseIdEntity implements IdPojo {
+public abstract class BaseIdEntity implements IdPersistable {
 
     /**
      * 唯一标识

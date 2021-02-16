@@ -3,7 +3,7 @@ package org.swiftboot.web.command;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import org.swiftboot.collections.CollectionUtils;
-import org.swiftboot.data.model.entity.Persistent;
+import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.GenericUtils;
 import org.swiftboot.web.Info;
@@ -25,7 +25,7 @@ import java.util.function.Predicate;
  * @author swiftech
  */
 @ApiModel
-public abstract class BasePopulateCommand<P extends Persistent> extends HttpCommand {
+public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpCommand {
 
     /**
      * 创建对应的实体类 P 的实例并且用属性值填充实例
@@ -100,7 +100,7 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                     continue;
                 }
                 if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())) {
-                    BasePopulateCommand<Persistent> sub = (BasePopulateCommand<Persistent>) BeanUtils.forceGetProperty(this, srcField);
+                    BasePopulateCommand<IdPersistable> sub = (BasePopulateCommand<IdPersistable>) BeanUtils.forceGetProperty(this, srcField);
                     if (sub == null) {
                         // System.out.printf("Ignore populate field: %s%n", srcField);
                         continue;
@@ -108,12 +108,12 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                     try {
                         if (target == null) {
                             // System.out.println("Create sub entity");
-                            Persistent relEntity = sub.createEntity();
+                            IdPersistable relEntity = sub.createEntity();
                             BeanUtils.forceSetProperty(entity, targetField, relEntity);
                         }
                         else {
                             // System.out.println("Populate sub entity");
-                            Persistent relEntity = (Persistent) target;
+                            IdPersistable relEntity = (IdPersistable) target;
                             sub.populateEntity(relEntity);
                         }
                     } catch (Exception e) {
@@ -141,14 +141,14 @@ public abstract class BasePopulateCommand<P extends Persistent> extends HttpComm
                                     if (!(item instanceof BasePopulateCommand))
                                         return; // exclude non populate-able elements;
                                     BasePopulateCommand<?> populateableItem = (BasePopulateCommand<?>) item;
-                                    Persistent subEntity = populateableItem.createEntity();
+                                    IdPersistable subEntity = populateableItem.createEntity();
                                     if (subEntities.contains(subEntity)) { // populate to existed entity to merge (for updating sub entities)
-                                        Optional<Persistent> optMatched = subEntities.stream().filter(
-                                                (Predicate<Persistent>) o -> subEntity.getId().equals(o.getId())
+                                        Optional<IdPersistable> optMatched = subEntities.stream().filter(
+                                                (Predicate<IdPersistable>) o -> subEntity.getId().equals(o.getId())
                                         )
                                                 .findFirst();
                                         if (optMatched.isPresent()) {
-                                            Persistent oldEntity = optMatched.get();
+                                            IdPersistable oldEntity = optMatched.get();
                                             ((BasePopulateCommand) item).populateEntity(oldEntity);
                                         }
                                     }

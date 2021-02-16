@@ -1,7 +1,8 @@
 package org.swiftboot.data.constant;
 
 /**
- * @author allen
+ * @author swiftech
+ * @since 2.0.0
  */
 public interface AutoUpdateTimeStrategy {
 

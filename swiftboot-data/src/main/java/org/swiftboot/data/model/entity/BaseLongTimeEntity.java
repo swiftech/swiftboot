@@ -3,42 +3,34 @@ package org.swiftboot.data.model.entity;
 import org.swiftboot.data.annotation.PropertyDescription;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 /**
- * Base class for MongoDB document
+ * 基于 {@coee java.lang.Long} 的实体类基类。
  *
  * @author swiftech
- **/
-public abstract class BaseDocument implements TimePersistable<Long> {
-
-    /**
-     * 唯一标识
-     */
-    @PropertyDescription(value = "Entity ID", example = "basedocu20191119010450543ekxpvom")
-    @Id
-    private String id;
-
+ * @since 2.0.0
+ */
+@MappedSuperclass
+public abstract class BaseLongTimeEntity extends BaseIdEntity implements TimePersistable<Long> {
     /**
      * 创建时间
      */
     @PropertyDescription(value = "Creation time", example = "1545355038524")
-    @Column(name = "create_time")
+    @Column(name = "CREATE_TIME", columnDefinition = "BIGINT COMMENT 'Creation time'")
     private Long createTime;
-
     /**
      * 修改时间
      */
     @PropertyDescription(value = "Updating time", example = "1545355038524")
-    @Column(name = "update_time")
+    @Column(name = "UPDATE_TIME", columnDefinition = "BIGINT COMMENT 'Updating time'")
     private Long updateTime;
 
-    public String getId() {
-        return id;
+    public BaseLongTimeEntity() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public BaseLongTimeEntity(String id) {
+        super(id);
     }
 
     @Override

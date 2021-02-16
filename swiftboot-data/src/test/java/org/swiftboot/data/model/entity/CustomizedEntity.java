@@ -1,7 +1,5 @@
 package org.swiftboot.data.model.entity;
 
-import org.swiftboot.data.model.entity.IdPojo;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +10,7 @@ import javax.persistence.Table;
  **/
 @Entity
 @Table(name = "CUSTOMIZED_TABLE")
-public class CustomizedEntity implements IdPojo {
+public class CustomizedEntity implements IdPersistable {
 
     @Id()
     @Column(name = "ID", length = 32)

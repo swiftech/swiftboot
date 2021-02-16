@@ -8,22 +8,22 @@ import javax.persistence.*;
  * @author swiftech
  **/
 @Entity
-@Table(name = "CHILD_TABLE")
-public class ChildEntity extends BaseLongTimeEntity {
+@Table(name = "CHILD_DATE_TIME_TABLE")
+public class ChildDateTimeEntity extends BaseDateTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
     @JsonIgnore
-    private ParentEntity parent;
+    private ParentDateTimeEntity parent;
 
     @Column
     private String name;
 
-    public ParentEntity getParent() {
+    public ParentDateTimeEntity getParent() {
         return parent;
     }
 
-    public void setParent(ParentEntity parent) {
+    public void setParent(ParentDateTimeEntity parent) {
         this.parent = parent;
     }
 

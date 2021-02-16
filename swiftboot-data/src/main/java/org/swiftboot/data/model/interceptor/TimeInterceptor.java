@@ -1,15 +1,17 @@
 package org.swiftboot.data.model.interceptor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.EmptyInterceptor;
-import org.hibernate.type.CollectionType;
-import org.hibernate.type.Type;
+import org.hibernate.type.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.data.SwiftBootDataConfigBean;
-import org.swiftboot.data.model.entity.Persistent;
+import org.swiftboot.data.model.entity.TimePersistable;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.*;
@@ -21,6 +23,7 @@ import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.*;
  *
  * @author swiftech
  * @see org.swiftboot.data.model.aspect.UpdateTimeAspect
+ * @since 2.0.0
  */
 public class TimeInterceptor extends EmptyInterceptor {
 
@@ -36,12 +39,15 @@ public class TimeInterceptor extends EmptyInterceptor {
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
 //        log.debug(this.getClass().getSimpleName() + ".onSave()");
 //        log.debug(String.format(" %s - %s%n", entity, id));
+//        System.out.println(StringUtils.join(propertyNames, ", "));
+//        System.out.println(StringUtils.join(state, ", "));
+//        System.out.println(StringUtils.join(types, ", "));
         boolean changed = false;
-        if (entity instanceof Persistent) {
+        if (entity instanceof TimePersistable) {
             for (int i = 0; i < propertyNames.length; i++) {
                 String pname = propertyNames[i];
                 if (CREATE_TIME.equals(pname)) {
-                    state[i] = System.currentTimeMillis();
+                    state[i] = nowByType(types[i]);
                     changed = true;
                 }
             }
@@ -63,7 +69,7 @@ public class TimeInterceptor extends EmptyInterceptor {
             return changed;
         }
 
-        if (entity instanceof Persistent) {
+        if (entity instanceof TimePersistable) {
             // find if data changed (except createTime and updateTime)
             boolean dataChanged = false;
             for (int i = 0; i < propertyNames.length; i++) {
@@ -86,7 +92,7 @@ public class TimeInterceptor extends EmptyInterceptor {
                 else if (UPDATE_TIME.equals(propertyName)) {
                     if (AUTO_UPDATE_TIME_ALWAYS.equals(flag) ||
                             (AUTO_UPDATE_TIME_ON_CHANGE.equals(flag)) && dataChanged) { // force or really changed entities will be updated updateTime.
-                        currentState[i] = System.currentTimeMillis();//
+                        currentState[i] = nowByType(types[i]);
                         changed = true; // mark as changed
                     }
                     else {
@@ -99,5 +105,20 @@ public class TimeInterceptor extends EmptyInterceptor {
 //            log.debug("Entity without updateTime: " + entity);
         }
         return changed;
+    }
+
+    private Object nowByType(Type type) {
+        if (type instanceof LongType) {
+            return System.currentTimeMillis();
+        }
+        else if (type instanceof LocalDateTimeType) {
+            return LocalDateTime.now();
+        }
+        else if (type instanceof TimestampType) {
+            return new Date();
+        }
+        else {
+            throw new RuntimeException("Type of value is not supported: " + type);
+        }
     }
 }
