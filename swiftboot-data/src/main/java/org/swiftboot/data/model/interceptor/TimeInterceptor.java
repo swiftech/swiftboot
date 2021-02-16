@@ -44,6 +44,7 @@ public class TimeInterceptor extends EmptyInterceptor {
 //        System.out.println(StringUtils.join(types, ", "));
         boolean changed = false;
         if (entity instanceof TimePersistable) {
+            log.debug("Auto set createTime for entity: " + entity.getClass().getName());
             for (int i = 0; i < propertyNames.length; i++) {
                 String pname = propertyNames[i];
                 if (CREATE_TIME.equals(pname)) {
@@ -70,6 +71,7 @@ public class TimeInterceptor extends EmptyInterceptor {
         }
 
         if (entity instanceof TimePersistable) {
+            log.debug("Auto set updateTime for entity: " + entity.getClass().getName());
             // find if data changed (except createTime and updateTime)
             boolean dataChanged = false;
             for (int i = 0; i < propertyNames.length; i++) {
@@ -100,9 +102,6 @@ public class TimeInterceptor extends EmptyInterceptor {
                     }
                 }
             }
-        }
-        else {
-//            log.debug("Entity without updateTime: " + entity);
         }
         return changed;
     }

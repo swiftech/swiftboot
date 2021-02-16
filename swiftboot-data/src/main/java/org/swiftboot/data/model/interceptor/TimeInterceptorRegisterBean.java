@@ -20,5 +20,6 @@ public class TimeInterceptorRegisterBean implements HibernatePropertiesCustomize
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
         hibernateProperties.put("hibernate.session_factory.interceptor", interceptor);
+        hibernateProperties.put("hibernate.ejb.interceptor", interceptor);
     }
 }
