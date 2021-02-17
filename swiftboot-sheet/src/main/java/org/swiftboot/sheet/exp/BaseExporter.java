@@ -1,5 +1,8 @@
 package org.swiftboot.sheet.exp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +11,8 @@ import java.util.List;
  * @author allen
  */
 public abstract class BaseExporter implements Exporter {
+
+    protected Logger log = LoggerFactory.getLogger(BaseExporter.class);
 
     /**
      * File type to export.
@@ -26,7 +31,7 @@ public abstract class BaseExporter implements Exporter {
      * @param colCount if = 1, it's a vertical line
      * @return
      */
-    protected List<List<Object>> asMatrix(Object value, Integer rowCount, Integer colCount) {
+    public static List<List<Object>> asMatrix(Object value, Integer rowCount, Integer colCount) {
         List<List<Object>> ret = new ArrayList<>();
         boolean isHorizontal = rowCount != null && rowCount == 1;
         boolean isVertical = colCount != null && colCount == 1;

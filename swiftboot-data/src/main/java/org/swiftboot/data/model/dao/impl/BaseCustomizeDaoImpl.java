@@ -1,7 +1,7 @@
 package org.swiftboot.data.model.dao.impl;
 
-import org.swiftboot.data.model.entity.IdPojo;
-import org.swiftboot.data.model.entity.Persistent;
+import org.swiftboot.data.model.entity.IdPersistable;
+import org.swiftboot.data.model.entity.TimePersistable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,12 +14,12 @@ import javax.persistence.criteria.Root;
  *
  * @author swiftech
  **/
-public abstract class BaseCustomizeDaoImpl<T extends IdPojo> {
+public abstract class BaseCustomizeDaoImpl<T extends IdPersistable> {
 
     @PersistenceContext
     protected EntityManager entityManager;
 
-    protected Class<Persistent> entityClass;
+    protected Class<TimePersistable> entityClass;
 
     /**
      * 创建一个单个字段查询的 CriteriaQuery 对象

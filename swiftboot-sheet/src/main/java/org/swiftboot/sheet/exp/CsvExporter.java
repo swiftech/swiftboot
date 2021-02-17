@@ -63,7 +63,7 @@ public class CsvExporter extends BaseExporter {
                 throw new RuntimeException(String.format("No value provided to export for key: %s", key));
             }
             if (value instanceof PictureLoader) {
-                System.out.println("Picture is not supported to export to CSV, just ignore ");
+                log.warn("Picture is not supported to export to CSV, just ignore ");
             }
             else {
                 List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
@@ -71,7 +71,7 @@ public class CsvExporter extends BaseExporter {
                 int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
                 for (int i = 0; i < actualRowCount; i++) {
                     List<Object> values = matrix.get(i);
-                    System.out.println(StringUtils.join(values));
+                    log.debug(StringUtils.join(values));
                     setValuesToRow(rows, startPos.clone().moveRows(i), actualColumnCount, values);
                 }
             }

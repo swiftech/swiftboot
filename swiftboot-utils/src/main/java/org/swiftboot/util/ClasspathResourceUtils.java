@@ -1,6 +1,8 @@
 package org.swiftboot.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 /**
@@ -8,6 +10,22 @@ import java.net.URL;
  * @since 1.1
  */
 public class ClasspathResourceUtils {
+
+    /**
+     * 从 CLASSPATH 目录中打开资源路径表示的文件输入流
+     *
+     * @param resourceUri 资源路径 URI，开头和结尾都都没有 "/"
+     * @return
+     * @throws IOException
+     */
+    public static InputStream openResourceStream(String resourceUri) throws IOException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource(resourceUri);
+        if (url == null) {
+            return null;
+        }
+        return url.openStream();
+    }
 
     /**
      * 从资源路径表示的 CLASSPATH 目录中检索并返回用关键字过滤后缀的所有文件

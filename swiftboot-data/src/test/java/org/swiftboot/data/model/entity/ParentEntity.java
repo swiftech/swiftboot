@@ -1,6 +1,7 @@
 package org.swiftboot.data.model.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  **/
 @Entity
 @Table(name = "PARENT_TABLE")
-public class ParentEntity extends BaseEntity {
+public class ParentEntity extends BaseLongTimeEntity implements Serializable {
     @Column
     private
     String name;
@@ -34,4 +35,5 @@ public class ParentEntity extends BaseEntity {
     public void setItems(List<ChildEntity> items) {
         this.items = items;
     }
+
 }

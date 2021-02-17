@@ -20,7 +20,7 @@ public class AdminUserRoleRelEntity extends BaseEntity {
      * 管理员用户
      */
     @PropertyDescription(value = "管理员用户", example = "a2ff207bff038d313888f172d7bc1abf")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADMIN_USER_ID", nullable = false)
     private AdminUserEntity adminUser;
 
@@ -28,7 +28,7 @@ public class AdminUserRoleRelEntity extends BaseEntity {
      * 管理员角色
      */
     @PropertyDescription(value = "管理员角色", example = "b2a1dbe6fc6ac11cff86aba687c50cf3")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADMIN_ROLE_ID", nullable = false)
     private AdminRoleEntity adminRole;
 

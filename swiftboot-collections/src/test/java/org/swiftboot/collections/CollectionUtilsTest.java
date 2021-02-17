@@ -25,12 +25,26 @@ public class CollectionUtilsTest {
     }
 
     @Test
+    public void testContains() {
+        List<Object> list = Arrays.asList("a", new TestBean("b", "v"));
+        Assertions.assertTrue(CollectionUtils.contains(list, TestBean.class));
+    }
+
+    @Test
+    public void testFirstMatch() {
+        TestBean b = new TestBean("b", "v");
+        List<Object> list = Arrays.asList("a", b);
+        Assertions.assertEquals(b, CollectionUtils.getFirstMatch(list, TestBean.class));
+        Assertions.assertEquals(b, CollectionUtils.getFirstMatch(list.toArray(), TestBean.class));
+    }
+
+    @Test
     public void testConstructByType() {
         Assertions.assertDoesNotThrow(() -> {
-            List list = CollectionUtils.constructCollectionByType(List.class);
+            List<?> list = CollectionUtils.constructCollectionByType(List.class);
             Assertions.assertNotNull(list);
 
-            Set set = CollectionUtils.constructCollectionByType(Set.class);
+            Set<?> set = CollectionUtils.constructCollectionByType(Set.class);
             Assertions.assertNotNull(set);
         });
     }

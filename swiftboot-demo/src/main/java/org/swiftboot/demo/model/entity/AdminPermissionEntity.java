@@ -42,7 +42,7 @@ public class AdminPermissionEntity extends BaseEntity {
      * 父权限
      */
     @PropertyDescription(value = "父权限")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID", nullable = true)
     private AdminPermissionEntity parentPermission;
 

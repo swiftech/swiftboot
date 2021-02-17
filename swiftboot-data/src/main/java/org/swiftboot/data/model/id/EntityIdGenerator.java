@@ -1,7 +1,7 @@
 package org.swiftboot.data.model.id;
 
 import org.apache.commons.lang3.StringUtils;
-import org.swiftboot.data.model.entity.IdPojo;
+import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
 
@@ -13,18 +13,18 @@ import java.util.Map;
  *
  * @author swiftech
  **/
-public class EntityIdGenerator implements IdGenerator<IdPojo> {
+public class EntityIdGenerator implements IdGenerator<IdPersistable> {
 
     public static final int MIN_CODE_LEN = 2;
     public static final int MAX_CODE_LEN = 6;
 
     // 类和业务代码映射缓存
-    private final Map<Class<? extends IdPojo>, String> classCodeMapping = new HashMap<>();
+    private final Map<Class<? extends IdPersistable>, String> classCodeMapping = new HashMap<>();
 
     @Override
-    public String generate(IdPojo object) {
+    public String generate(IdPersistable object) {
         // 自动根据业务对象名称生成业务对象代码，
-        Class<? extends IdPojo> entityClass = object.getClass();
+        Class<? extends IdPersistable> entityClass = object.getClass();
         String code = null;
         if (classCodeMapping.containsKey(entityClass)) {
             code = classCodeMapping.get(entityClass);

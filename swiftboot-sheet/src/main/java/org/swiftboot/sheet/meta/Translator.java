@@ -3,6 +3,8 @@ package org.swiftboot.sheet.meta;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.exception.NotSupportedExpressionException;
 import org.swiftboot.sheet.util.LetterUtils;
 
@@ -31,6 +33,7 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
  * @author allen
  */
 public class Translator {
+    private final Logger log = LoggerFactory.getLogger(Translator.class);
 
     private int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
 
@@ -237,7 +240,6 @@ public class Translator {
      * @return
      */
     String indexToExp(int index) {
-        System.out.println();
         int x = index;
         if (x < 0) {
             return null;
@@ -252,7 +254,7 @@ public class Translator {
             xxx.add(letterIdx);
             cutoff += letterIdx * s;
         }
-        System.out.printf("%d - %s%n", index, StringUtils.join(xxx));
+        log.debug(String.format("%d - %s%n", index, StringUtils.join(xxx)));
         StringBuilder ret = new StringBuilder();
         boolean isUpgrade = false;
         // from lowest to highest
@@ -287,7 +289,7 @@ public class Translator {
         }
         ret.reverse();
         String s = ret.toString();
-        System.out.println(s);
+        log.debug(s);
         return s;
     }
 }

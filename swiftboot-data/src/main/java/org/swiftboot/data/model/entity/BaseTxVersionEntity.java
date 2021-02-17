@@ -12,7 +12,7 @@ import javax.persistence.Version;
  * @author swiftech
  */
 @MappedSuperclass
-public abstract class BaseTxVersionEntity extends BaseEntity {
+public abstract class BaseTxVersionEntity extends BaseEntity implements TrxVersionPersistable{
 
     public BaseTxVersionEntity() {
     }

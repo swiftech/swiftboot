@@ -1,5 +1,5 @@
-#spring:
-#  jpa:
+spring:
+  jpa:
 #    database-platform: org.hibernate.dialect.H2Dialect
 #    hibernate:
 #      dialect: org.hibernate.dialect.H2Dialect
@@ -9,7 +9,8 @@
 #    properties:
 #      hibernate:
 #        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-#    show-sql: true
+    show-sql: true
+    open-in-view: false
 logging:
   level:
     root: INFO
@@ -18,4 +19,4 @@ swiftboot:
   data:
     model:
       autoGenerateId: true
-      autoUpdateTime: true
+      autoUpdateTimeStrategy: on-change

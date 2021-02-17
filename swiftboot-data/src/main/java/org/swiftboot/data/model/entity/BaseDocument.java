@@ -10,7 +10,7 @@ import javax.persistence.Id;
  *
  * @author swiftech
  **/
-public abstract class BaseDocument implements Persistent {
+public abstract class BaseDocument implements TimePersistable<Long> {
 
     /**
      * 唯一标识

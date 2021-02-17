@@ -1,5 +1,7 @@
 package org.swiftboot.data.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -7,10 +9,11 @@ import javax.persistence.*;
  **/
 @Entity
 @Table(name = "CHILD_TABLE")
-public class ChildEntity extends BaseEntity {
+public class ChildEntity extends BaseLongTimeEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
+    @JsonIgnore
     private ParentEntity parent;
 
     @Column

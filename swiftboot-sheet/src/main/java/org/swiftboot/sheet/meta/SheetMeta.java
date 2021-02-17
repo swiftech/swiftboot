@@ -1,6 +1,8 @@
 package org.swiftboot.sheet.meta;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.annatation.Mapping;
 import org.swiftboot.util.BeanUtils;
 
@@ -15,6 +17,9 @@ import java.util.Map;
  * @author allen
  */
 public class SheetMeta {
+
+    private final Logger log = LoggerFactory.getLogger(SheetMeta.class);
+
     /**
      * meta item -> export value
      */
@@ -120,14 +125,14 @@ public class SheetMeta {
         for (MetaItem meta : this.metaItems.keySet()) {
             Area area = meta.getArea();
             Position startingPos = area.getStartPosition();
-            System.out.printf("'%s' -> %s%n", meta.getKey(), meta.getArea());
+            log.debug(String.format("'%s' -> %s%n", meta.getKey(), meta.getArea()));
             if (area.isSingleCell()) {
                 visitor.visitMetaItem(meta.getKey(), startingPos, 1, 1);
             }
             else {
                 Integer rowCount = area.rowCount();
                 Integer columnCount = area.columnCount();
-                System.out.printf("row count %d, column count %d%n", rowCount, columnCount);
+                log.debug(String.format("row count %d, column count %d%n", rowCount, columnCount));
                 if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
                     throw new RuntimeException("Free size expression is not allowed");
                 }
@@ -157,7 +162,7 @@ public class SheetMeta {
         for (MetaItem metaItem : metaItems.keySet()) {
             overlayedArea = overlayedArea.overlay(metaItem.getArea());
         }
-        System.out.println("Overlayed area: " + overlayedArea);
+        log.debug("Overlayed area: " + overlayedArea);
         return overlayedArea.getEndPosition();
     }
 

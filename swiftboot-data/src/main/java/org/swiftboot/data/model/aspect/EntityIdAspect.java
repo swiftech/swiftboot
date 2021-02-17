@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.data.Info;
 import org.swiftboot.data.R;
 import org.swiftboot.data.SwiftBootDataConfigBean;
-import org.swiftboot.data.model.entity.IdPojo;
+import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.util.BeanUtils;
 
@@ -38,7 +38,7 @@ public class EntityIdAspect {
     private SwiftBootDataConfigBean dataConfigBean;
 
     @Resource
-    private IdGenerator<IdPojo> idGenerator;
+    private IdGenerator<IdPersistable> idGenerator;
 
 
     @Pointcut(value = "execution(public * org.springframework.data.repository.CrudRepository+.save*(..))")
@@ -61,19 +61,19 @@ public class EntityIdAspect {
         }
 
         for (Object arg : args) {
-            if (arg instanceof IdPojo) { // for saving single entity
-                IdPojo idEntity = (IdPojo) arg;
+            if (arg instanceof IdPersistable) { // for saving single entity
+                IdPersistable idEntity = (IdPersistable) arg;
                 this.tryToSetIdAndSubIds(idEntity);
             }
             else if (arg instanceof Iterable) { // for saving entities
                 for (Object idEntity : ((Iterable) arg)) {
-                    if (idEntity instanceof IdPojo) {
-                        this.tryToSetIdAndSubIds((IdPojo) idEntity);
+                    if (idEntity instanceof IdPersistable) {
+                        this.tryToSetIdAndSubIds((IdPersistable) idEntity);
                     }
                 }
             }
             else {
-                log.debug(Info.get(EntityIdAspect.class, R.PARAM_NOT_IMPLEMENT_INTERFACE2, arg, IdPojo.class.getName()));
+                log.debug(Info.get(EntityIdAspect.class, R.PARAM_NOT_IMPLEMENT_INTERFACE2, arg, IdPersistable.class.getName()));
             }
         }
         return null;
@@ -84,15 +84,12 @@ public class EntityIdAspect {
      *
      * @param idEntity
      */
-    private void tryToSetIdAndSubIds(IdPojo idEntity) {
+    private void tryToSetIdAndSubIds(IdPersistable idEntity) {
         // ID不存在才生成
         if (StringUtils.isBlank(idEntity.getId())) {
             String id = idGenerator.generate(idEntity);
             idEntity.setId(id);
         }
-
-//        tryToSetRelEntities(idEntity, OneToOne.class);
-//        tryToSetRelEntities(idEntity, OneToMany.class);
 
         this.tryToSetOneToOneEntities(idEntity);
         this.tryToSetOneToManyEntities(idEntity);
@@ -105,16 +102,16 @@ public class EntityIdAspect {
      * @param clazz
      * @deprecated
      */
-    private void tryToSetRelEntities(IdPojo parentEntity, Class<? extends Annotation> clazz) {
+    private void tryToSetRelEntities(IdPersistable parentEntity, Class<? extends Annotation> clazz) {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), clazz);
         for (Field subObject : subObjectList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObject);
-            if (relEntity instanceof IdPojo) {
-                tryToSetIdAndSubIds((IdPojo) relEntity); // - 递归 -
+            if (relEntity instanceof IdPersistable) {
+                tryToSetIdAndSubIds((IdPersistable) relEntity); // - 递归 -
             }
             else if (relEntity instanceof Iterable) {
                 for (Object subEntity : ((Iterable) relEntity)) {
-                    tryToSetIdAndSubIds((IdPojo) subEntity); // - 递归 -
+                    tryToSetIdAndSubIds((IdPersistable) subEntity); // - 递归 -
                 }
             }
         }
@@ -125,11 +122,12 @@ public class EntityIdAspect {
      *
      * @param parentEntity
      */
-    private void tryToSetOneToOneEntities(IdPojo parentEntity) {
+    private void tryToSetOneToOneEntities(IdPersistable parentEntity) {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToOne.class);
         for (Field subObjectField : subObjectList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObjectField);
-            tryToSetIdAndSubIds((IdPojo) relEntity);
+            if (relEntity == null) continue;
+            tryToSetIdAndSubIds((IdPersistable) relEntity);
         }
     }
 
@@ -138,12 +136,13 @@ public class EntityIdAspect {
      *
      * @param parentEntity
      */
-    private void tryToSetOneToManyEntities(IdPojo parentEntity) {
+    private void tryToSetOneToManyEntities(IdPersistable parentEntity) {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToMany.class);
         for (Field subObjectField : subObjectList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObjectField);
+            if (relEntity == null) continue;
             for (Object subEntity : ((Iterable<?>) relEntity)) {
-                tryToSetIdAndSubIds((IdPojo) subEntity); // - 递归 -
+                tryToSetIdAndSubIds((IdPersistable) subEntity); // - 递归 -
                 // 反向处理 ManyToOne 的属性
                 List<Field> m2oFields = FieldUtils.getFieldsListWithAnnotation(subEntity.getClass(), ManyToOne.class);
                 for (Field m2oField : m2oFields) {

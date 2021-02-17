@@ -5,6 +5,7 @@ import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -50,8 +51,16 @@ public class OrderEntity extends BaseEntity {
      * 订单明细
      */
     @PropertyDescription(value = "订单明细")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order", orphanRemoval = true)
     private Set<OrderDetailEntity> orderDetails;
+
+    @PropertyDescription(value = "订单支付")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "ORDER_PAYMENT_ID", nullable = true)
+    private OrderPaymentEntity orderPayment;
+
+    @Transient
+    private List<String> comments;
 
 
     public OrderEntity() {
@@ -59,6 +68,13 @@ public class OrderEntity extends BaseEntity {
 
     public OrderEntity(String id) {
         super(id);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderEntity{" +
+                "description='" + description + '\'' +
+                '}';
     }
 
     /**
@@ -131,4 +147,19 @@ public class OrderEntity extends BaseEntity {
         this.orderDetails = orderDetails;
     }
 
+    public OrderPaymentEntity getOrderPayment() {
+        return orderPayment;
+    }
+
+    public void setOrderPayment(OrderPaymentEntity orderPayment) {
+        this.orderPayment = orderPayment;
+    }
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<String> comments) {
+        this.comments = comments;
+    }
 }

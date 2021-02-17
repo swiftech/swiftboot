@@ -27,7 +27,7 @@ public class GoodsOrderRelEntity extends BaseEntity {
      * 商品
      */
     @PropertyDescription(value = "商品", example = "41882f64aac9da0dee30a63068a0326a")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GOODS_ID", nullable = false)
     private GoodsEntity goods;
 

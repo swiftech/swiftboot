@@ -5,114 +5,29 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.demo.model.entity.OrderDetailEntity;
-import org.swiftboot.demo.model.entity.OrderEntity;
+import org.swiftboot.demo.model.entity.OrderPaymentEntity;
 import org.swiftboot.web.command.BasePopulateCommand;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * @author allen
+ * 带有明细的订单创建对象
+ *
+ * @author swiftech
  */
 @ApiModel
-public class OrderWithDetailCreateCommand extends BasePopulateCommand<OrderEntity> {
-
-    @ApiModelProperty(value = "订单编号", example = "2019032411081201")
-    @JsonProperty("order_code")
-    @Length(max = 16)
-    private String orderCode;
-
-    @ApiModelProperty(value = "订单描述", example = "越快越好")
-    @JsonProperty("description")
-    @Length(max = 64)
-    private String description;
-
-    @ApiModelProperty(value = "商品总数", example = "5")
-    @JsonProperty("total_count")
-    @NotNull
-    private Integer totalCount;
-
-    @ApiModelProperty(value = "发货地址", example = "极乐世界102号")
-    @JsonProperty("address")
-    @Length(max = 64)
-    private String address;
+public class OrderWithDetailCreateCommand extends OrderCreateCommand {
 
     @ApiModelProperty(value = "订单明细")
     @JsonProperty("details")
     private List<OrderDetailCreate> orderDetails;
 
-    /**
-     * 获取订单编号
-     *
-     * @return
-     */
-    public String getOrderCode() {
-        return orderCode;
-    }
-
-    /**
-     * 设置订单编号
-     *
-     * @param orderCode
-     */
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
-    }
-
-    /**
-     * 获取订单描述
-     *
-     * @return
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 设置订单描述
-     *
-     * @param description
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * 获取商品总数
-     *
-     * @return
-     */
-    public Integer getTotalCount() {
-        return totalCount;
-    }
-
-    /**
-     * 设置商品总数
-     *
-     * @param totalCount
-     */
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    /**
-     * 获取发货地址
-     *
-     * @return
-     */
-    public String getAddress() {
-        return address;
-    }
-
-    /**
-     * 设置发货地址
-     *
-     * @param address
-     */
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    @ApiModelProperty(value = "订单支付")
+    @JsonProperty("payment")
+    private OrderPaymentCreate orderPayment;
 
     /**
      * 获取订单明细
@@ -130,6 +45,17 @@ public class OrderWithDetailCreateCommand extends BasePopulateCommand<OrderEntit
         this.orderDetails = orderDetails;
     }
 
+    public OrderPaymentCreate getOrderPayment() {
+        return orderPayment;
+    }
+
+    public void setOrderPayment(OrderPaymentCreate orderPayment) {
+        this.orderPayment = orderPayment;
+    }
+
+    /**
+     * 订单明细子创建对象
+     */
     @ApiModel
     public static class OrderDetailCreate extends BasePopulateCommand<OrderDetailEntity> {
 
@@ -157,6 +83,38 @@ public class OrderWithDetailCreateCommand extends BasePopulateCommand<OrderEntit
             this.description = description;
         }
 
+    }
+
+
+    /**
+     * 订单支付子创建对象
+     */
+    @ApiModel
+    public static class OrderPaymentCreate extends BasePopulateCommand<OrderPaymentEntity> {
+
+        @NotNull
+        @JsonProperty("total_price")
+        private BigDecimal totalPrice;
+
+        @NotNull
+        @JsonProperty("pay_status")
+        private int payStatus;
+
+        public BigDecimal getTotalPrice() {
+            return totalPrice;
+        }
+
+        public void setTotalPrice(BigDecimal totalPrice) {
+            this.totalPrice = totalPrice;
+        }
+
+        public int getPayStatus() {
+            return payStatus;
+        }
+
+        public void setPayStatus(int payStatus) {
+            this.payStatus = payStatus;
+        }
     }
 
 }

@@ -1,5 +1,7 @@
 package org.swiftboot.data.config;
 
+import org.swiftboot.data.constant.AutoUpdateTimeStrategy;
+
 /**
  * @author swiftech
  **/
@@ -13,7 +15,7 @@ public class ModelConfigBean {
     /**
      * 是否自动设置更新时间
      */
-    private boolean autoUpdateTime = false;
+    private String autoUpdateTimeStrategy = AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ON_CHANGE;
 
     /**
      * 是否初始化数据库
@@ -43,12 +45,12 @@ public class ModelConfigBean {
         this.autoGenerateId = autoGenerateId;
     }
 
-    public boolean isAutoUpdateTime() {
-        return autoUpdateTime;
+    public String getAutoUpdateTimeStrategy() {
+        return autoUpdateTimeStrategy;
     }
 
-    public void setAutoUpdateTime(boolean autoUpdateTime) {
-        this.autoUpdateTime = autoUpdateTime;
+    public void setAutoUpdateTimeStrategy(String autoUpdateTimeStrategy) {
+        this.autoUpdateTimeStrategy = autoUpdateTimeStrategy;
     }
 
     public boolean isInitData() {

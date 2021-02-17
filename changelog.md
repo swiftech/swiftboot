@@ -1,3 +1,21 @@
+2.0.0 (2021-02)
+更新内容：
+* `swiftboot-web` 控制器参数自动填充功能支持编辑子对象的填充。
+* `swiftboot-data` 重新实现自动设置创建时间和更新时间，支持一对一关联和一对多关联实体的自动设置更新时间。
+
+1.3-beta3
+* `swiftboot-sheet` 重构并增加文档
+* 依赖库升级和bug修复
+
+1.3-beta2 (2021-01-18)
+* `swiftboot-data` 新增 snowflake ID 生成器
+* 新增 `swiftboot-sheet` 提供了模版化的表格数据导出和导入的功能
+* 依赖库升级和bug修复
+
+1.3-beta1 (2020-09-29)
+* 将数据访问层从 `swiftboot-web` 独立出来成为 `swiftboot-data` 模块，方便用于任何 JPA 应用程序使用
+* 依赖库升级和bug修复
+
 2020-08-25 1.2.1 release
 * 修复了 `swiftboot-shiro` 配置加载的bug
 * 依赖库升级
