@@ -34,8 +34,6 @@ public class SheetEntity {
     @Mapping("B2:C3")
     private List<List<String>> matrix;
 
-    ...
-
 }
 ```
 
@@ -79,18 +77,17 @@ public class SheetEntity {
 
 ```java
 public class SheetEntity {
-    ...
-    @Mapping("A1")
-    PictureLoader pictureToExport;
+  @Mapping("A1")
+  PictureLoader pictureToExport;
 }
 ```
 
 ```java
-exportEntity.setPictureToExport(() -> {
-    byte[] bytesPic = ... // 加载图片
-    return new Picture(Workbook.PICTURE_TYPE_JPEG, bytesPic);
-});
-exporter.export(templateFileInputStream, exportEntity, outputStream);
+exportEntity.setPictureToExport(()->{
+        byte[]bytesPic=... // 加载图片
+        return new Picture(Workbook.PICTURE_TYPE_JPEG,bytesPic);
+        });
+        exporter.export(templateFileInputStream,exportEntity,outputStream);
 ```
 
 ### 表达式
