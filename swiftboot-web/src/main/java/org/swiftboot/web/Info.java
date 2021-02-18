@@ -2,7 +2,7 @@ package org.swiftboot.web;
 
 /**
  * @author swiftech
- * @since 1.1
+ * @since 1.3
  */
 public final class Info extends org.swiftboot.util.Info {
 

@@ -1,15 +1,20 @@
 package org.swiftboot.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
+ * Generic type utils
  *
  * @author swiftech
  */
 public class GenericUtils {
 
     /**
+     * Get generic type of one class's all ancestor classes.
+     *
      * @param clazz
      * @param <T>
      * @return
@@ -21,6 +26,7 @@ public class GenericUtils {
     }
 
     /**
+     * Get generic type of one class's direct parent class.
      *
      * @param clazz
      * @param <T>
@@ -50,6 +56,9 @@ public class GenericUtils {
      * @return
      */
     public static <T> ParameterizedType firstParameterizedType(Class<T> clazz) {
+        if (clazz == null) {
+            return null;
+        }
         Type genericSuperclass = clazz.getGenericSuperclass();
         if (genericSuperclass == null) {
             throw new RuntimeException(Info.get(GenericUtils.class, R.NO_GENERIC_CLASS_TO_ANCESTOR1, clazz.getName()));
@@ -59,6 +68,36 @@ public class GenericUtils {
         }
         Class clazz2 = (Class) genericSuperclass;
         return firstParameterizedType(clazz2);
+    }
+
+    /**
+     * 通过继承关系向上查找第一个类型为 interfaceClass 接口的 ParameterizedType
+     *
+     * @param clazz
+     * @param interfaceClass
+     * @param <T>
+     * @return
+     */
+    public static <T> ParameterizedType firstParameterizedType(Class<T> clazz, Class<?> interfaceClass) {
+        if (clazz == null) {
+            return null;
+        }
+        Type[] interfaces = clazz.getGenericInterfaces();
+        if (interfaces.length == 0) {
+            Type genericSuperclass = clazz.getGenericSuperclass();
+            System.out.println(genericSuperclass);
+            return firstParameterizedType((Class<T>) genericSuperclass, interfaceClass);
+        }
+        for (Type anInterface : interfaces) {
+            if (anInterface instanceof ParameterizedType) {
+                return (ParameterizedType) anInterface;
+            }
+            else if (anInterface == interfaceClass) {
+                return firstParameterizedType((Class<T>) anInterface, interfaceClass);
+            }
+        }
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        return firstParameterizedType((Class<T>) genericSuperclass, interfaceClass);
     }
 
 

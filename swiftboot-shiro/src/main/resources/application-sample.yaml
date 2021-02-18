@@ -14,3 +14,5 @@ swiftboot:
       storageType: redis
       timeout: 1800
       redisGroup: shiro-session
+    loginUrl: /login
+    successUrl: /main

@@ -33,7 +33,8 @@ public class IdUtilsTest {
 
     @Test
     public void testMakeSwiftIdByCodeFail() {
-        String s = IdUtils.makeID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        Assertions.assertThrows(RuntimeException.class,
+                () -> IdUtils.makeID("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
     }
 
 

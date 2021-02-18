@@ -10,9 +10,10 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
       ddl-auto: update
       import_files: import.sql
+    show-sql: true
+    open-in-view: false
 logging:
   level:
     root: INFO
@@ -23,11 +24,16 @@ shiro:
   annotations:
     enabled: true
 swiftboot:
+  data:
+    model:
+      autoGenerateId: true
+      autoUpdateTimeStrategy: on-change
   auth:
     enabled: false
   shiro:
     enabled: true
-    loginUrl: "/login"
+    loginUrl: /login
+    successUrl: /main
     cookie:
       domain: localhost
       path: /

@@ -1,9 +1,11 @@
 package org.swiftboot.web.command;
 
+import org.swiftboot.data.model.entity.HusbandEntity;
+
 /**
  * @author swiftech
  **/
-public class HusbandCommand extends BasePopulateCommand<org.swiftboot.web.model.entity.HusbandEntity> {
+public class HusbandCommand extends BasePopulateCommand<HusbandEntity> {
 
     private String name;
 

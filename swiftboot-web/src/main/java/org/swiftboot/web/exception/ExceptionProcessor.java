@@ -32,7 +32,7 @@ import org.swiftboot.web.result.HttpResponse;
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class ExceptionProcessor {
 
-    private static Logger log = LoggerFactory.getLogger(ExceptionProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(ExceptionProcessor.class);
 
     /**
      * 应用到所有 @RequestMapping 注解的方法,在其抛出 ErrMessageException 的时候执行

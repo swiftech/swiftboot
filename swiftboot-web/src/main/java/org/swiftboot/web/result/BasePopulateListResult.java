@@ -1,6 +1,6 @@
 package org.swiftboot.web.result;
 
-import org.swiftboot.web.model.entity.Persistent;
+import org.swiftboot.data.model.entity.IdPersistable;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * 列表查询结果抽象类
  *
- * @author swiftech
  * @param <T> 集合中元素的类型
  * @param <E> 元素对应的实体类类型
+ * @author swiftech
  */
-public abstract class BasePopulateListResult<T extends BasePopulateResult<E> , E extends Persistent> extends BaseListableResult<T> {
+public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E extends IdPersistable> extends BaseListableResult<T> {
 
     /**
      * 从实体类集合创建相对应的返回对象集合
@@ -63,7 +63,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E> , E
         List<T> list = new ArrayList<>();
         for (E entity : entities) {
             T item = BasePopulateResult.createResult(itemClass, entity);
-            if (populateHandler !=null) {
+            if (populateHandler != null) {
                 populateHandler.onPopulated(item, entity);
             }
             list.add(item);
@@ -78,7 +78,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E> , E
      * @param <T>
      * @param <E>
      */
-    public interface PopulateHandler<T extends BasePopulateResult<E>, E extends Persistent> {
+    public interface PopulateHandler<T extends BasePopulateResult<E>, E extends IdPersistable> {
 
         /**
          * 一个继承自 BasePopulateResult 的类被填充完成之后执行

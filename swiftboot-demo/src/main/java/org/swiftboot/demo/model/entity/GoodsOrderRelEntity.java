@@ -1,8 +1,8 @@
 package org.swiftboot.demo.model.entity;
 
 import org.springframework.context.annotation.Description;
-import org.swiftboot.web.annotation.PropertyDescription;
-import org.swiftboot.web.model.entity.BaseEntity;
+import org.swiftboot.data.annotation.PropertyDescription;
+import org.swiftboot.data.model.entity.BaseEntity;
 
 import javax.persistence.*;
 
@@ -27,7 +27,7 @@ public class GoodsOrderRelEntity extends BaseEntity {
      * 商品 TODO 此处类型和Command不一致
      */
     @PropertyDescription(value = "商品", example = "41882f64aac9da0dee30a63068a0326a")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GOODS_ID", nullable = false)
     private GoodsEntity goods;
 

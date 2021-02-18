@@ -103,12 +103,13 @@ public class SwiftbootShiroConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(SessionDAO.class)
+    @ConditionalOnMissingBean
     public SessionDAO shiroSessionMemoryDao() {
         return new MemorySessionDAO();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     ShiroSecurityService shiroSecurityService() {
         return new ShiroSecurityServiceImpl();
     }
@@ -137,6 +138,7 @@ public class SwiftbootShiroConfig {
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinition.getFilterChainMap());
         shiroFilterFactoryBean.setFilters(filterMap);
         shiroFilterFactoryBean.setLoginUrl(swiftbootShiroConfigBean.getLoginUrl());
+        shiroFilterFactoryBean.setSuccessUrl(swiftbootShiroConfigBean.getSuccessUrl());
         return shiroFilterFactoryBean;
     }
 

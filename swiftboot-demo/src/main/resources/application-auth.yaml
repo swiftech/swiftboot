@@ -9,7 +9,6 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -26,16 +25,18 @@ swiftboot:
   web:
     filter:
       cors: true
+    validation:
+      resultInJson: false
+  data:
     model:
       autoGenerateId: true
+      autoUpdateTimeStrategy: on-change
       initData: true
       initBaseDir: init
       initBaseDaoPackages:
         - org.swiftboot.demo.model.dao
       initBaseEntityPackages:
         - org.swiftboot.demo.model.entity
-    validation:
-      resultInJson: false
   service:
     redis:
       host: localhost

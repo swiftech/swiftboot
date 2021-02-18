@@ -1,6 +1,7 @@
 package org.swiftboot.util;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -13,16 +14,17 @@ import java.net.URL;
 public class BufferedIoUtilsTest {
 
     public static final String path =
-            "https://excellmedia.dl.sourceforge.net/project/swiftgantt/swiftgantt_stable/0.4.0/SwiftGantt_0.4.0_release_withdemo.zip";
+            "https://github.com/swiftech/swiftboot/archive/master.zip";
 
     @Test
     public void test() {
         try {
             URL url = new URL(path);
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-            InputStream inputStream = httpConn.getInputStream();
-            BufferedIoUtils.writeInputStreamToFile(inputStream, 1024,
-                    new File(SystemUtils.getUserHome(), "tmp/SwiftGantt_0.4.0_release_withdemo.zip"));
+            InputStream ins = httpConn.getInputStream();
+            Assertions.assertNotNull(ins);
+            BufferedIoUtils.writeInputStreamToFile(ins, 1024,
+                    createOutputFile("swiftboot-master.zip"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,25 +33,26 @@ public class BufferedIoUtilsTest {
     @Test
     public void testReadFileWriteFile() {
         try {
-            File readFile = new File(SystemUtils.getUserHome(), "password.txt");
-            InputStream inputStream = new FileInputStream(readFile);
-            BufferedIoUtils.writeInputStreamToFile(inputStream, 1024,
-                    new File(SystemUtils.getUserHome(), "tmp/password.txt"));
+            InputStream ins = ClasspathResourceUtils.openResourceStream("IoUtilsTest.txt");
+            Assertions.assertNotNull(ins);
+            BufferedIoUtils.writeInputStreamToFile(ins, 1024,
+                    createOutputFile("IoUtilsTests.txt"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * TODO
+     */
     @Test
     public void testCallback() {
-        File outFile = new File(SystemUtils.getUserHome(), "tmp/SwiftGantt_0.4.0_release_withdemo.zip");
-        FileOutputStream fout = null;
-        try {
+        File outFile = createOutputFile("swiftboot-master.zip");
+        try (FileOutputStream fout = new FileOutputStream(outFile)) {
             URL url = new URL(path);
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
             System.out.println("download " + path);
             InputStream inputStream = httpConn.getInputStream();
-            fout = new FileOutputStream(outFile);
             FileOutputStream finalFout = fout;
             BufferedIoUtils.readInputStream(inputStream, 1024,
                     t -> {
@@ -59,14 +62,27 @@ public class BufferedIoUtilsTest {
             System.out.println("complete: " + outFile);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (fout != null) {
-                try {
-                    fout.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
+    }
+
+    /**
+     * Create output file in "Temp" dir in user home dir
+     *
+     * @param fileUri
+     * @return
+     */
+    protected File createOutputFile(String fileUri) {
+        File dir = new File(SystemUtils.getUserHome(), "Temp/swiftboot/");
+        File f = new File(dir, fileUri);
+        if (!f.getParentFile().exists()) {
+            f.getParentFile().mkdirs();
+        }
+        return f;
+    }
+
+    protected OutputStream createOutputStream(String fileUri) throws FileNotFoundException {
+        File f = createOutputFile(fileUri);
+        System.out.println("Prepared to output to file: " + f.toString());
+        return new FileOutputStream(f.toString());
     }
 }

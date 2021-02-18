@@ -50,7 +50,7 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
         UsernamePasswordToken userPasswordToken = (UsernamePasswordToken) authenticationToken;
         log.info("Verify user: " + userPasswordToken.getUsername());
 
-        // 做用户认证
+        // Verify user's password
         String userId;
         try {
             userId = shiroSecurityService.verifyUser(userPasswordToken);

@@ -1,6 +1,10 @@
 spring:
   application:
     name: swiftboot-demo
+#  datasource:
+#    driverClassName: org.h2.Driver
+#    url: jdbc:h2:file:./target/swiftboot
+#    initialization-mode: always
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
@@ -22,14 +26,16 @@ swiftboot:
   web:
     filter:
       cors: true
+    validation:
+      resultInJson: false
+  data:
     model:
       autoGenerateId: true
+      autoUpdateTimeStrategy: on-change
       initData: true
       initBaseDir: /Users/allen/Workspace/github/swiftboot/swiftboot-web/src/test/resources/init/
       initBasePackages:
         - org.swiftboot.demo.model.entity
-    validation:
-      resultInJson: false
 shiro:
   enabled: false
   annotations:

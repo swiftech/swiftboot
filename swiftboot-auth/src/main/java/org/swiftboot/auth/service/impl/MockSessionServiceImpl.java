@@ -57,8 +57,9 @@ public class MockSessionServiceImpl implements SessionService {
     @Override
     public Session verifySession(String token) {
         log.warn("Mock verifySession()");
-        if ( mockSession != null
-                && mockSession.getExpireTime() > System.currentTimeMillis()){
+        if (mockSession != null
+                && mockSession.getExpireTime() != null
+                && mockSession.getExpireTime() > System.currentTimeMillis()) {
             return mockSession;
         }
         return null;
@@ -67,8 +68,9 @@ public class MockSessionServiceImpl implements SessionService {
     @Override
     public Session verifySession(String group, String token) {
         log.warn("Mock verifySession()");
-        if ( mockSession != null
-                && mockSession.getExpireTime() > System.currentTimeMillis()){
+        if (mockSession != null
+                && mockSession.getExpireTime() != null
+                && mockSession.getExpireTime() > System.currentTimeMillis()) {
             return mockSession;
         }
         return null;

@@ -12,6 +12,14 @@ import java.util.List;
 public class GenericUtilsTest {
 
     @Test
+    public void testFirstParameterizedType() {
+        Assertions.assertEquals(LinkedList.class, GenericUtils.firstParameterizedType(DDD.class).getActualTypeArguments()[0]);
+        Assertions.assertEquals(LinkedList.class, GenericUtils.firstParameterizedType(CCC.class).getActualTypeArguments()[0]);
+        Assertions.assertEquals(LinkedList.class, GenericUtils.firstParameterizedType(BBB.class).getActualTypeArguments()[0]);
+        Assertions.assertThrows(Exception.class, () -> GenericUtils.firstParameterizedType(AAA.class));
+    }
+
+    @Test
     public void testParentGenericClass() {
         Assertions.assertThrows(RuntimeException.class, () -> GenericUtils.parentGenericClass(AAA.class));
         Assertions.assertSame(LinkedList.class, GenericUtils.parentGenericClass(BBB.class));

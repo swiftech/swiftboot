@@ -2,8 +2,8 @@ package org.swiftboot.web.result;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.swiftboot.web.model.entity.EntityMocker;
-import org.swiftboot.web.model.entity.ParentEntity;
+import org.swiftboot.data.model.entity.EntityMocker;
+import org.swiftboot.data.model.entity.ParentEntity;
 
 /**
  * @author swiftech

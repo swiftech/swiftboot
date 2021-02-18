@@ -43,6 +43,7 @@ public class ShiroSecurityServiceImpl implements ShiroSecurityService, Applicati
     public String verifyUser(UsernamePasswordToken usernamePasswordToken) throws ErrMessageException {
         UserEntityStub user = null;
         try {
+            // To authenticate different kind users, use host in token to get different user auth DAO implementation
             UserAuthDaoStub<?> dao = (UserAuthDaoStub<?>) applicationContext.getBean(usernamePasswordToken.getHost());
             log.info(String.format("The DAO implementation to do user authentication: %s", dao.getClass().getName()));
             String loginName = usernamePasswordToken.getUsername();

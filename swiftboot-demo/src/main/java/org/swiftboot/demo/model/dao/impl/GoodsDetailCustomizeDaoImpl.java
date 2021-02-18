@@ -1,7 +1,7 @@
 package org.swiftboot.demo.model.dao.impl;
 
+import org.swiftboot.data.model.dao.impl.BaseCustomizeDaoImpl;
 import org.swiftboot.demo.model.dao.GoodsDetailCustomizeDao;
-import org.swiftboot.web.model.dao.impl.BaseCustomizeDaoImpl;
 
 /**
  * 商品详情数据查询接口实现

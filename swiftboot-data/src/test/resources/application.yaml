@@ -1,0 +1,22 @@
+spring:
+  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      dialect: org.hibernate.dialect.H2Dialect
+#      ddl-auto: update
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    properties:
+#      hibernate:
+#        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    show-sql: true
+    open-in-view: false
+logging:
+  level:
+    root: INFO
+    org.swiftboot: DEBUG
+swiftboot:
+  data:
+    model:
+      autoGenerateId: true
+      autoUpdateTimeStrategy: on-change

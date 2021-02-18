@@ -1,8 +1,8 @@
 package org.swiftboot.demo.model.entity;
 
 import org.springframework.context.annotation.Description;
-import org.swiftboot.web.annotation.PropertyDescription;
-import org.swiftboot.web.model.entity.BaseEntity;
+import org.swiftboot.data.annotation.PropertyDescription;
+import org.swiftboot.data.model.entity.BaseEntity;
 
 import javax.persistence.*;
 
@@ -27,7 +27,7 @@ public class OrderDetailEntity extends BaseEntity {
      * 订单
      */
     @PropertyDescription(value = "订单")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_ID", nullable = false)
     private OrderEntity order;
 
@@ -37,6 +37,13 @@ public class OrderDetailEntity extends BaseEntity {
 
     public OrderDetailEntity(String id) {
         super(id);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderDetailEntity{" +
+                "description='" + description + '\'' +
+                '}';
     }
 
     /**

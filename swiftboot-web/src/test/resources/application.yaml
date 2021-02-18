@@ -20,5 +20,6 @@ swiftboot:
       cors-allow-origin: '*'
     model:
       autoGenerateId: true
+      autoUpdateTime: true
     validation:
       resultInJson: false
