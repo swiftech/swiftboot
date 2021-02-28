@@ -15,11 +15,11 @@ import java.util.Map;
 public class TimeInterceptorRegisterBean implements HibernatePropertiesCustomizer {
 
     @Resource
-    private TimeInterceptor interceptor;
+    private InterceptorProxy interceptorProxy;
 
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
-        hibernateProperties.put("hibernate.session_factory.interceptor", interceptor);
-        hibernateProperties.put("hibernate.ejb.interceptor", interceptor);
+        hibernateProperties.put("hibernate.session_factory.interceptor", interceptorProxy);
+        hibernateProperties.put("hibernate.ejb.interceptor", interceptorProxy);
     }
 }

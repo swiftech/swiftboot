@@ -1,6 +1,5 @@
 package org.swiftboot.data.model.interceptor;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.*;
 import org.slf4j.Logger;
@@ -35,13 +34,12 @@ public class TimeInterceptor extends EmptyInterceptor {
     @Resource
     private SwiftBootDataConfigBean configBean;
 
+//    @Resource
+//    private IdGenerator idGenerator;
+
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-//        log.debug(this.getClass().getSimpleName() + ".onSave()");
-//        log.debug(String.format(" %s - %s%n", entity, id));
-//        System.out.println(StringUtils.join(propertyNames, ", "));
-//        System.out.println(StringUtils.join(state, ", "));
-//        System.out.println(StringUtils.join(types, ", "));
+        log.trace("oneSave()");
         boolean changed = false;
         if (entity instanceof TimePersistable) {
             log.debug("Auto set createTime for entity: " + entity.getClass().getName());
@@ -58,12 +56,7 @@ public class TimeInterceptor extends EmptyInterceptor {
 
     @Override
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-//        log.debug(this.getClass().getSimpleName() + ".onFlushDirty()");
-//        log.debug(String.format(" %s - %s%n", entity, id));
-//        System.out.println(StringUtils.join(propertyNames, ", "));
-//        System.out.println(StringUtils.join(previousState, ", "));
-//        System.out.println(StringUtils.join(currentState, ", "));
-//        System.out.println(StringUtils.join(types, ", "));
+        log.trace("onFlushDirty()");
         boolean changed = false;
         String flag = configBean.getModel().getAutoUpdateTimeStrategy();
         if (AUTO_UPDATE_TIME_NOT_SET.equals(flag)) {

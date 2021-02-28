@@ -20,6 +20,18 @@ public class ParentEntity extends BaseLongTimeEntity implements Serializable {
     private
     List<ChildEntity> items = new ArrayList<>();
 
+    public ParentEntity() {
+    }
+
+    public ParentEntity(String name) {
+        this.name = name;
+    }
+
+    public ParentEntity(String id, String name) {
+        super(id);
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

@@ -19,6 +19,18 @@ public class ChildEntity extends BaseLongTimeEntity {
     @Column
     private String name;
 
+    public ChildEntity() {
+    }
+
+    public ChildEntity(String name) {
+        this.name = name;
+    }
+
+    public ChildEntity(String id, String name) {
+        super(id);
+        this.name = name;
+    }
+
     public ParentEntity getParent() {
         return parent;
     }
