@@ -73,7 +73,7 @@ public class SwiftbootShiroConfig {
         else {
             ret.setSessionDAO(shiroSessionMemoryDao());
         }
-        ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000);
+        ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000L);
         ret.setSessionIdCookie(sessionIdCookie());
         ret.setSessionListeners(new ArrayList<SessionListener>() {
             {

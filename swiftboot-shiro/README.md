@@ -1,6 +1,6 @@
-# SwiftBoot-shiro
+# SwiftBoot-Shiro
 
-SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授权（Authorization）
+SwiftBoot-Shiro 封装了 Apache Shiro 实现了认证（Authentication）和授权（Authorization）
 只需要简单的配置和少量的代码即可集成 Shiro 进行用户认证和权限控制。
 它实现了一个通用的 `Realm` 类, 可以同时处理不同的帐号体系的认证和授权。
 
@@ -57,7 +57,9 @@ swiftboot:
 
 ### 认证
 * 实现 `UserAuthDaoStub` 接口，这个实现会最终交由处理最终实际的用户数据的查询（因为支持多种认证机制同时工作）
-```
+
+
+```java
 @Component("my-auth-service-name")
 public class DemoUserAuthenticator implements UserAuthStub<DemoUserEntity> {
 
@@ -66,6 +68,8 @@ public class DemoUserAuthenticator implements UserAuthStub<DemoUserEntity> {
 注意 `@Component` 注解给出的命名会在登录请求发起时用到。
 
 * 声明 Shiro 过滤器
+
+
 ```java
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
@@ -77,6 +81,8 @@ public class DemoUserAuthenticator implements UserAuthStub<DemoUserEntity> {
 ```
 
 * 实现用户登录方法(Service 或者 Controller 中)
+
+
 ```java
 Subject currentUser = SecurityUtils.getSubject();
 try {
@@ -94,9 +100,12 @@ try {
 
 * 实现 `UserPermissionDaoStub` 接口的 `findPermissionsByLoginName(String loginName)` 方法，通过用户登录名获取其所以的权限对象。
 具体实现可以用任何您想要的方式实现，可以用表连接查询，也可以用视图来实现，或者通过缓存来获取。
-
+  
+> 上面接口的实现所关联的实体类需要实现 `PermissionEntityStub` 接口
 
 * 修改上面的 `ShiroFilterChainDefinition` 的定义，按照 Shiro 的规范给 URL 加上所需的权限控制，例如：
+
+
 ```java
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {

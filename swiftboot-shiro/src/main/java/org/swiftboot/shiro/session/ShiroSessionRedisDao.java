@@ -22,7 +22,7 @@ import java.util.Collection;
  **/
 public class ShiroSessionRedisDao extends AbstractSessionDAO {
 
-    private Logger log = LoggerFactory.getLogger(ShiroSessionRedisDao.class);
+    private final Logger log = LoggerFactory.getLogger(ShiroSessionRedisDao.class);
 
     @Resource
     private RedisService redisService;
