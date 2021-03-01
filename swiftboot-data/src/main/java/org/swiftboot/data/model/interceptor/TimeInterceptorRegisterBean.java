@@ -9,6 +9,8 @@ import java.util.Map;
  * Register {@code TimeInterceptor} to Hibernate.
  *
  * @author swiftech
+ * @see InterceptorProxy
+ * @see IdInterceptor
  * @see TimeInterceptor
  * @since 2.0.0
  */

@@ -10,6 +10,8 @@ import javax.annotation.Resource;
 import java.util.Iterator;
 
 /**
+ * Interceptor for populating id to entities before Hibernate flushing them.
+ *
  * @author allen
  * @since 2.0.1
  */
@@ -18,7 +20,7 @@ public class IdInterceptor extends EmptyInterceptor {
     private final Logger log = LoggerFactory.getLogger(IdInterceptor.class);
 
     @Resource
-    private IdPopulator idPopulater;
+    private IdPopulator idPopulator;
 
     @Override
     public void preFlush(Iterator entities) {
@@ -27,7 +29,7 @@ public class IdInterceptor extends EmptyInterceptor {
             Object e = entities.next();
             if (e instanceof IdPersistable) {
                 IdPersistable entity = (IdPersistable) e;
-                idPopulater.populate(entity);
+                idPopulator.populate(entity);
             }
         }
     }

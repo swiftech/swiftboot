@@ -74,6 +74,9 @@ public class IdPopulator {
                 continue;
             }
             for (Object subEntity : ((Iterable<?>) relEntities)) {
+                if (!(subEntity instanceof IdPersistable)) {
+                    continue;
+                }
                 populate((IdPersistable) subEntity); // - 递归 -
                 // 反向处理 ManyToOne 的属性
                 List<Field> m2oFields = FieldUtils.getFieldsListWithAnnotation(subEntity.getClass(), ManyToOne.class);

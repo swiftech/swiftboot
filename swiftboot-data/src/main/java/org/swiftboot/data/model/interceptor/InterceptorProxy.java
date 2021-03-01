@@ -38,7 +38,11 @@ public class InterceptorProxy implements Interceptor, Serializable {
     @Override
     public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         log.trace("Proxy onLoad()");
-        return false;
+        boolean isDirty = false;
+        for (Interceptor interceptor : interceptors) {
+            isDirty = isDirty || interceptor.onLoad(entity, id, state, propertyNames, types);
+        }
+        return isDirty;
     }
 
     @Override
@@ -64,21 +68,25 @@ public class InterceptorProxy implements Interceptor, Serializable {
     @Override
     public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         log.trace("Proxy onDelete()");
+        interceptors.forEach(interceptor -> interceptor.onDelete(entity, id, state, propertyNames, types));
     }
 
     @Override
     public void onCollectionRecreate(Object collection, Serializable key) throws CallbackException {
         log.trace("Proxy onCollectionRecreate()");
+        interceptors.forEach(interceptor -> interceptor.onCollectionRecreate(collection, key));
     }
 
     @Override
     public void onCollectionRemove(Object collection, Serializable key) throws CallbackException {
         log.trace("Proxy onCollectionRemove()");
+        interceptors.forEach(interceptor -> interceptor.onCollectionRemove(collection, key));
     }
 
     @Override
     public void onCollectionUpdate(Object collection, Serializable key) throws CallbackException {
         log.trace("Proxy onCollectionUpdate()");
+        interceptors.forEach(interceptor -> interceptor.onCollectionUpdate(collection, key));
     }
 
     @Override
@@ -126,16 +134,19 @@ public class InterceptorProxy implements Interceptor, Serializable {
     @Override
     public void afterTransactionBegin(Transaction tx) {
         log.trace("Proxy afterTransactionBegin()");
+        interceptors.forEach(interceptor -> interceptor.afterTransactionBegin(tx));
     }
 
     @Override
     public void beforeTransactionCompletion(Transaction tx) {
         log.trace("Proxy beforeTransactionCompletion()");
+        interceptors.forEach(interceptor -> interceptor.beforeTransactionCompletion(tx));
     }
 
     @Override
     public void afterTransactionCompletion(Transaction tx) {
         log.trace("Proxy afterTransactionCompletion()");
+        interceptors.forEach(interceptor -> interceptor.afterTransactionCompletion(tx));
     }
 
     @Override
