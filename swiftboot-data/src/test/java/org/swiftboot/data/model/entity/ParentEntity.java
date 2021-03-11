@@ -15,8 +15,7 @@ public class ParentEntity extends BaseLongTimeEntity implements Serializable {
     private
     String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent", orphanRemoval = true)
     private
     List<ChildEntity> items = new ArrayList<>();
 
@@ -48,4 +47,11 @@ public class ParentEntity extends BaseLongTimeEntity implements Serializable {
         this.items = items;
     }
 
+    @Override
+    public String toString() {
+        return "ParentEntity{" +
+                "id='" + getId() + "', " +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

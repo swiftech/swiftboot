@@ -25,12 +25,16 @@ public class IdInterceptor extends EmptyInterceptor {
     @Override
     public void preFlush(Iterator entities) {
         log.trace("preFlush()");
-        while (entities.hasNext()) {
-            Object e = entities.next();
-            if (e instanceof IdPersistable) {
-                IdPersistable entity = (IdPersistable) e;
-                idPopulator.populate(entity);
+        try {
+            while (entities.hasNext()) {
+                Object e = entities.next();
+                if (e instanceof IdPersistable) {
+                    IdPersistable entity = (IdPersistable) e;
+                    idPopulator.populate(entity, false);
+                }
             }
+        } catch (Exception e) {
+            log.warn("Exception throws when trying to set id for entities: " + e.getLocalizedMessage());
         }
     }
 }

@@ -39,7 +39,7 @@ public class EntityIdAspect {
 
     @Before(value = "pointcut()")
     public Object before(JoinPoint joinPoint) {
-        log.debug(this.getClass().getSimpleName() + " before()");
+        log.debug(this.getClass().getSimpleName() + " executed before save()");
         // 检测前置条件
         if (!dataConfigBean.getModel().isAutoGenerateId()) {
             return null;
@@ -56,12 +56,12 @@ public class EntityIdAspect {
             log.trace("saving " + arg);
             if (arg instanceof IdPersistable) { // for saving single entity
                 IdPersistable idEntity = (IdPersistable) arg;
-                idPopulater.populate(idEntity);
+                idPopulater.populate(idEntity, true);
             }
             else if (arg instanceof Iterable) { // for saving entities
                 for (Object idEntity : ((Iterable) arg)) {
                     if (idEntity instanceof IdPersistable) {
-                        idPopulater.populate((IdPersistable) idEntity);
+                        idPopulater.populate((IdPersistable) idEntity, true);
                     }
                 }
             }

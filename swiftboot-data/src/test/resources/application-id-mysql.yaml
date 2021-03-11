@@ -23,4 +23,4 @@ swiftboot:
   data:
     model:
       autoGenerateId: true
-      autoUpdateTimeStrategy: on-change
+      autoUpdateTimeStrategy: not-set

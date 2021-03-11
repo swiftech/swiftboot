@@ -67,7 +67,7 @@ public class MyConfig {
   }
   ```
 
-根据配置，SwiftBoot-Data 会自动化的填充预定义的`ID` 和时间为上述三种类型的 `CREATE_TIME`, `UPDATE_TIME` 。关联的实体（集合）也会被自动的填充。
+根据配置，SwiftBoot-Data 会自动化的填充预定义的 `ID` 和时间为上述三种类型的 `CREATE_TIME`, `UPDATE_TIME` 。关联的实体（集合）也会被自动的填充。
 
 
 ##### 主键ID

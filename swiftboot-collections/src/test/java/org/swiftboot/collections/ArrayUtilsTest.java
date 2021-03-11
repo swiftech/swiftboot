@@ -42,4 +42,17 @@ public class ArrayUtilsTest {
         Object firstSet = ArrayUtils.getFirstMatch(array, Set.class);
         System.out.println(firstSet);
     }
+
+    @Test
+    void merge() {
+        Assertions.assertNull(ArrayUtils.merge(null, null));
+        Assertions.assertNotNull(ArrayUtils.merge(new int[]{}, null));
+        Assertions.assertNotNull(ArrayUtils.merge(null, new int[]{}));
+        Assertions.assertNotNull(ArrayUtils.merge(new int[]{}, new int[]{}));
+        Assertions.assertEquals(0, ArrayUtils.merge(new int[]{}, new int[]{}).length);
+
+        Assertions.assertArrayEquals(new int[]{1, 2, 3}, ArrayUtils.merge(new int[]{1, 2, 3}, new int[]{}));
+        Assertions.assertArrayEquals(new int[]{1, 2, 3}, ArrayUtils.merge(new int[]{1, 2, 3}, null));
+        Assertions.assertArrayEquals(new int[]{1, 2, 3, 4, 5}, ArrayUtils.merge(new int[]{1, 2, 3}, new int[]{4, 5}));
+    }
 }

@@ -53,7 +53,7 @@ public class UpdateTimeAspect {
                 || AUTO_UPDATE_TIME_ON_CHANGE.equals(strategy)) {
             return null;
         }
-        log.debug(this.getClass().getSimpleName() + " before()");
+        log.debug(this.getClass().getSimpleName() + " executed before save()");
         // 检测前置条件
         Object[] args = joinPoint.getArgs();
         if (args == null || args.length == 0) {

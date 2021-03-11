@@ -5,8 +5,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -19,6 +22,7 @@ import org.swiftboot.data.model.dao.ParentDao;
 import org.swiftboot.data.model.entity.ChildEntity;
 import org.swiftboot.data.model.entity.CustomizedEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
+import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.util.JsonUtils;
 
 import javax.annotation.Resource;
@@ -33,7 +37,10 @@ import java.util.Optional;
 //@DataJpaTest
 @SpringBootTest // 不能用 @DataJpaTest 否则 Aspect 无法生效
 @Import(EntityIdAspectTestConfig.class)
+@ActiveProfiles("id-mysql")
 public class EntityIdAspectTest {
+
+    private final Logger log = LoggerFactory.getLogger(EntityIdAspectTest.class);
 
 //    @Resource
 //    TestEntityManager testEntityManager;
@@ -52,6 +59,9 @@ public class EntityIdAspectTest {
 
     @Resource
     private PlatformTransactionManager txManager;
+
+    @Resource
+    private IdGenerator<ChildEntity> idGenerator;
 
     @BeforeEach
     public void setup() {
@@ -85,17 +95,16 @@ public class EntityIdAspectTest {
     @Transactional
     public void testCreateParentWithChildren() {
         System.out.println(parentDao);
-        ParentEntity entity = new ParentEntity();
-        entity.setName("君父");
+        ParentEntity parent = new ParentEntity();
+        parent.setName("君父");
         ChildEntity childEntity = new ChildEntity();
         childEntity.setName("臣子");
-        entity.setItems(new ArrayList<>());
-        entity.getItems().add(childEntity);
-        Optional<ParentEntity> xxx = parentDao.findByName("xxx"); // add this to test weired auto flush before save()
-        parentDao.save(entity);
-        System.out.println(entity.toString());
+        parent.setItems(new ArrayList<>());
+        parent.getItems().add(childEntity);
+        parentDao.save(parent);
+        System.out.println(parent.toString());
         // Assertions
-        Optional<ParentEntity> optParent = parentDao.findById(entity.getId());
+        Optional<ParentEntity> optParent = parentDao.findById(parent.getId());
         Assertions.assertNotNull(optParent);
         Assertions.assertTrue(optParent.isPresent());
         ParentEntity parentEntity = optParent.get();
@@ -116,39 +125,80 @@ public class EntityIdAspectTest {
     public void testEditParentWithNewChildren() {
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
 
-        System.out.println("Create new parent entity");
-        String pid = "1234567890";
+        log.info(" == Create new parent entity == ");
+        String parentId = "child20210307142722543tyvlvjaddz";
+        String modifyChildId = "child20210307142642072sbjonsfjvw";
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                ParentEntity entity = new ParentEntity(pid, "Saved Parent");
+                ParentEntity entity = new ParentEntity(parentId, "Saved Parent");
                 parentDao.save(entity);
             }
         });
 
-        System.out.println("Find and modify parent entity in another session");
+        log.info(" == Find parent entity and add children to it in another session == ");
+        if (true) {
+            tmpl.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    Optional<ParentEntity> optParent = parentDao.findById(parentId);
+                    if (optParent.isPresent()) {
+                        ParentEntity parentEntity = optParent.get();
+//                    entityManager.detach(parentEntity);
+                        //log.trace("query before adding entity 1");
+                        //Optional<ParentEntity> hello1 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                        ChildEntity childEntity1 = new ChildEntity("10001", "New Child 1");
+//                    childEntity1.setParent(parentEntity);
+                        childEntity1.setParent(parentEntity);
+                        parentEntity.getItems().add(childEntity1);
+                        //log.trace("query before adding entity 2");
+                        //Optional<ParentEntity> hello2 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                        ChildEntity childEntity2 = new ChildEntity(modifyChildId, "New Child 2");
+                        childEntity2.setParent(parentEntity);
+                        parentEntity.getItems().add(childEntity2);
+                        parentDao.save(parentEntity);
+                    }
+                }
+            });
+        }
+
+        log.info(" == Find and add new child ==");
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                Optional<ParentEntity> optParent = parentDao.findById(pid);
-                if (optParent.isPresent()){
+                Optional<ParentEntity> optParent = parentDao.findById(parentId);
+                if (optParent.isPresent()) {
                     ParentEntity parentEntity = optParent.get();
+                    log.trace("Clear existed children " + parentEntity.getItems().size());
                     parentEntity.getItems().clear();
-//                    entityManager.detach(parentEntity);
-                    ChildEntity childEntity = new ChildEntity("New Child 1");
-                    parentEntity.getItems().add(childEntity);
-                    Optional<ParentEntity> hello = parentDao.findByName("hello");// add this to test weired auto flush before save()
+//                    log.trace("query before adding entity 3");
+                    //Optional<ParentEntity> hello1 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                    ChildEntity childEntity3 = new ChildEntity("New Child 3");
+                    parentEntity.getItems().add(childEntity3);
+                    log.trace("query before adding Detached entity 2");
+                    Optional<ParentEntity> hello2 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                    ChildEntity modifiedChild2 = new ChildEntity(modifyChildId, "Modified Child 2");
+                    parentEntity.getItems().add(modifiedChild2);
+                    for (ChildEntity item : parentEntity.getItems()) {
+                        System.out.println(item);
+                        System.out.println(item.getParent());
+                    }
                     parentDao.save(parentEntity);
                 }
             }
         });
 
+
+        // Check result
+        log.info(" == Check result == ");
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                Optional<ParentEntity> optParent = parentDao.findById(pid);
-                if (optParent.isPresent()){
-                    System.out.println(JsonUtils.object2PrettyJson(optParent.get()));
+                Optional<ParentEntity> optParent = parentDao.findById(parentId);
+                if (optParent.isPresent()) {
+                    ParentEntity parentEntity = optParent.get();
+                    System.out.println(JsonUtils.object2PrettyJson(parentEntity));
+                    Assertions.assertEquals(2, parentEntity.getItems().size());
                 }
             }
         });

@@ -5,15 +5,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.swiftboot.data.constant.AutoUpdateTimeStrategy;
 import org.swiftboot.data.model.aspect.EntityIdAspect;
 import org.swiftboot.data.model.aspect.UpdateTimeAspect;
 import org.swiftboot.data.model.id.DefaultIdGenerator;
 import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.data.model.id.IdPopulator;
-import org.swiftboot.data.model.interceptor.IdInterceptor;
-import org.swiftboot.data.model.interceptor.InterceptorProxy;
-import org.swiftboot.data.model.interceptor.TimeInterceptor;
-import org.swiftboot.data.model.interceptor.TimeInterceptorRegisterBean;
+import org.swiftboot.data.model.interceptor.*;
 
 /**
  * @author swiftech
@@ -71,7 +69,7 @@ public class SwiftBootDataConfig {
      * @return
      */
     @Bean
-    @ConditionalOnProperty(value = DATA_MODEL_AUTO_UPDATE_TIME_STRATEGY, havingValue = "always")
+    @ConditionalOnProperty(value = DATA_MODEL_AUTO_UPDATE_TIME_STRATEGY, havingValue = AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ALWAYS)
     UpdateTimeAspect updateTimeAspect() {
         return new UpdateTimeAspect();
     }
@@ -87,14 +85,22 @@ public class SwiftBootDataConfig {
         if (swiftBootDataConfigBean().getModel().isAutoGenerateId()) {
             interceptorProxy.addInterceptor(idInterceptor());
         }
-        interceptorProxy.addInterceptor(timeInterceptor());
+        if (!AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_NOT_SET.equals(swiftBootDataConfigBean().getModel().getAutoUpdateTimeStrategy())) {
+            interceptorProxy.addInterceptor(timeInterceptor());
+        }
         return interceptorProxy;
     }
 
     @Bean
     @ConditionalOnBean(InterceptorProxy.class)
-    TimeInterceptorRegisterBean timeInterceptorRegisterBean() {
-        return new TimeInterceptorRegisterBean();
+    InterceptorLoader interceptorHandler() {
+        return new InterceptorLoader();
+    }
+
+    @Bean
+    @ConditionalOnBean(InterceptorLoader.class)
+    InterceptorProxyRegisterBean interceptorProxyRegisterBean() {
+        return new InterceptorProxyRegisterBean();
     }
 
 

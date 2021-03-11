@@ -46,4 +46,12 @@ public class ChildEntity extends BaseLongTimeEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "ChildEntity{" +
+                "id='" + getId() + "', " +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

@@ -17,20 +17,6 @@ public class BufferedIoUtilsTest {
             "https://github.com/swiftech/swiftboot/archive/master.zip";
 
     @Test
-    public void test() {
-        try {
-            URL url = new URL(path);
-            HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-            InputStream ins = httpConn.getInputStream();
-            Assertions.assertNotNull(ins);
-            BufferedIoUtils.writeInputStreamToFile(ins, 1024,
-                    createOutputFile("swiftboot-master.zip"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     public void testReadFileWriteFile() {
         try {
             InputStream ins = ClasspathResourceUtils.openResourceStream("IoUtilsTest.txt");
@@ -42,10 +28,32 @@ public class BufferedIoUtilsTest {
         }
     }
 
+    public static void main(String[] args) {
+        BufferedIoUtilsTest test = new BufferedIoUtilsTest();
+        test.testReadRemoteFile();
+        test.testCallback();
+    }
+
+    /**
+     * This may be blocked.
+     */
+    public void testReadRemoteFile() {
+        try {
+            URL url = new URL(path);
+            System.out.println("read remote file: " + path);
+            HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+            InputStream ins = httpConn.getInputStream();
+            Assertions.assertNotNull(ins);
+            BufferedIoUtils.writeInputStreamToFile(ins, 1024,
+                    createOutputFile("swiftboot-master.zip"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * TODO
      */
-    @Test
     public void testCallback() {
         File outFile = createOutputFile("swiftboot-master.zip");
         try (FileOutputStream fout = new FileOutputStream(outFile)) {

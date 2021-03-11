@@ -128,7 +128,7 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
                         if (target == null) {
                             // Populate collections for new created entity.
                             Collection<Object> newEntities = CollectionUtils.constructCollectionByType((Class<Collection<Object>>) targetField.getType());
-                            items.stream().forEach(item -> {
+                            items.forEach(item -> {
                                 if (!(item instanceof BasePopulateCommand)) return;// exclude non populatable elements;
                                 newEntities.add(((BasePopulateCommand) item).createEntity());
                             });
