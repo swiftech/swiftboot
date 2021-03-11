@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
 
-    private Logger log = LoggerFactory.getLogger(GoodsOrderRelServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(GoodsOrderRelServiceImpl.class);
 
     @Resource
     private GoodsOrderRelDao goodsOrderRelDao;

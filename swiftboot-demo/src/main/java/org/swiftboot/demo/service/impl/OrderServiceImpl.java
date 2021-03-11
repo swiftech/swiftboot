@@ -22,6 +22,7 @@ import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.web.command.IdListCommand;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +42,8 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private OrderDetailDao orderDetailDao;
 
-    // for test edit detail of order
-    private String permanentDetailId = "12345678901234567890123456789012";
+    @Resource
+    private EntityManager entityManager;
 
     /**
      * 创建订单
@@ -55,25 +56,6 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity p = cmd.createEntity();
         OrderEntity saved = orderDao.save(p);
         log.debug("创建订单: " + saved.getId());
-        return new OrderCreateResult(saved.getId());
-    }
-
-    /**
-     * 创建带有详情的订单
-     *
-     * @param cmd
-     * @return
-     */
-    @Override
-    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateCommand cmd) {
-        OrderEntity entity = cmd.createEntity();
-        // Add extra permanent detail ( will be merged if already existed)
-        OrderDetailEntity od = new OrderDetailEntity();
-        od.setId(permanentDetailId);
-        od.setDescription("固定订单明细项");
-        od.setOrder(entity);
-        entity.getOrderDetails().add(od);
-        OrderEntity saved = orderDao.save(entity);
         return new OrderCreateResult(saved.getId());
     }
 
@@ -96,52 +78,7 @@ public class OrderServiceImpl implements OrderService {
         return ret;
     }
 
-    /**
-     * 编辑订单，在原来明细上再添加新的明细。
-     *
-     * @param cmd
-     * @return
-     */
-    @Override
-    public OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveCommand cmd) {
-        OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
-        if (optEntity.isPresent()) {
-            OrderEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            for (OrderDetailEntity orderDetail : p.getOrderDetails()) {
-                System.out.printf("'%s' - '%s'%n", orderDetail.getId(), orderDetail.getDescription());
-            }
-            OrderEntity saved = orderDao.save(p);
-            ret.setOrderId(saved.getId());
-        }
-        else {
-            throw new RuntimeException("Order Not found: " + cmd.getId());
-        }
-        return ret;
-    }
 
-    /**
-     * 编辑订单， 删除原来的明细，添加新的明细
-     *
-     * @param cmd
-     * @return
-     */
-    public OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveCommand cmd) {
-        OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
-        if (optEntity.isPresent()) {
-            OrderEntity p = optEntity.get();
-            p.getOrderDetails().clear(); // remove old details
-            p = cmd.populateEntity(p);
-            OrderEntity saved = orderDao.save(p);
-            ret.setOrderId(saved.getId());
-        }
-        else {
-            throw new RuntimeException("Order Not found: " + cmd.getId());
-        }
-        return ret;
-    }
 
     /**
      * 逻辑删除订单

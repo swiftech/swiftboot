@@ -34,7 +34,7 @@ import javax.annotation.Resource;
 @ResponseBody
 public class GoodsOrderRelController {
 
-    private Logger log = LoggerFactory.getLogger(GoodsOrderRelController.class);
+    private final Logger log = LoggerFactory.getLogger(GoodsOrderRelController.class);
 
     @Resource
     private GoodsOrderRelService goodsOrderRelService;

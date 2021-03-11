@@ -73,6 +73,7 @@ public class OrderEntity extends BaseEntity {
     @Override
     public String toString() {
         return "OrderEntity{" +
+                "id='" + getId() + "', " +
                 "description='" + description + '\'' +
                 '}';
     }

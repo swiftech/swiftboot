@@ -29,7 +29,7 @@ import java.util.Optional;
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
 
-    private Logger log = LoggerFactory.getLogger(OrderDetailServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(OrderDetailServiceImpl.class);
 
     @Resource
     private OrderDetailDao orderDetailDao;
