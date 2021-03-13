@@ -53,13 +53,8 @@ public class InterceptorLoader implements ApplicationContextAware {
                     regBean.getInterceptorName(), regBean.getOrder(), regBean));
             interceptorProxy.addInterceptor(regBean.getInterceptor());
         }
-
-        log.trace(interceptorProxy.getInterceptors().size() + " interceptors in total");
-        for (Interceptor interceptor : interceptorProxy.getInterceptors()) {
-            log.trace(String.format("Interceptor: %s", interceptor));
-        }
+        interceptorProxy.printDebugInfo();
     }
-
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

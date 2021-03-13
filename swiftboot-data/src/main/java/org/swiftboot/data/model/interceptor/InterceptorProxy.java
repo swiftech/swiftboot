@@ -1,5 +1,6 @@
 package org.swiftboot.data.model.interceptor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.CallbackException;
 import org.hibernate.EntityMode;
 import org.hibernate.Interceptor;
@@ -113,7 +114,9 @@ public class InterceptorProxy implements Interceptor, Serializable {
         List<Boolean> bools = interceptors.stream()
                 .map(interceptor -> interceptor.isTransient(entity))
                 .collect(Collectors.toList());
-        return BooleanUtils.or(bools);
+        Boolean ret = BooleanUtils.or(bools);
+        log.trace(String.valueOf(ret));
+        return ret;
     }
 
     @Override
@@ -125,6 +128,9 @@ public class InterceptorProxy implements Interceptor, Serializable {
         int[] ret = null;
         for (int[] ints : collect) {
             ret = ArrayUtils.merge(ret, ints);
+        }
+        if (org.apache.commons.lang3.ArrayUtils.isNotEmpty(ret)) {
+            log.trace(StringUtils.join(ret, ','));
         }
         return ret;
     }
@@ -175,11 +181,11 @@ public class InterceptorProxy implements Interceptor, Serializable {
         return sql;
     }
 
-    public List<Interceptor> getInterceptors() {
-        return interceptors;
+    void printDebugInfo() {
+        log.trace(interceptors.size() + " interceptors in total");
+        for (Interceptor interceptor : interceptors) {
+            log.trace(String.format("Interceptor: %s", interceptor));
+        }
     }
 
-    public void setInterceptors(List<Interceptor> interceptors) {
-        this.interceptors = interceptors;
-    }
 }
