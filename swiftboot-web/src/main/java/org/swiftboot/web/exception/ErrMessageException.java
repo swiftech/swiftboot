@@ -58,7 +58,7 @@ public class ErrMessageException extends RuntimeException {
     public String toString() {
         //  输出错误信息
         return "ErrMessageException{" +
-                "errorCode='" + errorCode + "\'," + getMessage() +
+                "errorCode='" + errorCode + "'," + getMessage() +
                 '}';
     }
 

@@ -1,5 +1,5 @@
 # SwiftBoot-Web
-SwiftBoot 的主模块，开发 Web 应用需要引用。
+Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 
 ## 依赖
 * JDK >= 1.8
@@ -11,8 +11,10 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 
 
 ## 特性
-* 开箱即用，用更少的代码完成更多的工作。
-* 是无侵入性的，你可以只使用其中的一部分功能，也可以随时去掉它或者切换为别的框架。
+* 接口参数自动填充到实体类中。
+* 自动将实体类的属性值填充到返回值对象中。
+* 提供了统一的控制器（Controller）异常处理，自动将未处理的异常转换成 `JSON` 格式的接口响应对象返回给客户端。
+* 自动处理接口参数验证结果，转换为 `JSON` 格式的统一格式；扩展的表单验证器，可验证：手机号，包含大写数字，包含数字，包含特殊符号。
 * 统一固定的返回值格式:
   ```json
   {
@@ -23,20 +25,14 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
     }
   }
   ```
-* 可实现将接口参数自动填充到实体类中。
-* 可实现自动将实体类的属性值填充到返回值中。
-* 提供了统一的控制器（Controller）异常处理，自动将未处理的异常转换成 `JSON` 格式的接口响应对象返回给客户端。
-* 自动处理接口参数验证结果，转换为 `JSON` 格式的统一格式；扩展的表单验证器，可验证：手机号，包含大写数字，包含数字，包含特殊符号。
 
-## 引用 jar 包：
-
-  Maven:
+## Maven:
 
   ```xml
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.2</version>
   </dependency>
   ```
 
@@ -71,7 +67,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   ```java
   @Entity
   @Table(name = "DEMO_ORDER")
-  public class OrderEntity extends BaseEntity {
+  public class OrderEntity extends BaseIdEntity {
       @Column(name = "ORDER_CODE", length = 16, columnDefinition = "COMMENT '订单编号'")
       private String orderCode;
 
@@ -84,12 +80,13 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 
 ### 控制器 Controller
 
-* 所有的控制器接口返回统一定义的响应对象 `HttpResponse`，包含错误代码、错误消息以及泛型表达的接口返回值。`POST`, `PUT` 和 `PATCH` 接口的所有输入参数对象继承 `HttpCommand` 或者它的子类。
+* API 输入参数和返回值
+  `POST`, `PUT` 和 `PATCH` 接口的所有输入参数对象继承 `HttpCommand` 或者它的子类。 所有的控制器接口返回统一定义的响应对象 `HttpResponse`，包含错误代码、错误消息以及泛型表达的接口返回值。
 
 
   例如一个创建订单的接口如下：
   ```java
-  @RequestMapping(value = "order/create", method = RequestMethod.POST)
+  @PostMapping("order/create")
   public
   @ResponseBody HttpResponse<OrderCreateResult> orderCreate(
           @RequestBody @Validated @ApiParam("创建订单参数") OrderCreateCommand command) {
@@ -98,24 +95,29 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   }
   ```
 
-  SpringMVC 的 `@ResponseBody` 注解会把方法返回的 `HttpResponse` 对象及其内嵌的对象一起转换成 JSON 格式返回给访问接口的客户端。
-
   ```java
-  @ApiModel
   public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {
-    @ApiModelProperty(value = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")
     @Length(max = 16)
     private String orderCode;
 
-    @ApiModelProperty(value = "订单描述", example = "越快越好")
     @JsonProperty("description")
     @Length(max = 64)
     private String description;
   }
   ```
 
-* 控制器中抛出的异常直接抛出会使得客户端的错误展示非常不友好，而通过代码去捕获即繁琐又容易遗留，SwiftBoot 实现了控制器增强 `ExceptionProcessor`，他将异常信息以统一的 `JSON` 格式输出给客户端，配置方法如下：
+  ```java
+  public class OrderCreateResult extends BasePopulateResult<OrderEntity> {
+    @JsonProperty("order_id")
+    private String orderId;
+  }
+  ```
+
+> `@ResponseBody` 注解会把接口方法返回的 `HttpResponse` 对象及其内嵌的对象一起转换成 JSON 格式返回给访问接口的客户端。
+
+* 统一 API 异常处理 
+  控制器中抛出的异常直接抛出会使得客户端的错误处理非常不友好，而通过代码去捕获即繁琐又容易遗留，SwiftBoot 实现了控制器增强 `ExceptionProcessor`，他将异常信息以统一的 `JSON` 格式输出给客户端，配置方法如下：
   
 
   ```java
@@ -150,7 +152,8 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
   }
   ```
 
-  如果接口参数中有 `BindingResult` 这个参数，那么验证异常就不会抛出，此时可以在控制器类上添加注解 `@ConvertValidateResult` 来标识需要拦截并抛出 `ValidationException` 异常。这个注解也可以加在控制器方法上，只有该方法执行的时候才会进行增强处理。
+  如果接口参数中有 `BindingResult` 这个参数，那么验证异常就不会抛出，此时可以在控制器类上添加注解 `@ConvertValidateResult` 来标识需要拦截并抛出 `ValidationException` 异常。
+  > 这个注解也可以加在控制器方法上，只有该方法执行的时候才会进行增强处理。
 
   ```java
   @Controller
@@ -163,7 +166,7 @@ SwiftBoot 的主模块，开发 Web 应用需要引用。
 
 * HTTP 头处理
 
-SwiftBoot 可以帮助你把 HttpServletRequest 中的 Header 自动添加到 Command 对象中, 便于取用
+SwiftBoot 可以帮助你把 `HttpServletRequest` 中的 Header 自动添加到 Command 对象中
 
 
   ```java
@@ -172,7 +175,7 @@ SwiftBoot 可以帮助你把 HttpServletRequest 中的 Header 自动添加到 Co
     
       public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
           Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-          converters.add(new MessageConverter(builder.build));  
+          converters.add(new org.swiftboot.web.command.MessageConverter(builder.build));  
       }
   }
   ```
@@ -217,15 +220,12 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
 
   输入参数对象类定义：
   ```java
-  @ApiModel
   public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {
 
-    @ApiModelProperty(value = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")
     @Length(max = 16)
     private String orderCode;
 
-    @ApiModelProperty(value = "订单描述", example = "越快越好")
     @JsonProperty("description")
     @Length(max = 64)
     private String description;
@@ -235,11 +235,9 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
   返回对象类定义：
   ```java
   public class OrderResult extends BasePopulateResult {
-    @ApiModelProperty(value = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")
     private String orderCode;
 
-    @ApiModelProperty(value = "订单描述", example = "越快越好")
     @JsonProperty("description")
     private String description;
   }
@@ -254,7 +252,6 @@ Web 开发中最无趣的工作之一就是从接口参数对象中复制每个�
   父参数对象定义，包含子对象的集合：
   ```java
   public class OrderSaveCommand extends BasePopulateCommand<OrderEntity> {
-    @ApiModelProperty(value = "订单详情")
     private List<OrderDetail> details;
   }
   ```
