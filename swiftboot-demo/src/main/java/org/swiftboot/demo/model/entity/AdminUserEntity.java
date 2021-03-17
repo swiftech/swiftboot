@@ -23,7 +23,7 @@ public class AdminUserEntity extends BaseEntity implements UserEntityStub {
      * Login name of administrator
      */
     @PropertyDescription(value = "Login name of administrator", example = "admin")
-    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) UNIQUE NOT NULL COMMENT 'Login name of administrator'")
+    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) NOT NULL COMMENT 'Login name of administrator'")
     private String loginName;
 
     /**

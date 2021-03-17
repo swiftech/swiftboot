@@ -29,7 +29,7 @@ import java.util.Map;
  **/
 public abstract class ErrorCodeSupport {
 
-    private Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
+    private final Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
 
     public static final String CODE_OK = "1000";
     public static final String CODE_OK_WITH_CONTENT = "1002";

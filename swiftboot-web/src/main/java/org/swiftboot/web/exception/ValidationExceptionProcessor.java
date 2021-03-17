@@ -26,7 +26,7 @@ import java.io.Serializable;
 @Order(100)
 public class ValidationExceptionProcessor {
 
-    private static Logger log = LoggerFactory.getLogger(ValidationExceptionProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(ValidationExceptionProcessor.class);
 
     @Resource
     SwiftBootWebConfigBean swiftBootConfigBean;

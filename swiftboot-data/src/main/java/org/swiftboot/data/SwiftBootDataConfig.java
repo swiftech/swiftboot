@@ -5,18 +5,22 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.swiftboot.data.constant.AutoUpdateTimeStrategy;
 import org.swiftboot.data.model.aspect.EntityIdAspect;
 import org.swiftboot.data.model.aspect.UpdateTimeAspect;
 import org.swiftboot.data.model.id.DefaultIdGenerator;
 import org.swiftboot.data.model.id.IdGenerator;
-import org.swiftboot.data.model.interceptor.TimeInterceptor;
-import org.swiftboot.data.model.interceptor.TimeInterceptorRegisterBean;
+import org.swiftboot.data.model.id.IdPopulator;
+import org.swiftboot.data.model.interceptor.*;
 
 /**
  * @author swiftech
  **/
 @Configuration
 public class SwiftBootDataConfig {
+
+    public static final String DATA_MODEL_AUTO_GENERATE_ID = "swiftboot.data.model.autoGenerateId";
+    public static final String DATA_MODEL_AUTO_UPDATE_TIME_STRATEGY = "swiftboot.data.model.autoUpdateTimeStrategy";
 
     @Bean
     public SwiftBootDataConfigBean swiftBootDataConfigBean() {
@@ -29,7 +33,7 @@ public class SwiftBootDataConfig {
      * @return
      */
     @Bean
-    @ConditionalOnProperty(value = "swiftboot.data.model.autoGenerateId", havingValue = "true")
+    @ConditionalOnProperty(value = DATA_MODEL_AUTO_GENERATE_ID, havingValue = "true")
     EntityIdAspect entityIdAspect() {
         return new EntityIdAspect();
     }
@@ -45,12 +49,27 @@ public class SwiftBootDataConfig {
         return new DefaultIdGenerator();
     }
 
+    @Bean
+    @ConditionalOnBean(IdGenerator.class)
+    @ConditionalOnProperty(value = DATA_MODEL_AUTO_GENERATE_ID, havingValue = "true")
+    IdPopulator idPopulator() {
+        return new IdPopulator();
+    }
+
+
+    @Bean
+    @ConditionalOnProperty(value = DATA_MODEL_AUTO_GENERATE_ID, havingValue = "true")
+    IdInterceptor idInterceptor() {
+        return new IdInterceptor();
+    }
+
     /**
-     * 根据 swiftboot.data.model.autoUpdateTime=true 加载实体类更新时间的切面
+     * Only works when swiftboot.data.model.autoUpdateTimeStrategy=always
      *
      * @return
      */
     @Bean
+    @ConditionalOnProperty(value = DATA_MODEL_AUTO_UPDATE_TIME_STRATEGY, havingValue = AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ALWAYS)
     UpdateTimeAspect updateTimeAspect() {
         return new UpdateTimeAspect();
     }
@@ -61,9 +80,27 @@ public class SwiftBootDataConfig {
     }
 
     @Bean
-    @ConditionalOnBean(TimeInterceptor.class)
-    TimeInterceptorRegisterBean timeInterceptorRegisterBean() {
-        return new TimeInterceptorRegisterBean();
+    InterceptorProxy interceptorProxy() {
+        InterceptorProxy interceptorProxy = new InterceptorProxy();
+        if (swiftBootDataConfigBean().getModel().isAutoGenerateId()) {
+            interceptorProxy.addInterceptor(idInterceptor());
+        }
+        if (!AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_NOT_SET.equals(swiftBootDataConfigBean().getModel().getAutoUpdateTimeStrategy())) {
+            interceptorProxy.addInterceptor(timeInterceptor());
+        }
+        return interceptorProxy;
+    }
+
+    @Bean
+    @ConditionalOnBean(InterceptorProxy.class)
+    InterceptorLoader interceptorHandler() {
+        return new InterceptorLoader();
+    }
+
+    @Bean
+    @ConditionalOnBean(InterceptorLoader.class)
+    InterceptorProxyRegisterBean interceptorProxyRegisterBean() {
+        return new InterceptorProxyRegisterBean();
     }
 
 

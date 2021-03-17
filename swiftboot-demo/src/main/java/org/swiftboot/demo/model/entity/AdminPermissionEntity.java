@@ -21,7 +21,7 @@ public class AdminPermissionEntity extends BaseEntity {
      * 管理员用户权限代码
      */
     @PropertyDescription(value = "管理员用户权限代码", example = "ORDER_DEL")
-    @Column(name = "PERM_CODE", length = 256, unique = true, nullable = false, columnDefinition = "VARCHAR(256) UNIQUE NOT NULL COMMENT '管理员用户权限代码'")
+    @Column(name = "PERM_CODE", length = 256, unique = true, nullable = false, columnDefinition = "VARCHAR(256) NOT NULL COMMENT '管理员用户权限代码'")
     private String permCode;
 
     /**

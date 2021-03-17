@@ -43,10 +43,10 @@ public class ExceptionProcessor {
      */
     @ExceptionHandler(ErrMessageException.class)
     @ResponseBody
-    public HttpResponse onErrMessageException(NativeWebRequest request, ErrMessageException e) {
+    public HttpResponse<?> onErrMessageException(NativeWebRequest request, ErrMessageException e) {
         log.debug("onErrMessageException...");
         log.error(e.getMessage(), e);
-        return new HttpResponse(e);
+        return new HttpResponse<>(e);
     }
 
     /**
@@ -58,10 +58,10 @@ public class ExceptionProcessor {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public HttpResponse onException(NativeWebRequest request, Exception e) {
+    public HttpResponse<?> onException(NativeWebRequest request, Exception e) {
         log.debug("onException...");
         log.error(e.getMessage(), e);
-        return new HttpResponse(ErrorCodeSupport.CODE_SYS_ERR, e.getLocalizedMessage());
+        return new HttpResponse<>(ErrorCodeSupport.CODE_SYS_ERR, e.getLocalizedMessage());
     }
 
 }
