@@ -37,7 +37,7 @@ import java.util.Optional;
 //@DataJpaTest
 @SpringBootTest // 不能用 @DataJpaTest 否则 Aspect 无法生效
 @Import(EntityIdAspectTestConfig.class)
-@ActiveProfiles("id-mysql")
+@ActiveProfiles("id-h2")
 public class EntityIdAspectTest {
 
     private final Logger log = LoggerFactory.getLogger(EntityIdAspectTest.class);
@@ -172,7 +172,7 @@ public class EntityIdAspectTest {
                     log.trace("Clear existed children " + parentEntity.getItems().size());
                     parentEntity.getItems().clear();
 //                    log.trace("query before adding entity 3");
-                    //Optional<ParentEntity> hello1 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                    Optional<ParentEntity> hello1 = parentDao.findByName("hello");// add this to test weired auto flush before save()
                     ChildEntity childEntity3 = new ChildEntity("New Child 3");
                     parentEntity.getItems().add(childEntity3);
                     log.trace("query before adding Detached entity 2");

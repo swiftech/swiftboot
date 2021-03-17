@@ -5,10 +5,9 @@ import org.swiftboot.data.annotation.PropertyDescription;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
- * 基于 {@coee java.time.LocalDateTime} 的实体类基类。
+ * 基于 {@link java.time.LocalDateTime} 的实体类基类。
  *
  * @author swiftech
  * @since 2.0.0
