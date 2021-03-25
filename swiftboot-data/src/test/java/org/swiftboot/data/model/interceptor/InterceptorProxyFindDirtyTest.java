@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.Serializable;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class InterceptorProxyFindDirtyTest {
     Interceptor nullInterceptor = new EmptyInterceptor() {

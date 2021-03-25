@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class InterceptorProxyIsTransientTest {
 

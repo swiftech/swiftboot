@@ -33,7 +33,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class AuthFilter extends OncePerRequestFilter {
 
-    private Logger log = LoggerFactory.getLogger(AuthFilter.class);
+    private final Logger log = LoggerFactory.getLogger(AuthFilter.class);
 
     @Resource
     private SessionService sessionService;
@@ -65,7 +65,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
         if (isBlank(token)) {
             if (log.isWarnEnabled()) {
-                log.warn(String.format("No token '%s' in the Header or Cookie", tokenKey));
+                log.warn(String.format("No token '%s' in Headers or Cookies", tokenKey));
             }
             this.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
         }

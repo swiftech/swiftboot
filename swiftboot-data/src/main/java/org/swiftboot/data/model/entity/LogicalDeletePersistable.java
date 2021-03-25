@@ -1,14 +1,12 @@
 package org.swiftboot.data.model.entity;
 
-import java.io.Serializable;
-
 /**
  * 具有逻辑删除字段的可持久化对象
  *
  * @author swiftech
  * @since 2.1.0
  */
-public interface LogicalDeletePersistable<T> extends Serializable {
+public interface LogicalDeletePersistable<T> extends IdPersistable {
 
     /**
      * 获取记录是否逻辑删除

@@ -1,4 +1,4 @@
-package org.swiftboot.data.id.entity;
+package org.swiftboot.data.model.id.entity;
 
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;

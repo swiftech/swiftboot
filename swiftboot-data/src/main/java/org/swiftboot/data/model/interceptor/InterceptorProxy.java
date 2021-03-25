@@ -130,7 +130,10 @@ public class InterceptorProxy implements Interceptor, Serializable {
             ret = ArrayUtils.merge(ret, ints);
         }
         if (org.apache.commons.lang3.ArrayUtils.isNotEmpty(ret)) {
-            log.trace(StringUtils.join(ret, ','));
+            log.trace("dirty: " + StringUtils.join(ret, ','));
+        }
+        else {
+            log.trace("no dirty from client");
         }
         return ret;
     }

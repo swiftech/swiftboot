@@ -1,8 +1,8 @@
 package org.swiftboot.data.model.id;
 
 import org.junit.jupiter.api.Test;
-import org.swiftboot.data.id.entity.AEntity;
-import org.swiftboot.data.id.entity.AaaaBbbbCcccDdddEeeeEntity;
+import org.swiftboot.data.model.id.entity.AEntity;
+import org.swiftboot.data.model.id.entity.AaaaBbbbCcccDdddEeeeEntity;
 
 /**
  * @author allen
