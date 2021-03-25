@@ -32,7 +32,7 @@ import java.util.Optional;
 @Service
 public class GoodsServiceImpl implements GoodsService {
 
-    private Logger log = LoggerFactory.getLogger(GoodsServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(GoodsServiceImpl.class);
 
     @Resource
     private GoodsDao goodsDao;
@@ -97,11 +97,14 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void deleteGoods(String goodsId) {
+//        goodsDao.deleteLogically(goodsId);
         Optional<GoodsEntity> optEntity = goodsDao.findById(goodsId);
         if (optEntity.isPresent()) {
             GoodsEntity p = optEntity.get();
-            p.setDelete(true);
-            goodsDao.save(p);
+            log.trace(String.format("Delete goods %s - %s - %s logically", p.getId(), p.getName(), p.getIsDelete()));
+            goodsDao.deleteLogically(p);
+//            p.setDelete(true);
+//            goodsDao.save(p);
         }
     }
 
@@ -114,7 +117,7 @@ public class GoodsServiceImpl implements GoodsService {
     public void deleteGoodsList(IdListCommand cmd) {
         List<GoodsEntity> entities = goodsDao.findAllByIdIn(cmd.getIds());
         for (GoodsEntity entity : entities) {
-            entity.setDelete(true);
+            entity.setIsDelete(true);
             goodsDao.save(entity);
             // TODO 处理关联表的数据删除
         }
