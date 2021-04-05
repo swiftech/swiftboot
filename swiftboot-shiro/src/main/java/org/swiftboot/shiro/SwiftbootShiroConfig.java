@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
+ * All required beans that make shiro works.
+ *
  * @author swiftech
  * @since 1.2
  **/
