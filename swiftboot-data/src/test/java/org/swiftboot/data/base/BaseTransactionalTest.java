@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 /**
  * @author swiftech
+ * @deprecated
  */
 public abstract class BaseTransactionalTest {
 

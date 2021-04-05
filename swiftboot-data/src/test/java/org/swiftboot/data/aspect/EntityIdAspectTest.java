@@ -2,7 +2,6 @@ package org.swiftboot.data.aspect;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -22,7 +21,6 @@ import org.swiftboot.data.model.dao.ParentDao;
 import org.swiftboot.data.model.entity.ChildEntity;
 import org.swiftboot.data.model.entity.CustomizedEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
-import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.util.JsonUtils;
 
 import javax.annotation.Resource;
@@ -42,9 +40,6 @@ public class EntityIdAspectTest {
 
     private final Logger log = LoggerFactory.getLogger(EntityIdAspectTest.class);
 
-//    @Resource
-//    TestEntityManager testEntityManager;
-
     @Resource
     private ParentDao parentDao;
 
@@ -59,15 +54,6 @@ public class EntityIdAspectTest {
 
     @Resource
     private PlatformTransactionManager txManager;
-
-    @Resource
-    private IdGenerator<ChildEntity> idGenerator;
-
-    @BeforeEach
-    public void setup() {
-//        System.out.println(testEntityManager);
-    }
-
 
     /**
      * 测试实现 IdPersistable 接口的实体类
@@ -137,30 +123,28 @@ public class EntityIdAspectTest {
         });
 
         log.info(" == Find parent entity and add children to it in another session == ");
-        if (true) {
-            tmpl.execute(new TransactionCallbackWithoutResult() {
-                @Override
-                protected void doInTransactionWithoutResult(TransactionStatus status) {
-                    Optional<ParentEntity> optParent = parentDao.findById(parentId);
-                    if (optParent.isPresent()) {
-                        ParentEntity parentEntity = optParent.get();
+        tmpl.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                Optional<ParentEntity> optParent = parentDao.findById(parentId);
+                if (optParent.isPresent()) {
+                    ParentEntity parentEntity = optParent.get();
 //                    entityManager.detach(parentEntity);
-                        //log.trace("query before adding entity 1");
-                        //Optional<ParentEntity> hello1 = parentDao.findByName("hello");// add this to test weired auto flush before save()
-                        ChildEntity childEntity1 = new ChildEntity("10001", "New Child 1");
+                    //log.trace("query before adding entity 1");
+                    //Optional<ParentEntity> hello1 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                    ChildEntity childEntity1 = new ChildEntity("10001", "New Child 1");
 //                    childEntity1.setParent(parentEntity);
-                        childEntity1.setParent(parentEntity);
-                        parentEntity.getItems().add(childEntity1);
-                        //log.trace("query before adding entity 2");
-                        //Optional<ParentEntity> hello2 = parentDao.findByName("hello");// add this to test weired auto flush before save()
-                        ChildEntity childEntity2 = new ChildEntity(modifyChildId, "New Child 2");
-                        childEntity2.setParent(parentEntity);
-                        parentEntity.getItems().add(childEntity2);
-                        parentDao.save(parentEntity);
-                    }
+                    childEntity1.setParent(parentEntity);
+                    parentEntity.getItems().add(childEntity1);
+                    //log.trace("query before adding entity 2");
+                    //Optional<ParentEntity> hello2 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                    ChildEntity childEntity2 = new ChildEntity(modifyChildId, "New Child 2");
+                    childEntity2.setParent(parentEntity);
+                    parentEntity.getItems().add(childEntity2);
+                    parentDao.save(parentEntity);
                 }
-            });
-        }
+            }
+        });
 
         log.info(" == Find and add new child ==");
         tmpl.execute(new TransactionCallbackWithoutResult() {

@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 /**
- * 所有数据库实体类基类，包括创建时间和事务锁版本
+ *
  *
  * @author swiftech
  */

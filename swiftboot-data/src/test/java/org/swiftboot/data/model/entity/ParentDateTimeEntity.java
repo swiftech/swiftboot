@@ -8,7 +8,7 @@ import java.util.List;
  * @author swiftech
  **/
 @Entity
-@Table(name = "PARENT_DATE_TIME_TABLE")
+@Table(name = "UT_PARENT_DATE_TIME_TABLE")
 public class ParentDateTimeEntity extends BaseDateTimeEntity {
 
     @Column

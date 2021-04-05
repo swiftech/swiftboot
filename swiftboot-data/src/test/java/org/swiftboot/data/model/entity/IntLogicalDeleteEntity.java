@@ -10,7 +10,7 @@ import javax.persistence.Table;
  * @author swiftech
  */
 @Entity
-@Table(name = "INT_LOGICAL_DELETE")
+@Table(name = "UT_INT_LOGICAL_DELETE")
 public class IntLogicalDeleteEntity extends BaseIntDeleteEntity {
 
     @Column(name = "DESCRIPTION", length = 256)

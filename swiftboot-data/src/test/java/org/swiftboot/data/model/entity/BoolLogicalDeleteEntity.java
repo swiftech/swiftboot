@@ -10,7 +10,7 @@ import javax.persistence.Table;
  * @author swiftech
  */
 @Entity
-@Table(name = "BOOL_LOGICAL_DELETE")
+@Table(name = "UT_BOOL_LOGICAL_DELETE")
 public class BoolLogicalDeleteEntity extends BaseBoolDeleteEntity {
 
     @Column(name = "DESCRIPTION", length = 256)

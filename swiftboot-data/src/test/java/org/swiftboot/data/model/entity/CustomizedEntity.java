@@ -9,7 +9,7 @@ import javax.persistence.Table;
  * @author swiftech
  **/
 @Entity
-@Table(name = "CUSTOMIZED_TABLE")
+@Table(name = "UT_CUSTOMIZED_TABLE")
 public class CustomizedEntity implements IdPersistable {
 
     @Id()
