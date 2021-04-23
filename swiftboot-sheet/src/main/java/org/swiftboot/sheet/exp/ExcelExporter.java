@@ -4,10 +4,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.swiftboot.sheet.meta.Picture;
-import org.swiftboot.sheet.meta.PictureLoader;
-import org.swiftboot.sheet.meta.Position;
-import org.swiftboot.sheet.meta.SheetMeta;
+import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
 
 import java.io.IOException;
@@ -35,8 +32,10 @@ public class ExcelExporter extends BaseExporter {
 
     @Override
     public <T> void export(InputStream templateFileStream, Object dataObject, OutputStream outputStream) throws IOException {
-        SheetMeta meta = new SheetMeta();
-        meta.fromAnnotatedObject(dataObject);
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta meta = builder.fromAnnotatedObject(dataObject).build();
+//        SheetMeta meta = new SheetMeta();
+//        meta.fromAnnotatedObject(dataObject);
         this.export(templateFileStream, meta, outputStream);
     }
 
@@ -53,8 +52,8 @@ public class ExcelExporter extends BaseExporter {
         this.extendSheet(sheet, exportMeta.findMaxPosition());
 
         exportMeta.setAllowFreeSize(true);
-        exportMeta.accept((key, startPos, rowCount, columnCount) -> {
-            Object value = exportMeta.getValue(key);
+        exportMeta.accept((key, startPos, rowCount, columnCount, value) -> {
+//            Object value = exportMeta.getValue(key);
             if (value instanceof PictureLoader) {
                 try {
                     Picture pictureValue = ((PictureLoader) value).get();

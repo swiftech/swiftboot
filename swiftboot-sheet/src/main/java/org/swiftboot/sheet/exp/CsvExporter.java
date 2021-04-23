@@ -5,6 +5,7 @@ import org.apache.commons.text.StringTokenizer;
 import org.swiftboot.sheet.meta.PictureLoader;
 import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetMeta;
+import org.swiftboot.sheet.meta.SheetMetaBuilder;
 import org.swiftboot.util.IoUtils;
 
 import java.io.BufferedOutputStream;
@@ -36,8 +37,10 @@ public class CsvExporter extends BaseExporter {
 
     @Override
     public <T> void export(InputStream templateFileStream, Object dataObject, OutputStream outputStream) throws IOException {
-        SheetMeta meta = new SheetMeta();
-        meta.fromAnnotatedObject(dataObject);
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta meta = builder.fromAnnotatedObject(dataObject).build();
+//        SheetMeta meta = new SheetMeta();
+//        meta.fromAnnotatedObject(dataObject);
         this.export(templateFileStream, meta, outputStream);
     }
 
@@ -57,8 +60,8 @@ public class CsvExporter extends BaseExporter {
         }
         this.extendSheet(rows, exportMeta.findMaxPosition());
         exportMeta.setAllowFreeSize(true);
-        exportMeta.accept((key, startPos, rowCount, columnCount) -> {
-            Object value = exportMeta.getValue(key);
+        exportMeta.accept((key, startPos, rowCount, columnCount, value) -> {
+//            Object value = exportMeta.getValue(key);
             if (value == null) {
                 throw new RuntimeException(String.format("No value provided to export for key: %s", key));
             }

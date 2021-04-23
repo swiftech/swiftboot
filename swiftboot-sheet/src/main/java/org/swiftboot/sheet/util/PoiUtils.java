@@ -50,6 +50,70 @@ public class PoiUtils {
     }
 
     /**
+     * Get sheet from a worksheet file by it's suffix
+     *
+     * @param templateFileStream
+     * @param fileSuffix
+     * @return
+     * @throws IOException
+     */
+    public static Sheet getSheet(InputStream templateFileStream, String fileSuffix, int sheetIdx) throws IOException {
+        Workbook workbook = initWorkbook(templateFileStream, fileSuffix);
+        return getSheet(workbook, sheetIdx);
+    }
+
+    /**
+     * Get sheet of workbook by index.
+     *
+     * @param workbook
+     * @param sheetIdx
+     * @return
+     */
+    public static Sheet getSheet(Workbook workbook, int sheetIdx) {
+        int sheetCount = workbook.getNumberOfSheets();
+        if (sheetCount <= sheetIdx) {
+            return null;
+        }
+        else {
+            return workbook.getSheetAt(sheetIdx);
+        }
+    }
+
+    /**
+     * Get sheet of workbook by name.
+     *
+     * @param workbook
+     * @param sheetName
+     * @return
+     */
+    public static Sheet getSheet(Workbook workbook, String sheetName) {
+        int sheetIndex = workbook.getSheetIndex(sheetName);
+        if (sheetIndex >= 0) {
+            return workbook.getSheetAt(sheetIndex);
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Get sheet of workbook by name, create new if not existed.
+     *
+     * @param workbook
+     * @param sheetName
+     * @return
+     */
+    public static Sheet getOrCreateSheet(Workbook workbook, String sheetName) {
+        int sheetIndex = workbook.getSheetIndex(sheetName);
+        if (sheetIndex >= 0) {
+            return workbook.getSheetAt(sheetIndex);
+        }
+        else {
+            return workbook.createSheet();
+        }
+    }
+
+    /**
      * Read from excel file stream to get the workbook, create a new one if not exists.
      *
      * @param templateFileStream
@@ -133,7 +197,7 @@ public class PoiUtils {
      *
      * @param sheet
      * @param startPos
-     * @param endPosition   end position of area, not null.
+     * @param endPosition  end position of area, not null.
      * @param pictureValue
      */
     public static void writePicture(Sheet sheet, Position startPos, Position endPosition, Picture pictureValue) {

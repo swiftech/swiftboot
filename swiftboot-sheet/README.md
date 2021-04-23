@@ -20,7 +20,7 @@ SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data fro
 
 * 导入导出对象的定义
 
-你只需要定义一个 Bean 并用 `@Mapping` 注解标注需要从表格中导入或者导出数据的行列，例如：
+你只需要定义一个 Bean 并用 `@Mapping` 注解标注需要从表格中导入或者导出数据的行列，行列位置用[表达式](#表达式)来表示，例如：
 
 ```java
 public class SheetEntity {
@@ -38,7 +38,7 @@ public class SheetEntity {
 ```
 
 * 导出
-  创建指定文件类型的 `Exporter` ，调用 `export()` 方法将实体对象中的数据导出到数据表格文件中，例如：
+  创建指定文件类型的 `Exporter` ，然后调用 `export()` 方法将实体对象中的数据导出到数据表格文件中，例如：
 
 
 ```java
@@ -83,11 +83,11 @@ public class SheetEntity {
 ```
 
 ```java
-exportEntity.setPictureToExport(()->{
-        byte[]bytesPic=... // 加载图片
-        return new Picture(Workbook.PICTURE_TYPE_JPEG,bytesPic);
-        });
-        exporter.export(templateFileInputStream,exportEntity,outputStream);
+exportEntity.setPictureToExport(() -> {
+  byte[]bytesPic=... // 加载图片
+  return new Picture(Workbook.PICTURE_TYPE_JPEG, bytesPic);
+});
+exporter.export(templateFileInputStream, exportEntity, outputStream);
 ```
 
 ### 表达式
@@ -112,14 +112,15 @@ exportEntity.setPictureToExport(()->{
 
 ### 底层 API
 
-如果你想导入或者导出的表格位置是动态的，那么也可以直接调用底层的 API 来实现，例如：
+如果你想导入或者导出的表格位置是动态的(例如位置保存在数据库中），那么也可以直接调用底层的 API 来实现，例如：
 
 ```java
     Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
     SheetMeta sheetMeta = new SheetMeta();
-    sheetMeta.fromExpression("cell_0", "A1", "This is title");
-    sheetMeta.fromExpression("line_0", "A1:A2", Arrays.asList(1, 2));
-    ...
+    sheetMeta.addItem("cell_0", new Position(0, 0), "This is title 1"); // 直接位置设定设定导出单元格（从0开始）
+    sheetMeta.fromExpression("cell_1", "B1", "This is title 2"); // 表达式设定导出单元格
+    sheetMeta.fromExpression("line_0", "A2:A4", Arrays.asList(10, 20, 30)); // 表达式设定导出一列数据
+    sheetMeta.fromExpression("picture", "A5", pictureLoader); // 表达式设定导出图片
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
 

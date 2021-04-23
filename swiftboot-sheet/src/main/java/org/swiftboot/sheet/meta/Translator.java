@@ -30,6 +30,9 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
  * E2:?2 means export specified columns starts from column 5 in row 2.
  * E2:? means export specified rows and columns starts from row 2 column 5.
  *
+ * <p>Sheet</p>
+ * $'sheet 1'.E2:E3
+ *
  * @author allen
  */
 public class Translator {

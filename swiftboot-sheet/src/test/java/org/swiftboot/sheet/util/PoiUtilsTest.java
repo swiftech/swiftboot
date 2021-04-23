@@ -2,6 +2,7 @@ package org.swiftboot.sheet.util;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.BaseTest;
 import org.swiftboot.sheet.constant.SheetFileType;
@@ -12,16 +13,26 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Test {@code PoiUtils}
+ * Test {@link PoiUtils}
+ *
  * @author allen
  * @see PoiUtils
  */
 public class PoiUtilsTest extends BaseTest {
 
+    @Test
+    public void testGetOrCreateSheet() throws IOException {
+        Workbook workbook = PoiUtils.initWorkbook(null, SheetFileType.TYPE_XLSX);
+        Sheet s1 = PoiUtils.getOrCreateSheet(workbook, "sheet0");
+        Assertions.assertEquals(1, workbook.getNumberOfSheets());
+        Sheet s11 = PoiUtils.getOrCreateSheet(workbook, "sheet0");
+        Assertions.assertEquals(1, workbook.getNumberOfSheets());
+
+    }
 
     @Test
-    public void testPoiUtilsWritePicture() throws IOException {
-        Picture pictureValue = pictureLoader.get();
+    public void testWritePicture() throws IOException {
+        Picture pictureValue = super.pictureLoader.get();
 
 //        InputStream templateIns = super.loadTemplate(SheetFileType.TYPE_XLSX);
 //        Workbook workbook = PoiUtils.initWorkbook(templateIns, SheetFileType.TYPE_XLSX);

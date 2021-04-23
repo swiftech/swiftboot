@@ -1,47 +1,48 @@
 package org.swiftboot.sheet.meta;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 /**
  * A meta item represent information about one cell or a group cells in sheet.
  *
  * @author allen
  */
-public class MetaItem {
+public class MetaItem implements Comparable<MetaItem>{
 
     /**
      * Key to identify value in sheet.
      */
     private String key;
 
-    /**
-     * Index of sheet, default is 0.
-     */
-    private int sheetIndex = 0;
+    private Object value;
 
     /**
      * The area to access data in sheet.
      */
     private Area area;
 
-    /**
-     *
-     * @param key
-     * @param sheetIndex
-     * @param area
-     */
-    public MetaItem(String key, int sheetIndex, Area area) {
-        this.key = key;
-        this.sheetIndex = sheetIndex;
-        this.area = area;
+    public MetaItem() {
     }
 
     /**
-     *
      *
      * @param key
      * @param area
      */
     public MetaItem(String key, Area area) {
         this.key = key;
+        this.area = area;
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @param area
+     */
+    public MetaItem(String key, Object value, Area area) {
+        this.key = key;
+        this.value = value;
         this.area = area;
     }
 
@@ -53,12 +54,12 @@ public class MetaItem {
         this.key = key;
     }
 
-    public int getSheetIndex() {
-        return sheetIndex;
+    public Object getValue() {
+        return value;
     }
 
-    public void setSheetIndex(int sheetIndex) {
-        this.sheetIndex = sheetIndex;
+    public void setValue(Object value) {
+        this.value = value;
     }
 
     public Area getArea() {
@@ -71,10 +72,16 @@ public class MetaItem {
 
     @Override
     public String toString() {
-        return "Meta{" +
+        return "MetaItem{" +
                 "key='" + key + '\'' +
-                ", sheetIndex=" + sheetIndex +
+                ", value=" + value +
                 ", area=" + area +
                 '}';
     }
+
+    @Override
+    public int compareTo(MetaItem o) {
+        return ObjectUtils.compare(this.key, o.getKey());
+    }
+
 }

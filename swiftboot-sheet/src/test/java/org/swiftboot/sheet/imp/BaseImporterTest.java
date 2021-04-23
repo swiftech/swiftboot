@@ -3,16 +3,10 @@ package org.swiftboot.sheet.imp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.SwiftBootSheetFactory;
-import org.swiftboot.sheet.constant.SheetFileType;
-import org.swiftboot.sheet.meta.MetaItem;
-import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetMeta;
-import org.swiftboot.sheet.meta.Translator;
+import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,29 +24,30 @@ public class BaseImporterTest {
     );
 
     protected SheetMeta initTestMeta() {
-        Map<MetaItem, Object> metas = new HashMap<>();
-        SheetMeta meta = new SheetMeta(metas);
-        Translator translator = new Translator();
+        SheetMetaBuilder builder = new SheetMetaBuilder();
         // Single cells
-        metas.put(new MetaItem("key-b1", translator.toArea("B1")), null);
-        metas.put(new MetaItem("key-a2", translator.toArea("A2")), null);
-        metas.put(new MetaItem("key-x1", translator.toArea("X1")), null);
-        meta.addItem("key-b1-bypos", new Position(0, 1), null);
-        // Merged cell
-        metas.put(new MetaItem("key-5ad: a5", translator.toArea("A5")), null);
-        metas.put(new MetaItem("key-5ad: b5", translator.toArea("B5")), null);
-        metas.put(new MetaItem("key-5ad: c5", translator.toArea("C5")), null);
-        metas.put(new MetaItem("key-5ad: d5", translator.toArea("D5")), null);
+        SheetMeta meta = builder.items(builder.itemBuilder()
+                .newItem().key("key-b1").parse("B1")
+                .newItem().key("key-a2").parse("A2")
+                .newItem().key("key-x1").parse("X1")
+                .newItem().key("key-b1-bypos").from(0, 1))
+                // Merged cell
+                .items(builder.itemBuilder()
+                        .newItem().key("key-5ad: a5").parse("A5")
+                        .newItem().key("key-5ad: b5").parse("B5")
+                        .newItem().key("key-5ad: c5").parse("C5")
+                        .newItem().key("key-5ad: d5").parse("D5"))
 
-        // line-cells
-        metas.put(new MetaItem("key-b2:d2", translator.toArea("B2:D2")), null);
-        metas.put(new MetaItem("key-b2:b4", translator.toArea("B2:B4")), null);
+                // line-cells
+                .items(builder.itemBuilder()
+                        .newItem().key("key-b2:d2").parse("B2:D2")
+                        .newItem().key("key-b2:b4").parse("B2:B4"))
 
-        // matrix cells
-        metas.put(new MetaItem("key-b2:c3", translator.toArea("b2:c3")), null);
+                // matrix cells
+                .items(builder.itemBuilder().newItem().key("key-b2:c3").parse("b2:c3"))
 
-        // Empty
-        meta.fromExpression("key-x1", "x1");
+                // Empty
+                .items(builder.itemBuilder().newItem().key("key-x1").parse("x1")).build();
         return meta;
     }
 

@@ -15,6 +15,15 @@ public class Expression {
         this.expression = expression;
     }
 
+    public String getSheetName() {
+        // TODO
+        return substringBetween(expression, "$'", "'.");
+    }
+
+    public String getAreaExpression() {
+        return substringAfter(expression, ".");
+    }
+
     public boolean isRange() {
         return contains(expression, ":");
     }

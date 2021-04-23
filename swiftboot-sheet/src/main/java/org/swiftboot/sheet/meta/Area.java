@@ -3,9 +3,13 @@ package org.swiftboot.sheet.meta;
 import java.util.Objects;
 
 /**
+ * Represent an area in a sheet
+ *
  * @author allen
  */
 public class Area {
+
+    SheetId sheetId;
 
     /**
      * Start position of this area, this cannot be null.
@@ -30,7 +34,18 @@ public class Area {
         this.startPosition = startPosition;
     }
 
+    public Area(SheetId sheetId, Position startPosition) {
+        this.sheetId = sheetId;
+        this.startPosition = startPosition;
+    }
+
     public Area(Position startPosition, Position endPosition) {
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+    }
+
+    public Area(SheetId sheetId, Position startPosition, Position endPosition) {
+        this.sheetId = sheetId;
         this.startPosition = startPosition;
         this.endPosition = endPosition;
     }
@@ -109,6 +124,14 @@ public class Area {
         return new Area(nearest, farthest);
     }
 
+    public SheetId getSheetId() {
+        return sheetId;
+    }
+
+    public void setSheetId(SheetId sheetId) {
+        this.sheetId = sheetId;
+    }
+
     public Position getStartPosition() {
         return startPosition;
     }
@@ -128,7 +151,8 @@ public class Area {
     @Override
     public String toString() {
         return "Area{" +
-                "startPosition=" + startPosition +
+                "sheetId=" + sheetId +
+                ", startPosition=" + startPosition +
                 ", endPosition=" + endPosition +
                 '}';
     }

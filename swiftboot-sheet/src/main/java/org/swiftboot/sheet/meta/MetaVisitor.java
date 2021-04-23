@@ -12,6 +12,7 @@ public interface MetaVisitor {
      * @param startPos
      * @param rowCount expect row count
      * @param columnCount expect column count
+     * @param value value (for export when needed)
      */
-    void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount);
+    void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount, Object value);
 }

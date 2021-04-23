@@ -7,6 +7,7 @@ import org.swiftboot.sheet.SwiftBootSheetFactory;
 import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetMeta;
+import org.swiftboot.sheet.meta.SheetMetaBuilder;
 import org.swiftboot.sheet.util.PoiUtils;
 
 import java.io.IOException;
@@ -14,8 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- *
- *
  * @author allen
  */
 public class ExcelExporterTest extends BaseExporterTest {
@@ -51,9 +50,16 @@ public class ExcelExporterTest extends BaseExporterTest {
         }
     }
 
+    /**
+     * Do export to a excel whose type is specified by fileType, if inputStream is null,
+     * export it without template.
+     *
+     * @param inputStream input stream of template excel file.
+     * @param fileType
+     */
     private void doExportExcel(InputStream inputStream, String fileType) {
         Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
-        SheetMeta exportMeta = super.initTestMeta();
+        SheetMeta exportMeta = super.createSheetMetaBuilder().build();
         boolean isFromTemplate = inputStream != null;
         try (OutputStream fileOutputStream = super.createOutputStream(isFromTemplate, fileType)) {
             if (isFromTemplate) {
@@ -101,15 +107,15 @@ public class ExcelExporterTest extends BaseExporterTest {
     @Test
     public void testExportPicture() {
         ExcelExporter xlsxExporter = new ExcelExporter(SheetFileType.TYPE_XLSX);
-        SheetMeta meta = new SheetMeta();
 
-        meta.fromExpression("single cell", "B2", pictureLoader);
-
-        meta.fromExpression("matrix", "B2:C5", pictureLoader);
-
-        meta.fromExpression("horizontal", "B3:C3", pictureLoader);
-
-        meta.fromExpression("vertical", "D2:D5", pictureLoader);
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta meta;
+        meta = builder.items(builder.itemBuilder()
+                .newItem().key("single cell").parse("B2").value(pictureLoader)
+                .newItem().key("matrix").parse("B2:C5").value(pictureLoader)
+                .newItem().key("horizontal").parse("B3:C3").value(pictureLoader)
+                .newItem().key("vertical").parse("D2:D5").value(pictureLoader)
+                .newItem().key("single cell by position").from(10, 10).value(pictureLoader)).build();
 
         try (OutputStream outputStream = super.createOutputStream(false, SheetFileType.TYPE_XLSX)) {
             xlsxExporter.export(meta, outputStream);

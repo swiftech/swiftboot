@@ -3,6 +3,7 @@ package org.swiftboot.sheet.imp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.meta.SheetMeta;
+import org.swiftboot.sheet.meta.SheetMetaBuilder;
 import org.swiftboot.util.BeanUtils;
 
 import java.io.IOException;
@@ -38,11 +39,16 @@ public abstract class BaseImporter implements Importer {
     @Override
     public <T> T importFromStream(InputStream templateFileStream, Class<T> resultClass) throws IOException {
         T ret = this.createResult(resultClass);
-        SheetMeta meta = new SheetMeta();
-        List<Field> fields = meta.fromAnnotatedClass(resultClass);
+//        SheetMeta meta = new SheetMeta();
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta meta = builder.fromAnnotatedClass(resultClass).build();
+//        List<Field> fields = meta.fromAnnotatedClass(resultClass);
         Map<String, Object> result = this.importFromStream(templateFileStream, meta);
-        for (Field field : fields) {
-            BeanUtils.forceSetProperty(ret, field, result.get(field.getName()));
+        for (Field field : builder.getFields()) {
+            Object value = result.get(field.getName());
+            if (value != null) {
+                BeanUtils.forceSetProperty(ret, field, value);
+            }
         }
         return ret;
     }

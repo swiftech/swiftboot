@@ -27,7 +27,7 @@ public class CsvImporter extends BaseImporter {
         // read lines
         List<String> lines = IoUtils.readToStringList(templateFileStream);
         Map<String, Object> ret = new HashMap<>();
-        meta.accept((key, startPos, rowCount, columnCount) -> {
+        meta.accept((key, startPos, rowCount, columnCount, v) -> {
             List<List<Object>> matrix = new ArrayList<>();
             for (int i = 0; i < rowCount; i++) {
                 String row = lines.get(startPos.getRow() + i);

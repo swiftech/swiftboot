@@ -15,7 +15,7 @@ import java.util.Map;
 class ExcelImporterTest extends BaseImporterTest {
 
     @Test
-    void testImportExcel() {
+    void testImportExcel() throws IOException {
         testImportToMap(SheetFileType.TYPE_XLS);
         System.out.println();
         testImportToMap(SheetFileType.TYPE_XLSX);
@@ -33,6 +33,7 @@ class ExcelImporterTest extends BaseImporterTest {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource("imp/import." + fileType);
         Assertions.assertNotNull(url);
+        System.out.println("import from file: " + url);
 
         try {
             Map<String, Object> result = importer.importFromStream(url.openStream(), meta);
@@ -42,18 +43,15 @@ class ExcelImporterTest extends BaseImporterTest {
         }
     }
 
-    private void testImportToObject(String fileType) {
+    private void testImportToObject(String fileType) throws IOException {
         Importer importer = factory.createImporter(fileType);
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource("imp/import." + fileType);
 
-        try {
-            Object result = importer.importFromStream(url.openStream(), ImportEntity.class);
-            System.out.println(result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Object result = importer.importFromStream(url.openStream(), ImportEntity.class);
+        System.out.println(result);
+
     }
 
 }

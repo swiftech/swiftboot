@@ -53,8 +53,9 @@ public class CsvExporterTest extends BaseExporterTest {
 
     public void doTestExportFromMap(InputStream templateIns) {
         Exporter exporter = new SwiftBootSheetFactory().createExporter(SheetFileType.TYPE_CSV);
-        SheetMeta exportMeta = super.initTestMeta();
-        exportMeta.fromExpression("picture", "A1", super.pictureLoader); // This should be ignored because exporting picture is not supported.
+        SheetMetaBuilder sheetMetaBuilder = super.createSheetMetaBuilder();
+        sheetMetaBuilder.items(sheetMetaBuilder.itemBuilder().newItem().key("picture").parse("A1").value(super.pictureLoader)); // This should be ignored because exporting picture is not supported.
+        SheetMeta exportMeta = sheetMetaBuilder.build();
         printMeta(exportMeta);
         boolean isFromTemplate = templateIns != null;
         try (OutputStream fileOutputStream = super.createOutputStream(isFromTemplate, SheetFileType.TYPE_CSV)) {
@@ -126,7 +127,7 @@ public class CsvExporterTest extends BaseExporterTest {
         meta.setAllowFreeSize(true);// TODO remove it!
         meta.accept(new MetaVisitor() {
             @Override
-            public void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount) {
+            public void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount, Object value) {
                 System.out.printf("%s: %s %d rows %d columns%n", key, startPos, rowCount, columnCount);
             }
         });
