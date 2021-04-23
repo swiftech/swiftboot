@@ -1,5 +1,10 @@
+2.0.2
+* `swiftboot-data` 支持自定义 Hibernate 拦截器
+
+2.0.1
+* `swiftboot-data` 修复在 save() 之前 Hibernate 发生 flush 时没有自动设置 ID 的问题
+
 2.0.0 (2021-02)
-更新内容：
 * `swiftboot-web` 控制器参数自动填充功能支持编辑子对象的填充。
 * `swiftboot-data` 重新实现自动设置创建时间和更新时间，支持一对一关联和一对多关联实体的自动设置更新时间。
 
