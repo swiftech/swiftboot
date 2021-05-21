@@ -80,7 +80,7 @@ public class PoiUtils {
     }
 
     /**
-     * Get sheet of workbook by name.
+     * Get sheet of workbook by name, create new if not exist.
      *
      * @param workbook
      * @param sheetName
@@ -92,7 +92,8 @@ public class PoiUtils {
             return workbook.getSheetAt(sheetIndex);
         }
         else {
-            return null;
+            Sheet newSheet = workbook.createSheet(sheetName);
+            return newSheet;
         }
     }
 

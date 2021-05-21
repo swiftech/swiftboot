@@ -115,15 +115,58 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 如果你想导入或者导出的表格位置是动态的(例如位置保存在数据库中），那么也可以直接调用底层的 API 来实现，例如：
 
 ```java
+    SheetMetaBuilder builder = new SheetMetaBuilder();
+    builder
+    .items(builder.itemBuilder()
+        .newItem().key("cell_0").from(0, 0).value("This is title 1")) // 直接位置设定设定导出单元格（从0开始）
+        .newItem().key("cell_0").parse("B1").value("This is title 2")) // 表达式设定导出单元格
+        .newItem().key("line_0").from(1, 0).to(1, 2).value(Arrays.asList("a", "b", "c"))  // 位置设定导出一行数据
+        .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))  // 表达式设定导出一列数据
+        .newItem().key("picture").parse("A5").value(pictureLoader) // 表达式设定导出图片
+    )
+    .fromAnnotatedObject(exportEntity);
+    SheetMeta sheetMeta = builder.build();
     Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
-    SheetMeta sheetMeta = new SheetMeta();
-    sheetMeta.addItem("cell_0", new Position(0, 0), "This is title 1"); // 直接位置设定设定导出单元格（从0开始）
-    sheetMeta.fromExpression("cell_1", "B1", "This is title 2"); // 表达式设定导出单元格
-    sheetMeta.fromExpression("line_0", "A2:A4", Arrays.asList(10, 20, 30)); // 表达式设定导出一列数据
-    sheetMeta.fromExpression("picture", "A5", pictureLoader); // 表达式设定导出图片
+    exporter.export(templateFileInputStream, sheetMeta, outputStream);
+```
+> 默认导出的表格名称为 "Sheet 1"
+
+### 多表格支持
+
+在一个 Excel 中多表格也受支持，其表达式格式和 MS Excel 的一样：`$'<sheet name>'.`，例如
+
+```java
+public class SheetEntity {
+
+    @Mapping("B2:F2")
+    private List<String> line;
+
+    @Mapping("$'sheet1'.B2:C3")
+    private List<List<String>> matrix;
+
+}
+```
+
+直接调用底层API：
+
+```java
+    SheetMetaBuilder builder = new SheetMetaBuilder();
+    builder
+    .sheet("sheet 1")
+    .items(builder.itemBuilder()
+        .newItem().key("cell_0").from(0, 0)).value("This is title 1"))
+    .sheet("sheet 2")
+    .items(builder.itemBuilder()
+        .newItem().key("line_0").from(0, 0).to(0, 2).value(Arrays.asList("a", "b", "c"))
+        .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))
+    )
+    .fromAnnotatedObject(exportEntity);
+    SheetMeta sheetMeta = builder.build();
+    Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
 
+表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中
 
 ### Maven:
 
@@ -131,11 +174,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.3</version>
 </dependency>
 ```
 
-
-### 限制
-
-* 目前只支持导入和导出表格文件的第一个工作表。

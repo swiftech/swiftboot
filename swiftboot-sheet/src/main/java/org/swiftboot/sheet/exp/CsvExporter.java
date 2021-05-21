@@ -2,10 +2,7 @@ package org.swiftboot.sheet.exp;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringTokenizer;
-import org.swiftboot.sheet.meta.PictureLoader;
-import org.swiftboot.sheet.meta.Position;
-import org.swiftboot.sheet.meta.SheetMeta;
-import org.swiftboot.sheet.meta.SheetMetaBuilder;
+import org.swiftboot.sheet.meta.*;
 import org.swiftboot.util.IoUtils;
 
 import java.io.BufferedOutputStream;
@@ -70,6 +67,9 @@ public class CsvExporter extends BaseExporter {
             }
             else {
                 List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
+                if (matrix.isEmpty()){
+                    return;
+                }
                 int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
                 int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
                 for (int i = 0; i < actualRowCount; i++) {

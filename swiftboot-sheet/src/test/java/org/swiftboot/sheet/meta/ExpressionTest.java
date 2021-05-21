@@ -19,6 +19,7 @@ class ExpressionTest {
     static Expression expMatrix;
     static Expression expFreeSize;
     static Expression expSheet;
+    static Expression expSheetSingle;
 
     @BeforeAll
     public static void setup() {
@@ -29,13 +30,17 @@ class ExpressionTest {
         expVertical2 = new Expression("a1|2");
         expMatrix = new Expression("a1:b2");
         expFreeSize = new Expression("a1:?");
-        expSheet = new Expression("$'sheet0'.a1:b1");
+        expSheet = new Expression("$'sheet.0'.a1:b1");
+        expSheetSingle = new Expression("$'sheet.0'.a1");
     }
 
     @Test
     void testSheet() {
-        Assertions.assertEquals("sheet0", expSheet.getSheetName());
-        Assertions.assertEquals("a1:b1", expSheet.getAreaExpression());
+        Assertions.assertEquals("sheet.0", expSheet.getSheetName());
+        Assertions.assertEquals("a1:b1", expSheet.getCellsExp());
+
+        Assertions.assertEquals("sheet.0", expSheetSingle.getSheetName());
+        Assertions.assertEquals("a1", expSheetSingle.getCellsExp());
     }
 
     @Test

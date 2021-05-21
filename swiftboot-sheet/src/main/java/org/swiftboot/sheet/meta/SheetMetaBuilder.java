@@ -8,8 +8,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.swiftboot.sheet.meta.SheetMeta.MetaMap;
-
 /**
  * Builder to build {@link SheetMeta}
  *
@@ -47,13 +45,23 @@ public class SheetMetaBuilder {
     }
 
     public SheetMetaBuilder items(MetaItemBuilder itemBuilder) {
+
+//        LinkedHashMap<SheetId, List<MetaItem>> itemGroups = itemBuilder.build().stream().collect(Collectors.groupingBy(
+//                metaItem -> metaItem.getArea().sheetId, LinkedHashMap::new, Collectors.toList()));
+//        for (SheetId sheetId : itemGroups.keySet()) {
+//            this.sheet(sheetId.getSheetName())
+//                    .items();
+//        }
+
         List<MetaItem> items = itemBuilder.build();
         if (sheetId == null) {
             sheetId = SheetId.DEFAULT_SHEET;
         }
         for (MetaItem item : items) {
-            item.getArea().setSheetId(sheetId);
-            metaMap.addItem(this.sheetId, item);
+            if (item.getArea().getSheetId() == null) {
+                item.getArea().setSheetId(sheetId);
+            }
+            metaMap.addItem(item.getArea().getSheetId(), item);
         }
         return this;
     }
@@ -148,6 +156,7 @@ public class SheetMetaBuilder {
             item.setValue(value);
             return this;
         }
+
 
         public MetaItemBuilder parse(String expression) {
             Area area = translator.toArea(expression);

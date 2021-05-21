@@ -31,7 +31,8 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
  * E2:? means export specified rows and columns starts from row 2 column 5.
  *
  * <p>Sheet</p>
- * $'sheet 1'.E2:E3
+ * $'sheet.0'.E2:E3 means cells from rom 2 to 3 in column 5 of the sheet names 'sheet.0'
+ * $'sheet.1'.E2 means single cell in row 2 column 5 of the sheet names 'sheet.1'
  *
  * @author allen
  */
@@ -48,23 +49,26 @@ public class Translator {
      */
     public Area toArea(String exp) {
         Expression expression = new Expression(exp);
+        Area area;
         if (expression.isSinglePosition()) {
-            return new Area(this.toSinglePosition(exp));
+            area = new Area(this.toSinglePosition(expression.getCellsExp()));
         }
         else if (expression.isRange()) {
-            return this.freeRange(expression.splitAsFreeRange());
+            area = this.freeRange(expression.splitAsFreeRange());
         }
         else if (expression.isVerticalRange() || expression.isHorizontalRange()) {
-            return this.lineRange(expression);
+            area = this.lineRange(expression);
         }
         else {
-            throw new RuntimeException("Don't know how to handle");
+            throw new RuntimeException("Don't know how to handle this expression: " + exp);
         }
+        if (StringUtils.isNotBlank(expression.getSheetName())) {
+            area.setSheetId(new SheetId(expression.getSheetName()));
+        }
+        return area;
     }
 
     /**
-     *
-     *
      * @param startEnd expression array for start and end positions
      * @return
      */
@@ -110,7 +114,6 @@ public class Translator {
     }
 
     /**
-     *
      * @param expression
      * @return
      */

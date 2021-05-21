@@ -1,11 +1,13 @@
 package org.swiftboot.sheet.exp;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.BaseTest;
 import org.swiftboot.sheet.TestUtils;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,17 +22,20 @@ public class BaseExporterTest extends BaseTest {
      * @return
      */
     protected ExportEntity initExportEntity() {
-        ExportEntity exportEntity = new ExportEntity();
-        exportEntity.setValue1("test a1");
-        exportEntity.setValue2("test b1");
-        exportEntity.setMatrix(Arrays.asList(
+        List<List<Object>> m = Arrays.asList(
                 Arrays.asList(303, 304, 305, 999),
                 Arrays.asList(403, 404, 405, 406),
                 Arrays.asList(503, 504, 505, 506),
                 Arrays.asList(603, 604, 605, 606)
-        ));
+        );
+        ExportEntity exportEntity = new ExportEntity();
+        exportEntity.setValue1("test a1");
+        exportEntity.setValue2("test b1");
+        exportEntity.setMatrix(m);
         exportEntity.setLine(Arrays.asList("line[0]", "line[1]"));
         exportEntity.setPictureToExport(super.pictureLoader);
+        exportEntity.setMatrix2(m);
+        exportEntity.setPictureToExport2(super.pictureLoader);
         return exportEntity;
     }
 

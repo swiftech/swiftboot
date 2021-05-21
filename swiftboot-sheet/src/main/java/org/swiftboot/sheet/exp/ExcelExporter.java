@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
 
@@ -21,6 +23,8 @@ import static org.swiftboot.sheet.util.PoiUtils.setValueToCell;
  */
 public class ExcelExporter extends BaseExporter {
 
+    Logger log = LoggerFactory.getLogger(ExcelExporter.class);
+
     public ExcelExporter(String fileType) {
         super(fileType);
     }
@@ -34,8 +38,6 @@ public class ExcelExporter extends BaseExporter {
     public <T> void export(InputStream templateFileStream, Object dataObject, OutputStream outputStream) throws IOException {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         SheetMeta meta = builder.fromAnnotatedObject(dataObject).build();
-//        SheetMeta meta = new SheetMeta();
-//        meta.fromAnnotatedObject(dataObject);
         this.export(templateFileStream, meta, outputStream);
     }
 
@@ -47,32 +49,40 @@ public class ExcelExporter extends BaseExporter {
     @Override
     public void export(InputStream templateFileStream, SheetMeta exportMeta, OutputStream outputStream) throws IOException {
         Workbook wb = PoiUtils.initWorkbook(templateFileStream, super.getFileType());
-        Sheet sheet = PoiUtils.firstSheet(wb);
 
-        this.extendSheet(sheet, exportMeta.findMaxPosition());
-
-        exportMeta.setAllowFreeSize(true);
-        exportMeta.accept((key, startPos, rowCount, columnCount, value) -> {
+        exportMeta.getMetaMap().traverse((sheetId, items) -> {
+            log.debug("Export to sheet: " + sheetId);
+            Sheet sheet = PoiUtils.getOrCreateSheet(wb, sheetId.getSheetName()); // TODO 可能没名字
+            if (sheet == null) {
+                System.out.println("No sheet found: " + sheetId);
+                return;
+            }
+            extendSheet(sheet, exportMeta.findMaxPosition(sheetId));
+            exportMeta.setAllowFreeSize(true);
+            exportMeta.accept((key, startPos, rowCount, columnCount, value) -> {
 //            Object value = exportMeta.getValue(key);
-            if (value instanceof PictureLoader) {
-                try {
-                    Picture pictureValue = ((PictureLoader) value).get();
-                    PoiUtils.writePicture(sheet, startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (value instanceof PictureLoader) {
+                    try {
+                        Picture pictureValue = ((PictureLoader) value).get();
+                        PoiUtils.writePicture(sheet, startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-            else {
-                List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
-                int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
-                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
-                for (int i = 0; i < actualRowCount; i++) {
-                    List<Object> values = matrix.get(i);
-                    Row row = sheet.getRow(startPos.getRow() + i);
-                    setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values);
+                else {
+                    List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
+                    if (matrix.isEmpty()){
+                        return;
+                    }
+                    int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
+                    int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
+                    for (int i = 0; i < actualRowCount; i++) {
+                        List<Object> values = matrix.get(i);
+                        Row row = sheet.getRow(startPos.getRow() + i);
+                        setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values);
+                    }
                 }
-
-            }
+            });
         });
         wb.write(outputStream);
     }
@@ -87,7 +97,7 @@ public class ExcelExporter extends BaseExporter {
         if (lastPosition == null || lastPosition.isUncertain()) {
             return;
         }
-        log.debug(String.format("Try to extend sheet to %s%n", lastPosition));
+        log.debug(String.format("Try to extend sheet to %s", lastPosition));
         // Calculate the original size of a row.
         int originRowCount = sheet.getLastRowNum() + 1;
         int originRowSize = 0;
@@ -95,9 +105,9 @@ public class ExcelExporter extends BaseExporter {
             Row row = sheet.getRow(0);
             originRowSize = row.getLastCellNum() + 1;
         }
-        log.debug(String.format("Original row count: %d%n", originRowCount));
-        log.debug(String.format("Original physical number of rows: %d%n", sheet.getPhysicalNumberOfRows()));
-        log.debug(String.format("Original row size: %d%n", originRowSize));
+        log.debug(String.format("Original row count: %d", originRowCount));
+        log.debug(String.format("Original physical number of rows: %d", sheet.getPhysicalNumberOfRows()));
+        log.debug(String.format("Original row size: %d", originRowSize));
 
         // Extend columns
         int moreCols = lastPosition.getColumn() + 1 - originRowSize;

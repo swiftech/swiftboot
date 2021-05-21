@@ -69,14 +69,14 @@ public class SheetMeta {
             for (MetaItem meta : items) {
                 Area area = meta.getArea();
                 Position startingPos = area.getStartPosition();
-                log.debug(String.format("'%s' -> %s%n", meta.getKey(), meta.getArea()));
+                log.debug(String.format("'%s' -> %s", meta.getKey(), meta.getArea()));
                 if (area.isSingleCell()) {
                     visitor.visitMetaItem(meta.getKey(), startingPos, 1, 1, meta.getValue());
                 }
                 else {
                     Integer rowCount = area.rowCount();
                     Integer columnCount = area.columnCount();
-                    log.debug(String.format("row count %d, column count %d%n", rowCount, columnCount));
+                    log.debug(String.format("row count %d, column count %d", rowCount, columnCount));
                     if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
                         throw new RuntimeException("Free size expression is not allowed");
                     }
@@ -100,13 +100,24 @@ public class SheetMeta {
 
 
     /**
-     * Utils method that find max (end) position from all areas.
+     * Utils method that find max (end) position from all areas in a sheet.
      *
+     * @param sheetId
      * @return not null
      */
+    public Position findMaxPosition(SheetId sheetId) {
+        Area overlayedArea = new Area(0, 0, 0, 0);
+        List<MetaItem> metaItems = this.metaMap.sheetItems(sheetId);
+        for (MetaItem metaItem : metaItems) {
+            overlayedArea = overlayedArea.overlay(metaItem.getArea());
+        }
+        log.debug("Overlayed area: " + overlayedArea);
+        return overlayedArea.getEndPosition();
+    }
+
     public Position findMaxPosition() {
         Area overlayedArea = new Area(0, 0, 0, 0);
-        List<MetaItem> metaItems = this.getAllMetaItems();
+        List<MetaItem> metaItems = this.metaMap.allItems();
         for (MetaItem metaItem : metaItems) {
             overlayedArea = overlayedArea.overlay(metaItem.getArea());
         }
@@ -122,23 +133,5 @@ public class SheetMeta {
         isAllowFreeSize = allowFreeSize;
     }
 
-
-    public static class MetaMap {
-        Map<SheetId, List<MetaItem>> data = new HashMap<>();
-
-        public void addItem(SheetId id, MetaItem item) {
-            List<MetaItem> sub = data.computeIfAbsent(id, k -> new ArrayList<>());
-            sub.add(item);
-        }
-
-        public List<MetaItem> sheetItems(SheetId id) {
-            return data.get(id);
-        }
-
-        public boolean isEmpty() {
-            return data.isEmpty();
-        }
-
-    }
 
 }

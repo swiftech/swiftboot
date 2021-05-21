@@ -9,7 +9,10 @@ import java.util.Objects;
  */
 public class Area {
 
-    SheetId sheetId;
+    /**
+     *
+     */
+    SheetId sheetId = null;// default is null
 
     /**
      * Start position of this area, this cannot be null.

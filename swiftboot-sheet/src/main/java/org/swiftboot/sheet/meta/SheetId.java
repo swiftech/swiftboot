@@ -4,13 +4,15 @@ import java.util.Objects;
 
 /**
  * Represent a sheet in the workbook.
- * Either sheetIndex or sheetName are identical,
+ * Either sheetIndex or sheetName are identical.
+ * Two SheetId instances have same index are same, if not, same sheet name TODO.
  *
  * @author allen
  */
 public class SheetId {
 
-    public static final SheetId DEFAULT_SHEET = new SheetId(0, "Sheet 1");
+    public static final String DEFAULT_SHEET_NAME = "Sheet 1";
+    public static final SheetId DEFAULT_SHEET = new SheetId(0, DEFAULT_SHEET_NAME);
 
     /**
      * Sheet index, 0 is the first sheet in the workbook.

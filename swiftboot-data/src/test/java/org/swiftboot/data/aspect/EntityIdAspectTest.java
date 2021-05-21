@@ -102,7 +102,7 @@ public class EntityIdAspectTest {
         parent.setItems(new ArrayList<>());
         parent.getItems().add(childEntity);
         parentDao.save(parent);
-        System.out.println(parent.toString());
+        System.out.println(parent);
         // Assertions
         Optional<ParentEntity> optParent = parentDao.findById(parent.getId());
         Assertions.assertNotNull(optParent);

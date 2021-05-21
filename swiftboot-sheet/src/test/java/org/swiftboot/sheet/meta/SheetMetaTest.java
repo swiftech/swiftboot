@@ -5,23 +5,25 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author allen
+ * @see SheetMeta
  */
 class SheetMetaTest {
 
     @Test
     void findMaxPositionSimple() {
         SheetMetaBuilder builder = new SheetMetaBuilder();
-        SheetMeta meta = builder.items(builder.itemBuilder().key("1").parse("b2")).build();
-//        SheetMeta meta = new SheetMeta();
-//        meta.fromExpression("1", "b2");
+        SheetMeta meta = builder.items(builder.itemBuilder()
+                .newItem().key("1").parse("b2")).build();
         Assertions.assertEquals(new Position(1, 1), meta.findMaxPosition());
+        Assertions.assertEquals(new Position(1, 1), meta.findMaxPosition(SheetId.DEFAULT_SHEET));
     }
 
     @Test
     void findMaxPosition() {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         SheetMeta meta = builder
-                .items(builder.itemBuilder().key("1").parse("B1:D3")
+                .items(builder.itemBuilder()
+                        .newItem().key("1").parse("B1:D3")
                         .newItem().key("2").parse("A2:C4")
                         .newItem().key("3").parse("c2:c3")).build();
 //        SheetMeta meta = new SheetMeta();
