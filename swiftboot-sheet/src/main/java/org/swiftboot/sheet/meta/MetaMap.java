@@ -5,10 +5,10 @@ import org.apache.commons.collections4.ListUtils;
 import java.util.*;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class MetaMap {
-    Map<SheetId, List<MetaItem>> data = new HashMap<>();
+    Map<SheetId, List<MetaItem>> data = new LinkedHashMap<>();
 
     /**
      * Add item to a sheet.

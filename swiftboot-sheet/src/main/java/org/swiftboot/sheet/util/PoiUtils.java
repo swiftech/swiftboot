@@ -1,12 +1,15 @@
 package org.swiftboot.sheet.util;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.meta.Picture;
 import org.swiftboot.sheet.meta.Position;
+import org.swiftboot.sheet.meta.SheetId;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class PoiUtils {
 
@@ -80,37 +83,67 @@ public class PoiUtils {
     }
 
     /**
+     * Try to get sheet by index and name one by one.
+     * If found by index, sheet name will be overwritten by specified name.
+     * If not found, new sheet will be created.
+     *
+     * @param workbook
+     * @param sheetId
+     * @return
+     */
+    public static Sheet getOrCreateSheet(Workbook workbook, SheetId sheetId) {
+        if (sheetId == null) {
+            throw new RuntimeException("Sheet id can not be null");
+        }
+        Sheet sheet = null;
+        if (sheetId.getSheetIndex() == null || sheetId.getSheetIndex() >= workbook.getNumberOfSheets()) {
+            if (StringUtils.isBlank(sheetId.getSheetName())) {
+                if (sheetId.getSheetIndex()==null) {
+                    throw new RuntimeException("Sheet id is not valid: " + sheetId);
+                }
+                else {
+                    return workbook.createSheet(SheetId.DEFAULT_SHEET_NAME);
+                }
+            }
+            else {
+                return getOrCreateSheet(workbook, sheetId.getSheetName());
+            }
+        }
+        else {
+            sheet = workbook.getSheetAt(sheetId.getSheetIndex());
+            if (sheet == null) {
+                if (StringUtils.isBlank(sheetId.getSheetName())) {
+                    return workbook.createSheet(); //
+                }
+                else {
+                    return getOrCreateSheet(workbook, sheetId.getSheetName());
+                }
+            }
+            else {
+                if (StringUtils.isNotBlank(sheetId.getSheetName())) {
+                    String safeSheetName = WorkbookUtil.createSafeSheetName(sheetId.getSheetName());
+                    workbook.setSheetName(workbook.getSheetIndex(sheet), safeSheetName);
+                }
+                return sheet;
+            }
+        }
+    }
+
+    /**
      * Get sheet of workbook by name, create new if not exist.
      *
      * @param workbook
      * @param sheetName
      * @return
      */
-    public static Sheet getSheet(Workbook workbook, String sheetName) {
-        int sheetIndex = workbook.getSheetIndex(sheetName);
-        if (sheetIndex >= 0) {
-            return workbook.getSheetAt(sheetIndex);
-        }
-        else {
-            Sheet newSheet = workbook.createSheet(sheetName);
-            return newSheet;
-        }
-    }
-
-    /**
-     * Get sheet of workbook by name, create new if not existed.
-     *
-     * @param workbook
-     * @param sheetName
-     * @return
-     */
     public static Sheet getOrCreateSheet(Workbook workbook, String sheetName) {
-        int sheetIndex = workbook.getSheetIndex(sheetName);
-        if (sheetIndex >= 0) {
-            return workbook.getSheetAt(sheetIndex);
+        String safeSheetName = WorkbookUtil.createSafeSheetName(sheetName);
+        Sheet sheet = workbook.getSheet(safeSheetName);
+        if (sheet == null) {
+            return workbook.createSheet(safeSheetName);
         }
         else {
-            return workbook.createSheet();
+            return sheet;
         }
     }
 

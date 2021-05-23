@@ -10,15 +10,37 @@ import java.util.List;
 
 /**
  * Builder to build {@link SheetMeta}
+ * <pre>
+ * By annotated class type:
+ * use method  {@code fromAnnotatedClass()} or {@code fromAnnotatedObject()}to
+ * build items from an annotated class or it's instance object.
  *
- * @author allen
+ * By API dynamically:
+ * use method {@code itemBuilder()} create a new {@link MetaItemBuilder} to build items.
+ * use method {@code sheet()} to indicate a sheet by name or index.
+ * use method {@code items()} to collect all items from {@link MetaItemBuilder} to current sheet in builder.
+ * </pre>
+ *
+ * @author swiftech
+ * @see MetaItemBuilder
+ * @see SheetMeta
+ * @see Mapping
  */
 public class SheetMetaBuilder {
 
+    /**
+     * current sheet id
+     */
     private SheetId sheetId;
 
-    private MetaMap metaMap = new MetaMap();
+    /**
+     * mapping of sheet id to items.
+     */
+    private final MetaMap metaMap = new MetaMap();
 
+    /**
+     * Class fields of annotated class.
+     */
     private List<Field> fields;
 
     public SheetMetaBuilder sheet(int index) {
@@ -45,17 +67,9 @@ public class SheetMetaBuilder {
     }
 
     public SheetMetaBuilder items(MetaItemBuilder itemBuilder) {
-
-//        LinkedHashMap<SheetId, List<MetaItem>> itemGroups = itemBuilder.build().stream().collect(Collectors.groupingBy(
-//                metaItem -> metaItem.getArea().sheetId, LinkedHashMap::new, Collectors.toList()));
-//        for (SheetId sheetId : itemGroups.keySet()) {
-//            this.sheet(sheetId.getSheetName())
-//                    .items();
-//        }
-
         List<MetaItem> items = itemBuilder.build();
         if (sheetId == null) {
-            sheetId = SheetId.DEFAULT_SHEET;
+            sheetId = SheetId.DEFAULT_SHEET; // be the first sheet (names 'Sheet 1') if not provides
         }
         for (MetaItem item : items) {
             if (item.getArea().getSheetId() == null) {
@@ -65,17 +79,6 @@ public class SheetMetaBuilder {
         }
         return this;
     }
-
-//    public SheetMetaBuilder item(MetaItemBuilder itemBuilder) {
-//        MetaItem item = itemBuilder.build();
-//        if (sheetId == null) {
-//            sheetId = SheetId.DEFAULT_SHEET;
-//        }
-//        item.getArea().setSheetId(sheetId);
-//        metaMap.addItem(this.sheetId, item);
-//        return this;
-//    }
-
 
     /**
      * Load meta items from an object which is has fields with mapping annotation.
@@ -133,12 +136,16 @@ public class SheetMetaBuilder {
 
     /**
      * Builder to build a meta item.
+     * Use method newItem() to start build an item.
+     * Use method key() to add a key to identify the data value and area in sheet.
+     * Use method from(), to() or parse() to define area in sheet.
+     * Use method onCell() to do directly handling the POI cell object.
      */
     public static class MetaItemBuilder {
         // Translator to translate expression to actual positions in sheet.
         private static final Translator translator = new Translator();
 
-        private List<MetaItem> items = new ArrayList<>();
+        private final List<MetaItem> items = new ArrayList<>();
         private MetaItem item;
 
         public MetaItemBuilder newItem() {
@@ -157,6 +164,10 @@ public class SheetMetaBuilder {
             return this;
         }
 
+        public MetaItemBuilder onCell(CellHandler<? extends CellInfo> cellHandler) {
+            item.setCellHandler(cellHandler);
+            return this;
+        }
 
         public MetaItemBuilder parse(String expression) {
             Area area = translator.toArea(expression);

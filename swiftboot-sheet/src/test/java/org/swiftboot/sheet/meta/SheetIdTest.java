@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author allen
+ * @author swiftech
  * @see SheetId
  */
 public class SheetIdTest {
@@ -16,7 +16,7 @@ public class SheetIdTest {
      * Test the equation of SheetId by equals() and hashCode()
      */
     @Test
-    public void test(){
+    public void testEquals(){
         {
             SheetId sheetId00 = new SheetId(0);
             SheetId sheetId01 = new SheetId(0);

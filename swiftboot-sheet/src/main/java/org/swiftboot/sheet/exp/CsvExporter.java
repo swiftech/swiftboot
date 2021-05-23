@@ -17,9 +17,11 @@ import java.util.List;
 /**
  * Export data into a new or a templated CSV file.
  * Note:
- * not support export pictures, the exporter will ignore pictures if provides.
+ * multiple sheets and pictures export are not supported,
+ * if pictures provides, it will be ignored.
+ * if multiple sheet id provides, all items for these sheet ids will be exported to one CSV file.
  *
- * @author allen
+ * @author swiftech
  */
 public class CsvExporter extends BaseExporter {
 
@@ -36,8 +38,6 @@ public class CsvExporter extends BaseExporter {
     public <T> void export(InputStream templateFileStream, Object dataObject, OutputStream outputStream) throws IOException {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         SheetMeta meta = builder.fromAnnotatedObject(dataObject).build();
-//        SheetMeta meta = new SheetMeta();
-//        meta.fromAnnotatedObject(dataObject);
         this.export(templateFileStream, meta, outputStream);
     }
 
@@ -57,8 +57,7 @@ public class CsvExporter extends BaseExporter {
         }
         this.extendSheet(rows, exportMeta.findMaxPosition());
         exportMeta.setAllowFreeSize(true);
-        exportMeta.accept((key, startPos, rowCount, columnCount, value) -> {
-//            Object value = exportMeta.getValue(key);
+        exportMeta.accept((key, startPos, rowCount, columnCount, value, cellHandler) -> {
             if (value == null) {
                 throw new RuntimeException(String.format("No value provided to export for key: %s", key));
             }

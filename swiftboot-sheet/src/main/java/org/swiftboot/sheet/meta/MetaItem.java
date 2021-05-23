@@ -5,9 +5,9 @@ import org.apache.commons.lang3.ObjectUtils;
 /**
  * A meta item represent information about one cell or a group cells in sheet.
  *
- * @author allen
+ * @author swiftech
  */
-public class MetaItem implements Comparable<MetaItem>{
+public class MetaItem implements Comparable<MetaItem> {
 
     /**
      * Key to identify value in sheet.
@@ -15,6 +15,8 @@ public class MetaItem implements Comparable<MetaItem>{
     private String key;
 
     private Object value;
+
+    private CellHandler<?> cellHandler;
 
     /**
      * The area to access data in sheet.
@@ -25,7 +27,6 @@ public class MetaItem implements Comparable<MetaItem>{
     }
 
     /**
-     *
      * @param key
      * @param area
      */
@@ -35,7 +36,6 @@ public class MetaItem implements Comparable<MetaItem>{
     }
 
     /**
-     *
      * @param key
      * @param value
      * @param area
@@ -60,6 +60,14 @@ public class MetaItem implements Comparable<MetaItem>{
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    public CellHandler<? extends CellInfo> getCellHandler() {
+        return cellHandler;
+    }
+
+    public void setCellHandler(CellHandler<? extends CellInfo> cellHandler) {
+        this.cellHandler = cellHandler;
     }
 
     public Area getArea() {

@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Importer to import data from sheet file stream to a Map or an annotated object.
  *
- * @author allen
+ * @author swiftech
  */
 public interface Importer {
 

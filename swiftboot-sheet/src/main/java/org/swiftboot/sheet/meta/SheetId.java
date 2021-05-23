@@ -7,7 +7,7 @@ import java.util.Objects;
  * Either sheetIndex or sheetName are identical.
  * Two SheetId instances have same index are same, if not, same sheet name TODO.
  *
- * @author allen
+ * @author swiftech
  */
 public class SheetId {
 
@@ -40,11 +40,11 @@ public class SheetId {
         this.sheetName = sheetName;
     }
 
-    public int getSheetIndex() {
+    public Integer getSheetIndex() {
         return sheetIndex;
     }
 
-    public void setSheetIndex(int sheetIndex) {
+    public void setSheetIndex(Integer sheetIndex) {
         this.sheetIndex = sheetIndex;
     }
 

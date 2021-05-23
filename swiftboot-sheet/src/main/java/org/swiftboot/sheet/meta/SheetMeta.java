@@ -10,11 +10,9 @@ import java.util.stream.Stream;
 
 /**
  * Meta for accessing sheet data.
- * TODO
- * Use method addItem() to define relations between keys of data and areas in sheet directly.
- * Use method fromExpression() to define the relations if you want to indicate areas by expression.
  *
- * @author allen
+ * @author swiftech
+ * @see SheetMetaBuilder
  */
 public class SheetMeta {
 
@@ -60,18 +58,31 @@ public class SheetMeta {
      * @param visitor
      */
     public void accept(MetaVisitor visitor) {
+        this.accept(null, visitor);
+    }
+
+    /**
+     * Accept visitor to visit sheet and meta items.
+     *
+     * @param sheetVisitor
+     * @param itemVisitor
+     */
+    public void accept(SheetVisitor sheetVisitor, MetaVisitor itemVisitor) {
         if (this.metaMap == null || this.metaMap.isEmpty()) {
             throw new RuntimeException("Setup meta first");
         }
 
         for (SheetId sheetId : metaMap.data.keySet()) {
+            if (sheetVisitor != null) {
+                sheetVisitor.visitSheet(sheetId);
+            }
             List<MetaItem> items = metaMap.sheetItems(sheetId);
             for (MetaItem meta : items) {
                 Area area = meta.getArea();
                 Position startingPos = area.getStartPosition();
                 log.debug(String.format("'%s' -> %s", meta.getKey(), meta.getArea()));
                 if (area.isSingleCell()) {
-                    visitor.visitMetaItem(meta.getKey(), startingPos, 1, 1, meta.getValue());
+                    itemVisitor.visitMetaItem(meta.getKey(), startingPos, 1, 1, meta.getValue(), meta.getCellHandler());
                 }
                 else {
                     Integer rowCount = area.rowCount();
@@ -83,14 +94,14 @@ public class SheetMeta {
                     else if (area.isLine()) {
                         // Only one row is horizontal
                         if (rowCount != null && rowCount == 1) {
-                            visitor.visitMetaItem(meta.getKey(), startingPos, 1, columnCount, meta.getValue());
+                            itemVisitor.visitMetaItem(meta.getKey(), startingPos, 1, columnCount, meta.getValue(), meta.getCellHandler());
                         }
                         else if (columnCount != null && columnCount == 1) { // Only one column is vertical
-                            visitor.visitMetaItem(meta.getKey(), startingPos, rowCount, 1, meta.getValue());
+                            itemVisitor.visitMetaItem(meta.getKey(), startingPos, rowCount, 1, meta.getValue(), meta.getCellHandler());
                         }
                     }
                     else {
-                        visitor.visitMetaItem(meta.getKey(), startingPos, rowCount, columnCount, meta.getValue());
+                        itemVisitor.visitMetaItem(meta.getKey(), startingPos, rowCount, columnCount, meta.getValue(), meta.getCellHandler());
                     }
                 }
             }
@@ -115,6 +126,10 @@ public class SheetMeta {
         return overlayedArea.getEndPosition();
     }
 
+    /**
+     * Utils method that find max (end) position from all areas in all sheet.
+     * @return
+     */
     public Position findMaxPosition() {
         Area overlayedArea = new Area(0, 0, 0, 0);
         List<MetaItem> metaItems = this.metaMap.allItems();

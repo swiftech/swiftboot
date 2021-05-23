@@ -34,7 +34,7 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
  * $'sheet.0'.E2:E3 means cells from rom 2 to 3 in column 5 of the sheet names 'sheet.0'
  * $'sheet.1'.E2 means single cell in row 2 column 5 of the sheet names 'sheet.1'
  *
- * @author allen
+ * @author swiftech
  */
 public class Translator {
     private final Logger log = LoggerFactory.getLogger(Translator.class);

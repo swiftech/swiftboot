@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class CsvExporterTest extends BaseExporterTest {
 
@@ -127,7 +127,7 @@ public class CsvExporterTest extends BaseExporterTest {
         meta.setAllowFreeSize(true);// TODO remove it!
         meta.accept(new MetaVisitor() {
             @Override
-            public void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount, Object value) {
+            public void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount, Object value, CellHandler<?> cellHandler) {
                 System.out.printf("%s: %s %d rows %d columns%n", key, startPos, rowCount, columnCount);
             }
         });

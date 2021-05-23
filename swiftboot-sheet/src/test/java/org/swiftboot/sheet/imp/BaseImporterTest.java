@@ -3,15 +3,17 @@ package org.swiftboot.sheet.imp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.SwiftBootSheetFactory;
+import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class BaseImporterTest {
     protected SwiftBootSheetFactory factory = new SwiftBootSheetFactory();
@@ -47,18 +49,24 @@ public class BaseImporterTest {
                 .items(builder.itemBuilder().newItem().key("key-b2:c3").parse("b2:c3"))
 
                 // Empty
-                .items(builder.itemBuilder().newItem().key("key-x1").parse("x1")).build();
+                .items(builder.itemBuilder().newItem().key("key-x1").parse("x1"))
+
+                // multi sheets
+                .sheet(2)
+                .items(builder.itemBuilder().newItem().key("key-s3-a1").parse("A1"))
+
+                .build();
         return meta;
     }
 
-    protected void assertResults(Map<String, Object> result) {
+    protected void assertResults(Map<String, Object> result, String fileType) {
         for (String key : result.keySet()) {
             Object v = result.get(key);
             if (v == null) {
-                System.out.printf("%s = null%n", key);
+                System.out.printf("'%s' -> null%n", key);
             }
             else {
-                System.out.printf("%s = '%s'%n", key, result.get(key));
+                System.out.printf("'%s' -> '%s'%n", key, result.get(key));
             }
         }
         Assertions.assertEquals("b1", result.get("key-b1"));
@@ -71,15 +79,33 @@ public class BaseImporterTest {
 
         //Empty
         Assertions.assertNull(result.get("key-x1"));
+
+        // multi sheets
+        if (!SheetFileType.TYPE_CSV.equals(fileType)) {
+            Assertions.assertEquals("Sheet 3", result.get("key-s3-a1"));
+        }
     }
 
 
     @Test
     public void testShrinkMatrix() {
+        // abnormal  param
+        Assertions.assertNull(BaseImporter.shrinkMatrix(null, 1, 1));
+        Assertions.assertNull(BaseImporter.shrinkMatrix(new ArrayList<>(), 1, 1));
+        Assertions.assertNull(BaseImporter.shrinkMatrix(Arrays.asList(Arrays.asList()), 1, 1));
+
         List<List<Object>> matrix = Arrays.asList(Arrays.asList("hello", "world"), Arrays.asList("goodbye", "love"));
+
         System.out.println(BaseImporter.shrinkMatrix(matrix, 1, 1));
+        Assertions.assertEquals("hello", BaseImporter.shrinkMatrix(matrix, 1, 1));
+
         System.out.println(BaseImporter.shrinkMatrix(matrix, 1, null));
+        Assertions.assertEquals(Arrays.asList("hello", "world"), BaseImporter.shrinkMatrix(matrix, 1, null));
+
         System.out.println(BaseImporter.shrinkMatrix(matrix, null, 1));
+        Assertions.assertEquals(Arrays.asList("hello", "goodbye"), BaseImporter.shrinkMatrix(matrix, null, 1));
+
         System.out.println(BaseImporter.shrinkMatrix(matrix, 2, 2));
+        Assertions.assertEquals(matrix, BaseImporter.shrinkMatrix(matrix, 2, 2));
     }
 }

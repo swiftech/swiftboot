@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * entity for testing export.
  *
- * @author allen
+ * @author swiftech
  */
 public class ExportEntity {
 
@@ -31,7 +31,7 @@ public class ExportEntity {
     @Mapping("$'sheet.2'.B2:C3")
     private List<List<Object>> matrix2;
 
-    @Mapping("$'sheet.2'.G4")
+    @Mapping("$'sheet.3'.G4")
     private PictureLoader pictureToExport2;
 
     public String getValue1() {

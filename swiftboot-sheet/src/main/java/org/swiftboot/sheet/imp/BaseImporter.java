@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public abstract class BaseImporter implements Importer {
 
@@ -39,10 +39,8 @@ public abstract class BaseImporter implements Importer {
     @Override
     public <T> T importFromStream(InputStream templateFileStream, Class<T> resultClass) throws IOException {
         T ret = this.createResult(resultClass);
-//        SheetMeta meta = new SheetMeta();
         SheetMetaBuilder builder = new SheetMetaBuilder();
         SheetMeta meta = builder.fromAnnotatedClass(resultClass).build();
-//        List<Field> fields = meta.fromAnnotatedClass(resultClass);
         Map<String, Object> result = this.importFromStream(templateFileStream, meta);
         for (Field field : builder.getFields()) {
             Object value = result.get(field.getName());
@@ -62,7 +60,7 @@ public abstract class BaseImporter implements Importer {
      * @return
      */
     public static Object shrinkMatrix(List<List<Object>> matrix, Integer rowCount, Integer colCount) {
-        if (matrix == null || matrix.isEmpty() || matrix.get(0).isEmpty()) {
+        if (matrix == null || matrix.isEmpty() || matrix.get(0) == null || matrix.get(0).isEmpty()) {
             return null;
         }
         boolean isHorizontal = rowCount != null && rowCount == 1;

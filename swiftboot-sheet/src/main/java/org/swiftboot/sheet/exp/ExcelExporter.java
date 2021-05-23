@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.sheet.excel.ExcelCellInfo;
 import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
 
@@ -13,17 +14,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static org.swiftboot.sheet.util.PoiUtils.setValueToCell;
 
 /**
  * Export data into a new or a templated Excel 2003/2007 file.
  *
- * @author allen
+ * @author swiftech
  */
 public class ExcelExporter extends BaseExporter {
 
     Logger log = LoggerFactory.getLogger(ExcelExporter.class);
+
+    ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
 
     public ExcelExporter(String fileType) {
         super(fileType);
@@ -49,40 +52,39 @@ public class ExcelExporter extends BaseExporter {
     @Override
     public void export(InputStream templateFileStream, SheetMeta exportMeta, OutputStream outputStream) throws IOException {
         Workbook wb = PoiUtils.initWorkbook(templateFileStream, super.getFileType());
+        cellInfo.set(new ExcelCellInfo());
+        cellInfo.get().setWorkbook(wb);
 
-        exportMeta.getMetaMap().traverse((sheetId, items) -> {
+        final AtomicReference<Sheet> sheet = new AtomicReference<>();
+        exportMeta.setAllowFreeSize(true);
+        exportMeta.accept(sheetId -> {
             log.debug("Export to sheet: " + sheetId);
-            Sheet sheet = PoiUtils.getOrCreateSheet(wb, sheetId.getSheetName()); // TODO 可能没名字
-            if (sheet == null) {
-                System.out.println("No sheet found: " + sheetId);
-                return;
+            sheet.set(PoiUtils.getOrCreateSheet(wb, sheetId));
+            cellInfo.get().setSheet(sheet.get());
+            extendSheet(sheet.get(), exportMeta.findMaxPosition(sheetId));
+        }, (key, startPos, rowCount, columnCount, value, cellHandler) -> {
+            if (value instanceof PictureLoader) {
+                try {
+                    Picture pictureValue = ((PictureLoader) value).get();
+                    PoiUtils.writePicture(sheet.get(), startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-            extendSheet(sheet, exportMeta.findMaxPosition(sheetId));
-            exportMeta.setAllowFreeSize(true);
-            exportMeta.accept((key, startPos, rowCount, columnCount, value) -> {
-//            Object value = exportMeta.getValue(key);
-                if (value instanceof PictureLoader) {
-                    try {
-                        Picture pictureValue = ((PictureLoader) value).get();
-                        PoiUtils.writePicture(sheet, startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
+            else {
+                List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
+                if (matrix.isEmpty()) {
+                    return;
                 }
-                else {
-                    List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
-                    if (matrix.isEmpty()){
-                        return;
-                    }
-                    int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
-                    int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
-                    for (int i = 0; i < actualRowCount; i++) {
-                        List<Object> values = matrix.get(i);
-                        Row row = sheet.getRow(startPos.getRow() + i);
-                        setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values);
-                    }
+                int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
+                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
+                for (int i = 0; i < actualRowCount; i++) {
+                    cellInfo.get().setRowIdx(i);
+                    List<Object> values = matrix.get(i);
+                    Row row = sheet.get().getRow(startPos.getRow() + i);
+                    setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values, (CellHandler<ExcelCellInfo>) cellHandler);
                 }
-            });
+            }
         });
         wb.write(outputStream);
     }
@@ -154,17 +156,30 @@ public class ExcelExporter extends BaseExporter {
         }
     }
 
-    private void setValuesToRow(Row row, Position startPos, int columnCount, List<Object> values) {
+
+    /**
+     * @param row
+     * @param startPos
+     * @param columnCount how many columns to write value, could be greater or less than data size.
+     * @param values
+     * @param cellHandler
+     */
+    private void setValuesToRow(Row row, Position startPos, int columnCount, List<Object> values, CellHandler<ExcelCellInfo> cellHandler) {
         if (row == null || startPos == null) {
             return;
         }
         int colCount = Math.min(Math.max(columnCount, 1), values.size()); // at least one and not more than size of data.
         for (int j = 0; j < colCount; j++) {
+            cellInfo.get().setColIdx(j);
             Cell cell = row.getCell(startPos.getColumn() + j);
             if (cell == null) {
                 cell = row.createCell(startPos.getColumn() + j);
             }
-            setValueToCell(cell, values.get(j));
+            PoiUtils.setValueToCell(cell, values.get(j));
+            cellInfo.get().setCell(cell);
+            if (cellHandler != null) {
+                cellHandler.onCell(cellInfo.get());
+            }
         }
     }
 

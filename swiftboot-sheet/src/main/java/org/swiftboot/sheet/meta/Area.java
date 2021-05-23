@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Represent an area in a sheet
  *
- * @author allen
+ * @author swiftech
  */
 public class Area {
 

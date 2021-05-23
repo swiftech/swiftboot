@@ -3,6 +3,7 @@ package org.swiftboot.sheet.meta;
 /**
  * The visitor to meta.
  */
+@FunctionalInterface
 public interface MetaVisitor {
 
     /**
@@ -14,5 +15,6 @@ public interface MetaVisitor {
      * @param columnCount expect column count
      * @param value value (for export when needed)
      */
-    void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount, Object value);
+    void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount, Object value,
+                       CellHandler<? extends CellInfo> cellHandler);
 }

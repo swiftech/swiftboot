@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  *
- * @author allen
+ * @author swiftech
  * @see Expression
  */
 class ExpressionTest {
@@ -107,5 +107,13 @@ class ExpressionTest {
     @Test
     void splitAsVerticalRange() {
         Assertions.assertArrayEquals(new String[]{"a1","2"}, expVertical2.splitAsVerticalRange());
+    }
+
+    @Test
+    public void testIllegal() {
+        Assertions.assertThrows(Exception.class, () -> {
+            new Expression("");
+        });
+
     }
 }

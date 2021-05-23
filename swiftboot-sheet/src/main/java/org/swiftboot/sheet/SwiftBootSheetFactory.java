@@ -10,7 +10,7 @@ import org.swiftboot.sheet.imp.Importer;
 import static org.swiftboot.sheet.constant.SheetFileType.*;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class SwiftBootSheetFactory {
 

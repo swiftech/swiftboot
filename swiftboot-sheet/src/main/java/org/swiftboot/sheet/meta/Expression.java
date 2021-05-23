@@ -8,7 +8,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  * Expression like Excel's cell expression.
  * More specific parsing will be in {@link Translator}
  *
- * @author allen
+ * @author swiftech
  * @see Translator
  */
 public class Expression {
@@ -17,6 +17,9 @@ public class Expression {
     private String cellsExp;
 
     public Expression(String expression) {
+        if (StringUtils.isBlank(expression)) {
+            throw new RuntimeException("Expression cannot be empty");
+        }
         String[] split = splitByWholeSeparator(expression, "'.");
         if (split != null) {
             if (split.length == 2) {

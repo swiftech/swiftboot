@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 /**
  * Position in sheet
  *
- * @author allen
+ * @author swiftech
  */
 public class Position {
 

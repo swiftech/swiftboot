@@ -9,7 +9,7 @@ import java.io.OutputStream;
 /**
  * Exporter to export data from an annotated object or a Map in {@link SheetMeta} to a sheet file stream.
  *
- * @author allen
+ * @author swiftech
  */
 public interface Exporter {
 

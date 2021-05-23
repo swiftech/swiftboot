@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Test {@code Translator}
  *
- * @author allen
+ * @author swiftech
  * @see Translator
  */
 class TranslatorTest {
@@ -118,6 +118,7 @@ class TranslatorTest {
     @Test
     public void testIllegalExpression() {
         Translator translator = new Translator();
+        Assertions.assertThrows(Exception.class, () -> translator.toArea(""));
         Assertions.assertThrows(Exception.class, () -> translator.toArea("A:J"));
         Assertions.assertThrows(Exception.class, () -> translator.toArea("1:10"));
     }
