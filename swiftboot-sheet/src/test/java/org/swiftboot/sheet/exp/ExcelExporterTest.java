@@ -121,13 +121,13 @@ public class ExcelExporterTest extends BaseExporterTest {
         SheetMeta meta;
         meta = builder.items(builder.itemBuilder()
                 .newItem().key("single cell").parse("B2").value(pictureLoader)
-                .newItem().key("matrix").parse("B2:C5").value(pictureLoader)
+                .newItem().key("matrix").parse("B2:C5").merge().value(pictureLoader)
                 .newItem().key("horizontal").parse("B3:C3").value(pictureLoader)
                 .newItem().key("vertical").parse("D2:D5").value(pictureLoader)
                 .newItem().key("single cell by position").from(10, 10).value(pictureLoader)).build();
 
         Assertions.assertDoesNotThrow(() -> {
-            try (OutputStream outputStream = super.createOutputStream(false, SheetFileType.TYPE_XLSX)) {
+            try (OutputStream outputStream = super.createOutputStream(false, SheetFileType.TYPE_XLSX, "picutures")) {
                 xlsxExporter.export(meta, outputStream);
             } catch (Exception e) {
                 e.printStackTrace();

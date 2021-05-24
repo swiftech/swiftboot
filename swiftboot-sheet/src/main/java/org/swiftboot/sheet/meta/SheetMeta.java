@@ -82,7 +82,7 @@ public class SheetMeta {
                 Position startingPos = area.getStartPosition();
                 log.debug(String.format("'%s' -> %s", meta.getKey(), meta.getArea()));
                 if (area.isSingleCell()) {
-                    itemVisitor.visitMetaItem(meta.getKey(), startingPos, 1, 1, meta.getValue(), meta.getCellHandler());
+                    itemVisitor.visitMetaItem(meta, startingPos, 1, 1);
                 }
                 else {
                     Integer rowCount = area.rowCount();
@@ -94,14 +94,14 @@ public class SheetMeta {
                     else if (area.isLine()) {
                         // Only one row is horizontal
                         if (rowCount != null && rowCount == 1) {
-                            itemVisitor.visitMetaItem(meta.getKey(), startingPos, 1, columnCount, meta.getValue(), meta.getCellHandler());
+                            itemVisitor.visitMetaItem(meta, startingPos, 1, columnCount);
                         }
                         else if (columnCount != null && columnCount == 1) { // Only one column is vertical
-                            itemVisitor.visitMetaItem(meta.getKey(), startingPos, rowCount, 1, meta.getValue(), meta.getCellHandler());
+                            itemVisitor.visitMetaItem(meta, startingPos, rowCount, 1);
                         }
                     }
                     else {
-                        itemVisitor.visitMetaItem(meta.getKey(), startingPos, rowCount, columnCount, meta.getValue(), meta.getCellHandler());
+                        itemVisitor.visitMetaItem(meta, startingPos, rowCount, columnCount);
                     }
                 }
             }

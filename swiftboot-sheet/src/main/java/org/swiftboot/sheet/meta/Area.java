@@ -127,6 +127,15 @@ public class Area {
         return new Area(nearest, farthest);
     }
 
+    /**
+     * Dynamic area is size unknown.
+     *
+     * @return
+     */
+    public boolean isDynamic() {
+        return this.endPosition == null || this.endPosition.getRow() == null || this.endPosition.getColumn() == null;
+    }
+
     public SheetId getSheetId() {
         return sheetId;
     }

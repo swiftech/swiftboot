@@ -7,6 +7,7 @@ import java.io.IOException;
  *
  * @author swiftech
  */
+@FunctionalInterface
 public interface PictureLoader {
 
     /**

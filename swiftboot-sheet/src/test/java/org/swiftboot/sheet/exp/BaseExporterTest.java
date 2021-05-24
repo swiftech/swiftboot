@@ -89,9 +89,17 @@ public class BaseExporterTest extends BaseTest {
                         .newItem().key("key-d3:f3").parse("d3:f3").value(horizontal) // horizontal line, 999 shouldn't be exported
                         .newItem().key("key-d8:?8").parse("d8:?8").value(horizontal2)) // horizontal line with uncertain size, all exported
 
+                // matrix
                 .items(builder.itemBuilder()
                         .newItem().key("key-d4:f6").parse("d4:f6").value(matrix)
-                        .newItem().key("key-c14:?").parse("c14:?").value(matrix)).build();
+                        .newItem().key("key-c14:?").parse("c14:?").value(matrix))
+
+                // merged matrix
+                .items(builder.itemBuilder()
+                        .newItem().key("merged-h14:?").parse("h14:?").merge().value(matrix))
+
+                .build();
+
         return builder;
     }
 

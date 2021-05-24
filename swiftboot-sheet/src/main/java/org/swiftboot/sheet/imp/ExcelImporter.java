@@ -52,8 +52,8 @@ public class ExcelImporter extends BaseImporter {
                 return;
             }
             cellInfo.get().setSheet(sheet.get());
-        }, (key, startPos, rowCount, columnCount, v, cellHandler) -> {
-            log.trace(String.format("Item: '%s' %s-%s-%s", key, startPos, rowCount, columnCount));
+        }, (metaItem, startPos, rowCount, columnCount) -> {
+            log.trace(String.format("Item: '%s' %s-%s-%s", metaItem.getKey(), startPos, rowCount, columnCount));
             List<List<Object>> matrix = new ArrayList<>();
             for (int i = 0; i < rowCount; i++) {
                 cellInfo.get().setRowIdx(i);
@@ -63,10 +63,10 @@ public class ExcelImporter extends BaseImporter {
                     log.warn("No row found at " + rowIdx);
                     continue;
                 }
-                matrix.add(getValuesInRow(row, startPos, columnCount, (CellHandler<ExcelCellInfo>) cellHandler));
+                matrix.add(getValuesInRow(row, startPos, columnCount, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler()));
             }
             Object value = shrinkMatrix(matrix, rowCount, columnCount);
-            ret.put(key, value);
+            ret.put(metaItem.getKey(), value);
         });
 
         return ret;

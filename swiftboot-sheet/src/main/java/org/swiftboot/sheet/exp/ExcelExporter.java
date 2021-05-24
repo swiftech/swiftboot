@@ -1,12 +1,12 @@
 package org.swiftboot.sheet.exp;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
+import org.swiftboot.sheet.meta.Picture;
 import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
 
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -55,34 +56,59 @@ public class ExcelExporter extends BaseExporter {
         cellInfo.set(new ExcelCellInfo());
         cellInfo.get().setWorkbook(wb);
 
-        final AtomicReference<Sheet> sheet = new AtomicReference<>();
+        final AtomicReference<Sheet> sheetRef = new AtomicReference<>();
         exportMeta.setAllowFreeSize(true);
         exportMeta.accept(sheetId -> {
             log.debug("Export to sheet: " + sheetId);
-            sheet.set(PoiUtils.getOrCreateSheet(wb, sheetId));
-            cellInfo.get().setSheet(sheet.get());
-            extendSheet(sheet.get(), exportMeta.findMaxPosition(sheetId));
-        }, (key, startPos, rowCount, columnCount, value, cellHandler) -> {
-            if (value instanceof PictureLoader) {
+            sheetRef.set(PoiUtils.getOrCreateSheet(wb, sheetId));
+            cellInfo.get().setSheet(sheetRef.get());
+            extendSheet(sheetRef.get(), exportMeta.findMaxPosition(sheetId));
+        }, (metaItem, startPos, rowCount, columnCount) -> {
+            Sheet sheet = sheetRef.get();
+            if (metaItem.getValue() instanceof PictureLoader) {
                 try {
-                    Picture pictureValue = ((PictureLoader) value).get();
-                    PoiUtils.writePicture(sheet.get(), startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
+                    Picture pictureValue = ((PictureLoader) metaItem.getValue()).get();
+                    PoiUtils.writePicture(sheetRef.get(), startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+                // merge all cells in the picture area
+                if (metaItem.isMerge() && !metaItem.getArea().isDynamic()){
+                    sheet.addMergedRegion(new CellRangeAddress(startPos.getRow(), startPos.getRow() + rowCount - 1
+                            , startPos.getColumn(), startPos.getColumn() + columnCount - 1));
+                }
             }
             else {
-                List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
+                List<List<Object>> matrix = asMatrix(metaItem.getValue(), rowCount, columnCount);
                 if (matrix.isEmpty()) {
                     return;
                 }
                 int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
                 int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
-                for (int i = 0; i < actualRowCount; i++) {
-                    cellInfo.get().setRowIdx(i);
-                    List<Object> values = matrix.get(i);
-                    Row row = sheet.get().getRow(startPos.getRow() + i);
-                    setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values, (CellHandler<ExcelCellInfo>) cellHandler);
+                if (metaItem.isMerge()) {
+                    // merge cells in area
+                    sheet.addMergedRegion(new CellRangeAddress(startPos.getRow(), startPos.getRow() + actualRowCount - 1
+                            , startPos.getColumn(), startPos.getColumn() + actualColumnCount - 1));
+
+                    // merge values into lines
+                    Optional<String> optMergeValues = matrix.stream().map(objects -> StringUtils.join(objects, ","))
+                            .reduce((s, s2) -> String.format("%s\n%s", s, s2));
+                    if (optMergeValues.isPresent()) {
+                        Cell cell = sheet.getRow(startPos.getRow()).getCell(startPos.getColumn());
+                        PoiUtils.setValueToCell(cell, optMergeValues.get());
+                        CellStyle cs = wb.createCellStyle();
+                        cs.setAlignment(HorizontalAlignment.CENTER);
+                        cs.setVerticalAlignment(VerticalAlignment.CENTER);
+                        cell.setCellStyle(cs);
+                    }
+                }
+                else {
+                    for (int i = 0; i < actualRowCount; i++) {
+                        cellInfo.get().setRowIdx(i);
+                        List<Object> values = matrix.get(i);
+                        Row row = sheetRef.get().getRow(startPos.getRow() + i);
+                        setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler());
+                    }
                 }
             }
         });

@@ -127,8 +127,8 @@ public class CsvExporterTest extends BaseExporterTest {
         meta.setAllowFreeSize(true);// TODO remove it!
         meta.accept(new MetaVisitor() {
             @Override
-            public void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount, Object value, CellHandler<?> cellHandler) {
-                System.out.printf("%s: %s %d rows %d columns%n", key, startPos, rowCount, columnCount);
+            public void visitMetaItem(MetaItem metaItem, Position startPos, Integer rowCount, Integer columnCount) {
+                System.out.printf("%s: %s %d rows %d columns%n", metaItem.getKey(), startPos, rowCount, columnCount);
             }
         });
     }

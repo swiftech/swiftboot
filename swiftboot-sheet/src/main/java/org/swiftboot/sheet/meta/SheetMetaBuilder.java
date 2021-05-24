@@ -207,6 +207,16 @@ public class SheetMetaBuilder {
             return this;
         }
 
+        /**
+         * Merge all cells in area, merge all values into multi-line text and center the text in the merged cell.
+         *
+         * @return
+         */
+        public MetaItemBuilder merge(){
+            item.setMerge(true);
+            return this;
+        }
+
         public List<MetaItem> build() {
             return items;
         }

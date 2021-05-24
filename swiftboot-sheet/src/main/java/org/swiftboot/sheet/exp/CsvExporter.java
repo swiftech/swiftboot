@@ -57,15 +57,15 @@ public class CsvExporter extends BaseExporter {
         }
         this.extendSheet(rows, exportMeta.findMaxPosition());
         exportMeta.setAllowFreeSize(true);
-        exportMeta.accept((key, startPos, rowCount, columnCount, value, cellHandler) -> {
-            if (value == null) {
-                throw new RuntimeException(String.format("No value provided to export for key: %s", key));
+        exportMeta.accept((metaItem, startPos, rowCount, columnCount) -> {
+            if (metaItem.getValue() == null) {
+                throw new RuntimeException(String.format("No value provided to export for key: %s", metaItem.getKey()));
             }
-            if (value instanceof PictureLoader) {
+            if (metaItem.getValue() instanceof PictureLoader) {
                 log.warn("Picture is not supported to export to CSV, just ignore ");
             }
             else {
-                List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
+                List<List<Object>> matrix = asMatrix(metaItem.getValue(), rowCount, columnCount);
                 if (matrix.isEmpty()){
                     return;
                 }

@@ -23,6 +23,11 @@ public class MetaItem implements Comparable<MetaItem> {
      */
     private Area area;
 
+    /**
+     * Whether merge cells in area (with data merged and display in center)
+     */
+    private boolean merge;
+
     public MetaItem() {
     }
 
@@ -76,6 +81,14 @@ public class MetaItem implements Comparable<MetaItem> {
 
     public void setArea(Area area) {
         this.area = area;
+    }
+
+    public boolean isMerge() {
+        return merge;
+    }
+
+    public void setMerge(boolean merge) {
+        this.merge = merge;
     }
 
     @Override
