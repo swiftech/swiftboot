@@ -151,8 +151,8 @@ public class ExcelExporterTest extends BaseExporterTest {
                     System.out.printf("%s - %s - %s (%s.%s)%n", info.getWorkbook(), info.getSheet(), info.getCell(), info.getRowIdx(), info.getColIdx());
                     CellStyle cellStyle = info.getWorkbook().createCellStyle();
                     if ((info.getRowIdx() + info.getColIdx()) % 2 == 0) {
-                        cellStyle.setFillBackgroundColor(IndexedColors.AQUA.getIndex());
-                        cellStyle.setFillPattern(FillPatternType.BIG_SPOTS);
+                        cellStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+                        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                         info.getCell().setCellStyle(cellStyle);
                     }
                 }));

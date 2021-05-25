@@ -6,6 +6,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
+import org.swiftboot.sheet.excel.ExcelSheetInfo;
 import org.swiftboot.sheet.meta.Picture;
 import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
@@ -25,9 +26,9 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ExcelExporter extends BaseExporter {
 
-    Logger log = LoggerFactory.getLogger(ExcelExporter.class);
+    private final Logger log = LoggerFactory.getLogger(ExcelExporter.class);
 
-    ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
+    private ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
 
     public ExcelExporter(String fileType) {
         super(fileType);
@@ -63,19 +64,27 @@ public class ExcelExporter extends BaseExporter {
             sheetRef.set(PoiUtils.getOrCreateSheet(wb, sheetId));
             cellInfo.get().setSheet(sheetRef.get());
             extendSheet(sheetRef.get(), exportMeta.findMaxPosition(sheetId));
+            // callback to user client to handle the sheet.
+            if (exportMeta.getSheetHandler() != null) {
+                ExcelSheetInfo sheetInfo = new ExcelSheetInfo(wb, sheetRef.get());
+                exportMeta.getSheetHandler().onSheet(sheetInfo);
+            }
         }, (metaItem, startPos, rowCount, columnCount) -> {
             Sheet sheet = sheetRef.get();
+
+            // merge all cells in the specific area.
+            if (metaItem.isMerge() && !metaItem.getArea().isDynamic() && (rowCount > 1 || columnCount > 1)) {
+                int regionIdx = sheet.addMergedRegion(new CellRangeAddress(startPos.getRow(), startPos.getRow() + rowCount - 1,
+                        startPos.getColumn(), startPos.getColumn() + columnCount - 1));
+
+            }
+
             if (metaItem.getValue() instanceof PictureLoader) {
                 try {
                     Picture pictureValue = ((PictureLoader) metaItem.getValue()).get();
                     PoiUtils.writePicture(sheetRef.get(), startPos, startPos.clone().moveRows(rowCount).moveColumns(columnCount), pictureValue);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
-                }
-                // merge all cells in the picture area
-                if (metaItem.isMerge() && !metaItem.getArea().isDynamic()){
-                    sheet.addMergedRegion(new CellRangeAddress(startPos.getRow(), startPos.getRow() + rowCount - 1
-                            , startPos.getColumn(), startPos.getColumn() + columnCount - 1));
                 }
             }
             else {
@@ -85,11 +94,17 @@ public class ExcelExporter extends BaseExporter {
                 }
                 int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
                 int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
-                if (metaItem.isMerge()) {
-                    // merge cells in area
-                    sheet.addMergedRegion(new CellRangeAddress(startPos.getRow(), startPos.getRow() + actualRowCount - 1
-                            , startPos.getColumn(), startPos.getColumn() + actualColumnCount - 1));
 
+//                if (metaItem.getCopyArea() != null) {
+//                    // shift rows if insert
+//                    if (metaItem.isInsert()) {
+//                        sheet.shiftRows(startPos.getRow(), sheet.getLastRowNum(), actualRowCount, true, true);
+//
+//                    }
+//                }
+
+                //
+                if (metaItem.isMerge()) {
                     // merge values into lines
                     Optional<String> optMergeValues = matrix.stream().map(objects -> StringUtils.join(objects, ","))
                             .reduce((s, s2) -> String.format("%s\n%s", s, s2));
@@ -201,8 +216,10 @@ public class ExcelExporter extends BaseExporter {
             if (cell == null) {
                 cell = row.createCell(startPos.getColumn() + j);
             }
-            PoiUtils.setValueToCell(cell, values.get(j));
+            Object cellValue = values.get(j);
+            PoiUtils.setValueToCell(cell, cellValue);
             cellInfo.get().setCell(cell);
+            cellInfo.get().setValue(cellValue);
             if (cellHandler != null) {
                 cellHandler.onCell(cellInfo.get());
             }

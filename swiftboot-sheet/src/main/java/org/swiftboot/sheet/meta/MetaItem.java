@@ -28,6 +28,9 @@ public class MetaItem implements Comparable<MetaItem> {
      */
     private boolean merge;
 
+    private Area copyArea;
+    private boolean insert;
+
     public MetaItem() {
     }
 
@@ -89,6 +92,22 @@ public class MetaItem implements Comparable<MetaItem> {
 
     public void setMerge(boolean merge) {
         this.merge = merge;
+    }
+
+    public Area getCopyArea() {
+        return copyArea;
+    }
+
+    public void setCopyArea(Area copyArea) {
+        this.copyArea = copyArea;
+    }
+
+    public boolean isInsert() {
+        return insert;
+    }
+
+    public void setInsert(boolean insert) {
+        this.insert = insert;
     }
 
     @Override

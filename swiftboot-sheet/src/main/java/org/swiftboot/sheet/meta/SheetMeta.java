@@ -28,6 +28,8 @@ public class SheetMeta {
      */
     private boolean isAllowFreeSize = false;
 
+    private SheetHandler<?> sheetHandler;
+
     public SheetMeta() {
     }
 
@@ -128,6 +130,7 @@ public class SheetMeta {
 
     /**
      * Utils method that find max (end) position from all areas in all sheet.
+     *
      * @return
      */
     public Position findMaxPosition() {
@@ -148,5 +151,11 @@ public class SheetMeta {
         isAllowFreeSize = allowFreeSize;
     }
 
+    public SheetHandler getSheetHandler() {
+        return sheetHandler;
+    }
 
+    public void setSheetHandler(SheetHandler sheetHandler) {
+        this.sheetHandler = sheetHandler;
+    }
 }

@@ -8,6 +8,9 @@ import java.util.*;
  * @author swiftech
  */
 public class MetaMap {
+    /**
+     * mapping from sheet id to meta items in the order added.
+     */
     Map<SheetId, List<MetaItem>> data = new LinkedHashMap<>();
 
     /**

@@ -3,14 +3,14 @@ package org.swiftboot.sheet.excel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.swiftboot.sheet.meta.CellInfo;
+import org.swiftboot.sheet.meta.BaseCellInfo;
 
 /**
  * Cell info for MS-Excel
  *
  * @author swiftech
  */
-public class ExcelCellInfo implements CellInfo {
+public class ExcelCellInfo extends BaseCellInfo {
     /**
      * The workbook object that the cell object belongs
      */
