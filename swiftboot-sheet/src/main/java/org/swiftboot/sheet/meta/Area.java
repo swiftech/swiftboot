@@ -21,16 +21,21 @@ public class Area {
 
     /**
      * End position of this area, inclusive.
-     * this can be null which means uncertain rows and columns of this area.
+     * this can be null which means an area only has a single cell.
+     * row or column of this position can be null which means uncertain rows or columns of this area.
      */
     Position endPosition;
 
     public static Area newHorizontal(Position startPosition, int length) {
-        return new Area(startPosition, new Position(startPosition.getRow(), startPosition.getColumn() + length));
+        return new Area(startPosition, new Position(startPosition.getRow(), startPosition.getColumn() + length - 1));
     }
 
     public static Area newVertical(Position startPosition, int length) {
-        return new Area(startPosition, new Position(startPosition.getRow() + length, startPosition.getColumn()));
+        return new Area(startPosition, new Position(startPosition.getRow() + length - 1, startPosition.getColumn()));
+    }
+
+    public static Area newArea(Position startPosition, int rows, int cols) {
+        return new Area(startPosition, new Position(startPosition.getRow() + rows - 1, startPosition.getColumn() + cols - 1));
     }
 
     public Area(Position startPosition) {
@@ -133,7 +138,7 @@ public class Area {
      * @return
      */
     public boolean isDynamic() {
-        return this.endPosition == null || this.endPosition.getRow() == null || this.endPosition.getColumn() == null;
+        return this.endPosition != null && (this.endPosition.getRow() == null || this.endPosition.getColumn() == null);
     }
 
     public SheetId getSheetId() {
@@ -164,8 +169,8 @@ public class Area {
     public String toString() {
         return "Area{" +
                 "sheetId=" + sheetId +
-                ", startPosition=" + startPosition +
-                ", endPosition=" + endPosition +
+                ", start=" + startPosition +
+                ", end=" + endPosition +
                 '}';
     }
 

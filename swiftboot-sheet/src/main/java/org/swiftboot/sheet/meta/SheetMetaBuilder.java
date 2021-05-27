@@ -1,6 +1,8 @@
 package org.swiftboot.sheet.meta;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.annatation.Mapping;
 import org.swiftboot.util.BeanUtils;
 
@@ -27,6 +29,8 @@ import java.util.List;
  * @see Mapping
  */
 public class SheetMetaBuilder {
+
+    private final Logger log = LoggerFactory.getLogger(SheetMetaBuilder.class);
 
     /**
      * current sheet id
@@ -72,6 +76,14 @@ public class SheetMetaBuilder {
             sheetId = SheetId.DEFAULT_SHEET; // be the first sheet (names 'Sheet 1') if not provides
         }
         for (MetaItem item : items) {
+            if (item == null) {
+                log.warn("One meta item is null, ignored");
+                continue;
+            }
+            if (item.getArea() == null) {
+                log.warn(String.format("Meta item's area is null: %s, ignored", item.getKey()));
+                continue;
+            }
             if (item.getArea().getSheetId() == null) {
                 item.getArea().setSheetId(sheetId);
             }
@@ -175,6 +187,11 @@ public class SheetMetaBuilder {
             return this;
         }
 
+        public MetaItemBuilder from(String expression){
+            Position position = translator.toSinglePosition(expression);
+            return from(position);
+        }
+
         public MetaItemBuilder from(Position startPosition) {
             if (item.getArea() == null) {
                 item.setArea(new Area(startPosition));
@@ -189,6 +206,11 @@ public class SheetMetaBuilder {
             }
             item.getArea().setStartPosition(new Position(rowIdx, columnIdx));
             return this;
+        }
+
+        public MetaItemBuilder to(String expression){
+            Position position = translator.toSinglePosition(expression);
+            return to(position);
         }
 
         public MetaItemBuilder to(Position endPosition) {
@@ -212,9 +234,42 @@ public class SheetMetaBuilder {
          *
          * @return
          */
-        public MetaItemBuilder merge(){
+        public MetaItemBuilder merge() {
             item.setMerge(true);
             return this;
+        }
+
+        public MetaItemBuilder copy(String expression) {
+            return this.copy(expression, false);
+        }
+
+        /**
+         * Copy cells style from one area selected by expression to the target area like tiling,
+         * if the target area has uncertain size, actual size(determined by data size) will be applied.
+         * If the target area is larger than copied area, the cells style will be repeated.
+         *
+         * @param expression the expression should be non-dynamic, otherwise the copy will not be executed.
+         * @param insert
+         * @return
+         */
+        public MetaItemBuilder copy(String expression, boolean insert) {
+            item.setCopyArea(translator.toArea(expression));
+            item.setInsert(insert);
+            return this;
+        }
+
+        public MetaItemBuilder copy(Area area) {
+            return this.copy(area, false);
+        }
+
+        public MetaItemBuilder copy(Area area, boolean insert) {
+            item.setCopyArea(area);
+            item.setInsert(insert);
+            return this;
+        }
+
+        public Translator translator(){
+            return translator;
         }
 
         public List<MetaItem> build() {

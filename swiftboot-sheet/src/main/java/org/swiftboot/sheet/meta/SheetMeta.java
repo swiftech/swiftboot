@@ -143,6 +143,15 @@ public class SheetMeta {
         return overlayedArea.getEndPosition();
     }
 
+    public void print() {
+        metaMap.traverse((sheetId, items) -> {
+            System.out.println(sheetId);
+            for (MetaItem item : items) {
+                System.out.println(item);
+            }
+        });
+    }
+
     public boolean isAllowFreeSize() {
         return isAllowFreeSize;
     }

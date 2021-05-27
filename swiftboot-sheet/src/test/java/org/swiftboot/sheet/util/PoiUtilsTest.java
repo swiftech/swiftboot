@@ -6,11 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.BaseTest;
 import org.swiftboot.sheet.constant.SheetFileType;
-import org.swiftboot.sheet.meta.Picture;
-import org.swiftboot.sheet.meta.Position;
-import org.swiftboot.sheet.meta.SheetId;
+import org.swiftboot.sheet.meta.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -104,6 +103,36 @@ public class PoiUtilsTest extends BaseTest {
         try (OutputStream outputStream = super.createOutputStream(false, SheetFileType.TYPE_XLSX)) {
             workbook.write(outputStream);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testCopyCells() {
+        try (InputStream insXls = loadTemplate(SheetFileType.TYPE_XLS)) {
+            Workbook workbook = PoiUtils.initWorkbook(insXls, SheetFileType.TYPE_XLS);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            // copy single cell to larger area
+            PoiUtils.copyCells(sheet, new Area(new Position(0,0)), new Area(new Position(8, 8), new Position(9, 9)));
+
+            // copy 3x3 to 11x11
+            PoiUtils.copyCells(sheet, new Area(1, 1, 3, 3), new Area(10, 10, 20, 20));
+
+            // copy first cell to line contains it.
+            Translator translator = new Translator();
+            PoiUtils.copyCells(sheet, translator.toArea("M1"), translator.toArea("M1:Q1"));
+
+            // copy large area to small area
+            PoiUtils.copyCells(sheet, Area.newArea(new Position(0,0), 5, 5),
+                    new Area(new Position(15, 0), new Position(17, 2)));
+
+            try (OutputStream outputStream = super.createOutputStream(true, SheetFileType.TYPE_XLS, "copy_cells")) {
+                workbook.write(outputStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

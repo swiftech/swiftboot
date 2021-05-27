@@ -114,8 +114,12 @@ public class MetaItem implements Comparable<MetaItem> {
     public String toString() {
         return "MetaItem{" +
                 "key='" + key + '\'' +
-                ", value=" + value +
                 ", area=" + area +
+                ", merge=" + merge +
+                ", value=" + value +
+                ", copyArea=" + copyArea +
+                ", insert=" + insert +
+                ", cellHandler=" + cellHandler +
                 '}';
     }
 

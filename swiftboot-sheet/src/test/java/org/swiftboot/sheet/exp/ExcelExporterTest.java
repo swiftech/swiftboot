@@ -90,9 +90,13 @@ public class ExcelExporterTest extends BaseExporterTest {
             Workbook wb = PoiUtils.initWorkbook(null, SheetFileType.TYPE_XLSX);
             Sheet sheet = PoiUtils.firstSheet(wb);
             xlsExporter.extendSheet(sheet, new Position(0, 0));
-            System.out.println(sheet.getPhysicalNumberOfRows());
+            Assertions.assertEquals(1, sheet.getPhysicalNumberOfRows());
+            Assertions.assertEquals(1, sheet.getRow(0).getLastCellNum());
             xlsExporter.extendSheet(sheet, new Position(99, 99));
-            System.out.println(sheet.getPhysicalNumberOfRows());
+            Assertions.assertEquals(100, sheet.getPhysicalNumberOfRows());
+            for (int i = 0; i < 100; i++) {
+                Assertions.assertEquals(100, sheet.getRow(i).getLastCellNum());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,9 +109,13 @@ public class ExcelExporterTest extends BaseExporterTest {
             Workbook wb = PoiUtils.initWorkbook(insXlsx, SheetFileType.TYPE_XLSX);
             Sheet sheet = PoiUtils.firstSheet(wb);
             xlsxExporter.extendSheet(sheet, new Position(0, 0));
-            System.out.println(sheet.getPhysicalNumberOfRows());
+            Assertions.assertTrue(sheet.getPhysicalNumberOfRows() >= 1);
+            Assertions.assertTrue(sheet.getRow(0).getLastCellNum() >= 1);
             xlsxExporter.extendSheet(sheet, new Position(99, 99));
-            System.out.println(sheet.getPhysicalNumberOfRows());
+            Assertions.assertTrue(sheet.getPhysicalNumberOfRows() >= 100);
+            for (int i = 0; i < 100; i++) {
+                Assertions.assertTrue(sheet.getRow(i).getLastCellNum() >= 1);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

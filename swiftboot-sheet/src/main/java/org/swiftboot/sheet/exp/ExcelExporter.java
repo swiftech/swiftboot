@@ -3,6 +3,7 @@ package org.swiftboot.sheet.exp;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
@@ -74,9 +75,17 @@ public class ExcelExporter extends BaseExporter {
 
             // merge all cells in the specific area.
             if (metaItem.isMerge() && !metaItem.getArea().isDynamic() && (rowCount > 1 || columnCount > 1)) {
-                int regionIdx = sheet.addMergedRegion(new CellRangeAddress(startPos.getRow(), startPos.getRow() + rowCount - 1,
-                        startPos.getColumn(), startPos.getColumn() + columnCount - 1));
-
+                Cell firstCell = PoiUtils.getCell(sheet, startPos);
+                CellRangeAddress merged = new CellRangeAddress(startPos.getRow(), startPos.getRow() + rowCount - 1,
+                        startPos.getColumn(), startPos.getColumn() + columnCount - 1);
+                sheet.addMergedRegion(merged);
+                CellStyle cellStyle = firstCell.getCellStyle();
+                cellStyle.setAlignment(HorizontalAlignment.LEFT);
+                cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+                RegionUtil.setBorderTop(cellStyle.getBorderTop(), merged, sheet);
+                RegionUtil.setBorderBottom(cellStyle.getBorderBottom(), merged, sheet);
+                RegionUtil.setBorderLeft(cellStyle.getBorderLeft(), merged, sheet);
+                RegionUtil.setBorderRight(cellStyle.getBorderRight(), merged, sheet);
             }
 
             if (metaItem.getValue() instanceof PictureLoader) {
@@ -95,15 +104,19 @@ public class ExcelExporter extends BaseExporter {
                 int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
                 int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
 
-//                if (metaItem.getCopyArea() != null) {
-//                    // shift rows if insert
-//                    if (metaItem.isInsert()) {
-//                        sheet.shiftRows(startPos.getRow(), sheet.getLastRowNum(), actualRowCount, true, true);
-//
-//                    }
-//                }
+                if (metaItem.getCopyArea() != null && !metaItem.getCopyArea().isDynamic()) {
+                    // shift rows if insert
+                    if (metaItem.isInsert()) {
+                        sheet.shiftRows(startPos.getRow(), sheet.getLastRowNum(), actualRowCount, true, true);
+                    }
+                    //
+                    Area targetArea = Area.newArea(startPos,
+                            rowCount == null ? matrix.size() : rowCount,
+                            columnCount == null ? matrix.get(0).size() : columnCount);
+                    log.debug(String.format("Copy cells from %s to %s", metaItem.getCopyArea(), targetArea));
+                    PoiUtils.copyCells(sheet, metaItem.getCopyArea(), targetArea);
+                }
 
-                //
                 if (metaItem.isMerge()) {
                     // merge values into lines
                     Optional<String> optMergeValues = matrix.stream().map(objects -> StringUtils.join(objects, ","))
@@ -111,10 +124,6 @@ public class ExcelExporter extends BaseExporter {
                     if (optMergeValues.isPresent()) {
                         Cell cell = sheet.getRow(startPos.getRow()).getCell(startPos.getColumn());
                         PoiUtils.setValueToCell(cell, optMergeValues.get());
-                        CellStyle cs = wb.createCellStyle();
-                        cs.setAlignment(HorizontalAlignment.CENTER);
-                        cs.setVerticalAlignment(VerticalAlignment.CENTER);
-                        cell.setCellStyle(cs);
                     }
                 }
                 else {
@@ -143,23 +152,23 @@ public class ExcelExporter extends BaseExporter {
         log.debug(String.format("Try to extend sheet to %s", lastPosition));
         // Calculate the original size of a row.
         int originRowCount = sheet.getLastRowNum() + 1;
-        int originRowSize = 0;
+        int originRowSize = 0; // get how many columns from first row
         if (sheet.getRow(0) != null) {
             Row row = sheet.getRow(0);
-            originRowSize = row.getLastCellNum() + 1;
+            originRowSize = row.getLastCellNum();
         }
         log.debug(String.format("Original row count: %d", originRowCount));
         log.debug(String.format("Original physical number of rows: %d", sheet.getPhysicalNumberOfRows()));
         log.debug(String.format("Original row size: %d", originRowSize));
 
-        // Extend columns
-        int moreCols = lastPosition.getColumn() + 1 - originRowSize;
+        // Extend columns first for existent rows.
+        int expectRowSize = lastPosition.getColumn() + 1;
+        int moreCols = expectRowSize - originRowSize;
         if (moreCols > 0) {
             for (int i = 0; i < originRowCount; i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) {
                     row = sheet.createRow(i);
-//                    throw new RuntimeException(String.format("Row(index) %d cannot be null", i));
                 }
                 // Append more columns to a row
                 for (int j = 0; j < moreCols; j++) {
@@ -171,7 +180,7 @@ public class ExcelExporter extends BaseExporter {
         // Extend rows
         int moreRows = lastPosition.getRow() + 1 - originRowCount;
         if (moreRows > 0) {
-            int actualRowSize = Math.max(originRowSize, lastPosition.getColumn() + 1);
+            int actualRowSize = Math.max(originRowSize, expectRowSize);
             for (int i = 0; i < moreRows; i++) {
                 Row newRow = sheet.createRow(originRowCount + i);
                 for (int j = 0; j < actualRowSize; j++) {
@@ -180,14 +189,17 @@ public class ExcelExporter extends BaseExporter {
             }
         }
 
+        log.debug(String.format("Extended row count: %d", sheet.getPhysicalNumberOfRows()));
+
         // Check extending result
         if (sheet.getLastRowNum() < 0 || sheet.getLastRowNum() < lastPosition.getRow()) {
             throw new RuntimeException(String.format("Extending sheet rows inappropriate: %d", sheet.getLastRowNum()));
         }
         else {
             if (sheet.getRow(0) != null) {
-                short lastCellNum = sheet.getRow(0).getLastCellNum();
-                if (lastCellNum < lastPosition.getColumn() + 1) {
+                short lastCellNum = sheet.getRow(0).getLastCellNum(); // getLastCellNum is 1-based
+                // check the last extended column is as user's request.
+                if (lastCellNum < expectRowSize) {
                     throw new RuntimeException(String.format("Extending sheet column inappropriate: %d", lastCellNum));
                 }
             }

@@ -6,7 +6,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.swiftboot.collections.Matrix;
 import org.swiftboot.sheet.constant.SheetFileType;
+import org.swiftboot.sheet.meta.Area;
 import org.swiftboot.sheet.meta.Picture;
 import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetId;
@@ -15,8 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author swiftech
@@ -98,7 +102,7 @@ public class PoiUtils {
         Sheet sheet = null;
         if (sheetId.getSheetIndex() == null || sheetId.getSheetIndex() >= workbook.getNumberOfSheets()) {
             if (StringUtils.isBlank(sheetId.getSheetName())) {
-                if (sheetId.getSheetIndex()==null) {
+                if (sheetId.getSheetIndex() == null) {
                     throw new RuntimeException("Sheet id is not valid: " + sheetId);
                 }
                 else {
@@ -165,6 +169,15 @@ public class PoiUtils {
         else {
             throw new RuntimeException(String.format("%s file is not supported", fileSuffix));
         }
+    }
+
+
+    public static Cell getCell(Sheet sheet, Position position) {
+        return getCell(sheet, position.getRow(), position.getColumn());
+    }
+
+    public static Cell getCell(Sheet sheet, int rowIdx, int colIdx) {
+        return sheet.getRow(rowIdx).getCell(colIdx);
     }
 
 
@@ -257,7 +270,7 @@ public class PoiUtils {
             anchor.setRow1(startPos.getRow());
             if (isRestrictedInArea) {
                 anchor.setCol2(endPosition.getColumn() + 1); // exclusive
-                anchor.setRow2(endPosition.getRow() + 1); // eclusive
+                anchor.setRow2(endPosition.getRow() + 1); // exclusive
             }
             anchor.setDx1(0);
             anchor.setDy1(0);
@@ -279,4 +292,55 @@ public class PoiUtils {
             System.out.printf("Sheet or position or value is null: %s - %s - %s%n", sheet, startPos, pictureValue);
         }
     }
+
+    public static void copyCells(Sheet sheet, Area from, Area to) {
+        // collect all cells style
+        Matrix<CellStyle> mFrom = new Matrix<>(from.rowCount(), from.columnCount());
+        List<Float> rowHeights = new ArrayList<>(from.rowCount());
+        for (int i = 0; i < from.rowCount(); i++) {
+            int rowIdx = from.getStartPosition().getRow() + i;
+            Row row = sheet.getRow(rowIdx);
+            rowHeights.add(row.getHeightInPoints());
+            for (int j = 0; j < from.columnCount(); j++) {
+                int colIdx = from.getStartPosition().getColumn() + j;
+                Cell cell = row.getCell(colIdx);
+                if (cell == null) {
+                    throw new RuntimeException(String.format("No cell found at (%d - %d) to copy from", rowIdx, colIdx));
+                }
+                mFrom.set(i, j, cell.getCellStyle());
+            }
+        }
+
+        int rowMultiple = to.rowCount() / from.rowCount() + 1; //
+        int colMultiple = to.columnCount() / from.columnCount() + 1;
+        for (int x = 0; x < rowMultiple; x++) {
+            for (int i = 0; i < from.rowCount(); i++) {
+                int rowStep = x * from.rowCount();
+                int newRowIdx = rowStep + i; // not global index
+                if (newRowIdx >= to.rowCount()) {
+                    continue;
+                }
+                Row copyRow = sheet.getRow(to.getStartPosition().getRow() + newRowIdx);
+                if (copyRow == null) {
+                    copyRow = sheet.createRow(to.getStartPosition().getRow() + newRowIdx);
+                }
+                copyRow.setHeightInPoints(rowHeights.get(i));
+                for (int y = 0; y < colMultiple; y++) {
+                    for (int j = 0; j < from.columnCount(); j++) {
+                        int colStep = y * from.rowCount();
+                        int newColIdx = colStep + j; // not global index
+                        if (newColIdx >= to.columnCount()) {
+                            continue;
+                        }
+                        Cell newCell = copyRow.createCell(to.getStartPosition().getColumn() + newColIdx);
+                        CellStyle copiedStyle = mFrom.get(i, j);
+                        CellStyle copyStyle = sheet.getWorkbook().createCellStyle();
+                        copyStyle.cloneStyleFrom(copiedStyle);
+                        newCell.setCellStyle(copyStyle);
+                    }
+                }
+            }
+        }
+    }
+
 }

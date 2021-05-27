@@ -58,10 +58,10 @@ public class SheetId {
 
     @Override
     public String toString() {
-        return "SheetId{" +
-                "sheetIndex=" + sheetIndex +
-                ", sheetName='" + sheetName + '\'' +
-                '}';
+        return "SheetId(" +
+                sheetIndex +
+                ", " + sheetName +
+                ')';
     }
 
     @Override

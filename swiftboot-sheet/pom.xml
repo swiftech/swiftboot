@@ -17,6 +17,11 @@
             <artifactId>swiftboot-utils</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-collections</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
