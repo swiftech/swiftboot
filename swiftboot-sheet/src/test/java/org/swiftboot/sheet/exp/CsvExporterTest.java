@@ -53,7 +53,7 @@ public class CsvExporterTest extends BaseExporterTest {
 
     public void doTestExportFromMap(InputStream templateIns) {
         Exporter exporter = new SwiftBootSheetFactory().createExporter(SheetFileType.TYPE_CSV);
-        SheetMetaBuilder sheetMetaBuilder = super.createSheetMetaBuilder();
+        SheetMetaBuilder sheetMetaBuilder = super.createSheetMetaBuilder(SheetFileType.TYPE_CSV);
         sheetMetaBuilder.items(sheetMetaBuilder.itemBuilder().newItem().key("picture").parse("A1").value(super.pictureLoader)); // This should be ignored because exporting picture is not supported.
         SheetMeta exportMeta = sheetMetaBuilder.build();
         printMeta(exportMeta);

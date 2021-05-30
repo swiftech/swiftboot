@@ -293,6 +293,13 @@ public class PoiUtils {
         }
     }
 
+    /**
+     * Copy style of area 'from' to area 'to' repeatedly.
+     *
+     * @param sheet
+     * @param from area copied from must has fixed size.
+     * @param to area copy to must has fixed size
+     */
     public static void copyCells(Sheet sheet, Area from, Area to) {
         // collect all cells style
         Matrix<CellStyle> mFrom = new Matrix<>(from.rowCount(), from.columnCount());

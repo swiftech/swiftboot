@@ -59,12 +59,14 @@ public class ExcelExporter extends BaseExporter {
         cellInfo.get().setWorkbook(wb);
 
         final AtomicReference<Sheet> sheetRef = new AtomicReference<>();
+        final AtomicReference<Position> maxPositionRef = new AtomicReference<>(); // max position user wants
         exportMeta.setAllowFreeSize(true);
         exportMeta.accept(sheetId -> {
             log.debug("Export to sheet: " + sheetId);
             sheetRef.set(PoiUtils.getOrCreateSheet(wb, sheetId));
             cellInfo.get().setSheet(sheetRef.get());
-            extendSheet(sheetRef.get(), exportMeta.findMaxPosition(sheetId));
+            maxPositionRef.set(exportMeta.findMaxPosition(sheetId));
+            extendSheet(sheetRef.get(), maxPositionRef.get());
             // callback to user client to handle the sheet.
             if (exportMeta.getSheetHandler() != null) {
                 ExcelSheetInfo sheetInfo = new ExcelSheetInfo(wb, sheetRef.get());
@@ -78,6 +80,7 @@ public class ExcelExporter extends BaseExporter {
                 Cell firstCell = PoiUtils.getCell(sheet, startPos);
                 CellRangeAddress merged = new CellRangeAddress(startPos.getRow(), startPos.getRow() + rowCount - 1,
                         startPos.getColumn(), startPos.getColumn() + columnCount - 1);
+                log.debug(String.format("Merge cells: %s", merged.formatAsString()));
                 sheet.addMergedRegion(merged);
                 CellStyle cellStyle = firstCell.getCellStyle();
                 cellStyle.setAlignment(HorizontalAlignment.LEFT);
@@ -104,15 +107,19 @@ public class ExcelExporter extends BaseExporter {
                 int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
                 int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
 
+                // shift rows if need insert
+                if (metaItem.isInsert()) {
+                    int insertRowCount = (rowCount == null || metaItem.isInsertByValue()) ? actualRowCount : rowCount;
+                    log.debug(String.format("Insert %d rows start at row %d", insertRowCount, startPos.getRow()));
+                    sheet.shiftRows(startPos.getRow(), sheet.getLastRowNum(), insertRowCount, true, true);
+                    createCells(sheet, startPos,  startPos.clone().moveRows(insertRowCount - 1).moveColumns(maxPositionRef.get().getColumn() - 1), 0, 0);
+                }
+
                 if (metaItem.getCopyArea() != null && !metaItem.getCopyArea().isDynamic()) {
-                    // shift rows if insert
-                    if (metaItem.isInsert()) {
-                        sheet.shiftRows(startPos.getRow(), sheet.getLastRowNum(), actualRowCount, true, true);
-                    }
-                    //
+                    // if row or column is uncertain size, use copied area's row or column size instead.
                     Area targetArea = Area.newArea(startPos,
-                            rowCount == null ? matrix.size() : rowCount,
-                            columnCount == null ? matrix.get(0).size() : columnCount);
+                            rowCount == null ? metaItem.getCopyArea().rowCount() : rowCount,
+                            columnCount == null ? metaItem.getCopyArea().columnCount() : columnCount);
                     log.debug(String.format("Copy cells from %s to %s", metaItem.getCopyArea(), targetArea));
                     PoiUtils.copyCells(sheet, metaItem.getCopyArea(), targetArea);
                 }
@@ -161,17 +168,35 @@ public class ExcelExporter extends BaseExporter {
         log.debug(String.format("Original physical number of rows: %d", sheet.getPhysicalNumberOfRows()));
         log.debug(String.format("Original row size: %d", originRowSize));
 
+        createCells(sheet, new Position(0, 0), lastPosition, originRowCount, originRowSize);
+
+        log.debug(String.format("Extended row count: %d", sheet.getPhysicalNumberOfRows()));
+
+        checkExtendingResultForSheet(sheet, lastPosition);
+    }
+
+    /**
+     * Create cells from startPosition to lastPosition in sheet.
+     * originRowCount and originRowSize are required to avoid cover existed cells.
+     *
+     * @param sheet
+     * @param startPosition
+     * @param lastPosition
+     * @param originRowCount
+     * @param originRowSize
+     */
+    void createCells(Sheet sheet, Position startPosition, Position lastPosition, int originRowCount, int originRowSize) {
         // Extend columns first for existent rows.
         int expectRowSize = lastPosition.getColumn() + 1;
         int moreCols = expectRowSize - originRowSize;
         if (moreCols > 0) {
-            for (int i = 0; i < originRowCount; i++) {
+            for (int i = startPosition.getRow(); i < originRowCount; i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) {
                     row = sheet.createRow(i);
                 }
                 // Append more columns to a row
-                for (int j = 0; j < moreCols; j++) {
+                for (int j = startPosition.getRow(); j < moreCols; j++) {
                     row.createCell(originRowSize + j);
                 }
             }
@@ -181,16 +206,22 @@ public class ExcelExporter extends BaseExporter {
         int moreRows = lastPosition.getRow() + 1 - originRowCount;
         if (moreRows > 0) {
             int actualRowSize = Math.max(originRowSize, expectRowSize);
-            for (int i = 0; i < moreRows; i++) {
+            for (int i = startPosition.getRow(); i < moreRows; i++) {
                 Row newRow = sheet.createRow(originRowCount + i);
-                for (int j = 0; j < actualRowSize; j++) {
+                for (int j = startPosition.getColumn(); j < actualRowSize; j++) {
                     newRow.createCell(j);
                 }
             }
         }
+    }
 
-        log.debug(String.format("Extended row count: %d", sheet.getPhysicalNumberOfRows()));
-
+    /**
+     * Check the extending is ok for export.
+     *
+     * @param sheet
+     * @param lastPosition
+     */
+    private void checkExtendingResultForSheet(Sheet sheet, Position lastPosition) {
         // Check extending result
         if (sheet.getLastRowNum() < 0 || sheet.getLastRowNum() < lastPosition.getRow()) {
             throw new RuntimeException(String.format("Extending sheet rows inappropriate: %d", sheet.getLastRowNum()));
@@ -199,7 +230,7 @@ public class ExcelExporter extends BaseExporter {
             if (sheet.getRow(0) != null) {
                 short lastCellNum = sheet.getRow(0).getLastCellNum(); // getLastCellNum is 1-based
                 // check the last extended column is as user's request.
-                if (lastCellNum < expectRowSize) {
+                if (lastCellNum < lastPosition.getColumn() + 1) {
                     throw new RuntimeException(String.format("Extending sheet column inappropriate: %d", lastCellNum));
                 }
             }

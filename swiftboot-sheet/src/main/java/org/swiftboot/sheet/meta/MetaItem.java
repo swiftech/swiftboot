@@ -30,6 +30,7 @@ public class MetaItem implements Comparable<MetaItem> {
 
     private Area copyArea;
     private boolean insert;
+    private boolean insertByValue;
 
     public MetaItem() {
     }
@@ -108,6 +109,14 @@ public class MetaItem implements Comparable<MetaItem> {
 
     public void setInsert(boolean insert) {
         this.insert = insert;
+    }
+
+    public boolean isInsertByValue() {
+        return insertByValue;
+    }
+
+    public void setInsertByValue(boolean insertByValue) {
+        this.insertByValue = insertByValue;
     }
 
     @Override

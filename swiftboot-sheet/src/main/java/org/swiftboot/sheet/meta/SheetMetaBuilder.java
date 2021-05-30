@@ -152,46 +152,91 @@ public class SheetMetaBuilder {
      * Use method key() to add a key to identify the data value and area in sheet.
      * Use method from(), to() or parse() to define area in sheet.
      * Use method onCell() to do directly handling the POI cell object.
+     *
+     * @author swiftech
+     * @see SheetMetaBuilder
      */
     public static class MetaItemBuilder {
+        private final Logger log = LoggerFactory.getLogger(MetaItemBuilder.class);
         // Translator to translate expression to actual positions in sheet.
         private static final Translator translator = new Translator();
 
         private final List<MetaItem> items = new ArrayList<>();
         private MetaItem item;
 
+        /**
+         * Start to build a new item, this method must be called before setup anything.
+         *
+         * @return
+         */
         public MetaItemBuilder newItem() {
             item = new MetaItem();
             items.add(item);
             return this;
         }
 
+        /**
+         * Identify the data value and sheet area, not required for export.
+         *
+         * @param key
+         * @return
+         */
         public MetaItemBuilder key(String key) {
             item.setKey(key);
             return this;
         }
 
+        /**
+         * Value object from import or to export.
+         *
+         * @param value
+         * @return
+         */
         public MetaItemBuilder value(Object value) {
             item.setValue(value);
             return this;
         }
 
+        /**
+         * Custom handler to access cells in the area.
+         *
+         * @param cellHandler
+         * @return
+         */
         public MetaItemBuilder onCell(CellHandler<? extends CellInfo> cellHandler) {
             item.setCellHandler(cellHandler);
             return this;
         }
 
+        /**
+         * Parse expression to set the area.
+         *
+         * @param expression Expression that defines an area in a sheet.
+         * @return
+         */
         public MetaItemBuilder parse(String expression) {
             Area area = translator.toArea(expression);
             item.setArea(area);
             return this;
         }
 
-        public MetaItemBuilder from(String expression){
+        /**
+         * Set the position where the are starts by expression.
+         *
+         * @param expression Single position expression
+         * @return
+         */
+        public MetaItemBuilder from(String expression) {
             Position position = translator.toSinglePosition(expression);
             return from(position);
         }
 
+        /**
+         * Set the position where the area starts from.
+         *
+         * @param startPosition Start position in sheet for the area
+         * @return
+         */
         public MetaItemBuilder from(Position startPosition) {
             if (item.getArea() == null) {
                 item.setArea(new Area(startPosition));
@@ -200,6 +245,13 @@ public class SheetMetaBuilder {
             return this;
         }
 
+        /**
+         * Set the position where the area starts.
+         *
+         * @param rowIdx    row index in sheet
+         * @param columnIdx column index in sheet
+         * @return
+         */
         public MetaItemBuilder from(Integer rowIdx, Integer columnIdx) {
             if (item.getArea() == null) {
                 item.setArea(new Area(new Position(rowIdx, columnIdx)));
@@ -208,11 +260,23 @@ public class SheetMetaBuilder {
             return this;
         }
 
-        public MetaItemBuilder to(String expression){
+        /**
+         * Set the position where the area ends by expression
+         *
+         * @param expression Single position expression
+         * @return
+         */
+        public MetaItemBuilder to(String expression) {
             Position position = translator.toSinglePosition(expression);
             return to(position);
         }
 
+        /**
+         * Set the position where the area ends.
+         *
+         * @param endPosition End position in sheet for the area
+         * @return
+         */
         public MetaItemBuilder to(Position endPosition) {
             if (item.getArea() == null || item.getArea().getStartPosition() == null) {
                 return this;
@@ -221,6 +285,13 @@ public class SheetMetaBuilder {
             return this;
         }
 
+        /**
+         * Set the position where the area ends.
+         *
+         * @param rowIdx    row index in sheet
+         * @param columnIdx column index in sheet
+         * @return
+         */
         public MetaItemBuilder to(Integer rowIdx, Integer columnIdx) {
             if (item.getArea() == null || item.getArea().getStartPosition() == null) {
                 return this;
@@ -231,6 +302,7 @@ public class SheetMetaBuilder {
 
         /**
          * Merge all cells in area, merge all values into multi-line text and center the text in the merged cell.
+         * it requires providing fixed size area, otherwise it will be ignored.
          *
          * @return
          */
@@ -239,40 +311,83 @@ public class SheetMetaBuilder {
             return this;
         }
 
-        public MetaItemBuilder copy(String expression) {
-            return this.copy(expression, false);
-        }
-
         /**
          * Copy cells style from one area selected by expression to the target area like tiling,
          * if the target area has uncertain size, actual size(determined by data size) will be applied.
          * If the target area is larger than copied area, the cells style will be repeated.
          *
          * @param expression the expression should be non-dynamic, otherwise the copy will not be executed.
-         * @param insert
          * @return
          */
-        public MetaItemBuilder copy(String expression, boolean insert) {
+        public MetaItemBuilder copy(String expression) {
             item.setCopyArea(translator.toArea(expression));
-            item.setInsert(insert);
             return this;
         }
 
+        /**
+         * Copy cells style from one area to the target area like tiling,
+         * if the target area has uncertain size, actual size(determined by data size) will be applied.
+         * If the target area is larger than copied area, the cells style will be repeated.
+         *
+         * @param area the area should be non-dynamic, otherwise the copy will not be executed.
+         * @return
+         */
         public MetaItemBuilder copy(Area area) {
-            return this.copy(area, false);
-        }
-
-        public MetaItemBuilder copy(Area area, boolean insert) {
             item.setCopyArea(area);
-            item.setInsert(insert);
             return this;
         }
 
-        public Translator translator(){
+        /**
+         * Copy style from one cell to the target area like tiling,
+         * if the target area has uncertain size, actual size(determined by data size) will be applied.
+         * If the target area is larger than copied area, the cells style will be repeated.
+         *
+         * @param rowIdx
+         * @param colIdx
+         * @return
+         */
+        public MetaItemBuilder copy(int rowIdx, int colIdx) {
+            item.setCopyArea(new Area(new Position(rowIdx, colIdx)));
+            return this;
+        }
+
+        /**
+         * Insert rows in range that specified by area before copying styles and set values.
+         * if the area has uncertain rows, actual rows(determined by data size) will be applied.
+         *
+         * @return
+         */
+        public MetaItemBuilder insert() {
+            item.setInsert(true);
+            return this;
+        }
+
+        /**
+         * Insert rows in range that specified by value(size) before copying styles and set values.
+         *
+         * @return
+         */
+        public MetaItemBuilder insertByValue() {
+            item.setInsert(true);
+            item.setInsertByValue(true);
+            return this;
+        }
+
+        public Translator translator() {
             return translator;
         }
 
+        /**
+         * Build all the meta items for all sheets.
+         *
+         * @return
+         */
         public List<MetaItem> build() {
+            for (MetaItem metaItem : items) {
+                if (metaItem.isMerge() && metaItem.getArea().isDynamic()) {
+                    throw new RuntimeException(String.format("You want to merge area %s (%s) but the size of it is uncertain", metaItem.getArea(), metaItem.getKey()));
+                }
+            }
             return items;
         }
 

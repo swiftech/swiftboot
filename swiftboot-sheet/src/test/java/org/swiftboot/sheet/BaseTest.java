@@ -68,8 +68,8 @@ public class BaseTest {
             dir.mkdirs();
         }
         File f = new File(dir, fileName);
-        System.out.println("Prepared to export data to file: " + f.toString());
-        return new FileOutputStream(f.toString());
+        System.out.println("Prepared to export data to file: " + f);
+        return new FileOutputStream(f);
     }
 
     /**

@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.SwiftBootSheetFactory;
 import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
-import org.swiftboot.sheet.meta.Position;
-import org.swiftboot.sheet.meta.SheetMeta;
-import org.swiftboot.sheet.meta.SheetMetaBuilder;
+import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
 
 import java.io.IOException;
@@ -68,7 +66,7 @@ public class ExcelExporterTest extends BaseExporterTest {
      */
     private void doExportExcel(InputStream inputStream, String fileType) {
         Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
-        SheetMeta exportMeta = super.createSheetMetaBuilder().build();
+        SheetMeta exportMeta = super.createSheetMetaBuilder(fileType).build();
         boolean isFromTemplate = inputStream != null;
         try (OutputStream fileOutputStream = super.createOutputStream(isFromTemplate, fileType)) {
             if (isFromTemplate) {
@@ -123,7 +121,8 @@ public class ExcelExporterTest extends BaseExporterTest {
 
     @Test
     public void testExportPicture() {
-        ExcelExporter xlsxExporter = new ExcelExporter(SheetFileType.TYPE_XLSX);
+        String fileType = SheetFileType.TYPE_XLS;
+        ExcelExporter xlsxExporter = new ExcelExporter(fileType);
 
         SheetMetaBuilder builder = new SheetMetaBuilder();
         SheetMeta meta;
@@ -135,12 +134,17 @@ public class ExcelExporterTest extends BaseExporterTest {
                 .newItem().key("single cell by position").from(10, 10).value(pictureLoader)).build();
 
         Assertions.assertDoesNotThrow(() -> {
-            try (OutputStream outputStream = super.createOutputStream(false, SheetFileType.TYPE_XLSX, "picutures")) {
-                xlsxExporter.export(meta, outputStream);
-            } catch (Exception e) {
+            try (InputStream insXls = loadTemplate(fileType)) {
+                try (OutputStream outputStream = super.createOutputStream(true, fileType, "picutures")) {
+                    xlsxExporter.export(insXls, meta, outputStream);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
-                throw new RuntimeException(e);
             }
+
         });
     }
 
@@ -172,6 +176,56 @@ public class ExcelExporterTest extends BaseExporterTest {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    @Test
+    public void testInsert() {
+        String fileType = SheetFileType.TYPE_XLS;
+        ExcelExporter exporter = new ExcelExporter(fileType);
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        builder.items(builder.itemBuilder()
+                .newItem().parse("A2:?4").insert() // insert 3 rows after first row without copy styles
+                .newItem().parse("A2:M4").merge().value("merge new inserted rows")
+                .newItem().parse("A20:?25").copy("A1:F1").insert() // insert 6 rows after row 19 with copy styles
+        );
+        Assertions.assertDoesNotThrow(() -> {
+            try (InputStream insXls = loadTemplate(fileType)) {
+                try (OutputStream outputStream = createOutputStream(true, fileType, "insert")) {
+                    exporter.export(insXls, builder.build(), outputStream);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
+    @Test
+    public void testCopyAndMerge() {
+        String fileType = SheetFileType.TYPE_XLSX;
+        ExcelExporter exporter = new ExcelExporter(fileType);
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        builder.items(builder.itemBuilder()
+                // copy fixed size area and merge
+                .newItem().parse("A20:G25").copy("A1:F1").merge().value("copy fixed size area and merge")
+        );
+
+        Assertions.assertDoesNotThrow(() -> {
+            try (InputStream insXls = loadTemplate(fileType)) {
+                try (OutputStream outputStream = createOutputStream(true, fileType, "copy_merge_cells")) {
+                    exporter.export(insXls, builder.build(), outputStream);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
 
     }
 

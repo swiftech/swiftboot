@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.BaseTest;
 import org.swiftboot.sheet.TestUtils;
+import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
 import java.util.Arrays;
@@ -51,14 +52,14 @@ public class BaseExporterTest extends BaseTest {
      *
      * @return
      */
-    protected SheetMetaBuilder createSheetMetaBuilder() {
+    protected SheetMetaBuilder createSheetMetaBuilder(String sheetType) {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         List<Integer> vertical = Arrays.asList(302, 402, 502, 999);
         List<Integer> vertical2 = Arrays.asList(1, 1, 1, 0);
         List<Integer> horizontal = Arrays.asList(203, 204, 205, 999);
         List<Integer> horizontal2 = Arrays.asList(1, 1, 1, 0);
         // Matrix
-        List<List<Integer>> matrix = Arrays.asList(
+        List<List<Integer>> matrix4x4 = Arrays.asList(
                 Arrays.asList(303, 304, 305, 306),
                 Arrays.asList(403, 404, 405, 406),
                 Arrays.asList(503, 504, 505, 506),
@@ -91,15 +92,14 @@ public class BaseExporterTest extends BaseTest {
 
                 // matrix
                 .items(builder.itemBuilder()
-                        .newItem().key("key-d4:f6").parse("d4:f6").value(matrix)
-                        .newItem().key("key-c14:?").parse("c14:?").value(matrix))
+                        .newItem().key("key-d4:f6").parse("d4:f6").value(matrix4x4)
+                        .newItem().key("key-c14:?").parse("c14:?").value(matrix4x4));
 
-                // merged matrix
-                .items(builder.itemBuilder()
-                        .newItem().key("merged-h14:?").parse("h14:?").merge().value(matrix))
-
-                .build();
-
+        if (!SheetFileType.TYPE_CSV.equals(sheetType)) {
+            // merged matrix
+            builder.items(builder.itemBuilder()
+                    .newItem().key("merged-h14:k17").parse("h14:k17").merge().value(matrix4x4));
+        }
         return builder;
     }
 
