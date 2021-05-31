@@ -39,7 +39,7 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
 public class Translator {
     private final Logger log = LoggerFactory.getLogger(Translator.class);
 
-    private int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
+    private final int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
 
     /**
      * Translate expression to {@code Area}.
@@ -244,6 +244,7 @@ public class Translator {
      *
      * @param index
      * @return
+     * @deprecated
      */
     String indexToExp(int index) {
         int x = index;

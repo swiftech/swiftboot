@@ -3,7 +3,8 @@ package org.swiftboot.sheet.meta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,8 +29,6 @@ public class SheetMeta {
      */
     private boolean isAllowFreeSize = false;
 
-    private SheetHandler<?> sheetHandler;
-
     public SheetMeta() {
     }
 
@@ -37,6 +36,9 @@ public class SheetMeta {
         this.metaMap = metaMap;
     }
 
+    public SheetHandler<? extends SheetInfo> getSheetHandler(SheetId sheetId) {
+        return this.metaMap.getSheetHandler(sheetId);
+    }
 
     public List<MetaItem> getMetaItems(int sheetIndex) {
         return metaMap.sheetItems(new SheetId(sheetIndex));
@@ -160,11 +162,4 @@ public class SheetMeta {
         isAllowFreeSize = allowFreeSize;
     }
 
-    public SheetHandler getSheetHandler() {
-        return sheetHandler;
-    }
-
-    public void setSheetHandler(SheetHandler sheetHandler) {
-        this.sheetHandler = sheetHandler;
-    }
 }

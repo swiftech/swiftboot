@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.BaseTest;
 import org.swiftboot.sheet.TestUtils;
 import org.swiftboot.sheet.constant.SheetFileType;
+import org.swiftboot.sheet.excel.ExcelSheetInfo;
+import org.swiftboot.sheet.meta.SheetHandler;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
 import java.util.Arrays;
@@ -67,7 +69,10 @@ public class BaseExporterTest extends BaseTest {
         );
 
         // table titles
-        builder.sheet(0, "my first sheet");
+        builder.sheet(0, "my first sheet").handler((SheetHandler<ExcelSheetInfo>) sheetInfo -> {
+            System.out.println(sheetInfo.getWorkbook());
+            System.out.println(sheetInfo.getSheet());
+        });
 
         builder.items(builder.itemBuilder()
                 .newItem().key("column title").parse("B1:Z1").value(Arrays.asList(TestUtils.createLetters(12)))

@@ -68,9 +68,10 @@ public class ExcelExporter extends BaseExporter {
             maxPositionRef.set(exportMeta.findMaxPosition(sheetId));
             extendSheet(sheetRef.get(), maxPositionRef.get());
             // callback to user client to handle the sheet.
-            if (exportMeta.getSheetHandler() != null) {
+            if (exportMeta.getSheetHandler(sheetId) != null) {
                 ExcelSheetInfo sheetInfo = new ExcelSheetInfo(wb, sheetRef.get());
-                exportMeta.getSheetHandler().onSheet(sheetInfo);
+                SheetHandler<ExcelSheetInfo> handler = (SheetHandler<ExcelSheetInfo>) exportMeta.getSheetHandler(sheetId);
+                handler.onSheet(sheetInfo);
             }
         }, (metaItem, startPos, rowCount, columnCount) -> {
             Sheet sheet = sheetRef.get();
@@ -112,7 +113,7 @@ public class ExcelExporter extends BaseExporter {
                     int insertRowCount = (rowCount == null || metaItem.isInsertByValue()) ? actualRowCount : rowCount;
                     log.debug(String.format("Insert %d rows start at row %d", insertRowCount, startPos.getRow()));
                     sheet.shiftRows(startPos.getRow(), sheet.getLastRowNum(), insertRowCount, true, true);
-                    createCells(sheet, startPos,  startPos.clone().moveRows(insertRowCount - 1).moveColumns(maxPositionRef.get().getColumn() - 1), 0, 0);
+                    createCells(sheet, startPos, startPos.clone().moveRows(insertRowCount - 1).moveColumns(maxPositionRef.get().getColumn() - 1), 0, 0);
                 }
 
                 if (metaItem.getCopyArea() != null && !metaItem.getCopyArea().isDynamic()) {

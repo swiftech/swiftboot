@@ -66,6 +66,14 @@ public class SheetMetaBuilder {
         return this;
     }
 
+    public SheetMetaBuilder handler(SheetHandler<?> sheetHandler) {
+        if (sheetId == null) {
+            sheetId = SheetId.DEFAULT_SHEET; // be the first sheet (index is 0 and name is 'Sheet 1') if not provides
+        }
+        this.metaMap.setSheetHandler(this.sheetId, sheetHandler);
+        return this;
+    }
+
     public MetaItemBuilder itemBuilder() {
         return new MetaItemBuilder();
     }
