@@ -14,13 +14,14 @@ import java.util.List;
  * Builder to build {@link SheetMeta}
  * <pre>
  * By annotated class type:
- * use method  {@code fromAnnotatedClass()} or {@code fromAnnotatedObject()}to
- * build items from an annotated class or it's instance object.
+ * use method  {@code fromAnnotatedClass()} or {@code fromAnnotatedObject()} to
+ * build items from an annotated (@{@link Mapping}) class or it's instance object.
  *
  * By API dynamically:
  * use method {@code itemBuilder()} create a new {@link MetaItemBuilder} to build items.
  * use method {@code sheet()} to indicate a sheet by name or index.
  * use method {@code items()} to collect all items from {@link MetaItemBuilder} to current sheet in builder.
+ * use method {@code handler()} with a {@link SheetHandler} to access a POI sheet object directly.
  * </pre>
  *
  * @author swiftech
@@ -47,18 +48,37 @@ public class SheetMetaBuilder {
      */
     private List<Field> fields;
 
+    /**
+     * Identity a sheet by index.
+     * @param index
+     * @return
+     */
     public SheetMetaBuilder sheet(int index) {
         sheetId = new SheetId();
         sheetId.setSheetIndex(index);
         return this;
     }
 
+    /**
+     * Identity a sheet by name.
+     *
+     * @param name Should follow the Excel's sheet name rule, if not, it will be converted by force.
+     * @return
+     */
     public SheetMetaBuilder sheet(String name) {
         sheetId = new SheetId();
         sheetId.setSheetName(name);
         return this;
     }
 
+    /**
+     * Identity a sheet by index or name.
+     * The index has higher priority than the name.
+     *
+     * @param index
+     * @param name Should follow the Excel's sheet name rule, if not, it will be converted by force.
+     * @return
+     */
     public SheetMetaBuilder sheet(int index, String name) {
         sheetId = new SheetId();
         sheetId.setSheetIndex(index);
@@ -66,6 +86,12 @@ public class SheetMetaBuilder {
         return this;
     }
 
+    /**
+     * Specify a handler to access a sheet directly. Only works for Excel.
+     *
+     * @param sheetHandler
+     * @return
+     */
     public SheetMetaBuilder handler(SheetHandler<?> sheetHandler) {
         if (sheetId == null) {
             sheetId = SheetId.DEFAULT_SHEET; // be the first sheet (index is 0 and name is 'Sheet 1') if not provides
@@ -74,10 +100,23 @@ public class SheetMetaBuilder {
         return this;
     }
 
+    /**
+     * Create a new {@link MetaItemBuilder}.
+     *
+     * @return
+     */
     public MetaItemBuilder itemBuilder() {
         return new MetaItemBuilder();
     }
 
+    /**
+     * Append valid meta items which is built from {@link MetaItemBuilder}.
+     * If {@link SheetId} has not been provided, a default one with sheetIndex=0 and sheetName="Sheet 1" will be used.
+     * The non-null {@link SheetId} in meta item overrides current {@link SheetId}.
+     *
+     * @param itemBuilder
+     * @return
+     */
     public SheetMetaBuilder items(MetaItemBuilder itemBuilder) {
         List<MetaItem> items = itemBuilder.build();
         if (sheetId == null) {
@@ -101,7 +140,7 @@ public class SheetMetaBuilder {
     }
 
     /**
-     * Load meta items from an object which is has fields with mapping annotation.
+     * Load meta items from an object which has fields with mapping annotation @{@link Mapping}.
      * Should be used for export.
      *
      * @param object
@@ -124,7 +163,7 @@ public class SheetMetaBuilder {
     }
 
     /**
-     * Init meta items from class which is has fields with mapping annotation.
+     * Init meta items from class which has fields with mapping annotation @{@link Mapping}.
      * Should be used for import.
      *
      * @param clazz
@@ -146,6 +185,11 @@ public class SheetMetaBuilder {
         return this;
     }
 
+    /**
+     * Build a sheet meta object for import or export.
+     *
+     * @return
+     */
     public SheetMeta build() {
         return new SheetMeta(this.metaMap);
     }
@@ -195,9 +239,10 @@ public class SheetMetaBuilder {
         }
 
         /**
-         * Value object from import or to export.
+         * Value object from import or to export,
+         * it could be string, number, time, boolean or List or List with List elements ({@code List<List<Object>}).
          *
-         * @param value
+         * @param value A List is values for cells in line, A List with List elements is values for cells in matrix.
          * @return
          */
         public MetaItemBuilder value(Object value) {
@@ -206,7 +251,7 @@ public class SheetMetaBuilder {
         }
 
         /**
-         * Custom handler to access cells in the area.
+         * Custom handler to access cells in the area. Only works for Excel.
          *
          * @param cellHandler
          * @return

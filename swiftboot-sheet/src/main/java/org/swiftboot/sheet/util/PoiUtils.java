@@ -87,9 +87,9 @@ public class PoiUtils {
     }
 
     /**
-     * Try to get sheet by index and name one by one.
-     * If found by index, sheet name will be overwritten by specified name.
-     * If not found, new sheet will be created.
+     * Try to get sheet by index and name.
+     * If found a sheet by index, it's name will be overwritten by specified name,
+     * if not, new sheet will be created with the name.
      *
      * @param workbook
      * @param sheetId
@@ -255,13 +255,10 @@ public class PoiUtils {
             int pictureIdx = wb.addPicture(pictureValue.getData(), pictureValue.getPoiPictureType());
 
             CreationHelper helper = wb.getCreationHelper();
-            Drawing drawing = sheet.createDrawingPatriarch();
+            Drawing<?> drawing = sheet.createDrawingPatriarch();
             ClientAnchor anchor = helper.createClientAnchor();
 
-            boolean isRestrictedInArea = true;
-            if (endPosition == null || endPosition.isUncertain()) {
-                isRestrictedInArea = false;
-            }
+            boolean isRestrictedInArea = endPosition != null && !endPosition.isUncertain();
             // System.out.printf("%s restrict in area%n", isRestrictedInArea ? "" : "not ");
 
             // set top-left corner of the picture,
