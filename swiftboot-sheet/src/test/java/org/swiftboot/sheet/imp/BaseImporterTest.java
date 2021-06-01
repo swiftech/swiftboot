@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.SwiftBootSheetFactory;
 import org.swiftboot.sheet.constant.SheetFileType;
+import org.swiftboot.sheet.excel.ExcelSheetInfo;
+import org.swiftboot.sheet.meta.SheetHandler;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
@@ -28,11 +30,13 @@ public class BaseImporterTest {
     protected SheetMeta initTestMeta() {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         // Single cells
-        SheetMeta meta = builder.items(builder.itemBuilder()
-                .newItem().key("key-b1").parse("B1")
-                .newItem().key("key-a2").parse("A2")
-                .newItem().key("key-x1").parse("X1")
-                .newItem().key("key-b1-bypos").from(0, 1))
+        SheetMeta meta = builder
+                .handler((SheetHandler<ExcelSheetInfo>) sheetInfo -> System.out.println(sheetInfo.getSheet()))
+                .items(builder.itemBuilder()
+                        .newItem().key("key-b1").parse("B1")
+                        .newItem().key("key-a2").parse("A2")
+                        .newItem().key("key-x1").parse("X1")
+                        .newItem().key("key-b1-bypos").from(0, 1))
                 // Merged cell
                 .items(builder.itemBuilder()
                         .newItem().key("key-5ad: a5").parse("A5")

@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
+import org.swiftboot.sheet.excel.ExcelSheetInfo;
 import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
 
@@ -43,22 +44,28 @@ public class ExcelImporter extends BaseImporter {
 
         Map<String, Object> ret = new HashMap<>();
 
-        final AtomicReference<Sheet> sheet = new AtomicReference<>();
+        final AtomicReference<Sheet> sheetRef = new AtomicReference<>();
         meta.accept(sheetId -> {
             log.trace("Sheet: " + sheetId);
-            sheet.set(PoiUtils.getSheet(wb, sheetId.getSheetIndex()));
-            if (sheet.get() == null) {
+            sheetRef.set(PoiUtils.getSheet(wb, sheetId.getSheetIndex()));
+            if (sheetRef.get() == null) {
                 log.warn("No sheet found: " + sheetId);
                 return;
             }
-            cellInfo.get().setSheet(sheet.get());
+            cellInfo.get().setSheet(sheetRef.get());
+            // callback to user client to handle the sheet.
+            if (meta.getSheetHandler(sheetId) != null) {
+                ExcelSheetInfo sheetInfo = new ExcelSheetInfo(wb, sheetRef.get());
+                SheetHandler<ExcelSheetInfo> handler = (SheetHandler<ExcelSheetInfo>) meta.getSheetHandler(sheetId);
+                handler.onSheet(sheetInfo);
+            }
         }, (metaItem, startPos, rowCount, columnCount) -> {
             log.trace(String.format("Item: '%s' %s-%s-%s", metaItem.getKey(), startPos, rowCount, columnCount));
             List<List<Object>> matrix = new ArrayList<>();
             for (int i = 0; i < rowCount; i++) {
                 cellInfo.get().setRowIdx(i);
                 int rowIdx = startPos.getRow() + i;
-                Row row = sheet.get().getRow(rowIdx);
+                Row row = sheetRef.get().getRow(rowIdx);
                 if (row == null) {
                     log.warn("No row found at " + rowIdx);
                     continue;

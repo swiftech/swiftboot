@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Represent a sheet in the workbook.
  * Either sheetIndex or sheetName are identical.
- * Two SheetId instances have same index are same, if not, same sheet name TODO.
+ * Two {@link SheetId} instances have same index are same, if not, sheet names will be considered.
  *
  * @author swiftech
  */
