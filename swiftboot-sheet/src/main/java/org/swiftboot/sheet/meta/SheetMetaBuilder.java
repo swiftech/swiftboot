@@ -262,7 +262,7 @@ public class SheetMetaBuilder {
         }
 
         /**
-         * Parse expression to set the area.
+         * Create an area by parsing expression.
          *
          * @param expression Expression that defines an area in a sheet.
          * @return

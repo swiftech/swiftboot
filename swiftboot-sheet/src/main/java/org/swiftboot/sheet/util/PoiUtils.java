@@ -304,6 +304,9 @@ public class PoiUtils {
         for (int i = 0; i < from.rowCount(); i++) {
             int rowIdx = from.getStartPosition().getRow() + i;
             Row row = sheet.getRow(rowIdx);
+            if (row == null){
+                throw new RuntimeException(String.format("No row found at %d to copy from", rowIdx));
+            }
             rowHeights.add(row.getHeightInPoints());
             for (int j = 0; j < from.columnCount(); j++) {
                 int colIdx = from.getStartPosition().getColumn() + j;

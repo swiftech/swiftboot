@@ -156,7 +156,11 @@ public class Translator {
             return null;
         }
         String[] split = splitByCharacterType(exp.toUpperCase());
-        return toPosition(split);
+        try {
+            return toPosition(split);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Expression is invalid: %s", exp), e);
+        }
     }
 
 
@@ -234,6 +238,7 @@ public class Translator {
      *
      * @param position
      * @return
+     * @deprecated
      */
     String toExpression(Position position) {
         return indexToExp(position.getColumn()) + (position.getRow() + 1);

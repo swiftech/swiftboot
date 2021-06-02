@@ -125,7 +125,7 @@ public class PoiUtilsTest extends BaseTest {
 
             // copy large area to small area
             PoiUtils.copyCells(sheet, Area.newArea(new Position(0,0), 5, 5),
-                    new Area(new Position(15, 0), new Position(17, 2)));
+                    new Area(15, 0, 17, 2));
 
             try (OutputStream outputStream = super.createOutputStream(true, SheetFileType.TYPE_XLS, "copy_cells")) {
                 workbook.write(outputStream);
