@@ -11,13 +11,14 @@ SwiftBoot-shiro 封装了 Apache Shiro 实现了认证（Authentication）和授
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-shiro</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.2</version>
   </dependency>
   ```
 
 ## 使用
 
 ### 依赖
+* shiro
 * redis
 
 
@@ -55,7 +56,7 @@ swiftboot:
 * 定义用户（认证）实体类，实现 `UserEntityStub` 接口，
 
 
-### 认证
+### 认证 (Authentication)
 * 实现 `UserAuthDaoStub` 接口，这个实现会最终交由处理最终实际的用户数据的查询（因为支持多种认证机制同时工作）
 ```
 @Component("my-auth-service-name")
@@ -90,7 +91,7 @@ try {
 
 
 
-### 授权
+### 授权 (Authorization)
 
 * 实现 `UserPermissionDaoStub` 接口的 `findPermissionsByLoginName(String loginName)` 方法，通过用户登录名获取其所以的权限对象。
 具体实现可以用任何您想要的方式实现，可以用表连接查询，也可以用视图来实现，或者通过缓存来获取。

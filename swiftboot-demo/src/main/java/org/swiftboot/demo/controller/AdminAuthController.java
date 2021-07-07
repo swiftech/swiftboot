@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/admin/auth")
 @ResponseBody
 public class AdminAuthController {
-    private Logger log = LoggerFactory.getLogger(AdminAuthController.class);
+    private final Logger log = LoggerFactory.getLogger(AdminAuthController.class);
 
     @Resource
     private AdminUserService adminUserService;

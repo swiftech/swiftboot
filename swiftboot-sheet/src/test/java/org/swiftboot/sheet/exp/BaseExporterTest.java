@@ -98,13 +98,16 @@ public class BaseExporterTest extends BaseTest {
                 // matrix
                 .items(builder.itemBuilder()
                         .newItem().key("key-d4:f6").parse("d4:f6").value(matrix4x4)
-                        .newItem().key("key-c14:?").parse("c14:?").value(matrix4x4));
+                        .newItem().key("key-c14:?").parse("c14:?").value(matrix4x4)
+                );
 
         // Only for Excel.
         if (!SheetFileType.TYPE_CSV.equals(sheetType)) {
-            // merged matrix
+            // merged matrix and copy style from cell out of the area.
             builder.items(builder.itemBuilder()
-                    .newItem().key("merged-h14:k17").parse("h14:k17").copy("A1").merge().value(matrix4x4));
+                    .newItem().key("merged-b19:e22").parse("b19:e22").copy("A1").value(matrix4x4)
+                    .newItem().key("merged-h19:k22").parse("h19:k22").copy("A1").merge().value(matrix4x4)
+            );
         }
         return builder;
     }

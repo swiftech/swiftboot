@@ -25,7 +25,8 @@ public class SheetMeta {
     private MetaMap metaMap = new MetaMap();
 
     /**
-     * If not allowed, any areas with uncertain end position will let exception threw.
+     * If not allowed, any areas with uncertain end position will raise exception.
+     * Basically, it is Tree for export but False for import.
      */
     private boolean isAllowFreeSize = false;
 

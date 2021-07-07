@@ -60,7 +60,7 @@ public class ExcelImporter extends BaseImporter {
                 handler.onSheet(sheetInfo);
             }
         }, (metaItem, startPos, rowCount, columnCount) -> {
-            log.trace(String.format("Item: '%s' %s-%s-%s", metaItem.getKey(), startPos, rowCount, columnCount));
+            log.trace(String.format("Item: '%s' %s %s-%s", metaItem.getKey(), startPos, rowCount, columnCount));
             List<List<Object>> matrix = new ArrayList<>();
             for (int i = 0; i < rowCount; i++) {
                 cellInfo.get().setRowIdx(i);
@@ -79,6 +79,15 @@ public class ExcelImporter extends BaseImporter {
         return ret;
     }
 
+    /**
+     * Get values from {@code startPos} by {@code columnCount} in {@code row}.
+     *
+     * @param row
+     * @param startPos
+     * @param columnCount
+     * @param cellHandler
+     * @return
+     */
     private List<Object> getValuesInRow(Row row, Position startPos, int columnCount, CellHandler<ExcelCellInfo> cellHandler) {
         if (row == null || startPos == null) {
             return null;

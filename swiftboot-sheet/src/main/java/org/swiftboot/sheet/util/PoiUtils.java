@@ -180,7 +180,12 @@ public class PoiUtils {
         return sheet.getRow(rowIdx).getCell(colIdx);
     }
 
-
+    /**
+     * Value from cell, the type of value will be determined automatically.
+     *
+     * @param cell
+     * @return
+     */
     public static Object getValueFromCell(Cell cell) {
         if (cell != null) {
             switch (cell.getCellType()) {

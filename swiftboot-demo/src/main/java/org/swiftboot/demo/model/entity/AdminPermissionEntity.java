@@ -5,6 +5,7 @@ import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -144,15 +145,13 @@ public class AdminPermissionEntity extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+        if (!super.equals(o)) return false;
         AdminPermissionEntity that = (AdminPermissionEntity) o;
-
-        return permCode.equals(that.permCode);
-
+        return Objects.equals(permCode, that.permCode);
     }
 
     @Override
     public int hashCode() {
-        return permCode.hashCode();
+        return Objects.hash(super.hashCode(), permCode);
     }
 }
