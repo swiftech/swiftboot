@@ -29,9 +29,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  */
 public class SessionServiceRedisImpl implements SessionService {
 
-    private Logger log = LoggerFactory.getLogger(SessionServiceRedisImpl.class);
+    private final Logger log = LoggerFactory.getLogger(SessionServiceRedisImpl.class);
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Resource
     private RedisService redisService;

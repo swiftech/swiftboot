@@ -8,6 +8,7 @@ import org.swiftboot.web.constant.HttpConstants;
 /**
  * @param <E>
  * @author swiftech
+ * @deprecated
  */
 @ApiModel
 public abstract class BaseSessionCommand<E extends IdPersistable> extends BasePopulateCommand<E> {

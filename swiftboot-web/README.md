@@ -168,17 +168,18 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 
 SwiftBoot 可以帮助你把 `HttpServletRequest` 中的 Header 自动添加到 Command 对象中
 
+```java
+import org.swiftboot.web.command.WebMessageConverter;
 
-  ```java
-  @EnableWebMvc
-  public class MyDemoConfig implements WebMvcConfigurer{
-    
-      public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-          Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-          converters.add(new org.swiftboot.web.command.MessageConverter(builder.build));  
-      }
-  }
-  ```
+@EnableWebMvc
+public class MyDemoConfig implements WebMvcConfigurer {
+
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        converters.add(new WebMessageConverter(builder.build));
+    }
+}
+```
 
 ### Service 层
 

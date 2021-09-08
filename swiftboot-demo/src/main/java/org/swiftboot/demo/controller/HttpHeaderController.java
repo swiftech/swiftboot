@@ -21,7 +21,7 @@ import org.swiftboot.web.validate.ConvertValidateResult;
 @RequestMapping("/http/header")
 public class HttpHeaderController {
 
-    private Logger log = LoggerFactory.getLogger(HttpHeaderController.class);
+    private final Logger log = LoggerFactory.getLogger(HttpHeaderController.class);
 
     @ApiOperation(notes = "自动获取 http header 值", value = "自动获取 http header 值")
     @RequestMapping(value = "post", method = RequestMethod.POST)
@@ -32,9 +32,6 @@ public class HttpHeaderController {
             @RequestBody @Validated @ApiParam("会话") SessionCommand command) {
         log.info("> /http/header/post");
         log.debug(JsonUtils.object2PrettyJson(command));
-
-        log.info(command.getSessionId());
-
         return new HttpResponse<>();
     }
 }

@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 @ResponseBody
 public class AppUserController {
 
-    private Logger log = LoggerFactory.getLogger(AppUserController.class);
+    private final Logger log = LoggerFactory.getLogger(AppUserController.class);
 
     @Resource
     private AppUserService appUserService;
@@ -45,7 +45,8 @@ public class AppUserController {
             HttpServletResponse response) {
         log.info("> /app/user/signin");
         AppUserSigninResult appUserSigninResult = appUserService.appUserSignin(command);
-        Cookie cookie  = new Cookie(authConfigBean.getSession().getTokenKey(), appUserSigninResult.getToken());
+        Cookie cookie = new Cookie(authConfigBean.getSession().getTokenKey(), appUserSigninResult.getToken());
+        cookie.setPath("/");
         response.addCookie(cookie);
         return new HttpResponse<>(appUserSigninResult);
     }

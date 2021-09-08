@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @ApiModel
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class HttpResponse<T extends Object> implements Serializable {
+public class HttpResponse<T> implements Serializable {
 
     /**
      * 业务错误代码，长度4个字节的数字

@@ -1,5 +1,6 @@
 package org.swiftboot.data.model;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.TextStringBuilder;
 import org.slf4j.Logger;
@@ -43,7 +44,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  * 要求：
  * <ul>
  *     <li>导入的数据文件必须和实体类名称相同（不包含'Entity'）的 csv 文件</li>
- *     <li>实体类必须继承 BaseIdEntity，并且以 "Entity" 为后缀命名</li>
+ *     <li>实体类必须继承 {@link BaseIdEntity}，并且以 "Entity" 为后缀命名</li>
  *     <li>包结构必须是
  *     <pre>
  *     model
@@ -62,10 +63,10 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  */
 public class Initializer implements ApplicationContextAware {
 
-    private Logger log = LoggerFactory.getLogger(Initializer.class);
+    private final Logger log = LoggerFactory.getLogger(Initializer.class);
 
     @Resource
-    private SwiftBootDataConfigBean swiftBootConfigBean;
+    private SwiftBootDataConfigBean swiftBootDataConfigBean;
 
     private ApplicationContext applicationContext;
 
@@ -86,7 +87,7 @@ public class Initializer implements ApplicationContextAware {
     /**
      * 在数据文件中预生成ID， 运行带有一个参数：读取和写入 CSV 文件的目录路径
      *
-     * @param args 数据文件所在路径
+     * @param args 数据文件所在绝对路径
      */
     public static void main(String[] args) {
         if (args == null || args.length < 1 || StringUtils.isBlank(args[0])) {
@@ -106,7 +107,7 @@ public class Initializer implements ApplicationContextAware {
     /**
      * Run in command line mode, not the web mode
      *
-     * @param baseDirPath
+     * @param baseDirPath absolut path.
      */
     public void preAssignIdToAllDataFiles(String baseDirPath) {
         System.out.printf("Try to pre-assign id to all csv files under: %s%n", baseDirPath);
@@ -181,15 +182,21 @@ public class Initializer implements ApplicationContextAware {
     }
 
     public void initFromFiles() {
+        if (!swiftBootDataConfigBean.getModel().isInitData()) {
+            return;
+        }
         log.info("Init data from files: ");
         log.info("Scan entity classes from packages: ");
-        String[] pkgs = swiftBootConfigBean.getModel().getInitBaseEntityPackages();
+        String[] pkgs = swiftBootDataConfigBean.getModel().getInitBaseEntityPackages();
+        if (ArrayUtils.isEmpty(pkgs)) {
+            log.error("Incomplete config to do the initialization, please check the config file");
+            return;
+        }
         for (String pkg : pkgs) {
             log.info(pkg);
         }
 
-        File[] files = ClasspathResourceUtils.getResourceFiles(swiftBootConfigBean.getModel().getInitBaseDir(), ".csv");
-
+        File[] files = ClasspathResourceUtils.getResourceFiles(swiftBootDataConfigBean.getModel().getInitBaseDir(), ".csv");
         if (files == null || files.length == 0) {
             log.warn("No files found to init data");
             return;
@@ -197,7 +204,7 @@ public class Initializer implements ApplicationContextAware {
 
         Set<Class<?>> entityClasses
                 = SpringPackageUtils.scanClasses(
-                swiftBootConfigBean.getModel().getInitBaseEntityPackages(), BaseIdEntity.class);
+                swiftBootDataConfigBean.getModel().getInitBaseEntityPackages(), BaseIdEntity.class);
 
         if (entityClasses.isEmpty()) {
             log.warn("No entity classes found to create instance");
@@ -274,6 +281,9 @@ public class Initializer implements ApplicationContextAware {
 
                         @Override
                         public void onCell(int colNum, String columnName, String cellValue) {
+                            if (StringUtils.isBlank(cellValue)) {
+                                return;
+                            }
                             try {
                                 BeanUtils.forceSetPropertyFromString(entity, columnName, cellValue);
                             } catch (Exception e) {

@@ -26,7 +26,7 @@ import java.util.Optional;
 @Service
 public class AppUserServiceImpl implements AppUserService {
 
-    private Logger log = LoggerFactory.getLogger(AppUserServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(AppUserServiceImpl.class);
 
     @Resource
     private AppUserDao appUserDao;
@@ -61,10 +61,11 @@ public class AppUserServiceImpl implements AppUserService {
             ret.setSuccess(true);
 
             // session
-            Session session = new SessionBuilder().createSession();
-            session.setUserName(ret.getLoginName());
-            session.setUserId(ret.getId());
-            session.setGroup(authConfigBean.getSession().getGroup());
+            Session session = new SessionBuilder()
+                    .setUserName(ret.getLoginName())
+                    .setUserId(ret.getId())
+                    .setGroup(authConfigBean.getSession().getGroup())
+                    .createSession();
             String token = IdUtils.makeUUID();
             sessionService.addSession(token, session);
             ret.setToken(token);

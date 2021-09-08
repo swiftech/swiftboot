@@ -11,18 +11,18 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- * 扩展 SpringMVC 的接口参数转换
+ * 扩展 SpringMVC 的接口参数转换，默认情况下会被启用。
  * 包括：将 HTTP 头写入 HttpCommand 对象
  *
  * @author swiftech
  * @see HttpCommand
  **/
-public class MessageConverter extends MappingJackson2HttpMessageConverter {
+public class WebMessageConverter extends MappingJackson2HttpMessageConverter {
 
-    public MessageConverter() {
+    public WebMessageConverter() {
     }
 
-    public MessageConverter(ObjectMapper objectMapper) {
+    public WebMessageConverter(ObjectMapper objectMapper) {
         super(objectMapper);
     }
 

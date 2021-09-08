@@ -15,13 +15,14 @@ import org.swiftboot.web.util.HttpServletCookieUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYPE;
 
 /**
  * 拦截客户端的请求，用 Header 或者 Cookie 中的令牌来验证用户会话的有效性。
@@ -33,7 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class AuthFilter extends OncePerRequestFilter {
 
-    private Logger log = LoggerFactory.getLogger(AuthFilter.class);
+    private final Logger log = LoggerFactory.getLogger(AuthFilter.class);
 
     @Resource
     private SessionService sessionService;
@@ -44,7 +45,7 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws IOException {
 
         if (log.isDebugEnabled()) {
             log.debug(String.valueOf(request.getRequestURL()));
@@ -58,10 +59,7 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         String tokenKey = configBean.getSession().getTokenKey();
-        String token = HttpServletCookieUtils.getCookieValue(request, tokenKey);
-        if (isBlank(token)) {
-            token = request.getHeader(tokenKey);
-        }
+        String token = HttpServletCookieUtils.getValueFromHeaderOrCookie(request, tokenKey);
 
         if (isBlank(token)) {
             if (log.isWarnEnabled()) {
@@ -72,7 +70,8 @@ public class AuthFilter extends OncePerRequestFilter {
         else {
             try {
                 sessionService.verifySession(token);
-                filterChain.doFilter(request, response);
+                log.debug("User verified as valid");
+                filterChain.doFilter(new TokenRequestWrapper(request, tokenKey), response);
             } catch (ErrMessageException e) {
                 e.printStackTrace();
                 this.responseWithError(response, e.getErrorCode());
@@ -83,13 +82,40 @@ public class AuthFilter extends OncePerRequestFilter {
         }
     }
 
+    /**
+     * This wrapper transfer the token from cookie to header, to make sure // TBD
+     */
+    static class TokenRequestWrapper extends HttpServletRequestWrapper {
+        private final String tokenKey;
+
+        public TokenRequestWrapper(HttpServletRequest request, String tokenKey) {
+            super(request);
+            this.tokenKey = tokenKey;
+        }
+
+        @Override
+        public String getHeader(String name) {
+            if (tokenKey.equals(name)) {
+                HttpServletRequest req = (HttpServletRequest) getRequest();
+                return HttpServletCookieUtils.getValueFromHeaderOrCookie(req, name);
+            }
+            return super.getHeader(name);
+        }
+    }
+
     private void responseWithError(HttpServletResponse response, String errorCode) throws IOException {
         HttpResponse<?> resp = new HttpResponse<>(errorCode);
         response.setCharacterEncoding("utf-8");
-        response.setContentType("application/json; charset=utf-8");
+        response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
         response.flushBuffer();
         response.getWriter().close();
     }
+
+//    private void responseWithHttpStatus(HttpServletResponse response) throws IOException {
+//        response.setStatus(HttpStatus.FORBIDDEN.value());
+//        response.flushBuffer();
+//        response.getWriter().close();
+//    }
 
 }

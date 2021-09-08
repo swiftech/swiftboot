@@ -19,10 +19,22 @@ public class MapUtils {
      * @return
      */
     public static Map<String, String> parseKeyValueString(String content) {
+        return parseKeyValueString(content, ',', ':');
+    }
+
+    /**
+     * 将key-value字符串转换成Map，key不能有重复
+     *
+     * @param content
+     * @param pairSeparator
+     * @param kvSeparator
+     * @return
+     */
+    public static Map<String, String> parseKeyValueString(String content, Character pairSeparator, Character kvSeparator) {
         Map<String, String> ret = new HashMap<>();
-        String[] all = StringUtils.split(content, ",");
+        String[] all = StringUtils.split(content, pairSeparator);
         for (String entry : all) {
-            String[] kv = StringUtils.split(entry.trim(), ":");
+            String[] kv = StringUtils.split(entry.trim(), kvSeparator);
             if (ArrayUtils.isEmpty(kv) || kv.length < 2) {
                 continue;
             }
@@ -30,5 +42,7 @@ public class MapUtils {
         }
         return ret;
     }
+
+
 
 }
