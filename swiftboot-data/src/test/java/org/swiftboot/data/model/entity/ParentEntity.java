@@ -9,7 +9,7 @@ import java.util.List;
  * @author swiftech
  **/
 @Entity
-@Table(name = "PARENT_TABLE")
+@Table(name = "UT_PARENT_TABLE")
 public class ParentEntity extends BaseLongTimeEntity implements Serializable {
     @Column
     private

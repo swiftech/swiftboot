@@ -31,11 +31,6 @@ public class SwiftbootShiroConfigBean {
      */
     private String successUrl = "";
 
-    /**
-     * @deprecated to successUrl
-     */
-    private String returnUrl;
-
     public CookieConfigBean getCookie() {
         return cookie;
     }
@@ -68,11 +63,4 @@ public class SwiftbootShiroConfigBean {
         this.loginUrl = loginUrl;
     }
 
-    public String getReturnUrl() {
-        return returnUrl;
-    }
-
-    public void setReturnUrl(String returnUrl) {
-        this.returnUrl = returnUrl;
-    }
 }

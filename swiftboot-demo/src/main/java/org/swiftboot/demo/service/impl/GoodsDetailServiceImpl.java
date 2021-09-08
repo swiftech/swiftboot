@@ -88,7 +88,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
         Optional<GoodsDetailEntity> optEntity = goodsDetailDao.findById(goodsDetailId);
         if (optEntity.isPresent()) {
             GoodsDetailEntity p = optEntity.get();
-            p.setDelete(true);
+            p.setIsDelete(true);
             goodsDetailDao.save(p);
         }
     }
@@ -102,7 +102,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     public void deleteGoodsDetailList(IdListCommand cmd) {
         List<GoodsDetailEntity> entities = goodsDetailDao.findAllByIdIn(cmd.getIds());
         for (GoodsDetailEntity entity : entities) {
-            entity.setDelete(true);
+            entity.setIsDelete(true);
             goodsDetailDao.save(entity);
             // TODO 处理关联表的数据删除
         }

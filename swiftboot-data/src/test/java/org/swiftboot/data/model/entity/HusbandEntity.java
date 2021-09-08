@@ -6,7 +6,7 @@ import javax.persistence.*;
  * @author swiftech
  **/
 @Entity
-@Table(name = "HUSBAND_TABLE")
+@Table(name = "UT_HUSBAND_TABLE")
 public class HusbandEntity extends BaseEntity {
 
     @Column

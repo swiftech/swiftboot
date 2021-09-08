@@ -1,4 +1,4 @@
-package org.swiftboot.data.id.entity;
+package org.swiftboot.data.model.id.entity;
 
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Description("测试实体类")
 @Entity
 @Table(name = "TEST_TABLE")
-public class AaaaEntity extends BaseEntity {
+public class AEntity extends BaseEntity {
     /**
      * 名称
      */

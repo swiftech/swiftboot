@@ -8,11 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
-import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
-import org.swiftboot.demo.command.OrderWithDetailSaveCommand;
 import org.swiftboot.demo.model.dao.OrderDao;
 import org.swiftboot.demo.model.dao.OrderDetailDao;
-import org.swiftboot.demo.model.entity.OrderDetailEntity;
 import org.swiftboot.demo.model.entity.OrderEntity;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
@@ -90,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<OrderEntity> optEntity = orderDao.findById(orderId);
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
-            p.setDelete(true);
+            p.setIsDelete(true);
             orderDao.save(p);
         }
     }
@@ -104,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrderList(IdListCommand cmd) {
         List<OrderEntity> entities = orderDao.findAllByIdIn(cmd.getIds());
         for (OrderEntity entity : entities) {
-            entity.setDelete(true);
+            entity.setIsDelete(true);
             orderDao.save(entity);
             // TODO 处理关联表的数据删除
         }

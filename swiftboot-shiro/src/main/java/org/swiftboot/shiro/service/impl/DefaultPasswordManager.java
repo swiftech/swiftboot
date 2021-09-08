@@ -15,12 +15,12 @@ import javax.annotation.PostConstruct;
  */
 public class DefaultPasswordManager implements PasswordManager {
 
-    private Logger log = LoggerFactory.getLogger(DefaultPasswordManager.class);
+    private final Logger log = LoggerFactory.getLogger(DefaultPasswordManager.class);
 
     @PostConstruct
     public void init() {
         // 启用默认的密码管理器，如果需要更加安全，定义自己的密码管理并且实现更复杂的密码机制
-        log.warn("");
+        log.warn("Default password manager(md5) should be replaced with more secure mechanism");
     }
 
     /**

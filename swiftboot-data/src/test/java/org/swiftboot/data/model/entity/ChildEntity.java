@@ -8,7 +8,7 @@ import javax.persistence.*;
  * @author swiftech
  **/
 @Entity
-@Table(name = "CHILD_TABLE")
+@Table(name = "UT_CHILD_TABLE")
 public class ChildEntity extends BaseLongTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

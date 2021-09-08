@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
+ * All required beans that make shiro works.
+ *
  * @author swiftech
  * @since 1.2
  **/
@@ -73,7 +75,7 @@ public class SwiftbootShiroConfig {
         else {
             ret.setSessionDAO(shiroSessionMemoryDao());
         }
-        ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000);
+        ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000L);
         ret.setSessionIdCookie(sessionIdCookie());
         ret.setSessionListeners(new ArrayList<SessionListener>() {
             {

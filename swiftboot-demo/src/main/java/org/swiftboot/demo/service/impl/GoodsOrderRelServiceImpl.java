@@ -78,7 +78,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
         Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(goodsOrderRelId);
         if (optEntity.isPresent()) {
             GoodsOrderRelEntity p = optEntity.get();
-            p.setDelete(true);
+            p.setIsDelete(true);
             goodsOrderRelDao.save(p);
         }
     }
@@ -92,7 +92,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     public void deleteGoodsOrderRelList(IdListCommand cmd) {
         List<GoodsOrderRelEntity> entities = goodsOrderRelDao.findAllByIdIn(cmd.getIds());
         for (GoodsOrderRelEntity entity : entities) {
-            entity.setDelete(true);
+            entity.setIsDelete(true);
             goodsOrderRelDao.save(entity);
             // TODO 处理关联表的数据删除
         }
@@ -109,7 +109,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
         goodsOrderRelDao.findByGoodsIdAndOrderId(
             cmd.getGoodsId(), cmd.getOrderId());
         for (GoodsOrderRelEntity p : entities) {
-            p.setDelete(true);
+            p.setIsDelete(true);
             goodsOrderRelDao.save(p);
         }
     }

@@ -1,0 +1,31 @@
+spring:
+  jpa:
+    show-sql: true
+    open-in-view: false
+logging:
+  level:
+    root: INFO
+    org.swiftboot: TRACE
+    org.hibernate: INFO
+shiro:
+  enabled: true
+  annotations:
+    enabled: true
+swiftboot:
+  data:
+    model:
+      autoGenerateId: true
+      autoUpdateTimeStrategy: on-change
+  shiro:
+    enabled: true
+    cookie:
+      domain: localhost
+      path: /
+      name: swiftboot_shiro_token
+      maxAge: 1800
+    session:
+      storageType: memory
+      timeout: 1800
+      redisGroup: shiro-session
+    loginUrl: /login
+    successUrl: /main

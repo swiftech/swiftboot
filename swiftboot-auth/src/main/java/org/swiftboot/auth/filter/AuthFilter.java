@@ -63,7 +63,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
         if (isBlank(token)) {
             if (log.isWarnEnabled()) {
-                log.warn(String.format("No token '%s' in the Header or Cookie", tokenKey));
+                log.warn(String.format("No token '%s' in Headers or Cookies", tokenKey));
             }
             this.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
         }

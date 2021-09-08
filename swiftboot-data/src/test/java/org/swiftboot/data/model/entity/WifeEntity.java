@@ -6,7 +6,7 @@ import javax.persistence.*;
  * @author swiftech
  **/
 @Entity
-@Table(name = "WIFE_TABLE")
+@Table(name = "UT_WIFE_TABLE")
 public class WifeEntity extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
