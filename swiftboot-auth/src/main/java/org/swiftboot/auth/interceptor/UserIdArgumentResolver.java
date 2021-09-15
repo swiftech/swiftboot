@@ -17,8 +17,8 @@ import javax.annotation.Resource;
 
 /**
  * @author swiftech
- * @since 2.1
  * @see org.swiftboot.auth.filter.AuthFilter
+ * @since 2.1
  */
 public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -32,7 +32,9 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(UserId.class);
+        return parameter.hasParameterAnnotation(UserId.class)
+                || parameter.hasParameterAnnotation(UserName.class)
+                || parameter.hasParameterAnnotation(org.swiftboot.auth.interceptor.Session.class);
     }
 
     @Override
@@ -54,7 +56,18 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
                 return null;
             }
             log.info("Find and pre-set user id: " + session.getUserId());
-            return session.getUserId();
+            if (parameter.hasParameterAnnotation(UserId.class)) {
+                return session.getUserId();
+            }
+            else if (parameter.hasParameterAnnotation(UserName.class)) {
+                return session.getUserName();
+            }
+            else if (parameter.hasParameterAnnotation(org.swiftboot.auth.interceptor.Session.class)) {
+                return session;
+            }
+            else {
+                return null;
+            }
         }
     }
 }

@@ -119,3 +119,5 @@ public HttpResponse<?> getOrderList(@UserId String userId) {
 
 }
 ```
+
+> 除了 `@UserId`，还有 `@UserName` 可以直接获得登录的用户名，甚至可以通过 `@UserSession` 直接获得 session 对象

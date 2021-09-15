@@ -17,6 +17,9 @@ public class BaseAuthenticatedCommand<E extends IdPersistable> extends BasePopul
     private String userId;
 
     @JsonIgnore
+    private String userName;
+
+    @JsonIgnore
     public String getUserId() {
         return userId;
     }
@@ -26,4 +29,13 @@ public class BaseAuthenticatedCommand<E extends IdPersistable> extends BasePopul
         this.userId = userId;
     }
 
+    @JsonIgnore
+    public String getUserName() {
+        return userName;
+    }
+
+    @JsonIgnore
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

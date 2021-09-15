@@ -66,6 +66,7 @@ public class UserSessionMessageConverter extends WebMessageConverter {
                 }
                 log.info("Find and pre-set user id: " + session.getUserId());
                 command.setUserId(session.getUserId());
+                command.setUserName(session.getUserName());
             }
         }
         return converted;
