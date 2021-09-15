@@ -2,6 +2,7 @@ package org.swiftboot.demo.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.BindingResult;
+import org.swiftboot.auth.interceptor.UserId;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
@@ -37,7 +38,7 @@ import javax.annotation.Resource;
 @ResponseBody
 public class OrderController {
 
-    private Logger log = LoggerFactory.getLogger(OrderController.class);
+    private final Logger log = LoggerFactory.getLogger(OrderController.class);
 
     @Resource
     private OrderService orderService;
@@ -49,6 +50,7 @@ public class OrderController {
             @RequestBody @Validated @ApiParam("创建订单参数") OrderCreateCommand command,
             BindingResult bindingResult) {
         log.info("> /order/create");
+        log.info(command.getUserId());
         log.debug(JsonUtils.object2PrettyJson(command));
         OrderCreateResult ret = orderService.createOrder(command);
         return new HttpResponse<>(ret);
@@ -81,8 +83,9 @@ public class OrderController {
 
     @ApiOperation(notes = "查询订单列表", value = "查询订单列表")
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public HttpResponse<OrderListResult> orderList() {
+    public HttpResponse<OrderListResult> orderList(@UserId String userId) {
         log.info("> /order/list");
+        log.debug(userId);
         OrderListResult ret = orderService.queryOrderList();
         return new HttpResponse<>(ret);
     }

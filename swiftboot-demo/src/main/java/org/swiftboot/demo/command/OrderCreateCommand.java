@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
+import org.swiftboot.auth.controller.BaseAuthenticatedCommand;
 import org.swiftboot.demo.model.entity.OrderEntity;
-import org.swiftboot.web.command.BasePopulateCommand;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @author swiftech 2019-08-22
  **/
 @ApiModel
-public class OrderCreateCommand extends BasePopulateCommand<OrderEntity> {
+public class OrderCreateCommand extends BaseAuthenticatedCommand<OrderEntity> {
 
     @ApiModelProperty(value = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")

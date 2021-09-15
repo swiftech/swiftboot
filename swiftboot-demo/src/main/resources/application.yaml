@@ -33,8 +33,8 @@ swiftboot:
       autoGenerateId: true
       autoUpdateTimeStrategy: on-change
       initData: true
-      initBaseDir: /Users/allen/Workspace/github/swiftboot/swiftboot-web/src/test/resources/init/
-      initBasePackages:
+      initBaseDir: init/
+      initBaseEntityPackages:
         - org.swiftboot.demo.model.entity
 shiro:
   enabled: false

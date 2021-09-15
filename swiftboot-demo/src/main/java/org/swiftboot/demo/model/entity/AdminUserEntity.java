@@ -20,21 +20,21 @@ import javax.persistence.Table;
 public class AdminUserEntity extends BaseEntity implements UserEntityStub {
 
     /**
-     * Login name of administrator
+     * 登录名
      */
     @PropertyDescription(value = "Login name of administrator", example = "admin")
     @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) NOT NULL COMMENT 'Login name of administrator'")
     private String loginName;
 
     /**
-     * Login password to login name (MD5 with salt)
+     * 登录密码 (MD5加盐)
      */
     @PropertyDescription(value = "Login password to login name", notes = "MD5 with salt", example = "a865a7e0ddbf35fa6f6a232e0893bea4")
     @Column(name = "LOGIN_PWD", length = 64, nullable = false, columnDefinition = "VARCHAR(64) NOT NULL COMMENT 'Login password to login name(MD5 with salt)'")
     private String loginPwd;
 
     /**
-     * Name of the user
+     * 用户姓名
      */
     @PropertyDescription(value = "Name of the user", example = "James Bond")
     @Column(name = "USER_NAME", length = 64, columnDefinition = "VARCHAR(64) COMMENT 'Name of the user'")
@@ -49,42 +49,42 @@ public class AdminUserEntity extends BaseEntity implements UserEntityStub {
     }
 
     /**
-     * 获取Login name of administrator
+     * 获取登录名
      */
     public String getLoginName() {
         return loginName;
     }
 
     /**
-     * 设置Login name of administrator
+     * 设置登录名
      */
     public void setLoginName(String loginName) {
         this.loginName = loginName;
     }
 
     /**
-     * 获取Login password to login name (MD5 with salt)
+     * 获取登录密码 (MD5加盐)
      */
     public String getLoginPwd() {
         return loginPwd;
     }
 
     /**
-     * 设置Login password to login name (MD5 with salt)
+     * 设置登录密码 (MD5加盐)
      */
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
     }
 
     /**
-     * 获取Name of the user
+     * 获取用户姓名
      */
     public String getUserName() {
         return userName;
     }
 
     /**
-     * 设置Name of the user
+     * 设置用户姓名
      */
     public void setUserName(String userName) {
         this.userName = userName;

@@ -42,7 +42,7 @@ import java.util.Set;
 @ResponseBody
 public class AdminUserController {
 
-    private Logger log = LoggerFactory.getLogger(AdminUserController.class);
+    private final Logger log = LoggerFactory.getLogger(AdminUserController.class);
 
     @Resource
     private AdminUserService adminUserService;
