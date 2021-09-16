@@ -10,10 +10,13 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.annotation.Addition;
+import org.swiftboot.auth.annotation.ExpireTime;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @author swiftech
@@ -34,6 +37,8 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(UserId.class)
                 || parameter.hasParameterAnnotation(UserName.class)
+                || parameter.hasParameterAnnotation(ExpireTime.class)
+                || parameter.hasParameterAnnotation(Addition.class)
                 || parameter.hasParameterAnnotation(org.swiftboot.auth.interceptor.Session.class);
     }
 
@@ -61,6 +66,19 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
             }
             else if (parameter.hasParameterAnnotation(UserName.class)) {
                 return session.getUserName();
+            }
+            else if (parameter.hasParameterAnnotation(ExpireTime.class)) {
+                return session.getExpireTime();
+            }
+            else if (parameter.hasParameterAnnotation(Addition.class)) {
+                Addition anno = parameter.getParameterAnnotation(Addition.class);
+                if (anno != null && StringUtils.isNotBlank(anno.value())) {
+                    Map<String, Object> additions = session.getAdditions();
+                    if (additions != null && additions.containsKey(anno.value())) {
+                        return additions.get(anno.value());
+                    }
+                }
+                return null;
             }
             else if (parameter.hasParameterAnnotation(org.swiftboot.auth.interceptor.Session.class)) {
                 return session;

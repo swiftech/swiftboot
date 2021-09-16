@@ -65,6 +65,7 @@ public class AppUserServiceImpl implements AppUserService {
                     .userName(ret.getLoginName())
                     .userId(ret.getId())
                     .group(authConfigBean.getSession().getGroup())
+                    .addition("some_addition", "some addition in session")
                     .createSession();
             String token = IdUtils.makeUUID();
             sessionService.addSession(token, session);

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -62,7 +64,7 @@ public class JsonUtils {
      * @throws IOException
      */
     public static Map jsonToMap(String strJson) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.readValue(strJson, new TypeReference<Map>() {
         });
     }
@@ -77,7 +79,7 @@ public class JsonUtils {
      * @throws IOException
      */
     public static <T> T jsonTo(String strJson, Class<T> type) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.readValue(strJson, type);
     }
 
@@ -91,7 +93,7 @@ public class JsonUtils {
      * @throws IOException
      */
     public static <T> T jsonTo(String strJson, TypeReference<T> type) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.readValue(strJson, type);
     }
 
@@ -103,7 +105,7 @@ public class JsonUtils {
      * @throws JsonProcessingException
      */
     public static String mapToJson(Map map) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.writeValueAsString(map);
     }
 
@@ -115,7 +117,7 @@ public class JsonUtils {
      * @throws IOException
      */
     public static String object2Json(Object obj) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.writeValueAsString(obj);
     }
 
@@ -126,13 +128,20 @@ public class JsonUtils {
      * @return
      */
     public static String object2PrettyJson(Object obj) {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = getJava8ObjectMapper();
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return e.getLocalizedMessage();
         }
+    }
+
+    public static ObjectMapper getJava8ObjectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return mapper;
     }
 }
 
