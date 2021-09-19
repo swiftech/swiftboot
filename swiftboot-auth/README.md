@@ -1,7 +1,10 @@
 # SwiftBoot-Auth
-提供企业开发中的基本的用户认证功能）
+
+提供企业开发中的用户认证功能
 
 ### 特性
+* 非常少的代码即可实现完整的用户认证，只要实现校验用户凭证的代码逻辑和配置认证过滤有效的 URL 即可。
+
 * 一旦引用了 SwiftBoot-Auth，其内建的过滤器就会检查请求 Header 或 Coolie 中是否存在令牌（Token）以及令牌对应的会话（session）是否有效，
 令牌的名称通过 `swiftboot.auth.session.tokenKey` 来设定，过滤器需要过滤哪些 API 通过在配置 `FilterRegistrationBean` 中注册相应的 URI 来指定（例子请看后面的章节）
 
@@ -26,6 +29,7 @@
 ```yaml
 swiftboot:
   auth:
+    enabled: true
     session:
       type: redis
       group: my_session
@@ -49,14 +53,14 @@ swiftboot:
 
 ```java
 public class MyConfig {
-    @Bean
-    public AuthFilter authFilter() {
-        return new AuthFilter();
-    }
+
+    @Resource
+    AuthFilter authFilter;
+    
     @Bean
     public FilterRegistrationBean<AuthFilter> regAuthFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(authFilter());
+        registrationBean.setFilter(authFilter);
         registrationBean.addUrlPatterns("/secure/api/*");
         registrationBean.setOrder(Ordered.LOWEST_PRECEDENCE);
         return registrationBean;
@@ -79,8 +83,7 @@ public class MySigninServiceImpl {
         // 保存用户会话
         String userId = "<my user id>";
         String token = IdUtils.makeUUID(); // replace with your own token mechanism
-        Session session = new Session();
-        session.setUserId(userId);
+        Session session = new SessionBuilder().userId(userId).userName(nickName).createSession();
         sessionService.addSession(token, session);
         return token;
     }

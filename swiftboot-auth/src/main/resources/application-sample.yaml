@@ -1,5 +1,6 @@
 swiftboot:
   auth:
+    enabled: true
     session:
       type: redis
       group: swiftboot_session

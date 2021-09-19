@@ -6,15 +6,17 @@ import org.apache.commons.text.TextStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.swiftboot.data.SwiftBootDataConfigBean;
-import org.swiftboot.data.model.dao.GenericDao;
 import org.swiftboot.data.model.entity.BaseIdEntity;
+import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.data.reader.CsvReader;
 import org.swiftboot.data.reader.CsvReaderHandler;
 import org.swiftboot.data.util.SpringPackageUtils;
@@ -27,12 +29,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase;
@@ -43,6 +42,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  * 初始化执行过程中会对主键或者关键字段（必须是 unique 字段）做重复性检查
  * 要求：
  * <ul>
+ *     <li>创建 bean 的时候要调用 {@code addRepository} 把需要初始化数据的实体类和对于的 {@code CrudRepository} 做关联</li>
  *     <li>导入的数据文件必须和实体类名称相同（不包含'Entity'）的 csv 文件</li>
  *     <li>实体类必须继承 {@link BaseIdEntity}，并且以 "Entity" 为后缀命名</li>
  *     <li>包结构必须是
@@ -76,13 +76,20 @@ public class Initializer implements ApplicationContextAware {
     @Resource
     private EntityManager entityManager;
 
-    @Resource
-    private GenericDao genericDao;
-//
-//    @Resource
-//    private EntityManagerFactory entityManagerFactory;
-//
-//    private JpaRepositoryFactory jpaRepositoryFactory;
+//    private Map<Class<? extends IdPersistable>, CrudRepository<? extends IdPersistable, String>> repositoryMapping;
+
+    private final List<Class<? extends IdPersistable>> initEntities = new ArrayList<>();
+
+    private final AtomicInteger createdCount = new AtomicInteger(0);
+    private final AtomicInteger updatedCount = new AtomicInteger(0);
+
+    @Value("${spring.profiles.active}")
+    private String env;
+
+    /**
+     * Fallback to env if CSV data file not found for current env, if null, don't fallback.
+     */
+    private String fallbackEnv;
 
     /**
      * 在数据文件中预生成ID， 运行带有一个参数：读取和写入 CSV 文件的目录路径
@@ -101,6 +108,17 @@ public class Initializer implements ApplicationContextAware {
 
     @PostConstruct
     public void init() {
+        if (!swiftBootDataConfigBean.getModel().isInitData()) {
+            return;
+        }
+        if (initEntities.isEmpty()) {
+            log.warn("init data is enabled, but target entities is not given, please configure them.");
+            return;
+        }
+//        if (repositoryMapping == null || repositoryMapping.isEmpty()) {
+//            log.warn("init data is enabled, but dao mapping is not given, this process is ignored.");
+//            return;
+//        }
         initFromFiles();
     }
 
@@ -110,19 +128,19 @@ public class Initializer implements ApplicationContextAware {
      * @param baseDirPath absolut path.
      */
     public void preAssignIdToAllDataFiles(String baseDirPath) {
-        System.out.printf("Try to pre-assign id to all csv files under: %s%n", baseDirPath);
+        log.info(String.format("Try to pre-assign id to all csv files under: %s", baseDirPath));
         File baseDir = new File(baseDirPath);
         if (!baseDir.exists() || !baseDir.isDirectory()) {
-            System.out.println(String.format("Not exists or not a directory: %s", baseDir.getName()));
+            log.info(String.format("Not exists or not a directory: %s", baseDir.getName()));
         }
         else {
             File[] files = baseDir.listFiles((dir, name) -> name.endsWith(".csv"));
             if (files == null || files.length == 0) {
-                System.out.println("No files found to pre-assign ID");
+                log.info("No files found to pre-assign ID");
                 return;
             }
             for (File file : files) {
-                System.out.println("Pre-assign ID to file: " + file.getName());
+                log.info("Pre-assign ID to file: " + file.getName());
                 try {
                     TextStringBuilder outBuffer = new TextStringBuilder();
                     new CsvReader().readCsv(new FileInputStream(file), new CsvReaderHandler() {
@@ -146,7 +164,7 @@ public class Initializer implements ApplicationContextAware {
                         @Override
                         public void onRow(int rowNum, List<String> columns) {
                             outBuffer.appendNewLine();
-                            System.out.printf("handle line %d%n", rowNum);
+                            log.info(String.format("handle line %d", rowNum));
                             if (columns.size() < columnCount) {
                                 outBuffer.append("\"").append(IdUtils.makeID(code)).append("\"").append(",");
                             }
@@ -160,12 +178,12 @@ public class Initializer implements ApplicationContextAware {
 
                         @Override
                         public void onCell(int colNum, String columnName, String cellValue) {
-                            System.out.printf("handle data: %s=%s%n", columnName, cellValue);
+                            log.info(String.format("handle data: %s=%s", columnName, cellValue));
                         }
 
                         @Override
                         public void onRowFinished(int rowNow) {
-                            System.out.printf("row finished: %d%n", rowNow);
+                            log.info(String.format("row finished: %d", rowNow));
                         }
                     });
                     System.out.println(outBuffer.toString());
@@ -181,10 +199,16 @@ public class Initializer implements ApplicationContextAware {
         }
     }
 
+    public void withEntity(Class<? extends IdPersistable> entity) {
+        initEntities.add(entity);
+    }
+
+    @SafeVarargs
+    public final void withEntities(Class<? extends IdPersistable>... entities) {
+        Collections.addAll(initEntities, entities);
+    }
+
     public void initFromFiles() {
-        if (!swiftBootDataConfigBean.getModel().isInitData()) {
-            return;
-        }
         log.info("Init data from files: ");
         log.info("Scan entity classes from packages: ");
         String[] pkgs = swiftBootDataConfigBean.getModel().getInitBaseEntityPackages();
@@ -196,9 +220,13 @@ public class Initializer implements ApplicationContextAware {
             log.info(pkg);
         }
 
-        File[] files = ClasspathResourceUtils.getResourceFiles(swiftBootDataConfigBean.getModel().getInitBaseDir(), ".csv");
-        if (files == null || files.length == 0) {
-            log.warn("No files found to init data");
+        Map<Class<? extends IdPersistable>, InputStream> inputStreams;
+        try {
+            inputStreams = this.loadCsvDataFilesAsStreams();
+            if (inputStreams.isEmpty()) return;
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("Load CSV data files to init failed.");
             return;
         }
 
@@ -214,32 +242,60 @@ public class Initializer implements ApplicationContextAware {
         Map<String, ? extends Class<?>> classDic = entityClasses.stream().collect(
                 Collectors.toMap(clazz -> clazz.getSimpleName(), clazz -> clazz));
 
-        for (File file : files) {
-            log.info(String.format("Load data from file: %s", file.getName()));
-            String rawFileName = substringBeforeLast(file.getName(), ".csv");
-            Class<?> aClass = classDic.get(rawFileName + "Entity");
-            log.info("  for entity class: " + aClass);
+        for (Class<? extends IdPersistable> entityClass : inputStreams.keySet()) {
+            InputStream fileIns = inputStreams.get(entityClass);
+//            log.info(String.format("Load data from file: %s", file.getName()));
+//            String rawFileName = substringBeforeLast(file.getName(), ".csv");
+//            Class<?> aClass = classDic.get(rawFileName + "Entity");
+            log.info("  for entity class: " + entityClass);
 
-            if (aClass == null) {
-                log.warn(String.format("Entity class not exist: %sEntity", rawFileName));
+            if (entityClass == null) {
+                log.warn(String.format("Entity class not exist: %s", entityClass));
             }
             else {
                 try {
-                    initOne(file, rawFileName, aClass);
+                    initOne(fileIns, entityClass);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    log.warn(String.format("Make sure the class %s doesn't have a non-arg constructor%n", aClass.getName()));
+                    log.warn(String.format("Init one record failed, make sure the entity class %s does have a non-arg constructor.", entityClass.getName()));
                     break;
                 }
             }
         }
+        log.info(String.format("Initialize data done with %d objects created and %d objects updated", createdCount.get(), updatedCount.get()));
+    }
+
+    private Map<Class<? extends IdPersistable>, InputStream> loadCsvDataFilesAsStreams() throws IOException {
+        Map<Class<? extends IdPersistable>, InputStream> ret = new HashMap<>();
+        for (Class<? extends IdPersistable> initEntityClass : initEntities) {
+            String fileName = StringUtils.substringBefore(initEntityClass.getSimpleName(), "Entity");
+            String dataFileUri = String.format("%s%s/%s.csv", swiftBootDataConfigBean.getModel().getInitBaseDir(), env, fileName);
+            log.info("Try to load CSV data file: " + dataFileUri);
+            InputStream inputStream = ClasspathResourceUtils.openResourceStream(dataFileUri);
+            if (inputStream == null) {
+                log.warn("No CSV file found to init data.");
+                if (StringUtils.isNotBlank(fallbackEnv)) {
+                    dataFileUri = String.format("%s%s/%s.csv", swiftBootDataConfigBean.getModel().getInitBaseDir(), fallbackEnv, fileName);
+                    log.info("Fallback to load CSV data file: " + dataFileUri);
+                    inputStream = ClasspathResourceUtils.openResourceStream(dataFileUri);
+                    if (inputStream == null) {
+                        log.warn("No CSV file found to init data.");
+                        continue;
+                    }
+                }
+            }
+            ret.put(initEntityClass, inputStream);
+        }
+        return ret;
     }
 
     @Transactional
-    void initOne(File file, String rawFileName, Class<?> aClass) throws Exception {
-        // try to get dao
-        String baseName = substringBeforeLast(aClass.getName(), ".entity.");
-        String daoName = String.format("%s.dao.%sDao", baseName, rawFileName);
+    void initOne(InputStream fileIns, Class<?> entityClass) throws Exception {
+        // try to get dao bean
+        String baseName = substringBeforeLast(entityClass.getName(), ".entity.");
+        String entityName = StringUtils.substringBefore(entityClass.getSimpleName(), "Entity");
+        String daoName = String.format("%s.dao.%sDao", baseName, entityName);
+
         Class<?> daoClass = Class.forName(daoName);
         if (daoClass == null) {
             log.warn(String.format("Dao class not exist: %s", daoName));
@@ -248,34 +304,48 @@ public class Initializer implements ApplicationContextAware {
         else {
             log.info("Dao class: " + daoClass);
         }
+        Object daoBean = this.applicationContext.getBean(daoClass);
+        CrudRepository<? extends IdPersistable, String> dao =
+                (CrudRepository<? extends IdPersistable, String>) daoBean;
+        log.info(String.format("Use DAO %s to create entities", dao));
 
-//        Object daoBean = this.applicationContext.getBean(daoClass);
-//
-//        CrudRepository<BaseIdEntity, String> dao =
-//                (CrudRepository<BaseIdEntity, String>) daoBean;
-//        log.info(String.format("Use DAO %s to create entities", dao));
+//        CrudRepository<? extends IdPersistable, String> dao = repositoryMapping.get(entityClass);
+//        if (dao == null) {
+//            log.warn(String.format("Dao instance not exist: %s", entityClass));
+//            return;
+//        }
 
         TransactionTemplate transactionTemplate = new TransactionTemplate(txManager);
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                FileInputStream fileInputStream = null;
+//                FileInputStream fileInputStream = null;
                 try {
-                    fileInputStream = new FileInputStream(file);
-                    new CsvReader().readCsv(fileInputStream, new CsvReaderHandler() {
-                        private BaseIdEntity entity;
+//                    fileInputStream = new FileInputStream(fileIns);
+                    AtomicInteger idColIdx = new AtomicInteger(0); // Index of the ID column
+                    new CsvReader().readCsv(fileIns, new CsvReaderHandler() {
+                        private IdPersistable entity;
 
                         @Override
                         public void onTitle(List<String> titles) {
-
+                            for (int i = 0; i < titles.size(); i++) {
+                                if ("id".equalsIgnoreCase(titles.get(i))) idColIdx.set(i);
+                            }
                         }
 
                         @Override
                         public void onRow(int rowNum, List<String> columns) {
-                            try {
-                                entity = (BaseIdEntity) aClass.getDeclaredConstructor().newInstance();
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            String id = columns.get(idColIdx.get());
+                            Optional<IdPersistable> byId = (Optional<IdPersistable>) dao.findById(id);
+                            if (byId.isPresent()) {
+                                entity = byId.get();
+                            }
+                            else {
+                                try {
+                                    entity = (BaseIdEntity) entityClass.getDeclaredConstructor().newInstance();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 
@@ -293,9 +363,14 @@ public class Initializer implements ApplicationContextAware {
 
                         @Override
                         public void onRowFinished(int rowNow) {
-//                            entityManager.persist(entity);
-//                dao.save(entity);
-                            genericDao.saveEntity(entity);
+                            // dao.save(entity); directly call doesn't work, use EntityManager instead.
+                            if (entityManager.contains(entity)) {
+                                updatedCount.incrementAndGet();
+                            }
+                            else {
+                                createdCount.incrementAndGet();
+                            }
+                            entityManager.persist(entity);
                         }
                     });
                 } catch (Exception e) {
@@ -304,13 +379,33 @@ public class Initializer implements ApplicationContextAware {
                 }
             }
         });
-
         log.info("Initialize data of one table done.");
     }
+
+//    /**
+//     * @param entityClass
+//     * @param dao
+//     */
+//    public void addRepository(Class<? extends IdPersistable> entityClass, CrudRepository<? extends IdPersistable, String> dao) {
+//        if (this.repositoryMapping == null) {
+//            this.repositoryMapping = new HashMap<>();
+//        }
+//        this.repositoryMapping.put(entityClass, dao);
+//    }
+//
+//    /**
+//     * @param repositoryMapping
+//     */
+//    public void setRepositoryMapping(Map<Class<? extends IdPersistable>, CrudRepository<? extends IdPersistable, String>> repositoryMapping) {
+//        this.repositoryMapping = repositoryMapping;
+//    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
+    public void setFallbackEnv(String fallbackEnv) {
+        this.fallbackEnv = fallbackEnv;
+    }
 }

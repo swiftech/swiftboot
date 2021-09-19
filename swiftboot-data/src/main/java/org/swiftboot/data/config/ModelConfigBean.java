@@ -25,7 +25,7 @@ public class ModelConfigBean {
     /**
      * 初始化数据库的数据文件路径
      */
-    private String initBaseDir;
+    private String initBaseDir = "init/";
 
     /**
      * 初始化数据库扫描的包范围

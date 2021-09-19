@@ -128,6 +128,9 @@ public abstract class ErrorCodeSupport {
         String msg;
         try {
             msg = errorCodeMap.get(code);
+            if (StringUtils.isBlank(msg)) {
+                System.out.printf("WARN: message not found for code '%s'%n", code);
+            }
         } catch (Exception e) {
             System.out.println(Info.get(ErrorCodeSupport.class, R.NO_MSG_FOR_CODE1, code));
             msg = code; // 没有则直接返回 CODE
