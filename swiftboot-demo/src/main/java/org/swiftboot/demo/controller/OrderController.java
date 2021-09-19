@@ -2,6 +2,7 @@ package org.swiftboot.demo.controller;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.BindingResult;
+import org.swiftboot.auth.annotation.Addition;
 import org.swiftboot.auth.interceptor.UserId;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
@@ -83,9 +84,10 @@ public class OrderController {
 
     @ApiOperation(notes = "查询订单列表", value = "查询订单列表")
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public HttpResponse<OrderListResult> orderList(@UserId String userId) {
+    public HttpResponse<OrderListResult> orderList(@UserId String userId, @Addition("some_addition") String some_addition) {
         log.info("> /order/list");
         log.debug(userId);
+        log.debug(String.valueOf(some_addition));
         OrderListResult ret = orderService.queryOrderList();
         return new HttpResponse<>(ret);
     }

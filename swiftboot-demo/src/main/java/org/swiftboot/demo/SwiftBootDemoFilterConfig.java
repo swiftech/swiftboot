@@ -22,7 +22,6 @@ public class SwiftBootDemoFilterConfig implements WebMvcConfigurer {
     AuthFilter authFilter;
 
     @Bean
-    @ConditionalOnProperty(value = "swiftboot.auth.enabled", havingValue = "true")
     public FilterRegistrationBean<AuthFilter> regAuthFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(authFilter);

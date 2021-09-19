@@ -32,7 +32,7 @@ swiftboot:
       autoGenerateId: true
       autoUpdateTimeStrategy: on-change
       initData: true
-      initBaseDir: init
+      initBaseDir: init/
       initBaseDaoPackages:
         - org.swiftboot.demo.model.dao
       initBaseEntityPackages:
