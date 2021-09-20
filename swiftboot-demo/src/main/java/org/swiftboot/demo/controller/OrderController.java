@@ -3,7 +3,7 @@ package org.swiftboot.demo.controller;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.BindingResult;
 import org.swiftboot.auth.annotation.Addition;
-import org.swiftboot.auth.interceptor.UserId;
+import org.swiftboot.auth.annotation.UserId;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;

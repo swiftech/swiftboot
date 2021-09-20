@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * @author allen
+ * @author swiftech
  * @since 2.1
  */
 @Target({ElementType.PARAMETER})

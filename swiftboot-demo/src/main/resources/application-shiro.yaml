@@ -28,6 +28,10 @@ swiftboot:
     model:
       autoGenerateId: true
       autoUpdateTimeStrategy: on-change
+      initData:
+        enabled: false
+        baseDir: init/
+        fallback: true
   auth:
     enabled: false
   shiro:

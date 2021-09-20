@@ -5,3 +5,7 @@ swiftboot:
       autoGenerateId: true
       # 自动设置更新时间策略 'not-set' | 'on-change' | 'always'
       autoUpdateTimeStrategy: not-set
+      initData:
+        enabled: true
+        baseDir: init/
+        fallback: true

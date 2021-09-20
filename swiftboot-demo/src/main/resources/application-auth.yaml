@@ -20,7 +20,7 @@ spring:
 logging:
   level:
     root: INFO
-    org.swiftboot: TRACE
+    org.swiftboot: DEBUG
 swiftboot:
   web:
     filter:
@@ -31,12 +31,10 @@ swiftboot:
     model:
       autoGenerateId: true
       autoUpdateTimeStrategy: on-change
-      initData: true
-      initBaseDir: init/
-      initBaseDaoPackages:
-        - org.swiftboot.demo.model.dao
-      initBaseEntityPackages:
-        - org.swiftboot.demo.model.entity
+      initData:
+        enabled: true
+        baseDir: init/
+        fallback: true
   service:
     redis:
       host: localhost

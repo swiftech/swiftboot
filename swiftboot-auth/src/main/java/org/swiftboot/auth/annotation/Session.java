@@ -1,4 +1,4 @@
-package org.swiftboot.auth.interceptor;
+package org.swiftboot.auth.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -14,5 +14,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ElementType.PARAMETER})
 @Retention(RUNTIME)
 @Documented
-public @interface UserId {
+public @interface Session {
 }

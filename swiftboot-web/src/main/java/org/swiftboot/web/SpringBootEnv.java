@@ -29,7 +29,7 @@ public class SpringBootEnv implements ApplicationListener<ApplicationEvent> {
 
         }
         else if (event instanceof ApplicationReadyEvent) {
-            String profile = SystemUtils.getEnvironmentVariable("spring.profiles.active", "dev");
+            String profile = SystemUtils.getEnvironmentVariable("spring.profiles.active", "default");
             if ("prod".equals(profile)) {
                 System.out.println(Info.get(SpringBootEnv.class, R.PRODUCTION));
                 isProductionMode = true;

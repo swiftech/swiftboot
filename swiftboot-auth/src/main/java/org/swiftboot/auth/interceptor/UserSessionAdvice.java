@@ -1,20 +1,21 @@
 package org.swiftboot.auth.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
-import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
 import org.swiftboot.auth.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.controller.BaseAuthenticatedCommand;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
-import org.swiftboot.web.command.WebMessageConverter;
+import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.util.SpringWebUtils;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
@@ -24,11 +25,11 @@ import java.lang.reflect.Type;
  * @author swiftech
  * @since 2.1
  * @see org.swiftboot.auth.controller.BaseAuthenticatedCommand
- * @deprecated
  */
-public class UserSessionMessageConverter extends WebMessageConverter {
+@ControllerAdvice
+public class UserSessionAdvice extends RequestBodyAdviceAdapter {
 
-    private final Logger log = LoggerFactory.getLogger(UserSessionMessageConverter.class);
+    private final Logger log = LoggerFactory.getLogger(UserSessionAdvice.class);
 
     @Resource
     private SwiftbootAuthConfigBean configBean;
@@ -36,18 +37,20 @@ public class UserSessionMessageConverter extends WebMessageConverter {
     @Resource
     private SessionService sessionService;
 
-    public UserSessionMessageConverter() {
-    }
-
-    public UserSessionMessageConverter(ObjectMapper objectMapper) {
-        super(objectMapper);
+    @Override
+    public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+        return true;
     }
 
     @Override
-    public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-        Object converted = super.read(type, contextClass, inputMessage);
-        if (converted instanceof BaseAuthenticatedCommand) {
-            BaseAuthenticatedCommand<?> command = (BaseAuthenticatedCommand<?>) converted;
+    public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+        log.debug("SessionAdvice.afterBodyRead()");
+
+        if (body instanceof BaseAuthenticatedCommand) {
+            log.debug("Handle command: " + body.getClass());
+            BaseAuthenticatedCommand command = (BaseAuthenticatedCommand) body;
+            System.out.println(JsonUtils.object2PrettyJson(command));
+
             String tokenKey = configBean.getSession().getTokenKey();
 
             String token = SpringWebUtils.getHeader(tokenKey, inputMessage);
@@ -57,19 +60,22 @@ public class UserSessionMessageConverter extends WebMessageConverter {
 
             if (StringUtils.isBlank(token)) {
                 log.trace("No token found in headers or cookie");
-                return converted;
+                return command;
             }
             else {
                 Session session = sessionService.getSession(token);
                 if (session == null) {
                     log.trace("No session found for token: " + token);
-                    return converted;
+                    return command;
                 }
                 log.info("Find and pre-set user id: " + session.getUserId());
                 command.setUserId(session.getUserId());
                 command.setUserName(session.getUserName());
             }
         }
-        return converted;
+        else {
+            System.out.println(body.getClass());
+        }
+        return body;
     }
 }

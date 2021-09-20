@@ -32,10 +32,10 @@ swiftboot:
     model:
       autoGenerateId: true
       autoUpdateTimeStrategy: on-change
-      initData: true
-      initBaseDir: init/
-      initBaseEntityPackages:
-        - org.swiftboot.demo.model.entity
+      initData:
+        enabled: true
+        baseDir: init/
+        fallback: true
 shiro:
   enabled: false
   annotations:

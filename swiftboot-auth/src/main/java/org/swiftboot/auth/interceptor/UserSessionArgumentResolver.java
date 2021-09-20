@@ -12,6 +12,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.swiftboot.auth.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.annotation.Addition;
 import org.swiftboot.auth.annotation.ExpireTime;
+import org.swiftboot.auth.annotation.UserId;
+import org.swiftboot.auth.annotation.UserName;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
 
@@ -19,13 +21,16 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
+ * Populate values from session to the annotated parameter of controller.
+ * {@link UserId}, {@link UserName}, {@link ExpireTime}, {@link Addition}, {@link org.swiftboot.auth.annotation.Session}
+ *
  * @author swiftech
  * @see org.swiftboot.auth.filter.AuthFilter
  * @since 2.1
  */
-public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserSessionArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final Logger log = LoggerFactory.getLogger(UserIdArgumentResolver.class);
+    private final Logger log = LoggerFactory.getLogger(UserSessionArgumentResolver.class);
 
     @Resource
     private SwiftbootAuthConfigBean configBean;
@@ -39,7 +44,7 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
                 || parameter.hasParameterAnnotation(UserName.class)
                 || parameter.hasParameterAnnotation(ExpireTime.class)
                 || parameter.hasParameterAnnotation(Addition.class)
-                || parameter.hasParameterAnnotation(org.swiftboot.auth.interceptor.Session.class);
+                || parameter.hasParameterAnnotation(org.swiftboot.auth.annotation.Session.class);
     }
 
     @Override
@@ -80,7 +85,7 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
                 }
                 return null;
             }
-            else if (parameter.hasParameterAnnotation(org.swiftboot.auth.interceptor.Session.class)) {
+            else if (parameter.hasParameterAnnotation(org.swiftboot.auth.annotation.Session.class)) {
                 return session;
             }
             else {

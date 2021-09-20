@@ -7,13 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.AuthFilter;
-import org.swiftboot.auth.interceptor.UserSessionMessageConverter;
-import org.swiftboot.auth.interceptor.UserIdArgumentResolver;
+import org.swiftboot.auth.interceptor.UserSessionArgumentResolver;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.auth.service.impl.MockSessionServiceImpl;
 import org.swiftboot.auth.service.impl.SessionServiceRedisImpl;
@@ -64,8 +61,8 @@ public class SwiftbootAuthConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public UserIdArgumentResolver userIdArgumentResolver() {
-        return new UserIdArgumentResolver();
+    public UserSessionArgumentResolver userIdArgumentResolver() {
+        return new UserSessionArgumentResolver();
     }
 
     @Override
@@ -73,24 +70,24 @@ public class SwiftbootAuthConfig implements WebMvcConfigurer {
         resolvers.add(userIdArgumentResolver());
     }
 
-    @Bean
-    public UserSessionMessageConverter sessionConverter() {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        return new UserSessionMessageConverter(builder.build());
-    }
+//    @Bean
+//    public UserSessionMessageConverter sessionConverter() {
+//        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+//        return new UserSessionMessageConverter(builder.build());
+//    }
+//
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        converters.add(0, sessionConverter());
+//    }
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(0, sessionConverter());
-    }
-
-    @Override
-    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+//    @Override
+//    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 //        System.out.println("### extend the session converter: " + converters.size());
 //        converters.add(0, sessionConverter());
 //        for (HttpMessageConverter<?> converter : converters) {
 //            System.out.println("$$$" + converter);
 //        }
-    }
+//    }
 
 }
