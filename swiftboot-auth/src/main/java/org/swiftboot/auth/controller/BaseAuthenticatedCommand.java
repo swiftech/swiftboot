@@ -9,7 +9,7 @@ import org.swiftboot.web.command.BasePopulateCommand;
  *
  * @author swiftech
  * @since 2.1
- * @see org.swiftboot.auth.interceptor.UserSessionMessageConverter
+ * @see org.swiftboot.auth.interceptor.UserSessionAdvice
  */
 public class BaseAuthenticatedCommand<E extends IdPersistable> extends BasePopulateCommand<E> {
 
