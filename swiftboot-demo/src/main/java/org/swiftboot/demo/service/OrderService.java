@@ -74,10 +74,10 @@ public interface OrderService {
 
     /**
      * 查询所有订单
-     *
+     * @param userId
      * @return
      */
-    OrderListResult queryOrderList();
+    OrderListResult queryOrderList(String userId);
 
     /**
      * 分页查询订单

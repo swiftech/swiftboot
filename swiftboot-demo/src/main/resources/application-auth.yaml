@@ -42,6 +42,7 @@ swiftboot:
   auth:
     enabled: true
     session:
-      storageType: redis
+      type: redis
+      group: swiftboot_session
       tokenKey: swiftboot_token
       expiresIn: 0

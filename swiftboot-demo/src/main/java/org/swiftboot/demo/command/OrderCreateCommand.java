@@ -37,7 +37,6 @@ public class OrderCreateCommand extends BaseAuthenticatedCommand<OrderEntity> {
     @Length(max = 64)
     private String address;
 
-
     /**
      * 获取订单编号
      *

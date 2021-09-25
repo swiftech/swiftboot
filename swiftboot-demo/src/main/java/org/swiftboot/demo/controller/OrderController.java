@@ -52,6 +52,7 @@ public class OrderController {
             BindingResult bindingResult) {
         log.info("> /order/create");
         log.info(command.getUserId());
+        log.info(command.getHeader("swiftboot_token"));
         log.debug(JsonUtils.object2PrettyJson(command));
         OrderCreateResult ret = orderService.createOrder(command);
         return new HttpResponse<>(ret);
@@ -88,7 +89,7 @@ public class OrderController {
         log.info("> /order/list");
         log.debug(userId);
         log.debug(String.valueOf(some_addition));
-        OrderListResult ret = orderService.queryOrderList();
+        OrderListResult ret = orderService.queryOrderList(userId);
         return new HttpResponse<>(ret);
     }
 

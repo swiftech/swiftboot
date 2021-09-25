@@ -78,6 +78,22 @@ public interface OrderDao extends PagingAndSortingRepository<OrderEntity, String
      */
     List<OrderEntity> findByIsDeleteFalseAndAddress(String address);
 
+    /**
+     * 按照APP_USER ID查询订单
+     *
+     * @param userId APP_USER ID
+     * @return
+     */
+    List<OrderEntity> findByUserId(String userId);
+
+    /**
+     * 按照APP_USER ID查询未逻辑删除的订单
+     *
+     * @param userId APP_USER ID
+     * @return
+     */
+    List<OrderEntity> findByIsDeleteFalseAndUserId(String userId);
+
 
     /**
      * 批量按照ID查询订单

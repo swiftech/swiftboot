@@ -48,6 +48,13 @@ public class OrderEntity extends BaseEntity {
     private String address;
 
     /**
+     * APP_USER ID
+     */
+    @PropertyDescription(value = "APP_USER ID", example = "appuser201912030118069998d7e8179")
+    @Column(name = "USER_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT 'APP_USER ID'")
+    private String userId;
+
+    /**
      * 订单明细
      */
     @PropertyDescription(value = "订单明细")
@@ -132,6 +139,20 @@ public class OrderEntity extends BaseEntity {
      */
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    /**
+     * 获取APP_USER ID
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置APP_USER ID
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**

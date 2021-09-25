@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderCreateResult createOrder(OrderCreateCommand cmd) {
         OrderEntity p = cmd.createEntity();
+        p.setUserId(cmd.getUserId()); // call explicitly for the field COULD be different.
         OrderEntity saved = orderDao.save(p);
         log.debug("创建订单: " + saved.getId());
         return new OrderCreateResult(saved.getId());
@@ -164,9 +165,9 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderListResult queryOrderList() {
+    public OrderListResult queryOrderList(String userId) {
         OrderListResult ret = new OrderListResult();
-        Iterable<OrderEntity> all = orderDao.findAll();
+        Iterable<OrderEntity> all = orderDao.findByIsDeleteFalseAndUserId(userId);
         if (all != null) {
             ret.populateByEntities(all);
             ret.setTotal(orderDao.count());
