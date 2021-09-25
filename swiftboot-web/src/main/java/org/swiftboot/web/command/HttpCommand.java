@@ -41,6 +41,13 @@ public class HttpCommand implements Serializable {
         this.headers.put(k, v);
     }
 
+    public String getHeader(String k) {
+        if (this.headers != null) {
+            return this.headers.get(k);
+        }
+        return null;
+    }
+
     @JsonIgnore
     public String getHeaderString() {
         StringBuffer buf = new StringBuffer();
