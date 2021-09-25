@@ -8,8 +8,8 @@ import java.util.Map;
  * 表示用户会话，包含分组，用户 ID，用户名和会话过期时间。
  * 还可以用 additions 添加用户自定义的参数
  *
- * @see SessionBuilder
  * @author swiftech
+ * @see SessionBuilder
  */
 public class Session implements Serializable {
 

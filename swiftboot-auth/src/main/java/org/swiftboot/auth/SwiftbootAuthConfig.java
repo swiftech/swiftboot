@@ -70,24 +70,4 @@ public class SwiftbootAuthConfig implements WebMvcConfigurer {
         resolvers.add(userIdArgumentResolver());
     }
 
-//    @Bean
-//    public UserSessionMessageConverter sessionConverter() {
-//        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-//        return new UserSessionMessageConverter(builder.build());
-//    }
-//
-//    @Override
-//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        converters.add(0, sessionConverter());
-//    }
-
-//    @Override
-//    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        System.out.println("### extend the session converter: " + converters.size());
-//        converters.add(0, sessionConverter());
-//        for (HttpMessageConverter<?> converter : converters) {
-//            System.out.println("$$$" + converter);
-//        }
-//    }
-
 }

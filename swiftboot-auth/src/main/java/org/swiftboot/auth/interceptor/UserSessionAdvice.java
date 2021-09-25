@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
  * {@link org.swiftboot.auth.controller.BaseAuthenticatedCommand} object.
  *
  * @author swiftech
- * @since 2.1
  * @see org.swiftboot.auth.controller.BaseAuthenticatedCommand
+ * @since 2.1
  */
 @ControllerAdvice
 public class UserSessionAdvice extends RequestBodyAdviceAdapter {
@@ -39,42 +39,36 @@ public class UserSessionAdvice extends RequestBodyAdviceAdapter {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return true;
+        return targetType == BaseAuthenticatedCommand.class || BaseAuthenticatedCommand.class.isAssignableFrom((Class<?>) targetType);
     }
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        log.debug("SessionAdvice.afterBodyRead()");
+        if (log.isTraceEnabled()) log.trace("SessionAdvice.afterBodyRead()");
+        if (log.isTraceEnabled()) log.trace("Handle command: " + body.getClass());
+        BaseAuthenticatedCommand command = (BaseAuthenticatedCommand) body;
+        System.out.println(JsonUtils.object2PrettyJson(command));
 
-        if (body instanceof BaseAuthenticatedCommand) {
-            log.debug("Handle command: " + body.getClass());
-            BaseAuthenticatedCommand command = (BaseAuthenticatedCommand) body;
-            System.out.println(JsonUtils.object2PrettyJson(command));
+        String tokenKey = configBean.getSession().getTokenKey();
 
-            String tokenKey = configBean.getSession().getTokenKey();
+        String token = SpringWebUtils.getHeader(tokenKey, inputMessage);
+        if (StringUtils.isBlank(token)) {
+            token = SpringWebUtils.getCookieFromHeader(tokenKey, inputMessage);
+        }
 
-            String token = SpringWebUtils.getHeader(tokenKey, inputMessage);
-            if (StringUtils.isBlank(token)) {
-                token = SpringWebUtils.getCookieFromHeader(tokenKey, inputMessage);
-            }
-
-            if (StringUtils.isBlank(token)) {
-                log.trace("No token found in headers or cookie");
-                return command;
-            }
-            else {
-                Session session = sessionService.getSession(token);
-                if (session == null) {
-                    log.trace("No session found for token: " + token);
-                    return command;
-                }
-                log.info("Find and pre-set user id: " + session.getUserId());
-                command.setUserId(session.getUserId());
-                command.setUserName(session.getUserName());
-            }
+        if (StringUtils.isBlank(token)) {
+            if (log.isTraceEnabled()) log.trace("No token found in headers or cookie");
+            return command;
         }
         else {
-            System.out.println(body.getClass());
+            Session session = sessionService.getSession(token);
+            if (session == null) {
+                if (log.isTraceEnabled()) log.trace("No session found for token: " + token);
+                return command;
+            }
+            if (log.isDebugEnabled()) log.debug("Find and pre-set user id: " + session.getUserId());
+            command.setUserId(session.getUserId());
+            command.setUserName(session.getUserName());
         }
         return body;
     }

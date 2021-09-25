@@ -202,7 +202,7 @@ public class SessionServiceRedisImpl implements SessionService {
                 throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
             }
             else {
-                // Update expire time if there is expire time in session
+                // Update expire time if there is expired time in session
                 session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000));
                 try {
                     this.saveSession(token, session);

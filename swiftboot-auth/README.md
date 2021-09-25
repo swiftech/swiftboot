@@ -24,38 +24,37 @@
 	
 ### 使用方法
 
-* application.yaml
+* 处理用户登录
 
-```yaml
-swiftboot:
-  auth:
-    enabled: true
-    session:
-      type: redis
-      group: my_session
-      tokenKey: my_token
-      expireTime: 1800
+```java
+@Service
+public class MySigninServiceImpl {
+    
+    @Resource
+    private SessionService sessionService;
+
+    public String doSignin(){
+        // 用户登录认证逻辑
+        ...... 
+        // 用户认证通过的话保存用户会话
+        String userId = "<my user id>";
+        String token = IdUtils.makeUUID(); // replace with your own token mechanism
+        Session session = new SessionBuilder().userId(userId).userName(nickName).createSession();
+        sessionService.addSession(token, session);
+        return token;
+    }
+}
 ```
 
-    参数解释：
-
-    * type
-        配置为 `redis`, 使用 Redis 存储会话，需要配置 `RedisService`，参考：[swiftboot-service](../swiftboot-service/README.md)
-        配置为 `mock`，使用内存存储会话，仅用于调试.
-
-    * group
-
-    * tokenKey
-
-    * expireTime
-
 * 配置过滤器
+    
+    对于需要登录才能访问的资源路径，按照 SpringBoot 提供的方式配置过滤器 `org.swiftboot.auth.filter.AuthFilter`
 
 ```java
 public class MyConfig {
 
     @Resource
-    AuthFilter authFilter;
+    org.swiftboot.auth.filter.AuthFilter authFilter;
     
     @Bean
     public FilterRegistrationBean<AuthFilter> regAuthFilter() {
@@ -68,29 +67,7 @@ public class MyConfig {
 }
 ```
 
-* 处理用户登录
-
-```java
-@Service
-public class MySigninServiceImpl {
-    
-    @Resource
-    private SessionService sessionService;
-
-    public String doSignin(){
-        // 用户登录验证逻辑
-        ...... 
-        // 保存用户会话
-        String userId = "<my user id>";
-        String token = IdUtils.makeUUID(); // replace with your own token mechanism
-        Session session = new SessionBuilder().userId(userId).userName(nickName).createSession();
-        sessionService.addSession(token, session);
-        return token;
-    }
-}
-```
-
-* 在 Controller 中写入 Cookie 或者返回给客户端（客户端放入后续请求的 Header 中，名称和配置的 `swiftboot.auth.session.tokenKey` 一样，例如 `my_token` ）
+* 在 Controller 中将分配给用户的 Token 写入 Cookie 或者直接返回给客户端（客户端放入后续请求的 Header 中，名称和配置的 `swiftboot.auth.session.tokenKey` 一样，例如 `my_token` ）
 
 ```java
 Cookie cookie  = new Cookie(config.getSession().getTokenKey(), adminUserResult.getToken());
@@ -101,10 +78,10 @@ httpServletResponse.addCookie(cookie);
 
 对于已登录的用户的请求，用户 ID 会被自动的注入，无需写代码从 Cookie 或者 Header 获取用户 Token，再从会话中获取用户 ID 了。
 
-  * 对于 `POST` 请求，只要是继承自 `BaseSessionCommand` 的接口参数对象，都会被自动的注入用户ID，在 Controller 中只要通过 `command.getUerId()` 就可以获得 ID。例如：
+  * 对于 `POST` 请求，只要是继承自 `BaseAuthenticatedCommand` 的接口参数对象，都会被自动的注入用户ID，在 Controller 中只要通过 `command.getUerId()` 就可以获得 ID。例如：
 
 ```java
-public class OrderCreateCommand extends BaseSessionCommand<OrderEntity> {
+public class OrderCreateCommand extends BaseAuthenticatedCommand<OrderEntity> {
 
 }
 ```
@@ -119,8 +96,41 @@ public HttpResponse<OrderCreateResult> orderCreate(@RequestBody OrderCreateComma
 
 ```java
 public HttpResponse<?> getOrderList(@UserId String userId) {
-
+    log.info(userId);
 }
 ```
 
-> 除了 `@UserId`，还有 `@UserName` 可以直接获得登录的用户名，甚至可以通过 `@UserSession` 直接获得 session 对象
+> 除了 `@UserId`，还有 `@UserName` 可以直接获得登录的用户名，`@ExpireTime`可以获得会话超时的时间点(类型为long)，或者可以通过 `@UserSession` 直接获得 session 对象
+
+> 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
+
+* application.yaml
+
+```yaml
+swiftboot:
+  auth:
+    enabled: true
+    session:
+      type: redis
+      group: my_session
+      tokenKey: my_token
+      expiresIn: 1800
+```
+
+    参数解释：
+
+    * enabled
+        是否启用，如果为 `false`，则 swiftboot-auth 定义的 Bean 都不会加载，功能也都无效。
+
+    * type
+        配置为 `redis`, 使用 Redis 存储会话，需要配置 `RedisService`，参考：[swiftboot-service](../swiftboot-service/README.md)。
+        配置为 `mock`，使用内存存储会话，仅用于调试。
+
+    * group
+        默认的会话分组名称，用这个值来创建会话存储（Redis）中的集合，默认为 "swiftboot_token"
+
+    * tokenKey
+        传递用户认证后得到的 Token 的 Key 的名称，无论是在 Cookie 还是在 Header 中都是用这个名字进行存储。 
+
+    * expiresIn
+        默认超时时间长度，单位秒，默认 1800 秒（即30分钟）

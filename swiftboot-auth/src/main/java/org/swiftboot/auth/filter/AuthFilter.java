@@ -25,8 +25,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYPE;
 
 /**
- * 拦截客户端的请求，用 Header 或者 Cookie 中的令牌来验证用户会话的有效性。
- * 如果令牌不存在，会话不存在、过期或者无效，则抛出异常终止请求，返回默认的错误代码给客户端。
+ * 拦截客户端的请求，用 Header 或者 Cookie 中的令牌来验证用户请求的合法性。
+ * 如果令牌不存在，会话不存在、过期或者无效，则抛出异常终止请求，返回相应的错误代码给客户端。
  * 使用 Spring 的 {@link org.springframework.boot.web.servlet.FilterRegistrationBean} 来定义需要进行过滤的 URL 模式
  *
  * @author swiftech
@@ -83,7 +83,7 @@ public class AuthFilter extends OncePerRequestFilter {
     }
 
     /**
-     * This wrapper transfer the token from cookie to header, to make sure // TBD
+     * This wrapper transfer the token from cookie to header // TBD
      */
     static class TokenRequestWrapper extends HttpServletRequestWrapper {
         private final String tokenKey;
