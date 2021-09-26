@@ -216,4 +216,10 @@ public class SessionServiceRedisImpl implements SessionService {
         return session;
     }
 
+    @Override
+    public void clearAllSessions() {
+        if (StringUtils.isNoneBlank(config.getSession().getGroup())) {
+            redisService.del(config.getSession().getGroup());
+        }
+    }
 }

@@ -108,6 +108,13 @@ public class MockSessionServiceImpl implements SessionService, ApplicationContex
         return null;
     }
 
+    @Override
+    public void clearAllSessions() {
+        log.warn("Mock clearAllSessions()");
+        mockSession = null;
+        this.dumpToFile();
+    }
+
     private void dumpToFile() {
         String s = null;
         try {

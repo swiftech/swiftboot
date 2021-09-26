@@ -83,4 +83,10 @@ public interface SessionService {
      */
     Session verifySession(String group, String token);
 
+    /**
+     * 清空配置的 group 中所有的会话信息
+     *
+     */
+    void clearAllSessions();
+
 }
