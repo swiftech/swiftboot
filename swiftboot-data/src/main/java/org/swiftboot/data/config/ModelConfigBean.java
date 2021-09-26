@@ -1,5 +1,6 @@
 package org.swiftboot.data.config;
 
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.swiftboot.data.constant.AutoUpdateTimeStrategy;
 
 /**
@@ -13,13 +14,14 @@ public class ModelConfigBean {
     private boolean autoGenerateId = false;
 
     /**
-     * 是否自动设置更新时间
+     * 是否自动设置更新时间，可选"not-set"，"on-change"，"always"
      */
     private String autoUpdateTimeStrategy = AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ON_CHANGE;
 
     /**
      * 初始化数据
      */
+    @NestedConfigurationProperty
     private InitDataConfigBean initData;
 
     public boolean isAutoGenerateId() {

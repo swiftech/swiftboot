@@ -2,12 +2,14 @@ package org.swiftboot.web;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.context.annotation.Configuration;
 import org.swiftboot.web.config.FilterConfigBean;
 import org.swiftboot.web.config.ValidationResultConfigBean;
 
 /**
  * @author swiftech
  **/
+@Configuration
 @ConfigurationProperties("swiftboot.web")
 public class SwiftBootWebConfigBean {
 

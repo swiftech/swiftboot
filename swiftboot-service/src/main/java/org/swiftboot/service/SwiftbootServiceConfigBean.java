@@ -2,12 +2,14 @@ package org.swiftboot.service;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.context.annotation.Configuration;
 import org.swiftboot.service.config.CaptchaConfigBean;
 import org.swiftboot.service.config.RedisConfigBean;
 
 /**
  * @author swiftech 2019-05-20
  **/
+@Configuration
 @ConfigurationProperties("swiftboot.service")
 public class SwiftbootServiceConfigBean {
 
