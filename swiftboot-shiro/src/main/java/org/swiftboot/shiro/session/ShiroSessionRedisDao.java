@@ -7,7 +7,7 @@ import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.service.service.RedisService;
-import org.swiftboot.shiro.SwiftbootShiroConfigBean;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;

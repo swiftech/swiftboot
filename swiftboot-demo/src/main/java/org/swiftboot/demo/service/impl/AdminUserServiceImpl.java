@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.demo.command.AdminUserCreateCommand;
 import org.swiftboot.demo.command.AdminUserSaveCommand;

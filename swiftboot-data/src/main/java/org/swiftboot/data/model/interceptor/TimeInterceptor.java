@@ -5,7 +5,7 @@ import org.hibernate.type.CollectionType;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.data.SwiftBootDataConfigBean;
+import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.data.util.HibernateUtils;
 

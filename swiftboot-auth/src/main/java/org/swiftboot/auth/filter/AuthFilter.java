@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;

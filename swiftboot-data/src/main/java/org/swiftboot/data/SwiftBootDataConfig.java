@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.constant.AutoUpdateTimeStrategy;
 import org.swiftboot.data.model.aspect.EntityIdAspect;
 import org.swiftboot.data.model.aspect.UpdateTimeAspect;
@@ -12,6 +13,8 @@ import org.swiftboot.data.model.id.DefaultIdGenerator;
 import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.data.model.id.IdPopulator;
 import org.swiftboot.data.model.interceptor.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author swiftech
@@ -22,10 +25,8 @@ public class SwiftBootDataConfig {
     public static final String DATA_MODEL_AUTO_GENERATE_ID = "swiftboot.data.model.autoGenerateId";
     public static final String DATA_MODEL_AUTO_UPDATE_TIME_STRATEGY = "swiftboot.data.model.autoUpdateTimeStrategy";
 
-    @Bean
-    public SwiftBootDataConfigBean swiftBootDataConfigBean() {
-        return new SwiftBootDataConfigBean();
-    }
+    @Resource
+    private SwiftBootDataConfigBean swiftBootDataConfigBean;
 
     /**
      * 如果 swiftboot.data.model.autoGenerateId=true 自动加载实体类 ID 切面
@@ -82,10 +83,10 @@ public class SwiftBootDataConfig {
     @Bean
     InterceptorProxy interceptorProxy() {
         InterceptorProxy interceptorProxy = new InterceptorProxy();
-        if (swiftBootDataConfigBean().getModel().isAutoGenerateId()) {
+        if (swiftBootDataConfigBean.getModel().isAutoGenerateId()) {
             interceptorProxy.addInterceptor(idInterceptor());
         }
-        if (!AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_NOT_SET.equals(swiftBootDataConfigBean().getModel().getAutoUpdateTimeStrategy())) {
+        if (!AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_NOT_SET.equals(swiftBootDataConfigBean.getModel().getAutoUpdateTimeStrategy())) {
             interceptorProxy.addInterceptor(timeInterceptor());
         }
         return interceptorProxy;

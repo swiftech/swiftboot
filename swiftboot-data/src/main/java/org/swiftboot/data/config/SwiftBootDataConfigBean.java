@@ -1,12 +1,13 @@
-package org.swiftboot.data;
+package org.swiftboot.data.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.swiftboot.data.config.ModelConfigBean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author swiftech
  **/
+@Configuration
 @ConfigurationProperties("swiftboot.data")
 public class SwiftBootDataConfigBean {
 

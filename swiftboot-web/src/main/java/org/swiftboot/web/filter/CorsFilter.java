@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.swiftboot.web.SwiftBootWebConfigBean;
+import org.swiftboot.web.config.SwiftBootWebConfigBean;
 import org.swiftboot.web.constant.HttpConstants;
 
 import javax.annotation.Resource;

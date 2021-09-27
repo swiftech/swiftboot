@@ -15,7 +15,7 @@ import org.swiftboot.demo.result.AdminUserSigninResult;
 import org.swiftboot.demo.result.AdminUserSignoutResult;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
-import org.swiftboot.shiro.SwiftbootShiroConfigBean;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 
 import javax.annotation.Resource;

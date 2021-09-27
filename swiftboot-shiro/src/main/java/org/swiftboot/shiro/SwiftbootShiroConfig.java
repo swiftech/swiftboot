@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.swiftboot.service.service.RedisService;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.shiro.constant.ShiroSessionStorageType;
 import org.swiftboot.shiro.realm.UserAuthorizingRealm;
 import org.swiftboot.shiro.service.ShiroSecurityService;

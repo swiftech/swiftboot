@@ -13,7 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.swiftboot.data.SwiftBootDataConfigBean;
+import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.constant.InitDataConstants;
 import org.swiftboot.data.model.entity.BaseIdEntity;
 import org.swiftboot.data.model.entity.IdPersistable;

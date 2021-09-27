@@ -3,7 +3,7 @@ package org.swiftboot.demo.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionBuilder;
 import org.swiftboot.auth.service.SessionService;

@@ -1,10 +1,8 @@
-package org.swiftboot.shiro;
+package org.swiftboot.shiro.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Configuration;
-import org.swiftboot.shiro.config.CookieConfigBean;
-import org.swiftboot.shiro.config.ShiroSessionConfigBean;
 
 /**
  *

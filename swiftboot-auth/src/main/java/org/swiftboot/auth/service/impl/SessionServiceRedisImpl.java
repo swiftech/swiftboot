@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.service.service.RedisService;

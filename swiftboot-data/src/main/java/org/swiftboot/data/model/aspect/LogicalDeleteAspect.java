@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.data.SwiftBootDataConfigBean;
+import org.swiftboot.data.config.SwiftBootDataConfigBean;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;

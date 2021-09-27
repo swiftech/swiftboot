@@ -9,7 +9,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.swiftboot.shiro.SwiftbootShiroConfigBean;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.shiro.service.ShiroSecurityService;
 import org.swiftboot.web.exception.ErrMessageException;
 

@@ -9,7 +9,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.annotation.Addition;
 import org.swiftboot.auth.annotation.ExpireTime;
 import org.swiftboot.auth.annotation.UserId;
