@@ -1,7 +1,6 @@
 # SwiftBoot-Sheet
 
-SwiftBoot-Sheet
-提供了一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。只需要给导入或导出指定数据对应的位置，而无需关心导入或导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
+提供一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。只需要给导入或导出指定数据对应的位置，而无需关心导入或导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
 
 SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data from or export data to sheet files (including xlsx, xls, csv), regardless of the style of the sheet. In other words, users can edit the style of template sheet file whatever he/she likes without affecting the import or export of data.
 
@@ -172,18 +171,28 @@ public class SheetEntity {
 > 表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中.
 
 
-### 复制样式
+### 复制样式（导出）
 
-使用 `MetaItemBuilder` 的 `copy()` 方法可以将其他区域的单元格样式复制过来。
+对于输出位置不确定但是需要给这个单元格设定样式的情况，使用 `MetaItemBuilder` 的 `copy()` 方法可以将其他区域的单元格样式复制过来。例如：
 
+```java
+builder.items(builder.itemBuilder()
+        .newItem().parse("A1").copy("A0").value("output value")) // 从 `A0` 单元格复制样式到 `A1` 单元格。
+```
 
-| 目标区域\CopyStrategy | `EXTEND`                         | `AS_IS`                                              |
-| --------------------- | -------------------------------- | ---------------------------------------------------- |
-| 固定大小              | 循环复制直到填满目标区域         | 只复制来源区域大小，超出则忽略                       |
-| 行固定，列动态        | 行循环复制，列复制到实际区域大小 | 只复制来源区域大小，列只复制一遍，超出实际大小则忽略 |
-| 行动态，列固定        | 行复制到实际区域大小，列循环复制 | 只复制来源区域大小，行只复制一遍，超出实际大小则忽略 |
+### 动态长度区域的样式处理（导出）
 
-> 动态大小的情况，会与 merge() 产生冲突，因为 merge 的 value 有可能是单个值
+虽然我们把数据处理和表单样式完全分离了，但是对于大小不固定的区域，无法预先在模版中设置好整个区域的样式，那么我们可以用 `copy()` 来从其他单元格复制样式。
+例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的任意单元格），例如：
+
+```java
+builder.items(builder.itemBuilder()
+        .newItem().parse("A0:?0").insert().copy("A0").value(Arrays.asList("foo", "bar"))) // 从 `A0` 单元格复制样式到第一行的若干（长度由数据长度决定）单元格
+```
+
+> 如果对于单元格样式有更灵活的要求的情况（例如根据值改变单元格的背景颜色等等），可以使用 `MetaItemBuilder.onCell()` 来直接操作 POI 的 `Cell` 对象（参考 [自定义表格处理](#自定义表格处理) ）.
+> 注意：对于动态长度的 `copy()`，会与` merge()` 产生冲突，因为 `merge()` 的 value 有可能是单个值
+
 
 ### 自定义表格处理
 
@@ -200,19 +209,6 @@ builder.sheet(0, "my first sheet")
         }))
     ;
 ```
-
-### 动态长度区域的格式处理（导出）
-
-虽然我们把数据处理和表单样式完全分离了，但是对于大小不固定的区域，无法预先在模版中设置好整个区域的样式，那么我们可以用 `copy()` 来从其他单元格复制样式。
-例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的单元格）
-
-```java
-
-```
-
-
-
-> 如果对于单元格样式有更灵活的要求的情况，例如根据值改变单元格的背景颜色，可以使用 `MetaItemBuilder.onCell()` 来直接操作 POI 的 `Cell` 对象（参考 [自定义表格处理](#自定义表格处理) ）.
 
 
 ### Maven:

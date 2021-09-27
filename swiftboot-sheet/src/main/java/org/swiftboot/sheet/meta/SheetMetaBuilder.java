@@ -240,7 +240,7 @@ public class SheetMetaBuilder {
 
         /**
          * Value object from import or to export,
-         * it could be string, number, time, boolean or List or List with List elements ({@code List<List<Object>}).
+         * it could be string, number, time, boolean, array, List or List with List elements ({@code List<List<Object>}).
          *
          * @param value A List is values for cells in line, A List with List elements is values for cells in matrix.
          * @return
