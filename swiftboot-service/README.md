@@ -24,6 +24,7 @@ swiftboot:
     redis:
       host: localhost
       port: 6379
+      cluster: localhost:6379
   captcha:
     expiresIn: 300
 ```

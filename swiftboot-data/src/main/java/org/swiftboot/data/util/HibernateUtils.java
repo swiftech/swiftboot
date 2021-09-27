@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * @author allen
+ * @author swiftech
  * @since 2.0.2
  */
 public class HibernateUtils {

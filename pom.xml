@@ -14,7 +14,7 @@
     <artifactId>swiftboot</artifactId>
     <packaging>pom</packaging>
     <version>2.1</version>
-    <description>企业Web应用快速开发开发框架</description>
+    <description>A rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise</description>
 
     <modules>
         <module>swiftboot-utils</module>

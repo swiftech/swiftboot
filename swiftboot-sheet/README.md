@@ -63,7 +63,7 @@ public class SheetEntity {
 
 ```java
     Importer importer = new SwiftBootSheetFactory().createImporter(SheetFileType.TYPE_XLSX);
-    SheetEntity result = importer.importFromStream(templateFileInputStream, SheetEntity.class, outputStream);
+    SheetEntity result = importer.importFromStream(fileInputStream, SheetEntity.class);
 
 ```
 
@@ -96,7 +96,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 * 表达式字母和数字顺序可颠倒，例如`E2` 和 `2E` 是一样的。
 * 表达式中字母可为大写或小写，例如`E2` 和 `e2` 是一样的。
 * 用 '-' 或 '|' 加上数字代表行或列
-* 用 '?' 表示不确定
+* 用 '?' 表示不确定长度
 * 起始点和终止点的顺序可以颠倒，也就是说终止点写在起始点前面效果是一样的，最终都是由小至大。
 * 导出：如果表达式的范围小于给出的数据大小，则只导出表达式给定的范围的数据。
 * 对于合并单元格，只需要给出合并范围内的任一单元格位置即可。
@@ -112,7 +112,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 ### 底层 API
 
-如果你想导入或者导出的表格位置是动态的(例如位置保存在数据库中），那么也可以直接调用底层的 API 来实现，例如：
+如果你想导入或者导出的表格位置是动态的(例如位置保存在配置文件或者数据库中），那么也可以直接调用底层的 API 来实现，例如：
 
 ```java
     SheetMetaBuilder builder = new SheetMetaBuilder();
@@ -129,16 +129,18 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
     Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
+
 > 默认导出的表格名称为 "Sheet 1"
 
-### 多表格支持
 
-在一个 Excel 中多表格也受支持，其表达式格式和 MS Excel 的一样：`$'<sheet name>'.`，例如
+### 多表单(Sheet)支持
+
+导入和导出都支持 Excel 文档中的多表格，可以通过调用相应的 API 或者在表达式中指定表单，其表达式格式和 MS Excel 的一样：`$'<sheet name>'.`，例如
 
 ```java
 public class SheetEntity {
 
-    @Mapping("B2:F2")
+    @Mapping("$'sheet0'.B2:F2")
     private List<String> line;
 
     @Mapping("$'sheet1'.B2:C3")
@@ -166,7 +168,52 @@ public class SheetEntity {
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
 
-表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中
+> 不指定表单的情况下，默认是第一个表单，且名称默认为 "Sheet 1".
+> 表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中.
+
+
+### 复制样式
+
+使用 `MetaItemBuilder` 的 `copy()` 方法可以将其他区域的单元格样式复制过来。
+
+
+| 目标区域\CopyStrategy | `EXTEND`                         | `AS_IS`                                              |
+| --------------------- | -------------------------------- | ---------------------------------------------------- |
+| 固定大小              | 循环复制直到填满目标区域         | 只复制来源区域大小，超出则忽略                       |
+| 行固定，列动态        | 行循环复制，列复制到实际区域大小 | 只复制来源区域大小，列只复制一遍，超出实际大小则忽略 |
+| 行动态，列固定        | 行复制到实际区域大小，列循环复制 | 只复制来源区域大小，行只复制一遍，超出实际大小则忽略 |
+
+> 动态大小的情况，会与 merge() 产生冲突，因为 merge 的 value 有可能是单个值
+
+### 自定义表格处理
+
+虽然 SwiftBoot-Sheet 提供了简洁而强大的功能，但是有些情况下用户可能还是需要自行操作表格，例如，
+```java
+SheetMetaBuilder builder = new SheetMetaBuilder();
+builder.sheet(0, "my first sheet")
+    .handler((SheetHandler<ExcelSheetInfo>) sheetInfo -> {
+        System.out.println(sheetInfo.getSheet());
+    }).
+    items(builder.itemBuilder()
+        .newItem().key("customized").parse("B2:F5").value(matrix).onCell((ExcelCellInfo info) -> {
+            System.out.printf("%s - %s - %s (%s.%s)%n", info.getWorkbook(), info.getSheet(), info.getCell(), info.getRowIdx(), info.getColIdx());
+        }))
+    ;
+```
+
+### 动态长度区域的格式处理（导出）
+
+虽然我们把数据处理和表单样式完全分离了，但是对于大小不固定的区域，无法预先在模版中设置好整个区域的样式，那么我们可以用 `copy()` 来从其他单元格复制样式。
+例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的单元格）
+
+```java
+
+```
+
+
+
+> 如果对于单元格样式有更灵活的要求的情况，例如根据值改变单元格的背景颜色，可以使用 `MetaItemBuilder.onCell()` 来直接操作 POI 的 `Cell` 对象（参考 [自定义表格处理](#自定义表格处理) ）.
+
 
 ### Maven:
 
@@ -174,7 +221,6 @@ public class SheetEntity {
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.0.3</version>
+  <version>2.1</version>
 </dependency>
 ```
-

@@ -32,7 +32,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>2.0.2</version>
+    <version>2.1</version>
   </dependency>
   ```
 
@@ -299,4 +299,5 @@ swiftboot:
     filter:
       cors: true
 ```
+
 > 开启后跨域访问不受限制，仅用于开发调试，生产环境如果需要跨域访问则必须自行配置 Spring 的跨域过滤器 `CorsFilter`

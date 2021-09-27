@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Populator for generating ID and populating ID to entity and all it's one-to-one and one-to-many entities.
  *
- * @author allen
+ * @author swiftech
  * @since 2.0.1
  */
 public class IdPopulator {

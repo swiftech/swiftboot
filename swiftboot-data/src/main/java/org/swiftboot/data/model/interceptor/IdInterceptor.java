@@ -12,7 +12,7 @@ import java.util.Iterator;
 /**
  * Interceptor for populating id to entities before Hibernate flushing them.
  *
- * @author allen
+ * @author swiftech
  * @since 2.0.1
  */
 public class IdInterceptor extends EmptyInterceptor {

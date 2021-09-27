@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>swiftboot-web</artifactId>
-    <description>Base module for enterprise web applications</description>
+    <description>Basic module for enterprise web applications</description>
 
     <dependencies>
         <dependency>

@@ -1,7 +1,7 @@
 package org.swiftboot.data.model.expression;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class DataModelRootObject {
 

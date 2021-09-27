@@ -11,7 +11,7 @@ SwiftBoot-Shiro 封装了 Apache Shiro 实现了认证（Authentication）和授
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-shiro</artifactId>
-    <version>2.0.2</version>
+    <version>2.1</version>
   </dependency>
   ```
 
