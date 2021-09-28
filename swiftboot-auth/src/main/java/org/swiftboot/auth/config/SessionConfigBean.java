@@ -29,9 +29,14 @@ public class SessionConfigBean {
     private String tokenKey = "swiftboot_token";
 
     /**
-     * 会话(session)超时时间, 单位秒, 默认30分钟，设置为 0 或者 <0 表示不超时
+     * 会话超时时间, 单位秒, 默认30分钟，设置为 0 或者 <0 表示不超时
      */
     private int expiresIn = 60 * 30;
+
+    /**
+     * 当用户访问的时候是否更新会话的超时时间（只在 expiresIn > 0 的时候有效），默认为 false
+     */
+    private boolean updateExpireTime = false;
 
 
     public String getType() {
@@ -64,5 +69,13 @@ public class SessionConfigBean {
 
     public void setTokenKey(String tokenKey) {
         this.tokenKey = tokenKey;
+    }
+
+    public boolean isUpdateExpireTime() {
+        return updateExpireTime;
+    }
+
+    public void setUpdateExpireTime(boolean updateExpireTime) {
+        this.updateExpireTime = updateExpireTime;
     }
 }

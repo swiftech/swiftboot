@@ -61,7 +61,7 @@ public class SessionServiceRedisImpl implements SessionService {
             // Session 中的超时时间覆盖配置中的超时时间
             if (session.getExpireTime() == null) {
                 if (config.getSession().getExpiresIn() > 0) {
-                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000));
+                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000L));
                 }
             }
             else {
@@ -202,13 +202,15 @@ public class SessionServiceRedisImpl implements SessionService {
                 throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
             }
             else {
-                // Update expire time if there is expired time in session
-                session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000));
-                try {
-                    this.saveSession(token, session);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
+                if (config.getSession().isUpdateExpireTime()) {
+                    // Update expire time if allowed and there is expired time in session
+                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000L));
+                    try {
+                        this.saveSession(token, session);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
+                    }
                 }
                 return session;
             }

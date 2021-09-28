@@ -20,6 +20,11 @@ public class SwiftbootShiroConfigBean {
     private ShiroSessionConfigBean session = new ShiroSessionConfigBean();
 
     /**
+     * 开启用户认证和鉴权功能（基于Shiro）
+     */
+    private boolean enabled = false;
+
+    /**
      * 登录 URL，在认证失败的时候会跳转
      */
     private String loginUrl = "/login";
@@ -43,6 +48,14 @@ public class SwiftbootShiroConfigBean {
 
     public void setSession(ShiroSessionConfigBean session) {
         this.session = session;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getSuccessUrl() {
