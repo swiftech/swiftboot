@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author swiftech
- * @since 2.0.3ø
+ * @since 2.1
  */
 class MatrixTest {
     static Matrix<Integer> m;

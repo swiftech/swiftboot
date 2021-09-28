@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @param <E>
  * @author swiftech
- * @since 2.0.3
+ * @since 2.1
  */
 public class Matrix<E> {
     private List<List<E>> m;
