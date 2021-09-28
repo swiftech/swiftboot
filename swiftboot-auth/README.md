@@ -104,7 +104,7 @@ public HttpResponse<?> getOrderList(@UserId String userId) {
 
 > 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
 
-* application.yaml
+* application.yaml 例子
 
 ```yaml
 swiftboot:
@@ -115,6 +115,7 @@ swiftboot:
       group: my_session
       tokenKey: my_token
       expiresIn: 1800
+      updateExpireTime: true
 ```
 
     参数解释：
@@ -133,4 +134,7 @@ swiftboot:
         传递用户认证后得到的 Token 的 Key 的名称，无论是在 Cookie 还是在 Header 中都是用这个名字进行存储。 
 
     * expiresIn
-        默认超时时间长度，单位秒，默认 1800 秒（即30分钟）
+        会话超时时间长度，单位秒，默认 1800 秒（即30分钟）
+
+    * updateExpireTime
+        当用户访问的时候是否更新会话的超时时间（只在 expiresIn > 0 的时候有效），默认为 false

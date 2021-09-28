@@ -29,7 +29,7 @@ public class SessionConfigBean {
     private String tokenKey = "swiftboot_token";
 
     /**
-     * 会话超时时间, 单位秒, 默认30分钟，设置为 0 或者 <0 表示不超时
+     * 会话超时时间长度, 单位秒, 默认30分钟，设置为 0 或者 <0 表示不超时
      */
     private int expiresIn = 60 * 30;
 
