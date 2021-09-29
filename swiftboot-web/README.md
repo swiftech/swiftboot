@@ -42,7 +42,6 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 
 * 配置
 
-
   ```java
   @Configuration
   @ComponentScan(basePackages = {"org.swiftboot.web", "org.swiftboot.data"})
@@ -116,7 +115,8 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 
 > `@ResponseBody` 注解会把接口方法返回的 `HttpResponse` 对象及其内嵌的对象一起转换成 JSON 格式返回给访问接口的客户端。
 
-* 统一 API 异常处理 
+* 统一 API 异常处理
+
   控制器中抛出的异常直接抛出会使得客户端的错误处理非常不友好，而通过代码去捕获即繁琐又容易遗留，SwiftBoot 实现了控制器增强 `ExceptionProcessor`，他将异常信息以统一的 `JSON` 格式输出给客户端，配置方法如下：
   
 
@@ -138,6 +138,12 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
         return new ExceptionProcessor();
     }
   }
+  ```
+
+  如果需要自定义接口异常的代码和消息，只需要抛出 `ErrMessageException` 异常即可，例如：
+
+  ```java
+  throw new ErrMessageException("4001", "error message");
   ```
 
 * 输入参数验证
@@ -163,22 +169,19 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
   }
   ```
 
+* 错误处理
+
+接口
 
 * HTTP 头处理
 
-SwiftBoot 可以帮助你把 `HttpServletRequest` 中的 Header 自动添加到 Command 对象中
+只要你的接口参数对象继承了 `HttpCommand` 类或者其子类，SwiftBoot 就会自动把 `HttpServletRequest` 中的 Header 添加到对象中，通过调用 `getHeader()` 方法就可以得到 Header 值：
 
 ```java
-import org.swiftboot.web.command.WebMessageConverter;
-
-@EnableWebMvc
-public class MyDemoConfig implements WebMvcConfigurer {
-
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        converters.add(new WebMessageConverter(builder.build));
-    }
+public class MyCommand extends HttpCommand {
 }
+
+String myHeader = myCommand.getHeader("my_header");
 ```
 
 ### Service 层
@@ -186,10 +189,12 @@ public class MyDemoConfig implements WebMvcConfigurer {
 #### 参数对象自动填充
 
 Web 开发中最无趣的工作之一就是从接口参数对象中复制每个参数值到 Model 层的实体类中进行保存，反之亦然。 SwiftBoot 实现了自动化的参数填充，它能够有选择性的将参数值填充到对应的实体类中，也能将实体类中的值填充到返回值对象中（如果实体类关联了其他实体类对象，它也会对应的填充到返回值对象的内嵌对象中去）。
+
 * 输入参数自动填充实现方法：
   * 输入参数对象继承 `BasePopulateCommand`，并指定范型类型为对应的实体类的类型。
   * 对于新增数据的操作，调用 `createEntity()` 方法即可实例化相对应的实体类，并把输入参数对象中所有名称对应的值填充到实体类中。对于用 `@OneToOne` 和 `@OneToMany` 注解标注的子类或者子集合也会被自动填充。
   * 对于修改数据的操作，查询出需要修改的实体类之后，调用 `populateEntity()` 方法将输入参数对象中所有名称对应的值填充到实体类中。 对于用 `@OneToOne` 和 `@OneToMany` 注解标注的子类或者子集合也会被自动填充。
+
 * 输出参数自动填充实现方法：
   * 返回值对象继承 `BasePopulateResult`
   * 在需要的地方调用 `BasePopulateResult` 的静态方法 `createResult()` 即可实例化返回值对象，并把将查询到的实体类中所有对应名称的值（包括一对一、一对多关联的实体类）填充到输出对象中。或者在代码中直接实例化返回对象实例，然后调用它的 `populateByEntity()` 方法进行填充。

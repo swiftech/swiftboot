@@ -78,7 +78,7 @@ httpServletResponse.addCookie(cookie);
 
 对于已登录的用户的请求，用户 ID 会被自动的注入，无需写代码从 Cookie 或者 Header 获取用户 Token，再从会话中获取用户 ID 了。
 
-  * 对于 `POST` 请求，只要是继承自 `BaseAuthenticatedCommand` 的接口参数对象，都会被自动的注入用户ID，在 Controller 中只要通过 `command.getUerId()` 就可以获得 ID。例如：
+  * 对于 `POST` 请求，只要是继承自 `BaseAuthenticatedCommand` 或者其子类的接口参数对象，都会被自动的注入用户ID和用户名称，在 Controller 中只要通过 `command.getUerId()` 和 `command.getUserName()` 就可以获得。例如：
 
 ```java
 public class OrderCreateCommand extends BaseAuthenticatedCommand<OrderEntity> {
@@ -90,6 +90,7 @@ public class OrderCreateCommand extends BaseAuthenticatedCommand<OrderEntity> {
 @RequestMapping(value = "order/create", method = RequestMethod.POST)
 public HttpResponse<OrderCreateResult> orderCreate(@RequestBody OrderCreateCommand command) {
     log.info(command.getUserId());
+    log.info(command.getUserName());
 }
 ```
   * 对于 `GET` 请求，只需要在 Controller 方法上加一个 `String` 类型的参数，并且加上 `@UserId` 注解即可得到用户ID。例如：
@@ -104,7 +105,8 @@ public HttpResponse<?> getOrderList(@UserId String userId) {
 
 > 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
 
-* application.yaml 例子
+
+* 配置 application.yaml
 
 ```yaml
 swiftboot:
@@ -118,23 +120,23 @@ swiftboot:
       updateExpireTime: true
 ```
 
-    参数解释：
+  参数解释：
 
-    * enabled
-        是否启用，如果为 `false`，则 swiftboot-auth 定义的 Bean 都不会加载，功能也都无效。
+  * enabled
+      是否启用，如果为 `false`，则 swiftboot-auth 定义的 Bean 都不会加载，功能也都无效。
 
-    * type
-        配置为 `redis`, 使用 Redis 存储会话，需要配置 `RedisService`，参考：[swiftboot-service](../swiftboot-service/README.md)。
-        配置为 `mock`，使用内存存储会话，仅用于调试。
+  * type
+      配置为 `redis`, 使用 Redis 存储会话，需要配置 `RedisService`，参考：[swiftboot-service](../swiftboot-service/README.md)。
+      配置为 `mock`，使用内存存储会话，仅用于调试。
 
-    * group
-        默认的会话分组名称，用这个值来创建会话存储（Redis）中的集合，默认为 "swiftboot_token"
+  * group
+      默认的会话分组名称，用这个值来创建会话存储（Redis）中的集合，默认为 "swiftboot_token"
 
-    * tokenKey
-        传递用户认证后得到的 Token 的 Key 的名称，无论是在 Cookie 还是在 Header 中都是用这个名字进行存储。 
+  * tokenKey
+      传递用户认证后得到的 Token 的 Key 的名称，无论是在 Cookie 还是在 Header 中都是用这个名字进行存储。 
 
-    * expiresIn
-        会话超时时间长度，单位秒，默认 1800 秒（即30分钟）
+  * expiresIn
+      会话超时时间长度，单位秒，默认 1800 秒（即30分钟）
 
-    * updateExpireTime
-        当用户访问的时候是否更新会话的超时时间（只在 expiresIn > 0 的时候有效），默认为 false
+  * updateExpireTime
+      当用户访问的时候是否更新会话的超时时间（只在 expiresIn > 0 的时候有效），默认为 false

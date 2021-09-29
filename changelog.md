@@ -1,5 +1,16 @@
-2.0.2
-* `swiftboot-data` 支持自定义 Hibernate 拦截器
+2.1
+* `[data]` 增加逻辑删除的 JPA 扩展接口。
+* `[sheet]` 导出增加多表格支持、复制单元格样式功能、合并单元格功能，修复bug和重构。
+* `[web]` 废弃 WebMessageConverter，不再需要显式声明，简化使用。
+* `[auth]` 增加将用户会话信息自动填充至接口参数对象或者变量的功能。
+* `[auth]` 增加全部清除用户会话的功能
+* `[auth]` Mock会话服务增加磁盘存储
+* 修复了一些bug
+* 大量文档更新
+* SpringBoot 及其他依赖库升级
+
+2.0.2 (2021-03-14)
+* `swiftboot-data` 支持自定义 Hibernate 拦截器（通过 `InterceptorLoader` 加载）
 
 2.0.1
 * `swiftboot-data` 修复在 save() 之前 Hibernate 发生 flush 时没有自动设置 ID 的问题

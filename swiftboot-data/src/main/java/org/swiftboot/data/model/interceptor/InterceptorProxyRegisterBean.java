@@ -14,6 +14,7 @@ import java.util.Map;
  * @see InterceptorProxy
  * @see IdInterceptor
  * @see TimeInterceptor
+ * @see InterceptorLoader
  * @since 2.0.0
  */
 public class InterceptorProxyRegisterBean implements HibernatePropertiesCustomizer {

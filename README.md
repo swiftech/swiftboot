@@ -46,14 +46,17 @@
 
 ### 版本
 
-* 最新版：v2.0.2 (2021-03-14)
+* 最新版：v2.1
   更新内容：
-  * `swiftboot-web` 控制器参数自动填充功能支持编辑子对象的填充。
-  * 将数据访问层从 `swiftboot-web` 独立出来成为 `swiftboot-data` 模块，方便用于任何 JPA 应用程序使用。
-  * `swiftboot-data` 重新实现自动设置创建时间和更新时间，支持一对一关联和一对多关联实体的自动设置更新时间。
-  * `swiftboot-data` 新增 snowflake ID 生成器。
-  * 新增 `swiftboot-sheet` 模块提供了模版化的表格数据导出和导入的功能，支持 Excel 和 CSV。
-  * 依赖库升级和bug修复。
+  * `[data]` 增加逻辑删除的 JPA 扩展接口。
+  * `[sheet]` 导出增加多表格支持、复制单元格样式功能、合并单元格功能，修复bug和重构。
+  * `[web]` 废弃 WebMessageConverter，不再需要显式声明，简化使用。
+  * `[auth]` 增加将用户会话信息自动填充至接口参数对象或者变量的功能。
+  * `[auth]` 增加全部清除用户会话的功能
+  * `[auth]` Mock会话服务增加磁盘存储
+  * 修复了一些bug
+  * 大量文档更新
+  * SpringBoot 及其他依赖库升级
 
 [完整更新记录](changelog.md)
 

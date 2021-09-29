@@ -143,4 +143,58 @@ SwiftBoot-Data 提供了一个比 UUID 更好的主键 ID 生成器 `EntityIdGen
   * `on-change` 当有数据变化时自动设置更新时间。
   * `always` 忽略是否有数据变化，强制在保存的时候设置更新时间。
 
-* 一对一或一对多关联的实体或者子实体集合，也会按照以上的规则进行自动设置。
+  * 一对一或一对多关联的实体或者子实体集合，也会按照以上的规则进行自动设置。
+
+###### 逻辑删除
+
+通常在表中添加一个逻辑删除的字段来标记这条记录是不是已经被逻辑删除了，SwiftBoot-Data 对此提供了一些基本的支持。
+
+首先选择标记逻辑删除的字段的类型，可以选择 `Boolean` 或者 `Integer`，根据选择决定相关的类需要继承不同的父类。 例如，选择 `Boolean` 类型的字段记录逻辑删除：
+
+* Entity 类
+
+  继承 `BaseBoolDeleteEntity` 类（其中已经定义了一个 `Boolean` 类型的 `IS_DELETE`（`isDelete`） 字段）例如：
+
+  ```java
+  @Entity
+  @Table(name = "MY_TABLE")
+  public class MyLogicalDeleteEntity extends BaseBoolDeleteEntity {
+  }
+  ```
+
+  > 如果你的实体类需要继承其他类，而不能继承 `BaseBoolDeleteEntity` 类，可以通过实现 `LogicalDeletePersistable<Boolean>` 接口来自己实现这个字段的定义
+
+* Repository 类
+
+  继承 `BooleanLogicalDeleteExtend` 接口，它已经实现了逻辑删除的 JPA 方法 `deleteLogically` 和 `undeleteLogically`，直接使用即可：
+
+```java
+public interface BoolLogicalDeleteDao extends CrudRepository<MyLogicalDeleteEntity, String>,
+        BooleanLogicalDeleteExtend<MyLogicalDeleteEntity> {
+}
+```
+
+> 如果选择 `Integer` 类型，则分别继承 `BaseIntDeleteEntity`(或实现 `LogicalDeletePersistable<Integer>` 接口) 和实现 `IntegerLogicalDeleteExtend` 接口 
+
+
+###### 拦截器
+
+由于 SwiftBoot-Data 的 `InterceptorProxy` 注册成了 Hibernate 的拦截器，那么如果你需要注册自定义拦截器就不能使用 Hibernate 的做法了(属性 `hibernate.session_factory.interceptor` 或 `hibernate.ejb.interceptor`)，不然会产生冲突，但是 SwiftBoot-Data 
+提供了 `InterceptorLoader` 可以在不改变 Hibernate 的拦截器的实现而加载你自己定义的拦截器。也就是说如果你已经实现了 Hibernate 的拦截器，无需做改变即可使用，
+只是注册的方法改为使用 `InterceptorRegisterBean` 来注册拦截器，例如：
+
+```java
+@Bean
+MyHibernateInterceptor myHibernateInterceptor() {
+    return new MyHibernateInterceptor(); // 自定义的拦截器
+}
+
+@Bean
+InterceptorRegisterBean<MyHibernateInterceptor> registerDataPermissionInterceptor() {
+    InterceptorRegisterBean<MyHibernateInterceptor> regBean = new InterceptorRegisterBean<>();
+    regBean.setOrder(100);
+    regBean.setInterceptorName("My Data Interceptor");
+    regBean.setInterceptor(myHibernateInterceptor());
+    return regBean;
+}
+```

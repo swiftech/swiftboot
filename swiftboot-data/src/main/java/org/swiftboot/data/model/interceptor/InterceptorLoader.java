@@ -33,7 +33,7 @@ public class InterceptorLoader implements ApplicationContextAware {
 
     @PostConstruct
     public void init() {
-        log.trace("InterceptorHandler goes");
+        log.trace("InterceptorLoader init user's Hibernate interceptor");
         Map<String, InterceptorRegisterBean> beans = this.applicationContext.getBeansOfType(InterceptorRegisterBean.class);
 
         // find all registered interceptors.
