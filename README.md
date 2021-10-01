@@ -1,5 +1,7 @@
 # SwiftBoot
 
+A rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise
+
 基于 Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
 
 ### 为什么要有 SwiftBoot
@@ -16,11 +18,11 @@
 * 接口的返回值对象，实体对象自动填充。
 * 自动验证输入参数并自动转换为统一的返回格式。
 * 主键ID自动生成，字段自动填充机制。
-* 企业 Web 开发常用的工具类和集合类。
 * 提供常见的服务（例如 Redis服务，用户认证等等），减少不必要的重复开发工作，关注核心业务逻辑。
 * 提供基本的用户认证（基于 Redis），可用于 Web 和移动应用的用户认证。
+* 提供基于 Shiro 框架的用户认证和授权，简化 Shiro 框架的使用。
 * 表格数据模版化导入导出，支持 Excel, CSV。
-* 常见文档格式转换（开发中）。
+* 企业 Web 开发常用的工具类和集合类。
 
 ### 模块
 
@@ -49,13 +51,17 @@
 * 最新版：v2.1
   更新内容：
   * `[data]` 增加逻辑删除的 JPA 扩展接口。
+  * `[data]` 增加 `InterceptorLoader` 用于加载用户自定义的 Hibernate 拦截器
+  * `[data]` 修复了自动填充 ID 时子对象重复填充的bug。
   * `[sheet]` 导出增加多表格支持、复制单元格样式功能、合并单元格功能，修复bug和重构。
-  * `[web]` 废弃 WebMessageConverter，不再需要显式声明，简化使用。
+  * `[web]` 废弃 `WebMessageConverter`，不再需要显式声明，简化使用。
+  * `[web]` 新增 `HeaderUtils` 和 `SpringWebUtils` 处理 HTTP 头。
   * `[auth]` 增加将用户会话信息自动填充至接口参数对象或者变量的功能。
-  * `[auth]` 增加全部清除用户会话的功能
-  * `[auth]` Mock会话服务增加磁盘存储
+  * `[auth]` 增加全部清除用户会话的功能。
+  * `[auth]` Mock会话服务增加磁盘存储。
+  * SpringBoot 配置文档化
   * 修复了一些bug
-  * 大量文档更新
+  * 大量代码重构和文档更新
   * SpringBoot 及其他依赖库升级
 
 [完整更新记录](changelog.md)

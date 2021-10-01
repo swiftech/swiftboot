@@ -31,30 +31,32 @@ public class IdPopulator {
      * Populate id to entity and all it's related entities.
      *
      * @param idEntity
+     * @param attachParent whether attach parent entity.
      */
     public void populate(IdPersistable idEntity, boolean attachParent) {
 //        log.trace(String.format("Try to populate entity '%s' with id", idEntity.getClass().getSimpleName()));
         if (StringUtils.isBlank(idEntity.getId())) {
             String id = idGenerator.generate(idEntity);
-            log.trace(String.format("Generate ID for %s: %s", idEntity, id));
+            if (log.isTraceEnabled()) log.trace(String.format("Generate ID for %s: %s", idEntity, id));
             idEntity.setId(id);
         }
 
-        this.tryToPopulateOneToOneEntities(idEntity,attachParent);
-        this.tryToPopulateOneToManyEntities(idEntity,attachParent);
+        this.tryToPopulateOneToOneEntities(idEntity, attachParent);
+        this.tryToPopulateOneToManyEntities(idEntity, attachParent);
     }
 
     /**
      * Try to set id of one to one relations.
      *
      * @param parentEntity
+     * @param attachParent whether attach parent entity.
      */
     private void tryToPopulateOneToOneEntities(IdPersistable parentEntity, boolean attachParent) {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToOne.class);
         for (Field subObjectField : subObjectList) {
             Object relEntity = BeanUtils.forceGetProperty(parentEntity, subObjectField);
             if (relEntity == null) continue;
-            log.trace(String.format("Try to populate one-to-one sub-entity %s with id", subObjectField.getName()));
+            if (log.isTraceEnabled()) log.trace(String.format("Try to populate one-to-one sub-entity %s with id", subObjectField.getName()));
             populate((IdPersistable) relEntity, attachParent);
         }
     }
@@ -63,16 +65,17 @@ public class IdPopulator {
      * Try to set id of one to many relations.
      *
      * @param parentEntity
+     * @param attachParent whether attach parent entity.
      */
     private void tryToPopulateOneToManyEntities(IdPersistable parentEntity, boolean attachParent) {
         List<Field> subObjectList = FieldUtils.getFieldsListWithAnnotation(parentEntity.getClass(), OneToMany.class);
         for (Field subObjectField : subObjectList) {
             Object relEntities = BeanUtils.forceGetProperty(parentEntity, subObjectField);
             if (relEntities == null) {
-                log.debug("@OneToMany annotated field is null");
+                if (log.isDebugEnabled()) log.debug("@OneToMany annotated field is null");
                 continue;
             }
-            log.trace(String.format("Try to populate one-to-many sub-entity '%s' with id", subObjectField.getName()));
+            if (log.isTraceEnabled()) log.trace(String.format("Try to populate one-to-many sub-entity '%s' with id", subObjectField.getName()));
             for (Object subEntity : ((Iterable<?>) relEntities)) {
                 if (!(subEntity instanceof IdPersistable)) {
                     continue;
@@ -85,12 +88,12 @@ public class IdPopulator {
                         Object o = BeanUtils.forceGetProperty(subEntity, m2oField);
                         if (o == null) {
                             if (attachParent) {
-                                log.debug(String.format("Attach parent entity %s to sub entity %s", parentEntity, subEntity));
+                                if (log.isDebugEnabled()) log.debug(String.format("Attach parent entity %s to sub entity %s", parentEntity, subEntity));
                                 BeanUtils.forceSetProperty(subEntity, m2oField, parentEntity);
                             }
                         }
                         else {
-                            log.trace(String.format("Parent entity %s has already been attached sub entity %s", o, subEntity));
+                            if (log.isTraceEnabled()) log.trace(String.format("Parent entity %s has already been attached sub entity %s", o, subEntity));
                         }
                         // log.debug(String.valueOf(BeanUtils.forceGetProperty(subEntity, m2oField)));
 //                        log.trace(String.format("parentEntity %s- %s", parentEntity, parentEntity.hashCode()));

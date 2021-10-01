@@ -30,7 +30,7 @@ public class IdInterceptor extends EmptyInterceptor {
                 Object e = entities.next();
                 if (e instanceof IdPersistable) {
                     IdPersistable entity = (IdPersistable) e;
-                    idPopulator.populate(entity, false);
+                    idPopulator.populate(entity, false); // avoid re-populate id for children entities.
                 }
             }
         } catch (Exception e) {

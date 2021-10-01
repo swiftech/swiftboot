@@ -56,13 +56,13 @@ public class SwiftbootAuthConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public UserSessionArgumentResolver userIdArgumentResolver() {
+    public UserSessionArgumentResolver userSessionArgumentResolver() {
         return new UserSessionArgumentResolver();
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(userIdArgumentResolver());
+        resolvers.add(userSessionArgumentResolver());
     }
 
 }
