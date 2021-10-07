@@ -21,11 +21,12 @@ import org.swiftboot.web.result.HttpResponse;
  * {@link org.springframework.context.annotation.ComponentScan @ComponentScan}(basePackages = {"org.swiftboot.web"})
  * </pre>
  * 配置：
+ * <pre>
  * swiftboot:
  *   web:
  *     validation:
  *       resultInJson: false
- *
+ * </pre>
  * @author swiftech
  */
 @ControllerAdvice

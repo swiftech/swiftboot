@@ -42,6 +42,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 
 * 配置
 
+
   ```java
   @Configuration
   @ComponentScan(basePackages = {"org.swiftboot.web", "org.swiftboot.data"})
@@ -149,7 +150,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 * 输入参数验证
 
 
-  除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 `JSON` 输出格式。（自动从 Command 对象的注解中获取到参数对应的描述信息）
+  除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 `JSON` 输出格式。（自动从 Command 对象的 `ApiModelProperty` 注解中获取到参数对应的描述信息）
   配置：
   ```java
   @Bean
