@@ -8,12 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.swiftboot.demo.exception.ErrorCode;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.result.HttpResponse;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.swiftboot.web.result.ResponseBuilder;
 
 /**
  * @author swiftech
@@ -23,16 +22,37 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/test")
 public class TestController {
 
-    private Logger log = LoggerFactory.getLogger(TestController.class);
-
+    private final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @ApiOperation(notes = "测试资源", value = "测试资源")
-    @RequestMapping(value = "message/resource", method = RequestMethod.GET)
+    @RequestMapping(value = "message/resource/code", method = RequestMethod.GET)
     public
     @ResponseBody
-    HttpResponse<Void> testMessageResource(
-            HttpServletResponse response,
-            HttpServletRequest request) {
+    HttpResponse<Void> testMessageResource() {
         throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR);
+    }
+
+    @ApiOperation(notes = "测试资源", value = "测试资源")
+    @RequestMapping(value = "message/resource/customize", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    HttpResponse<Void> testMessageResourceCustomize() {
+        throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, "自定义错误消息");
+    }
+
+    @ApiOperation(notes = "测试资源", value = "测试资源")
+    @RequestMapping(value = "message/resource/params", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    HttpResponse<Void> testMessageResourceParams() {
+        return new ResponseBuilder<Void>().code(ErrorCode.CODE_TEST_PARAMS).msgParams("foo", "bar").build();
+    }
+
+    @ApiOperation(notes = "测试资源", value = "测试资源")
+    @RequestMapping(value = "message/resource/customize/params", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    HttpResponse<Void> testMessageResourceCustomizeParams() {
+        return new ResponseBuilder<Void>().code(ErrorCode.CODE_TEST_PARAMS).msg("自定义错误消息：{0}和{1}").msgParams("foo", "bar").build();
     }
 }
