@@ -16,10 +16,16 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class PhoneNoValidator implements ConstraintValidator<PhoneNo, String> {
 
-    private Logger logger = LoggerFactory.getLogger(PhoneNoValidator.class);
+    private final Logger log = LoggerFactory.getLogger(PhoneNoValidator.class);
+
+    private String prefix;
 
     @Override
     public void initialize(PhoneNo phoneNo) {
+        this.prefix = phoneNo.prefix();
+        if (!StringUtils.isNumeric(this.prefix)) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
@@ -29,6 +35,6 @@ public class PhoneNoValidator implements ConstraintValidator<PhoneNo, String> {
         }
         return s.trim().length() == 11
                 && NumberUtils.isDigits(s.trim())
-                && StringUtils.startsWith(s.trim(), "1");
+                && StringUtils.startsWith(s.trim(), this.prefix);
     }
 }

@@ -1,5 +1,6 @@
 package org.swiftboot.web.result;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +32,13 @@ public class HttpResponse<T> implements Serializable {
      * 错误代码对应的错误信息
      */
     @ApiModelProperty(value = "Error message", required = false, example = "OK")
-    protected String msg = ErrorCodeSupport.getErrorMessage(ErrorCodeSupport.CODE_OK);
+    protected String msg = null;
+
+    /**
+     * 错误资源中的参数值
+     */
+    @JsonIgnore
+    protected String[] msgParams;
 
     /**
      * 返回的对象
@@ -48,7 +55,6 @@ public class HttpResponse<T> implements Serializable {
 
     public HttpResponse(String code) {
         this.code = code;
-        this.msg = ErrorCodeSupport.getErrorMessage(code);
     }
 
     public HttpResponse(String code, String msg) {
@@ -58,7 +64,6 @@ public class HttpResponse<T> implements Serializable {
 
     public HttpResponse(String code, T result) {
         this.code = code;
-        this.msg = ErrorCodeSupport.getErrorMessage(code);
         this.result = result;
     }
 
@@ -79,7 +84,14 @@ public class HttpResponse<T> implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
-        this.msg = ErrorCodeSupport.getErrorMessage(code);
+    }
+
+    public String[] getMsgParams() {
+        return msgParams;
+    }
+
+    public void setMsgParams(String[] msgParams) {
+        this.msgParams = msgParams;
     }
 
     public String getMsg() {

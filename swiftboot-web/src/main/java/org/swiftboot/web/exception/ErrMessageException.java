@@ -44,6 +44,7 @@ public class ErrMessageException extends RuntimeException {
 
     public ErrMessageException(String errorCode, Throwable cause) {
         super(ErrorCodeSupport.getErrorMessage(errorCode), cause);
+        this.errorCode = errorCode;
     }
 
     public String getErrorCode() {

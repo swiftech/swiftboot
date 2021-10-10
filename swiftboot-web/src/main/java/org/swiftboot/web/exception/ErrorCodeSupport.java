@@ -5,9 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.stereotype.Component;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
+import org.swiftboot.web.util.MessageUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -27,7 +29,8 @@ import java.util.Map;
  *
  * @author swiftech
  **/
-public abstract class ErrorCodeSupport {
+@Component
+public class ErrorCodeSupport {
 
     private final Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
 
@@ -39,7 +42,7 @@ public abstract class ErrorCodeSupport {
      **/
     public static final String CODE_SYS_ERR = "3000"; //未知系统错误
     public static final String CODE_SYS_DB_ERROR = "3001"; //数据库错误
-    public static final String CODE_PARAMS_ERROR = "3002"; // 输入参数错误
+    public static final String CODE_ARGUMENTS_ERROR = "3002"; // 输入参数错误
     public static final String CODE_NO_PERMISSION = "3003"; // 没有权限进行操作
     public static final String CODE_ILLEGAL_API_ACCESS = "3005"; // 非法的 API 调用
     public static final String CODE_APP_VERSION_EXPIRED = "3006"; // 客户端版本低，请升级至新版本
@@ -83,7 +86,7 @@ public abstract class ErrorCodeSupport {
 
 
     // code -> message
-    private static HashMap<String, String> errorCodeMap = new HashMap<>();
+    private static final HashMap<String, String> errorCodeMap = new HashMap<>();
 
     @Resource
     private MessageSource messageSource;
@@ -98,6 +101,9 @@ public abstract class ErrorCodeSupport {
         errorCodeMap.put(code, msg);
     }
 
+    public String getMessage(String code, String... args) {
+        return ErrorCodeSupport.getErrorMessage(code, args);
+    }
 
     /**
      * 获取参数化的错误消息
@@ -111,11 +117,11 @@ public abstract class ErrorCodeSupport {
         if (code.equals(template)) {
             return code;
         }
-        String[] argp = new String[args.length];
-        for (int i = 0; i < args.length; i++) {
-            argp[i] = String.format("{%d}", i);
-        }
-        return StringUtils.replaceEach(template, argp, args);
+        return MessageUtils.instantiateMessage(template, args);
+    }
+
+    public String getMessage(String code) {
+        return ErrorCodeSupport.getErrorMessage(code);
     }
 
     /**
@@ -141,9 +147,9 @@ public abstract class ErrorCodeSupport {
     /**
      * 验证是否存在重复的错误代码
      */
-    public static void validate() {
+    public void validate(Class<?> errCodeClass) {
         Map<String, Object> cache = new HashMap<>();
-        Field[] fields = ErrorCodeSupport.class.getDeclaredFields();
+        Field[] fields = errCodeClass.getDeclaredFields();
         if (fields.length == 0) {
             throw new RuntimeException(Info.get(ErrorCodeSupport.class, R.NO_PRE_DEFINED_MSG));
         }
@@ -164,82 +170,64 @@ public abstract class ErrorCodeSupport {
     /**
      * 从i18n资源初始化错误代码对应的错误信息
      */
-    protected void initErrorCode() {
+    public void initErrorCode() {
         log.info(StringUtils.join(Info.sources));
-        log.info(Info.get(ErrorCodeSupport.class, R.I18N_INIT_START));
+        log.info(Info.get(this.getClass(), R.I18N_INIT_START));
         try {
-            validate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-
-        try {
-            log.info(Info.get(ErrorCodeSupport.class, R.INIT_PRE_DEFINED_MSG1, ErrorCodeSupport.class.getName()));
-            List<Field> standard = BeanUtils.getStaticFieldsByType(ErrorCodeSupport.class, String.class);
-            log.info(Info.get(ErrorCodeSupport.class, R.TOTAL_MSG_COUNT1, standard.size()));
-            for (Field field : standard) {
-                if (field.getName().startsWith("CODE_")) {
-                    String fieldValue = field.get(null).toString();
-                    log.debug(String.format("  %s(%s)", field.getName(), fieldValue));
-                    String message = null;
-                    try {
-                        message = messageSource.getMessage(field.getName(), null, Locale.CHINESE); // TODO
-                    } catch (NoSuchMessageException e) {
-                        log.info(Info.get(ErrorCodeSupport.class, R.IGNORE_MSG1, field.getName()));
-                        continue;
-                    }
-                    if (StringUtils.isBlank(message)) {
-                        log.info(Info.get(ErrorCodeSupport.class, R.NOT_FOUND_MSG1, field.getName()));
-                    }
-                    else {
-                        putErrorCodeAndMessage(field.get(null).toString(), message);
-                    }
-                }
-            }
-
-            log.info(Info.get(ErrorCodeSupport.class, R.INIT_USER_DEFINED_MSG1, this.getClass().getName()));
-            List<Field> fields = BeanUtils.getStaticFieldsByType(this.getClass(), String.class);
-            for (Field field : fields) {
-                if (field.getName().startsWith("CODE_")) {
-                    String fieldValue = field.get(null).toString();
-                    log.debug(String.format("  %s(%s)", field.getName(), fieldValue));
-                    if (StringUtils.isNotBlank(getErrorMessage(fieldValue))) {
-                        log.warn(Info.get(ErrorCodeSupport.class, R.CODE_EXIST2, field.getName(), fieldValue));
-                        continue;
-                    }
-                    String message = null;
-                    try {
-                        message = messageSource.getMessage(field.getName(), null, Locale.CHINESE);
-                    } catch (NoSuchMessageException e) {
-                        log.info(Info.get(ErrorCodeSupport.class, R.IGNORE_MSG1, field.getName()));
-                        continue;
-                    }
-                    if (StringUtils.isBlank(message)) {
-                        log.info(Info.get(ErrorCodeSupport.class, R.NOT_FOUND_MSG1, field.getName()));
-                    }
-                    else {
-                        putErrorCodeAndMessage(field.get(null).toString(), message);
-                    }
-                }
-            }
-
-            if (errorCodeMap == null || errorCodeMap.isEmpty()) {
+            this.validate(this.getClass());
+            this.loadFromClass(this.getClass());
+            if (errorCodeMap.isEmpty()) {
                 log.warn(Info.get(ErrorCodeSupport.class, R.INIT_FAIL));
                 return;
             }
             else {
                 log.info(Info.get(ErrorCodeSupport.class, R.INIT_COUNT1, errorCodeMap.size()));
             }
-
             String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "this is a param of message");
             log.debug(Info.get(ErrorCodeSupport.class, R.VALIDATE_INI1T, argumentedMsg));
         } catch (Exception e) {
             e.printStackTrace();
+            return;
         }
         log.info(Info.get(ErrorCodeSupport.class, R.I18N_INIT_DONE));
     }
 
+    /**
+     *
+     * @param errCodeClass
+     * @throws IllegalAccessException
+     */
+    public void loadFromClass(Class<?> errCodeClass) throws IllegalAccessException {
+        log.info(Info.get(ErrorCodeSupport.class, R.INIT_USER_DEFINED_MSG1, errCodeClass.getName()));
+        List<Field> fields = BeanUtils.getStaticFieldsByType(errCodeClass, String.class);
+        for (Field field : fields) {
+            if (field.getName().startsWith("CODE_")) {
+                String codeNum = field.get(null).toString();
+                log.debug(String.format("  %s(%s)", field.getName(), codeNum));
+                if (StringUtils.isNotBlank(errorCodeMap.get(codeNum))) {
+                    // ignore if already loaded
+                    log.warn(Info.get(ErrorCodeSupport.class, R.CODE_EXIST2, field.getName(), codeNum));
+                    continue;
+                }
+                String message;
+                try {
+                    message = messageSource.getMessage(field.getName(), null, Locale.CHINESE);
+                } catch (NoSuchMessageException e) {
+                    log.info(Info.get(ErrorCodeSupport.class, R.IGNORE_MSG1, field.getName()));
+                    continue;
+                }
+                if (StringUtils.isBlank(message)) {
+                    log.info(Info.get(ErrorCodeSupport.class, R.NOT_FOUND_MSG1, field.getName()));
+                }
+                else {
+                    putErrorCodeAndMessage(field.get(null).toString(), message);
+                }
+            }
+        }
+    }
+
     @PostConstruct
-    public abstract void init();
+    public void init() {
+        initErrorCode();
+    }
 }

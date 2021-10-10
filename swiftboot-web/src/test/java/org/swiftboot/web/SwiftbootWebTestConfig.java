@@ -25,7 +25,7 @@ import org.swiftboot.data.model.id.IdGenerator;
 @EntityScan(basePackages = {
         "org.swiftboot.web.model.entity"
 })
-public class SwiftbootWebConfig {
+public class SwiftbootWebTestConfig {
     @Bean
     IdGenerator idGenerator() {
         return new EntityIdGenerator();
