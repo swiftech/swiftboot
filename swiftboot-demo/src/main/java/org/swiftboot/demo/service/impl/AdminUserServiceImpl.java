@@ -39,7 +39,7 @@ import static org.swiftboot.demo.constant.AuthConstants.MY_AUTH_SERVICE_NAME;
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
 
-    private Logger log = LoggerFactory.getLogger(AdminUserServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(AdminUserServiceImpl.class);
 
     @Resource
     private AdminUserDao adminUserDao;

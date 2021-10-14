@@ -1,6 +1,6 @@
 # SwiftBoot-Auth
 
-提供企业开发中的用户认证功能
+提供 Web 应用开发中的用户认证功能
 
 ### 特性
 * 非常少的代码即可实现完整的用户认证，只要实现校验用户凭证的代码逻辑和配置认证过滤有效的 URL 即可。
@@ -106,7 +106,7 @@ public HttpResponse<?> getOrderList(@UserId String userId) {
 > 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
 
 
-* 配置 application.yaml
+* 配置 application.yaml 例子
 
 ```yaml
 swiftboot:
@@ -130,13 +130,13 @@ swiftboot:
       配置为 `mock`，使用内存存储会话，仅用于调试。
 
   * group
-      默认的会话分组名称，用这个值来创建会话存储（Redis）中的集合，默认为 "swiftboot_token"
+      默认的会话分组名称，用这个值来创建会话存储（Redis）中的集合，默认为 `swiftboot_token`。
 
   * tokenKey
       传递用户认证后得到的 Token 的 Key 的名称，无论是在 Cookie 还是在 Header 中都是用这个名字进行存储。 
 
   * expiresIn
-      会话超时时间长度，单位秒，默认 1800 秒（即30分钟）
+      会话超时时间长度，单位秒，默认 `1800` 秒（即30分钟）
 
   * updateExpireTime
-      当用户访问的时候是否更新会话的超时时间（只在 expiresIn > 0 的时候有效），默认为 false
+    当用户访问的时候是否更新会话的超时时间（只在 `expiresIn` > 0 的时候有效），默认为 `false`。

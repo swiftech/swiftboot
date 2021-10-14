@@ -13,7 +13,7 @@ import org.swiftboot.web.util.JacksonUtils;
 import java.util.ArrayList;
 
 /**
- * 表单提交输入验证返回值，出现表单验证错误时创建并填充　HttpResponse　对象。
+ * 表单提交输入验证返回值，出现表单验证错误时创建并填充　{@link org.swiftboot.web.result.HttpResponse}　对象。
  * 可以设置多个输入框对应错误消息（或者错误消息资源代码）
  *
  * @author swiftech
@@ -32,6 +32,9 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
         if (bindingResult.hasErrors()) {
             ValidationResult validationResult = new ValidationResult();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
+                if (objectError == null) {
+                    continue;
+                }
                 String k = getJsonPropertyKeyFromError(bean, objectError.getCodes());
                 FieldError fe = (FieldError) objectError;
                 String fieldDesc;
@@ -128,14 +131,17 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
         /**
          * 输入　key　值
          */
-        @ApiModelProperty(value = "输入 key 值", example = "content")
+        @ApiModelProperty(value = "Key of Input", example = "content")
         String key;
 
         /**
          * 错误信息
          */
-        @ApiModelProperty(value = "错误信息", example = "长度需要在0和64之间")
+        @ApiModelProperty(value = "Error Message", example = "length must be between 0 and 64")
         String msg;
+
+        public InputError() {
+        }
 
         public InputError(String key, String msg) {
             this.key = key;
@@ -158,6 +164,5 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
             this.msg = msg;
         }
     }
-
 
 }

@@ -1,5 +1,6 @@
 package org.swiftboot.demo.service.impl;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +57,13 @@ public class GoodsServiceImpl implements GoodsService {
         GoodsEntity p1 = cmd.createEntity();
         goodsDao.save(p1);
         log.debug("创建商品: " + p1.getId());
-
         if (true) {
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR);
+            if (RandomUtils.nextBoolean()) {
+                throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR);
+            }
+            else {
+                throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, "自定义错误消息");
+            }
         }
         return new GoodsCreateResult(p1.getId());
     }
