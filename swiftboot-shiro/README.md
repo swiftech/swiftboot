@@ -39,7 +39,6 @@ swiftboot:
     session:
       storageType: redis
       timeout: 1800
-      forceDisableRedirect: false
       redisGroup: shiro-session
     cookie:
       domain: localhost

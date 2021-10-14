@@ -1,5 +1,6 @@
 package org.swiftboot.data.model.interceptor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.Type;
@@ -39,7 +40,8 @@ public class TimeInterceptor extends EmptyInterceptor {
         log.trace("onSave()");
         boolean changed = false;
         if (entity instanceof TimePersistable) {
-            log.debug("Auto set createTime for entity: " + entity);
+            if (log.isDebugEnabled())
+                log.debug("Auto set createTime for entity: " + StringUtils.substringAfterLast(entity.toString(), "."));
             for (int i = 0; i < propertyNames.length; i++) {
                 String pname = propertyNames[i];
                 if (CREATE_TIME.equals(pname)) {
@@ -61,7 +63,8 @@ public class TimeInterceptor extends EmptyInterceptor {
         }
 
         if (entity instanceof TimePersistable) {
-            log.debug("Auto set updateTime for entity: " + entity);
+            if (log.isDebugEnabled())
+                log.debug("Auto set createTime for entity: " + StringUtils.substringAfterLast(entity.toString(), "."));
             // find if data changed (except createTime and updateTime)
             boolean dataChanged = false;
             for (int i = 0; i < propertyNames.length; i++) {
