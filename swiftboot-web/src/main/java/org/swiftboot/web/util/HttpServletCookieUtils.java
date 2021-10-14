@@ -20,7 +20,8 @@ public class HttpServletCookieUtils {
     }
 
     /**
-     * Try to get value from header, if not exists, try to get it from cookie.
+     * Try to get value from header, if not exists, try to get it from cookie,
+     * return null if failed.
      *
      * @param request
      * @param name
