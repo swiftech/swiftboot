@@ -1,5 +1,7 @@
 package org.swiftboot.auth.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +12,15 @@ import java.util.Map;
  *
  * @author swiftech
  * @see SessionBuilder
+ * @see org.swiftboot.auth.interceptor.UserSessionResponseAdvice
  */
 public class Session implements Serializable {
+
+    /**
+     * The user token here is used for {@link org.swiftboot.auth.interceptor.UserSessionResponseAdvice} to read.
+     */
+    @JsonIgnore
+    private String userToken;
 
     /**
      * 用户ID
@@ -41,11 +50,20 @@ public class Session implements Serializable {
     public Session() {
     }
 
-    protected Session(String group, String userId, String userName, Long expireTime) {
+    protected Session(String userToken, String group, String userId, String userName, Long expireTime) {
+        this.userToken = userToken;
         this.userId = userId;
         this.userName = userName;
         this.group = group;
         this.expireTime = expireTime;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public String getGroup() {
