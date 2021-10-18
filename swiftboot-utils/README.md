@@ -35,7 +35,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-utils</artifactId>
-		<version>2.1</version>
+		<version>2.1.1</version>
 	</dependency>
 </dependencies>
 
