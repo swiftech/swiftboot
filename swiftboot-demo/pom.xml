@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <swiftboot.version>2.1</swiftboot.version>
+        <swiftboot.version>2.1.1</swiftboot.version>
 <!--        <junit.version>5.5.2</junit.version>-->
     </properties>
 
