@@ -175,7 +175,9 @@ public class ErrorCodeSupport {
         log.info(Info.get(this.getClass(), R.I18N_INIT_START));
         try {
             this.validate(this.getClass());
-            this.loadFromClass(this.getClass());
+            log.info(Info.get(ErrorCodeSupport.class, R.INIT_PRE_DEFINED_MSG1, this.getClass()));
+            this.loadFromClass(ErrorCodeSupport.class);
+//            log.info(Info.get(ErrorCodeSupport.class, R.INIT_USER_DEFINED_MSG1, this.getClass()));
             if (errorCodeMap.isEmpty()) {
                 log.warn(Info.get(ErrorCodeSupport.class, R.INIT_FAIL));
                 return;
@@ -198,7 +200,6 @@ public class ErrorCodeSupport {
      * @throws IllegalAccessException
      */
     public void loadFromClass(Class<?> errCodeClass) throws IllegalAccessException {
-        log.info(Info.get(ErrorCodeSupport.class, R.INIT_USER_DEFINED_MSG1, errCodeClass.getName()));
         List<Field> fields = BeanUtils.getStaticFieldsByType(errCodeClass, String.class);
         for (Field field : fields) {
             if (field.getName().startsWith("CODE_")) {
@@ -211,7 +212,7 @@ public class ErrorCodeSupport {
                 }
                 String message;
                 try {
-                    message = messageSource.getMessage(field.getName(), null, Locale.CHINESE);
+                    message = messageSource.getMessage(field.getName(), null, Locale.getDefault());
                 } catch (NoSuchMessageException e) {
                     log.info(Info.get(ErrorCodeSupport.class, R.IGNORE_MSG1, field.getName()));
                     continue;
@@ -220,7 +221,7 @@ public class ErrorCodeSupport {
                     log.info(Info.get(ErrorCodeSupport.class, R.NOT_FOUND_MSG1, field.getName()));
                 }
                 else {
-                    putErrorCodeAndMessage(field.get(null).toString(), message);
+                    putErrorCodeAndMessage(codeNum, message);
                 }
             }
         }

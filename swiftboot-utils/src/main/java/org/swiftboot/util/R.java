@@ -28,9 +28,9 @@ public class R implements Resource {
     }
 
     public static void main(String[] args) {
-        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));;
+        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));
 //        Info.validateForAllLocale();
         System.out.println();
-        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));;
+        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));
     }
 }

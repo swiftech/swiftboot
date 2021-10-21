@@ -24,8 +24,8 @@ public class R implements Resource {
         System.out.println();
 
         System.out.println(Info.get(QueueMap.class, R.QUEUE_SIZE_NOT_MATCH2));
-        System.out.println(Info.get(CollectionUtils.class, R.COLLECTION_TYPE_NOT_SUPPORTED1));;
-        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));;
+        System.out.println(Info.get(CollectionUtils.class, R.COLLECTION_TYPE_NOT_SUPPORTED1));
+        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));
     }
 
 

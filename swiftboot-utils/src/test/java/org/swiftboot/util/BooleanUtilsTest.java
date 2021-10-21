@@ -16,7 +16,7 @@ class BooleanUtilsTest {
         Assertions.assertFalse(BooleanUtils.or(FALSE, FALSE));
         Assertions.assertTrue(BooleanUtils.or(FALSE, TRUE, FALSE));
         Assertions.assertNull(BooleanUtils.or(new Boolean[]{null}));
-        Assertions.assertNull(BooleanUtils.or(new Boolean[]{null, null}));
+        Assertions.assertNull(BooleanUtils.or(null, null));
         Assertions.assertTrue(BooleanUtils.or(FALSE, TRUE, FALSE, null));
         Assertions.assertFalse(BooleanUtils.or(FALSE, FALSE, null));
 

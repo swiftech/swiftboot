@@ -22,7 +22,7 @@ import java.util.Map;
 @Component
 public class ConsumerErrorDecoder implements ErrorDecoder {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Exception decode(String methodKey, Response response) {

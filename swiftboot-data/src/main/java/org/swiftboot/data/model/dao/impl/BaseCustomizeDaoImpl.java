@@ -30,8 +30,8 @@ public abstract class BaseCustomizeDaoImpl<T extends IdPersistable> {
      */
     protected CriteriaQuery<T> makeCriteriaQuery(String key, Object value) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> cq = (CriteriaQuery<T>) cb.createQuery(entityClass);
-        Root<T> from = (Root<T>) cq.from(entityClass);
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> from = cq.from(entityClass);
         cq.select(from);
         if (StringUtils.isNotBlank(key) && value != null) {
             cq.where(

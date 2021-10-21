@@ -9,7 +9,7 @@ import java.io.IOException;
  **/
 public class FileConverter {
 
-    private ConvertFactory convertFactory = new ConvertFactory();
+    private final ConvertFactory convertFactory = new ConvertFactory();
 
     public void convert(Source source, Target target) throws ConvertException {
 

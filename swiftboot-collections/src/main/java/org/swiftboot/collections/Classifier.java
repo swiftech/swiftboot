@@ -18,11 +18,11 @@ import java.util.*;
  */
 public final class Classifier<T extends Comparable<T>, E> {
 
-    private Trait<T, E> trait;
-    private Filter<E> filter;
-    private SubCollection<E> subCollectionCreator;
-    private Comparator<T> traitComparator;
-    private Comparator<E> collectionComparator;
+    private final Trait<T, E> trait;
+    private final Filter<E> filter;
+    private final SubCollection<E> subCollectionCreator;
+    private final Comparator<T> traitComparator;
+    private final Comparator<E> collectionComparator;
     private Converter<E, ?> converter; // TODO
 
     public Classifier(Trait<T, E> trait,

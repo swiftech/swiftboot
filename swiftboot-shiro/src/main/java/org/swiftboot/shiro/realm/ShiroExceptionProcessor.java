@@ -24,7 +24,7 @@ import java.io.Serializable;
 @Order(200)
 public class ShiroExceptionProcessor {
 
-    private static Logger log = LoggerFactory.getLogger(ShiroExceptionProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(ShiroExceptionProcessor.class);
 
     /**
      * 处理 Shiro 鉴权失败的异常 {@link UnauthorizedException}

@@ -20,9 +20,6 @@ public class ContainsCapitalValidator implements ConstraintValidator<ContainsCap
 
     @Override
     public boolean isValid(String pwd, ConstraintValidatorContext constraintValidatorContext) {
-        if (!StringUtils.containsAny(pwd, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")) {
-            return false;
-        }
-        return true;
+        return StringUtils.containsAny(pwd, "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
 }
