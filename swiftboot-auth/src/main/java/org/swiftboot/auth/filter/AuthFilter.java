@@ -105,6 +105,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
     private void responseWithError(HttpServletResponse response, String errorCode) throws IOException {
         HttpResponse<?> resp = new HttpResponse<>(errorCode);
+        resp.setMsg(ErrorCodeSupport.getErrorMessage(errorCode));
         response.setCharacterEncoding("utf-8");
         response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(resp));

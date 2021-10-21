@@ -86,7 +86,7 @@ public HttpResponse<AppUserSigninResult> userSignIn(@RequestBody UserSignInComma
 public class MyConfig {
 
     @Resource
-    org.swiftboot.auth.filter.AuthFilter authFilter;
+    private org.swiftboot.auth.filter.AuthFilter authFilter;
     
     @Bean
     public FilterRegistrationBean<AuthFilter> regAuthFilter() {
