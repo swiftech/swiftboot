@@ -1,13 +1,12 @@
 package org.swiftboot.web.enums;
 
+/**
+ * Used to defined java enum that has Integer code and String value.
+ */
 public interface CodeValueEnumable {
 
-    int getCode();
+    Integer getCode();
 
     String getValue();
 
-//    String getValue(int code);
-
-//    default String getValue(int code) {
-//    }
 }

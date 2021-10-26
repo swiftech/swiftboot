@@ -65,6 +65,7 @@ public class EnvUtils {
     /**
      *
      */
+    @FunctionalInterface
     public interface SysPropertyExtractor {
 
         /**

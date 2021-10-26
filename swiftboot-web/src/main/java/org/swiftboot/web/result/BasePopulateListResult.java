@@ -78,6 +78,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E 
      * @param <T>
      * @param <E>
      */
+    @FunctionalInterface
     public interface PopulateHandler<T extends BasePopulateResult<E>, E extends IdPersistable> {
 
         /**

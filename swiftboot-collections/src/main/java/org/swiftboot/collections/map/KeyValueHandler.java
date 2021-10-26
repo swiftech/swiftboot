@@ -5,6 +5,7 @@ package org.swiftboot.collections.map;
  *
  * @author swiftech
  **/
+@FunctionalInterface
 public interface KeyValueHandler<K, V> {
 
     void handle(K key, V value) throws Exception;

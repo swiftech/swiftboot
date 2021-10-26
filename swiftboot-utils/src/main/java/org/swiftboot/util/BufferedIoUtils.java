@@ -95,6 +95,7 @@ public class BufferedIoUtils {
      *
      * @author swiftech
      **/
+    @FunctionalInterface
     public interface Callback<T> {
 
         /**
