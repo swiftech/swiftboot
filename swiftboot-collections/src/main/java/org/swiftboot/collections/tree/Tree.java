@@ -26,7 +26,6 @@ public class Tree {
 
     /**
      * How many levels this tree has.
-     * TODO will be changed if add more nodes to lowest level.
      */
     private int levels;
 
@@ -61,7 +60,7 @@ public class Tree {
      */
     public <T> void init(List<T> treeItems, Initiator<T> initiator) {
         for (T element : treeItems) {
-            System.out.println("Data element: " + element);
+            // System.out.println("Data element: " + element);
 
             // create new node if not exist(check by data object)
             Node newNode = null;
@@ -74,7 +73,7 @@ public class Tree {
             }
 
             Object parentItem = initiator.findParent(treeItems, element);
-            System.out.println("Find parent : " + parentItem);
+            // System.out.println("Find parent : " + parentItem);
 
             // Found root node which has no parent
             if (parentItem == null) {
@@ -82,7 +81,7 @@ public class Tree {
                 // Found and supposed to be root node.
                 if (rootNode == null) {
                     rootNode = newNode;
-                    System.out.println("Root Node Probably Found.");
+                    // System.out.println("Root Node Probably Found.");
                 }
                 else {// Found more than one root node.
                     // Root node already determined, just set with it as root.
@@ -102,7 +101,7 @@ public class Tree {
                             rootNode = newRootNode;
 
                             allUniqueElements.put(defaultRoot, newRootNode);
-                            System.out.println("Default Root Node Created: " + rootNode);
+                            // System.out.println("Default Root Node Created: " + rootNode);
                             newNode.setParent(rootNode);
                         }
                     }
@@ -126,7 +125,7 @@ public class Tree {
         // Init level for all node by starting from root node(which level is default 0).
         for (Iterator<Node> it = this.DFSIterator(); it.hasNext(); ) {
             Node node = it.next();
-            System.out.println("NODE: " + node);
+            // System.out.println("NODE: " + node);
             if (node == rootNode) {
                 continue;
             }
@@ -137,7 +136,7 @@ public class Tree {
             }
         }
 
-        System.out.println("Init complete.");
+        // System.out.println("Init complete.");
     }
 
     /**
@@ -209,7 +208,7 @@ public class Tree {
 
         public boolean hasNext() {
             if (stack.empty()) {
-                System.out.println("No more nodes can be iterate in the tree.");
+                // System.out.println("No more nodes can be iterate in the tree.");
                 if (cursor < allUniqueElements.size()) {
                     throw new IllegalStateException(
                             String.format("%d nodes iterated but still more nodes: %d", cursor, allUniqueElements.size()));
