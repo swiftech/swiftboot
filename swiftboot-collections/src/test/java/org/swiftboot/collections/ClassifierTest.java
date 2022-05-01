@@ -33,7 +33,7 @@ public class ClassifierTest {
     @Test
     public void testSimple() {
         Classifier<String, TestBean> classifier = new ClassifierBuilder<String, TestBean>()
-                .setTrait(TestBean::getKey)
+                .trait(TestBean::getKey)
                 .createClassifier();
         Map<String, Collection<TestBean>> result = classifier.classify(list);
         System.out.println(result);
@@ -42,9 +42,9 @@ public class ClassifierTest {
     @Test
     public void testWithList() {
         Classifier<String, TestBean> classifier = new ClassifierBuilder<String, TestBean>()
-                .setTrait(TestBean::getKey)
-                .setTraitComparator(String::compareTo)
-                .setCollectionComparator(Comparator.comparing(TestBean::getValue))
+                .trait(TestBean::getKey)
+                .traitComparator(String::compareTo)
+                .collectionComparator(Comparator.comparing(TestBean::getValue))
                 .createClassifier();
 
         Map<String, Collection<TestBean>> result = classifier.classify(list);
@@ -58,9 +58,9 @@ public class ClassifierTest {
     public void testWithSet() {
 
         Classifier<String, TestBean> classifier = new ClassifierBuilder<String, TestBean>()
-                .setTrait(TestBean::getKey)
-                .setTraitComparator(Comparator.naturalOrder())
-                .setCollectionComparator(Comparator.comparing(TestBean::getValue))
+                .trait(TestBean::getKey)
+                .traitComparator(Comparator.naturalOrder())
+                .collectionComparator(Comparator.comparing(TestBean::getValue))
                 .createClassifier();
 
         Map<String, Collection<TestBean>> result = classifier.classify(list);

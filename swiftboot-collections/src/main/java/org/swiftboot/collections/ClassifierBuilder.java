@@ -3,6 +3,8 @@ package org.swiftboot.collections;
 import java.util.Comparator;
 
 /**
+ * Builder for {@link Classifier}
+ * 
  * @param <T>
  * @param <E>
  * @see Classifier
@@ -19,7 +21,7 @@ public class ClassifierBuilder<T extends Comparable<T>, E> {
      * @param trait
      * @return
      */
-    public ClassifierBuilder<T, E> setTrait(Classifier.Trait<T, E> trait) {
+    public ClassifierBuilder<T, E> trait(Classifier.Trait<T, E> trait) {
         this.trait = trait;
         return this;
     }
@@ -29,7 +31,7 @@ public class ClassifierBuilder<T extends Comparable<T>, E> {
      * @param filter
      * @return
      */
-    public ClassifierBuilder<T, E> setFilter(Classifier.Filter<E> filter) {
+    public ClassifierBuilder<T, E> filter(Classifier.Filter<E> filter) {
         this.filter = filter;
         return this;
     }
@@ -39,7 +41,7 @@ public class ClassifierBuilder<T extends Comparable<T>, E> {
      * @param subCollectionCreator
      * @return
      */
-    public ClassifierBuilder<T, E> setSubCollectionCreator(Classifier.SubCollection<E> subCollectionCreator) {
+    public ClassifierBuilder<T, E> subCollectionCreator(Classifier.SubCollection<E> subCollectionCreator) {
         this.subCollectionCreator = subCollectionCreator;
         return this;
     }
@@ -49,7 +51,7 @@ public class ClassifierBuilder<T extends Comparable<T>, E> {
      * @param traitComparator
      * @return
      */
-    public ClassifierBuilder<T, E> setTraitComparator(Comparator<T> traitComparator) {
+    public ClassifierBuilder<T, E> traitComparator(Comparator<T> traitComparator) {
         this.traitComparator = traitComparator;
         return this;
     }
@@ -59,7 +61,7 @@ public class ClassifierBuilder<T extends Comparable<T>, E> {
      * @param collectionComparator
      * @return
      */
-    public ClassifierBuilder<T, E> setCollectionComparator(Comparator<E> collectionComparator) {
+    public ClassifierBuilder<T, E> collectionComparator(Comparator<E> collectionComparator) {
         this.collectionComparator = collectionComparator;
         return this;
     }
