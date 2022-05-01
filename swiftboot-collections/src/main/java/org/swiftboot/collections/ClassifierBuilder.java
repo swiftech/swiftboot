@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 /**
  * Builder for {@link Classifier}
- * 
+ *
  * @param <T>
  * @param <E>
  * @see Classifier
