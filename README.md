@@ -48,8 +48,21 @@ A rapid development framework based on Spring Boot, Spring MVC and Spring Data f
 
 ### 版本
 
-* 最新版：v2.1
+* 最新版：v2.2.1
+  Update:
+  * add Tree class to collections.
+  * add missing error msg translating for AuthFilter
+  * change the way to implement user authentication.
+  * return user token through http response header instead of response body.
+  * add parameterized error message support to HttpResponse object.
+  * add parameterized error message support for user-defined validators. 
+  * refactored the error code support.
+  * re-implement the translating from error code to message by response advice. 
+  * phone number validator supports parameterized error message.
+
+* 稳定版：v2.1.1
   更新内容：
+  * `[web]` 修复自定义验证器没有加载资源的bug
   * `[data]` 增加逻辑删除的 JPA 扩展接口。
   * `[data]` 增加 `InterceptorLoader` 用于加载用户自定义的 Hibernate 拦截器
   * `[data]` 修复了自动填充 ID 时子对象重复填充的bug。
