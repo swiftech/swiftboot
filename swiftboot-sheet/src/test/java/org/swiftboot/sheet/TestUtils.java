@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Utils for creating testing data for swiftboot-sheet.
  *
- * @author allen
+ * @author swiftech
  */
 public class TestUtils {
 

@@ -5,6 +5,7 @@ import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -21,7 +22,7 @@ public class AdminPermissionEntity extends BaseEntity {
      * 管理员用户权限代码
      */
     @PropertyDescription(value = "管理员用户权限代码", example = "ORDER_DEL")
-    @Column(name = "PERM_CODE", length = 256, unique = true, nullable = false, columnDefinition = "VARCHAR(256) UNIQUE NOT NULL COMMENT '管理员用户权限代码'")
+    @Column(name = "PERM_CODE", length = 256, unique = true, nullable = false, columnDefinition = "VARCHAR(256) NOT NULL COMMENT '管理员用户权限代码'")
     private String permCode;
 
     /**
@@ -144,15 +145,13 @@ public class AdminPermissionEntity extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+        if (!super.equals(o)) return false;
         AdminPermissionEntity that = (AdminPermissionEntity) o;
-
-        return permCode.equals(that.permCode);
-
+        return Objects.equals(permCode, that.permCode);
     }
 
     @Override
     public int hashCode() {
-        return permCode.hashCode();
+        return Objects.hash(super.hashCode(), permCode);
     }
 }

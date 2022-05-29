@@ -12,6 +12,17 @@ import java.net.URL;
 public class ClasspathResourceUtils {
 
     /**
+     * 获得 CLASSPATH 目录中的 {@code URL} 表示的文件资源
+     *
+     * @param resourceUri 资源路径 URI，开头和结尾都都没有 "/"
+     * @return
+     */
+    public static URL getResourceURI(String resourceUri) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        return loader.getResource(resourceUri);
+    }
+
+    /**
      * 从 CLASSPATH 目录中打开资源路径表示的文件输入流
      *
      * @param resourceUri 资源路径 URI，开头和结尾都都没有 "/"

@@ -29,7 +29,7 @@ import java.util.Optional;
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
 
-    private Logger log = LoggerFactory.getLogger(OrderDetailServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(OrderDetailServiceImpl.class);
 
     @Resource
     private OrderDetailDao orderDetailDao;
@@ -77,7 +77,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Optional<OrderDetailEntity> optEntity = orderDetailDao.findById(orderDetailId);
         if (optEntity.isPresent()) {
             OrderDetailEntity p = optEntity.get();
-            p.setDelete(true);
+            p.setIsDelete(true);
             orderDetailDao.save(p);
         }
     }
@@ -91,7 +91,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public void deleteOrderDetailList(IdListCommand cmd) {
         List<OrderDetailEntity> entities = orderDetailDao.findAllByIdIn(cmd.getIds());
         for (OrderDetailEntity entity : entities) {
-            entity.setDelete(true);
+            entity.setIsDelete(true);
             orderDetailDao.save(entity);
             // TODO 处理关联表的数据删除
         }

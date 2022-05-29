@@ -20,66 +20,66 @@ import java.util.Map;
 
 /**
  * 错误代码定义，所有错误代码的变量名必须以 "CODE_" 开头
- * 成功代码以"1xxx"开头
- * 标准错误代码以"2xxx"开头
- * 自定义错误代码从"3000"开始
+ * 成功代码以"2"开头，例如"2000"
+ * 标准错误代码以"3"开头，例如"3005"
+ * 自定义错误代码从"4"开始，例如"4001"
  * 在应用启动的时候必须调用 initErrorCode() 方法对错误信息进行初始化
  *
  * @author swiftech
  **/
 public abstract class ErrorCodeSupport {
 
-    private Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
+    private final Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
 
-    public static final String CODE_OK = "1000";
-    public static final String CODE_OK_WITH_CONTENT = "1002";
+    public static final String CODE_OK = "2000";
+    public static final String CODE_OK_WITH_CONTENT = "2002";
 
     /**
-     * 常规错误代码 20xx
+     * 常规错误代码 30xx
      **/
-    public static final String CODE_SYS_ERR = "2000"; //未知系统错误
-    public static final String CODE_SYS_DB_ERROR = "2001"; //数据库错误
-    public static final String CODE_PARAMS_ERROR = "2002"; // 输入参数错误
-    public static final String CODE_NO_PERMISSION = "2003"; // 没有权限进行操作
-    public static final String CODE_ILLEGAL_API_ACCESS = "2005"; // 非法的 API 调用
-    public static final String CODE_APP_VERSION_EXPIRED = "2006"; // 客户端版本低，请升级至新版本
-    public static final String CODE_SYS_TIME_DIFF = "2007"; // 客户端时间和服务器端不一致
-    public static final String CODE_FILE_UPLOAD_FAIL = "2008"; // 上传文件失败
-    public static final String CODE_FILE_DOWNLOAD_FAIL = "2009"; // 下载文件失败
-    public static final String CODE_FILE_NOT_EXIST = "2010"; // 文件不存在
-    public static final String CODE_TX_VERSION_ERROR = "2012"; // 他人已做操作，请刷新当前页面或数据
+    public static final String CODE_SYS_ERR = "3000"; //未知系统错误
+    public static final String CODE_SYS_DB_ERROR = "3001"; //数据库错误
+    public static final String CODE_PARAMS_ERROR = "3002"; // 输入参数错误
+    public static final String CODE_NO_PERMISSION = "3003"; // 没有权限进行操作
+    public static final String CODE_ILLEGAL_API_ACCESS = "3005"; // 非法的 API 调用
+    public static final String CODE_APP_VERSION_EXPIRED = "3006"; // 客户端版本低，请升级至新版本
+    public static final String CODE_SYS_TIME_DIFF = "3007"; // 客户端时间和服务器端不一致
+    public static final String CODE_FILE_UPLOAD_FAIL = "3008"; // 上传文件失败
+    public static final String CODE_FILE_DOWNLOAD_FAIL = "3009"; // 下载文件失败
+    public static final String CODE_FILE_NOT_EXIST = "3010"; // 文件不存在
+    public static final String CODE_TX_VERSION_ERROR = "3012"; // 他人已做操作，请刷新当前页面或数据
 
 
     /**
-     * 用户错误代码定义 21xx
+     * 用户错误代码定义 31xx
      */
     // 登录
-    public static final String CODE_NO_REG = "2100";// 用户未注册
-    public static final String CODE_NO_SIGNIN = "2101";// 用户未登录
-    public static final String CODE_SIGNIN_FAIL = "2102";// 账号或密码错误
-    public static final String CODE_SIGNIN_WRONG_PWD = "2103";// 密码错误
-    public static final String CODE_USER_FROZEN = "2105";// 用户已被冻结
-    public static final String CODE_USER_ACCOUNT_EMPTY = "2106";// 请输入账号
-    public static final String CODE_USER_PASSWORD_EMPTY = "2107";// 请输入密码
-    public static final String CODE_USER_SESSION_NOT_EXIST = "2108";// 用户登录会话不存在
-    public static final String CODE_SESSION_TIMEOUT = "2109";// 会话超时，请重新登录
-    public static final String CODE_USER_LACK_INFO = "2110";// 缺少用户信息，无法登录
+    public static final String CODE_NO_REG = "3100";// 用户未注册
+    public static final String CODE_NO_SIGNIN = "3101";// 用户未登录
+    public static final String CODE_SIGNIN_FAIL = "3102";// 账号或密码错误
+    public static final String CODE_SIGNIN_WRONG_PWD = "3103";// 密码错误
+    public static final String CODE_USER_FROZEN = "3105";// 用户已被冻结
+    public static final String CODE_USER_ACCOUNT_EMPTY = "3106";// 请输入账号
+    public static final String CODE_USER_PASSWORD_EMPTY = "3107";// 请输入密码
+    public static final String CODE_USER_SESSION_NOT_EXIST = "3108";// 用户登录会话不存在
+    public static final String CODE_SESSION_TIMEOUT = "3109";// 会话超时，请重新登录
+    public static final String CODE_USER_LACK_INFO = "3110";// 缺少用户信息，无法登录
 
     // 验证码
-    public static final String CODE_CAPTCHA_EMPTY = "2111";// 请输入验证码
-    public static final String CODE_CAPTCHA_TOO_MANY = " 2112";// 获取太频繁，请稍后再试
-    public static final String CODE_CAPTCHA_SEND_FAIL = "2113";// 发送验证码失败
-    public static final String CODE_CAPTCHA_TOOMANY = "2114";// 超过验证码发送上限
-    public static final String CODE_CAPTCHA_WRONG = "2115"; // 验证码错误
-    public static final String CODE_CAPTCHA_EXPIRED = "2117";// 验证码已失效，请重新获取
-    public static final String CODE_CAPTCHA_NO_EXIST = "2118";// 没有找到验证码
-    public static final String CODE_SMS_CAPTCHA_LACK_SEND_TO = "2119";// 请输入手机号码
+    public static final String CODE_CAPTCHA_EMPTY = "3111";// 请输入验证码
+    public static final String CODE_CAPTCHA_TOO_MANY = " 3112";// 获取太频繁，请稍后再试
+    public static final String CODE_CAPTCHA_SEND_FAIL = "3113";// 发送验证码失败
+    public static final String CODE_CAPTCHA_TOOMANY = "3114";// 超过验证码发送上限
+    public static final String CODE_CAPTCHA_WRONG = "3115"; // 验证码错误
+    public static final String CODE_CAPTCHA_EXPIRED = "3117";// 验证码已失效，请重新获取
+    public static final String CODE_CAPTCHA_NO_EXIST = "3118";// 没有找到验证码
+    public static final String CODE_SMS_CAPTCHA_LACK_SEND_TO = "3119";// 请输入手机号码
 
     // 注册
-    public static final String CODE_REG_USER_EXISTS = "2131";// 用户已注册
-    public static final String CODE_REG_FAIL = "2133";// 用户注册失败
+    public static final String CODE_REG_USER_EXISTS = "3131";// 用户已注册
+    public static final String CODE_REG_FAIL = "3133";// 用户注册失败
     // 其他
-    public static final String CODE_CHANGE_PWD_FAILED = "2141";// 修改密码失败
+    public static final String CODE_CHANGE_PWD_FAILED = "3141";// 修改密码失败
 
 
     // code -> message
@@ -128,6 +128,9 @@ public abstract class ErrorCodeSupport {
         String msg;
         try {
             msg = errorCodeMap.get(code);
+            if (StringUtils.isBlank(msg)) {
+                System.out.printf("WARN: message not found for code '%s'%n", code);
+            }
         } catch (Exception e) {
             System.out.println(Info.get(ErrorCodeSupport.class, R.NO_MSG_FOR_CODE1, code));
             msg = code; // 没有则直接返回 CODE

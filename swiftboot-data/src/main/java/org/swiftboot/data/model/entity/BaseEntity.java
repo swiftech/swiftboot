@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
  * @deprecated
  **/
 @MappedSuperclass
-public abstract class BaseEntity extends BaseLongTimeEntity {
+public abstract class BaseEntity extends BaseLongTimeEntity implements LogicalDeletePersistable<Boolean>{
 
     /**
      * 是否逻辑删除
@@ -27,11 +27,13 @@ public abstract class BaseEntity extends BaseLongTimeEntity {
         super(id);
     }
 
-    public Boolean isDelete() {
+    public Boolean getIsDelete() {
         return isDelete;
     }
 
-    public void setDelete(Boolean delete) {
-        isDelete = delete;
+    @Override
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
+
 }

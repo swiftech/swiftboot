@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Importer for CSV data sheet.
  *
- * @author allen
+ * @author swiftech
  */
 public class CsvImporter extends BaseImporter {
 
@@ -27,7 +27,7 @@ public class CsvImporter extends BaseImporter {
         // read lines
         List<String> lines = IoUtils.readToStringList(templateFileStream);
         Map<String, Object> ret = new HashMap<>();
-        meta.accept((key, startPos, rowCount, columnCount) -> {
+        meta.accept((metaItem, startPos, rowCount, columnCount) -> {
             List<List<Object>> matrix = new ArrayList<>();
             for (int i = 0; i < rowCount; i++) {
                 String row = lines.get(startPos.getRow() + i);
@@ -45,7 +45,7 @@ public class CsvImporter extends BaseImporter {
                 matrix.add(values);
             }
             Object value = shrinkMatrix(matrix, rowCount, columnCount);
-            ret.put(key, value);
+            ret.put(metaItem.getKey(), value);
         });
         return ret;
     }

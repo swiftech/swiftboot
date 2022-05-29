@@ -1,21 +1,22 @@
 package org.swiftboot.sheet.meta;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 /**
  * A meta item represent information about one cell or a group cells in sheet.
  *
- * @author allen
+ * @author swiftech
  */
-public class MetaItem {
+public class MetaItem implements Comparable<MetaItem> {
 
     /**
      * Key to identify value in sheet.
      */
     private String key;
 
-    /**
-     * Index of sheet, default is 0.
-     */
-    private int sheetIndex = 0;
+    private Object value;
+
+    private CellHandler<?> cellHandler;
 
     /**
      * The area to access data in sheet.
@@ -23,25 +24,34 @@ public class MetaItem {
     private Area area;
 
     /**
-     *
-     * @param key
-     * @param sheetIndex
-     * @param area
+     * Whether merge cells in area (with data merged and display in center)
      */
-    public MetaItem(String key, int sheetIndex, Area area) {
-        this.key = key;
-        this.sheetIndex = sheetIndex;
-        this.area = area;
+    private boolean merge;
+
+    private Area copyArea;
+    private boolean insert;
+    private boolean insertByValue;
+
+    public MetaItem() {
     }
 
     /**
-     *
-     *
      * @param key
      * @param area
      */
     public MetaItem(String key, Area area) {
         this.key = key;
+        this.area = area;
+    }
+
+    /**
+     * @param key
+     * @param value
+     * @param area
+     */
+    public MetaItem(String key, Object value, Area area) {
+        this.key = key;
+        this.value = value;
         this.area = area;
     }
 
@@ -53,12 +63,20 @@ public class MetaItem {
         this.key = key;
     }
 
-    public int getSheetIndex() {
-        return sheetIndex;
+    public Object getValue() {
+        return value;
     }
 
-    public void setSheetIndex(int sheetIndex) {
-        this.sheetIndex = sheetIndex;
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    public CellHandler<? extends CellInfo> getCellHandler() {
+        return cellHandler;
+    }
+
+    public void setCellHandler(CellHandler<? extends CellInfo> cellHandler) {
+        this.cellHandler = cellHandler;
     }
 
     public Area getArea() {
@@ -69,12 +87,54 @@ public class MetaItem {
         this.area = area;
     }
 
+    public boolean isMerge() {
+        return merge;
+    }
+
+    public void setMerge(boolean merge) {
+        this.merge = merge;
+    }
+
+    public Area getCopyArea() {
+        return copyArea;
+    }
+
+    public void setCopyArea(Area copyArea) {
+        this.copyArea = copyArea;
+    }
+
+    public boolean isInsert() {
+        return insert;
+    }
+
+    public void setInsert(boolean insert) {
+        this.insert = insert;
+    }
+
+    public boolean isInsertByValue() {
+        return insertByValue;
+    }
+
+    public void setInsertByValue(boolean insertByValue) {
+        this.insertByValue = insertByValue;
+    }
+
     @Override
     public String toString() {
-        return "Meta{" +
+        return "MetaItem{" +
                 "key='" + key + '\'' +
-                ", sheetIndex=" + sheetIndex +
                 ", area=" + area +
+                ", merge=" + merge +
+                ", value=" + value +
+                ", copyArea=" + copyArea +
+                ", insert=" + insert +
+                ", cellHandler=" + cellHandler +
                 '}';
     }
+
+    @Override
+    public int compareTo(MetaItem o) {
+        return ObjectUtils.compare(this.key, o.getKey());
+    }
+
 }

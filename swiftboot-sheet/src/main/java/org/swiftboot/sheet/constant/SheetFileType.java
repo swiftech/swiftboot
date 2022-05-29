@@ -1,7 +1,7 @@
 package org.swiftboot.sheet.constant;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public interface SheetFileType {
     String TYPE_XLSX = "xlsx";

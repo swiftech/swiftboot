@@ -1,8 +1,10 @@
 swiftboot:
   auth:
+    enabled: true
     session:
       type: redis
       group: swiftboot_session
       tokenKey: swiftboot_token
-      expireTime: 1800
+      expiresIn: 1800
+      updateExpireTime: true
 

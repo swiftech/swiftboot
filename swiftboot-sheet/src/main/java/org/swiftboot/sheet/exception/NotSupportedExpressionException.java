@@ -1,7 +1,7 @@
 package org.swiftboot.sheet.exception;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class NotSupportedExpressionException extends RuntimeException {
 

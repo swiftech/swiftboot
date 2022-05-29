@@ -29,7 +29,7 @@ import java.util.List;
  * @since 1.2
  **/
 public class ShiroSecurityServiceImpl implements ShiroSecurityService, ApplicationContextAware {
-    private Logger log = LoggerFactory.getLogger(ShiroSecurityServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(ShiroSecurityServiceImpl.class);
 
     private ApplicationContext applicationContext;
 
@@ -48,7 +48,7 @@ public class ShiroSecurityServiceImpl implements ShiroSecurityService, Applicati
             log.info(String.format("The DAO implementation to do user authentication: %s", dao.getClass().getName()));
             String loginName = usernamePasswordToken.getUsername();
             String loginPwd = String.valueOf(usernamePasswordToken.getPassword());
-            log.info(String.format("Authenticate user %s(%s)", usernamePasswordToken.getUsername(), usernamePasswordToken.getHost()));
+            log.info(String.format("Authenticate user '%s'('%s')", usernamePasswordToken.getUsername(), usernamePasswordToken.getHost()));
             user = dao.findByLoginName(loginName);
             if (user == null) {
                 throw new ErrMessageException(ErrorCodeSupport.CODE_NO_REG);
@@ -57,8 +57,8 @@ public class ShiroSecurityServiceImpl implements ShiroSecurityService, Applicati
             // 此处用 UsernamePasswordToken 可以支持不同 host 来源做不同的密码加密
             String toBeVerified = passwordManager.encryptPassword(usernamePasswordToken);
             if (!user.getLoginPwd().equals(toBeVerified)) {
-                log.debug(String.format("Check password: %s[%s]", toBeVerified, loginPwd));
-                log.debug(String.format("Encrypted pwd in DB: %s", user.getLoginPwd()));
+                log.trace(String.format("Check password: %s[%s]", toBeVerified, loginPwd));
+                log.trace(String.format("Encrypted pwd from DB: %s", user.getLoginPwd()));
                 throw new ErrMessageException(ErrorCodeSupport.CODE_SIGNIN_FAIL);
             }
             return user.getId();

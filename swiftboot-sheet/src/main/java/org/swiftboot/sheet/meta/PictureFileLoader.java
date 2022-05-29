@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Simple picture loader which read from a local file.
  *
- * @author allen
+ * @author swiftech
  */
 public class PictureFileLoader implements PictureLoader {
 

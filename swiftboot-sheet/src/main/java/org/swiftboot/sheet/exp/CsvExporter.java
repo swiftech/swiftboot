@@ -2,9 +2,7 @@ package org.swiftboot.sheet.exp;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringTokenizer;
-import org.swiftboot.sheet.meta.PictureLoader;
-import org.swiftboot.sheet.meta.Position;
-import org.swiftboot.sheet.meta.SheetMeta;
+import org.swiftboot.sheet.meta.*;
 import org.swiftboot.util.IoUtils;
 
 import java.io.BufferedOutputStream;
@@ -19,9 +17,11 @@ import java.util.List;
 /**
  * Export data into a new or a templated CSV file.
  * Note:
- * not support export pictures, the exporter will ignore pictures if provides.
+ * multiple sheets and pictures export are not supported,
+ * if pictures provides, it will be ignored.
+ * if multiple sheet id provides, all items for these sheet ids will be exported to one CSV file.
  *
- * @author allen
+ * @author swiftech
  */
 public class CsvExporter extends BaseExporter {
 
@@ -36,8 +36,8 @@ public class CsvExporter extends BaseExporter {
 
     @Override
     public <T> void export(InputStream templateFileStream, Object dataObject, OutputStream outputStream) throws IOException {
-        SheetMeta meta = new SheetMeta();
-        meta.fromAnnotatedObject(dataObject);
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta meta = builder.fromAnnotatedObject(dataObject).build();
         this.export(templateFileStream, meta, outputStream);
     }
 
@@ -57,16 +57,18 @@ public class CsvExporter extends BaseExporter {
         }
         this.extendSheet(rows, exportMeta.findMaxPosition());
         exportMeta.setAllowFreeSize(true);
-        exportMeta.accept((key, startPos, rowCount, columnCount) -> {
-            Object value = exportMeta.getValue(key);
-            if (value == null) {
-                throw new RuntimeException(String.format("No value provided to export for key: %s", key));
+        exportMeta.accept((metaItem, startPos, rowCount, columnCount) -> {
+            if (metaItem.getValue() == null) {
+                throw new RuntimeException(String.format("No value provided to export for key: %s", metaItem.getKey()));
             }
-            if (value instanceof PictureLoader) {
+            if (metaItem.getValue() instanceof PictureLoader) {
                 log.warn("Picture is not supported to export to CSV, just ignore ");
             }
             else {
-                List<List<Object>> matrix = asMatrix(value, rowCount, columnCount);
+                List<List<Object>> matrix = asMatrix(metaItem.getValue(), rowCount, columnCount);
+                if (matrix.isEmpty()){
+                    return;
+                }
                 int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
                 int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
                 for (int i = 0; i < actualRowCount; i++) {

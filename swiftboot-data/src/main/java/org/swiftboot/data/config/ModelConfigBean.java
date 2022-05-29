@@ -1,5 +1,6 @@
 package org.swiftboot.data.config;
 
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.swiftboot.data.constant.AutoUpdateTimeStrategy;
 
 /**
@@ -13,29 +14,15 @@ public class ModelConfigBean {
     private boolean autoGenerateId = false;
 
     /**
-     * 是否自动设置更新时间
+     * 是否自动设置更新时间，可选"not-set"，"on-change"，"always"
      */
     private String autoUpdateTimeStrategy = AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ON_CHANGE;
 
     /**
-     * 是否初始化数据库
+     * 初始化数据
      */
-    private boolean initData = false;
-
-    /**
-     * 初始化数据库的数据文件路径
-     */
-    private String initBaseDir;
-
-    /**
-     * 初始化数据库扫描的包范围
-     */
-    private String[] initBaseEntityPackages;
-
-    /**
-     * TBD
-     */
-    private String[] initBaseDaoPackages;
+    @NestedConfigurationProperty
+    private InitDataConfigBean initData;
 
     public boolean isAutoGenerateId() {
         return autoGenerateId;
@@ -53,35 +40,11 @@ public class ModelConfigBean {
         this.autoUpdateTimeStrategy = autoUpdateTimeStrategy;
     }
 
-    public boolean isInitData() {
+    public InitDataConfigBean getInitData() {
         return initData;
     }
 
-    public void setInitData(boolean initData) {
+    public void setInitData(InitDataConfigBean initData) {
         this.initData = initData;
-    }
-
-    public String getInitBaseDir() {
-        return initBaseDir;
-    }
-
-    public void setInitBaseDir(String initBaseDir) {
-        this.initBaseDir = initBaseDir;
-    }
-
-    public String[] getInitBaseEntityPackages() {
-        return initBaseEntityPackages;
-    }
-
-    public void setInitBaseEntityPackages(String[] initBaseEntityPackages) {
-        this.initBaseEntityPackages = initBaseEntityPackages;
-    }
-
-    public String[] getInitBaseDaoPackages() {
-        return initBaseDaoPackages;
-    }
-
-    public void setInitBaseDaoPackages(String[] initBaseDaoPackages) {
-        this.initBaseDaoPackages = initBaseDaoPackages;
     }
 }

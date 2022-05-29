@@ -9,7 +9,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.swiftboot.shiro.SwiftbootShiroConfigBean;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.shiro.service.ShiroSecurityService;
 import org.swiftboot.web.exception.ErrMessageException;
 
@@ -28,7 +28,7 @@ import static org.swiftboot.shiro.constant.ShiroSessionConstants.SESSION_KEY_USE
 @Transactional
 public class UserAuthorizingRealm extends AuthorizingRealm {
 
-    private Logger log = LoggerFactory.getLogger(UserAuthorizingRealm.class);
+    private final Logger log = LoggerFactory.getLogger(UserAuthorizingRealm.class);
 
     @Resource
     private ShiroSecurityService shiroSecurityService;
@@ -73,7 +73,7 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
             Session session = SecurityUtils.getSubject().getSession();
             if (session == null) {
                 session = SecurityUtils.getSubject().getSession(true);
-                session.setTimeout(shiroConfigBean.getSession().getTimeout() * 1000);
+                session.setTimeout(shiroConfigBean.getSession().getTimeout() * 1000L);
                 log.info(String.format("Session not exist, create a new one: %s", session.getId()));
             }
             // 保存操作人的 ID 等信息

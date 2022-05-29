@@ -9,7 +9,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.swiftboot.demo.SwiftbootDemoConfigBean;
+import org.swiftboot.demo.config.SwiftbootDemoConfigBean;
 import org.swiftboot.demo.config.PermissionConfigBean;
 import org.swiftboot.demo.config.RoleConfigBean;
 import org.swiftboot.demo.config.UserConfigBean;
@@ -32,12 +32,9 @@ import java.util.*;
 @ConditionalOnProperty(value = "swiftboot.shiro.enabled", havingValue = "true")
 public class AdminInit {
 
-    private Logger log = LoggerFactory.getLogger(AdminInit.class);
+    private final Logger log = LoggerFactory.getLogger(AdminInit.class);
 
     public static final String PERMISSION_CODE_SEPARATOR = ":";
-//
-//    @Resource
-//    private SwiftbootShiroConfigBean config;
 
     @Resource
     private SwiftbootDemoConfigBean demoConfig;
@@ -74,7 +71,7 @@ public class AdminInit {
         permConfig.setCode(PermissionCodeUtils.standardPermCode(permConfig.getCode()));
 
         Optional<AdminPermissionEntity> exist = adminPermissionDao.findByPermCode(permConfig.getCode());
-        AdminPermissionEntity permissionEntity = null;
+        AdminPermissionEntity permissionEntity;
         if (!exist.isPresent()) {
             permissionEntity = new AdminPermissionEntity();
         }
@@ -121,7 +118,7 @@ public class AdminInit {
 
         // 权限（至少有一个所有权限）
         Optional<AdminPermissionEntity> optRootPerm = adminPermissionDao.findByPermCode("*");
-        AdminPermissionEntity rootPermission = null;
+        AdminPermissionEntity rootPermission;
         if (optRootPerm.isPresent()) {
             rootPermission = optRootPerm.get();
         }
@@ -226,7 +223,7 @@ public class AdminInit {
         // 用户和角色关系
         Map<String, List<String>> roleUserRels = demoConfig.getInit().getRoleUserRels();
         if (roleUserRels != null) {
-            log.info(String.format("%d 个用户需要初始化角色关联", rolePermsRels.size()));
+            log.info(String.format("%d 个用户需要初始化角色关联", roleUserRels.size()));
             for (String roleName : roleUserRels.keySet()) {
                 List<String> userLoginNameList = roleUserRels.get(roleName);
                 Optional<AdminRoleEntity> optAdminRole = adminRoleDao.findByRoleName(roleName);

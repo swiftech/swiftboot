@@ -3,15 +3,16 @@ package org.swiftboot.sheet.meta;
 /**
  * The visitor to meta.
  */
+@FunctionalInterface
 public interface MetaVisitor {
 
     /**
      * Visit a meta item with relative information.
      *
-     * @param key
+     * @param metaItem
      * @param startPos
      * @param rowCount expect row count
      * @param columnCount expect column count
      */
-    void visitMetaItem(String key, Position startPos, Integer rowCount, Integer columnCount);
+    void visitMetaItem(MetaItem metaItem, Position startPos, Integer rowCount, Integer columnCount);
 }

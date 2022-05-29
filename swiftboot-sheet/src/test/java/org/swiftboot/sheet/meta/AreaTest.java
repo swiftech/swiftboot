@@ -4,9 +4,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * @author allen
+ * @author swiftech
+ * @see Area
  */
 class AreaTest {
+
+    @Test
+    void sheetId() {
+        Area area = new Area(new Position(1, 1));
+        Assertions.assertNull(area.getSheetId());
+
+        area.setSheetId(new SheetId(0, SheetId.DEFAULT_SHEET_NAME));
+        Assertions.assertEquals(SheetId.DEFAULT_SHEET, area.getSheetId());
+    }
 
     @Test
     void size() {

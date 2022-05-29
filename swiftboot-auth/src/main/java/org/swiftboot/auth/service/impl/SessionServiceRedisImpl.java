@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.service.service.RedisService;
@@ -29,9 +29,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  */
 public class SessionServiceRedisImpl implements SessionService {
 
-    private Logger log = LoggerFactory.getLogger(SessionServiceRedisImpl.class);
+    private final Logger log = LoggerFactory.getLogger(SessionServiceRedisImpl.class);
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Resource
     private RedisService redisService;
@@ -61,7 +61,7 @@ public class SessionServiceRedisImpl implements SessionService {
             // Session 中的超时时间覆盖配置中的超时时间
             if (session.getExpireTime() == null) {
                 if (config.getSession().getExpiresIn() > 0) {
-                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000));
+                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000L));
                 }
             }
             else {
@@ -202,13 +202,15 @@ public class SessionServiceRedisImpl implements SessionService {
                 throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
             }
             else {
-                // Update expire time if there is expire time in session
-                session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000));
-                try {
-                    this.saveSession(token, session);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
+                if (config.getSession().isUpdateExpireTime()) {
+                    // Update expire time if allowed and there is expired time in session
+                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000L));
+                    try {
+                        this.saveSession(token, session);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
+                    }
                 }
                 return session;
             }
@@ -216,4 +218,10 @@ public class SessionServiceRedisImpl implements SessionService {
         return session;
     }
 
+    @Override
+    public void clearAllSessions() {
+        if (StringUtils.isNoneBlank(config.getSession().getGroup())) {
+            redisService.del(config.getSession().getGroup());
+        }
+    }
 }

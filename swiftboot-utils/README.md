@@ -17,7 +17,7 @@
 
 * `IoUtils` IO读写工具类
 
-* `JsonUtils` Json处理工具类
+* `JsonUtils` Json处理工具类，支持 Java8 时间类型
 
 * `SysUtils` 处理操作系统的工具类
 
@@ -25,7 +25,7 @@
 
 * `NumberFormatUtils` 数格式化工具类
 
-* `BufferedIoUtils` 缓存的IO流工具类
+* `BufferedIoUtils` 带有缓存的IO流工具类
 
 
 ### Maven
@@ -35,7 +35,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-utils</artifactId>
-		<version>2.0.0</version>
+		<version>2.1</version>
 	</dependency>
 </dependencies>
 

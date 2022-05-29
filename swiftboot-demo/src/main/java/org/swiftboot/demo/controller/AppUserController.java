@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.demo.command.AppUserSigninCommand;
 import org.swiftboot.demo.result.AppUserSigninResult;
 import org.swiftboot.demo.service.AppUserService;
@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 @ResponseBody
 public class AppUserController {
 
-    private Logger log = LoggerFactory.getLogger(AppUserController.class);
+    private final Logger log = LoggerFactory.getLogger(AppUserController.class);
 
     @Resource
     private AppUserService appUserService;
@@ -45,7 +45,8 @@ public class AppUserController {
             HttpServletResponse response) {
         log.info("> /app/user/signin");
         AppUserSigninResult appUserSigninResult = appUserService.appUserSignin(command);
-        Cookie cookie  = new Cookie(authConfigBean.getSession().getTokenKey(), appUserSigninResult.getToken());
+        Cookie cookie = new Cookie(authConfigBean.getSession().getTokenKey(), appUserSigninResult.getToken());
+        cookie.setPath("/");
         response.addCookie(cookie);
         return new HttpResponse<>(appUserSigninResult);
     }

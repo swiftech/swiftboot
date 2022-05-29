@@ -1,10 +1,9 @@
 package org.swiftboot.demo.model.dao;
 
-import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.swiftboot.data.model.dao.BooleanLogicalDeleteExtend;
+import org.swiftboot.demo.model.entity.GoodsEntity;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,7 +11,8 @@ import java.util.List;
  *
  * @author swiftech 2019-04-07
  **/
-public interface GoodsDao extends PagingAndSortingRepository<GoodsEntity, String>, GoodsCustomizeDao {
+public interface GoodsDao extends PagingAndSortingRepository<GoodsEntity, String>,
+        GoodsCustomizeDao, BooleanLogicalDeleteExtend<GoodsEntity> {
 
     /**
      * 按照商品名称查询商品

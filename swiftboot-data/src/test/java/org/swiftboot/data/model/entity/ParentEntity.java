@@ -9,16 +9,27 @@ import java.util.List;
  * @author swiftech
  **/
 @Entity
-@Table(name = "PARENT_TABLE")
+@Table(name = "UT_PARENT_TABLE")
 public class ParentEntity extends BaseLongTimeEntity implements Serializable {
     @Column
     private
     String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent", orphanRemoval = true)
     private
     List<ChildEntity> items = new ArrayList<>();
+
+    public ParentEntity() {
+    }
+
+    public ParentEntity(String name) {
+        this.name = name;
+    }
+
+    public ParentEntity(String id, String name) {
+        super(id);
+        this.name = name;
+    }
 
     public String getName() {
         return name;
@@ -36,4 +47,11 @@ public class ParentEntity extends BaseLongTimeEntity implements Serializable {
         this.items = items;
     }
 
+    @Override
+    public String toString() {
+        return "ParentEntity{" +
+                "id='" + getId() + "', " +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

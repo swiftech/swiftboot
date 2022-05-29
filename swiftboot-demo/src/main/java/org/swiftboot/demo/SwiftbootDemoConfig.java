@@ -10,8 +10,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.swiftboot.data.model.Initializer;
 import org.swiftboot.data.model.id.EntityIdGenerator;
 import org.swiftboot.data.model.id.IdGenerator;
+import org.swiftboot.demo.model.entity.GoodsDetailEntity;
+import org.swiftboot.demo.model.entity.GoodsEntity;
 
 /**
  * @author swiftech
@@ -52,14 +55,37 @@ public class SwiftbootDemoConfig {
         return messageSource;
     }
 
-//
+    @Bean
+    public Initializer initializer() {
+        Initializer initializer = new Initializer();
+        initializer.forEntities(GoodsEntity.class, GoodsDetailEntity.class);
+        return initializer;
+    }
+
 //    @Bean
-//    ExceptionProcessor exceptionProcessor() {
-//        return new ExceptionProcessor();
+//    DeleteInterceptor deleteInterceptor(){
+//        return new DeleteInterceptor();
 //    }
 //
 //    @Bean
-//    ValidationExceptionProcessor validationExceptionProcessor() {
-//        return new ValidationExceptionProcessor();
+//    InterceptorRegisterBean<DeleteInterceptor> registerDeleteInterceptor() {
+//        InterceptorRegisterBean<DeleteInterceptor> regBean = new InterceptorRegisterBean<>();
+//        regBean.setInterceptor(deleteInterceptor());
+//        return regBean;
 //    }
+//
+//    @Bean
+//    DataPermissionInterceptor dataPermissionInterceptor() {
+//        return new DataPermissionInterceptor();
+//    }
+//
+//    @Bean
+//    InterceptorRegisterBean<DataPermissionInterceptor> registerDataPermissionInterceptor() {
+//        InterceptorRegisterBean<DataPermissionInterceptor> regBean = new InterceptorRegisterBean<>();
+//        regBean.setOrder(100);
+//        regBean.setInterceptorName("My Data Interceptor");
+//        regBean.setInterceptor(dataPermissionInterceptor());
+//        return regBean;
+//    }
+
 }

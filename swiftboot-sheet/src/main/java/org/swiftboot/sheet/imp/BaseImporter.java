@@ -3,6 +3,7 @@ package org.swiftboot.sheet.imp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.meta.SheetMeta;
+import org.swiftboot.sheet.meta.SheetMetaBuilder;
 import org.swiftboot.util.BeanUtils;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public abstract class BaseImporter implements Importer {
 
@@ -38,11 +39,14 @@ public abstract class BaseImporter implements Importer {
     @Override
     public <T> T importFromStream(InputStream templateFileStream, Class<T> resultClass) throws IOException {
         T ret = this.createResult(resultClass);
-        SheetMeta meta = new SheetMeta();
-        List<Field> fields = meta.fromAnnotatedClass(resultClass);
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta meta = builder.fromAnnotatedClass(resultClass).build();
         Map<String, Object> result = this.importFromStream(templateFileStream, meta);
-        for (Field field : fields) {
-            BeanUtils.forceSetProperty(ret, field, result.get(field.getName()));
+        for (Field field : builder.getFields()) {
+            Object value = result.get(field.getName());
+            if (value != null) {
+                BeanUtils.forceSetProperty(ret, field, value);
+            }
         }
         return ret;
     }
@@ -56,7 +60,7 @@ public abstract class BaseImporter implements Importer {
      * @return
      */
     public static Object shrinkMatrix(List<List<Object>> matrix, Integer rowCount, Integer colCount) {
-        if (matrix == null || matrix.isEmpty() || matrix.get(0).isEmpty()) {
+        if (matrix == null || matrix.isEmpty() || matrix.get(0) == null || matrix.get(0).isEmpty()) {
             return null;
         }
         boolean isHorizontal = rowCount != null && rowCount == 1;

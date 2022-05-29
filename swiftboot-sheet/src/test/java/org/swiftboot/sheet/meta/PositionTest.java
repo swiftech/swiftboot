@@ -3,12 +3,21 @@ package org.swiftboot.sheet.meta;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * @author allen
+ * @author swiftech
+ * @see Position
  */
 class PositionTest {
+
+    @Test
+    void illegal() {
+        Assertions.assertThrows(Exception.class, () -> new Position(-1, 0));
+        Assertions.assertThrows(Exception.class, () -> new Position(0, -1));
+        Assertions.assertThrows(Exception.class, () -> new Position(-1, -1));
+        Assertions.assertThrows(Exception.class, () -> new Position(65536, 0));
+        Assertions.assertThrows(Exception.class, () -> new Position(0, 256));
+        Assertions.assertThrows(Exception.class, () -> new Position(65536, 256));
+    }
 
     @Test
     void enlarge() {

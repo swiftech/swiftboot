@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.Map;
 
 /**
- * @author allen
+ * @author swiftech
  */
 class CsvImporterTest extends BaseImporterTest {
 
@@ -25,7 +25,7 @@ class CsvImporterTest extends BaseImporterTest {
 
         try {
             Map<String, Object> result = importer.importFromStream(url.openStream(), meta);
-            super.assertResults(result);
+            super.assertResults(result, SheetFileType.TYPE_CSV);
         } catch (IOException e) {
             e.printStackTrace();
         }

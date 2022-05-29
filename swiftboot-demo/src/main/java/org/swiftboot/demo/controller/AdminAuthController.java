@@ -15,7 +15,7 @@ import org.swiftboot.demo.result.AdminUserSigninResult;
 import org.swiftboot.demo.result.AdminUserSignoutResult;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
-import org.swiftboot.shiro.SwiftbootShiroConfigBean;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 
 import javax.annotation.Resource;
@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/admin/auth")
 @ResponseBody
 public class AdminAuthController {
-    private Logger log = LoggerFactory.getLogger(AdminAuthController.class);
+    private final Logger log = LoggerFactory.getLogger(AdminAuthController.class);
 
     @Resource
     private AdminUserService adminUserService;

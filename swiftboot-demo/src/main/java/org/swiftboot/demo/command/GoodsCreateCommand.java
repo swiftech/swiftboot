@@ -99,19 +99,39 @@ public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
         this.price = price;
     }
 
+    /**
+     * 获取生产时间
+     *
+     * @return
+     */
     public LocalDateTime getProductionTime() {
         return productionTime;
     }
 
+    /**
+     * 设置生产时间
+     *
+     * @param productionTime
+     */
     public GoodsCreateCommand setProductionTime(LocalDateTime productionTime) {
         this.productionTime = productionTime;
         return this;
     }
 
+    /**
+     * 获取过期日期
+     *
+     * @return
+     */
     public LocalDate getExpireDate() {
         return expireDate;
     }
 
+    /**
+     * 设置过期日期
+     *
+     * @param expireDate
+     */
     public GoodsCreateCommand setExpireDate(LocalDate expireDate) {
         this.expireDate = expireDate;
         return this;

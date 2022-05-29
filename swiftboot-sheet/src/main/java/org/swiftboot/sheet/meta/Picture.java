@@ -3,7 +3,7 @@ package org.swiftboot.sheet.meta;
 /**
  * Stands for a picture that will be export to Excel sheet.
  *
- * @author allen
+ * @author swiftech
  */
 public class Picture {
 

@@ -2,7 +2,7 @@ package org.swiftboot.service.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import org.swiftboot.service.SwiftbootServiceConfigBean;
+import org.swiftboot.service.config.SwiftbootServiceConfigBean;
 import org.swiftboot.service.model.Captcha;
 import org.swiftboot.service.service.CaptchaService;
 import org.swiftboot.service.service.RedisService;

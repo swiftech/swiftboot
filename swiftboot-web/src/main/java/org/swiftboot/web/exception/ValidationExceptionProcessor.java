@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.swiftboot.web.SwiftBootWebConfigBean;
+import org.swiftboot.web.config.SwiftBootWebConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ValidationResult;
 import org.swiftboot.web.validate.ValidationResult.InputError;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @Order(100)
 public class ValidationExceptionProcessor {
 
-    private static Logger log = LoggerFactory.getLogger(ValidationExceptionProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(ValidationExceptionProcessor.class);
 
     @Resource
     SwiftBootWebConfigBean swiftBootConfigBean;

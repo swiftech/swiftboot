@@ -1,7 +1,7 @@
 package org.swiftboot.data.model.dao.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.data.model.entity.IdPersistable;
-import org.swiftboot.data.model.entity.TimePersistable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,7 +19,7 @@ public abstract class BaseCustomizeDaoImpl<T extends IdPersistable> {
     @PersistenceContext
     protected EntityManager entityManager;
 
-    protected Class<TimePersistable> entityClass;
+    protected Class<T> entityClass;
 
     /**
      * 创建一个单个字段查询的 CriteriaQuery 对象
@@ -28,14 +28,17 @@ public abstract class BaseCustomizeDaoImpl<T extends IdPersistable> {
      * @param value
      * @return
      */
-    protected CriteriaQuery makeCriteriaQuery(String key, Object value) {
+    protected CriteriaQuery<T> makeCriteriaQuery(String key, Object value) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> q = (CriteriaQuery<T>) cb.createQuery(entityClass);
-        Root<T> from = (Root<T>) q.from(entityClass);
-        q.select(from).where(
-                cb.equal(from.get(key), value)
-        );
-        return q;
+        CriteriaQuery<T> cq = (CriteriaQuery<T>) cb.createQuery(entityClass);
+        Root<T> from = (Root<T>) cq.from(entityClass);
+        cq.select(from);
+        if (StringUtils.isNotBlank(key) && value != null) {
+            cq.where(
+                    cb.equal(from.get(key), value)
+            );
+        }
+        return cq;
     }
 
     public EntityManager getEntityManager() {

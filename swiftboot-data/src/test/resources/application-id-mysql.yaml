@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/swiftboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 12345678
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    show-sql: true
+    open-in-view: false
+logging:
+  level:
+    root: INFO
+    org.swiftboot: TRACE
+swiftboot:
+  data:
+    model:
+      autoGenerateId: true
+      autoUpdateTimeStrategy: not-set

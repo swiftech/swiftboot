@@ -3,7 +3,7 @@ package org.swiftboot.service.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.service.SwiftbootServiceConfigBean;
+import org.swiftboot.service.config.SwiftbootServiceConfigBean;
 import org.swiftboot.service.service.RedisService;
 import org.swiftboot.service.util.SerializeUtils;
 import redis.clients.jedis.Jedis;

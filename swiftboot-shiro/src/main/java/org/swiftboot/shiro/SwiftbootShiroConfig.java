@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.swiftboot.service.service.RedisService;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.shiro.constant.ShiroSessionStorageType;
 import org.swiftboot.shiro.realm.UserAuthorizingRealm;
 import org.swiftboot.shiro.service.ShiroSecurityService;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
+ * All required beans that make shiro works.
+ *
  * @author swiftech
  * @since 1.2
  **/
@@ -73,7 +76,7 @@ public class SwiftbootShiroConfig {
         else {
             ret.setSessionDAO(shiroSessionMemoryDao());
         }
-        ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000);
+        ret.setGlobalSessionTimeout(swiftbootShiroConfigBean.getSession().getTimeout() * 1000L);
         ret.setSessionIdCookie(sessionIdCookie());
         ret.setSessionListeners(new ArrayList<SessionListener>() {
             {

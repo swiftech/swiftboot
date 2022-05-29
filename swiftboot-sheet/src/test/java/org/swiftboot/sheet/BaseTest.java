@@ -1,5 +1,6 @@
 package org.swiftboot.sheet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.swiftboot.sheet.meta.PictureLoader;
@@ -10,7 +11,7 @@ import java.io.*;
 import java.net.URL;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class BaseTest {
 
@@ -43,15 +44,32 @@ public class BaseTest {
      * @throws FileNotFoundException
      */
     protected OutputStream createOutputStream(boolean fromTemplate, String fileType) throws FileNotFoundException {
-        String fileName = String.format("exported%s.%s", fromTemplate ? "_template" : "", fileType);
+        return this.createOutputStream(fromTemplate, fileType, null);
+    }
+
+    /**
+     * Create a file stream by file type and tag for testing output sheet.
+     *
+     * @param fromTemplate
+     * @param fileType
+     * @param tag          tag to distinguish more
+     * @return
+     * @throws FileNotFoundException
+     */
+    protected OutputStream createOutputStream(boolean fromTemplate, String fileType, String tag) throws FileNotFoundException {
+        String withTag = "exported";
+        if (StringUtils.isNotBlank(tag)) {
+            withTag = withTag + "_" + tag;
+        }
+        String fileName = String.format("%s%s.%s", withTag, fromTemplate ? "_template" : "", fileType);
 
         File dir = new File(SystemUtils.getUserHome(), TEMP_DIR_URI + "swiftboot-sheet/");
         if (!dir.exists()) {
             dir.mkdirs();
         }
         File f = new File(dir, fileName);
-        System.out.println("Prepared to export data to file: " + f.toString());
-        return new FileOutputStream(f.toString());
+        System.out.println("Prepared to export data to file: " + f);
+        return new FileOutputStream(f);
     }
 
     /**

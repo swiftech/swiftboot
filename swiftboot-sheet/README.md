@@ -1,7 +1,6 @@
 # SwiftBoot-Sheet
 
-SwiftBoot-Sheet
-提供了一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。只需要给导入或导出指定数据对应的位置，而无需关心导入或导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
+提供一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。只需要给导入或导出指定数据对应的位置，而无需关心导入或导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
 
 SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data from or export data to sheet files (including xlsx, xls, csv), regardless of the style of the sheet. In other words, users can edit the style of template sheet file whatever he/she likes without affecting the import or export of data.
 
@@ -20,7 +19,7 @@ SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data fro
 
 * 导入导出对象的定义
 
-你只需要定义一个 Bean 并用 `@Mapping` 注解标注需要从表格中导入或者导出数据的行列，例如：
+你只需要定义一个 Bean 并用 `@Mapping` 注解标注需要从表格中导入或者导出数据的行列，行列位置用[表达式](#表达式)来表示，例如：
 
 ```java
 public class SheetEntity {
@@ -34,13 +33,11 @@ public class SheetEntity {
     @Mapping("B2:C3")
     private List<List<String>> matrix;
 
-    ...
-
 }
 ```
 
 * 导出
-  创建指定文件类型的 `Exporter` ，调用 `export()` 方法将实体对象中的数据导出到数据表格文件中，例如：
+  创建指定文件类型的 `Exporter` ，然后调用 `export()` 方法将实体对象中的数据导出到数据表格文件中，例如：
 
 
 ```java
@@ -65,7 +62,7 @@ public class SheetEntity {
 
 ```java
     Importer importer = new SwiftBootSheetFactory().createImporter(SheetFileType.TYPE_XLSX);
-    SheetEntity result = importer.importFromStream(templateFileInputStream, SheetEntity.class, outputStream);
+    SheetEntity result = importer.importFromStream(fileInputStream, SheetEntity.class);
 
 ```
 
@@ -79,16 +76,15 @@ public class SheetEntity {
 
 ```java
 public class SheetEntity {
-    ...
-    @Mapping("A1")
-    PictureLoader pictureToExport;
+  @Mapping("A1")
+  PictureLoader pictureToExport;
 }
 ```
 
 ```java
 exportEntity.setPictureToExport(() -> {
-    byte[] bytesPic = ... // 加载图片
-    return new Picture(Workbook.PICTURE_TYPE_JPEG, bytesPic);
+  byte[]bytesPic=... // 加载图片
+  return new Picture(Workbook.PICTURE_TYPE_JPEG, bytesPic);
 });
 exporter.export(templateFileInputStream, exportEntity, outputStream);
 ```
@@ -99,7 +95,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 * 表达式字母和数字顺序可颠倒，例如`E2` 和 `2E` 是一样的。
 * 表达式中字母可为大写或小写，例如`E2` 和 `e2` 是一样的。
 * 用 '-' 或 '|' 加上数字代表行或列
-* 用 '?' 表示不确定
+* 用 '?' 表示不确定长度
 * 起始点和终止点的顺序可以颠倒，也就是说终止点写在起始点前面效果是一样的，最终都是由小至大。
 * 导出：如果表达式的范围小于给出的数据大小，则只导出表达式给定的范围的数据。
 * 对于合并单元格，只需要给出合并范围内的任一单元格位置即可。
@@ -115,15 +111,103 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 ### 底层 API
 
-如果你想导入或者导出的表格位置是动态的，那么也可以直接调用底层的 API 来实现，例如：
+如果你想导入或者导出的表格位置是动态的(例如位置保存在配置文件或者数据库中），那么也可以直接调用底层的 API 来实现，例如：
 
 ```java
+    SheetMetaBuilder builder = new SheetMetaBuilder();
+    builder
+    .items(builder.itemBuilder()
+        .newItem().key("cell_0").from(0, 0).value("This is title 1")) // 直接位置设定设定导出单元格（从0开始）
+        .newItem().key("cell_0").parse("B1").value("This is title 2")) // 表达式设定导出单元格
+        .newItem().key("line_0").from(1, 0).to(1, 2).value(Arrays.asList("a", "b", "c"))  // 位置设定导出一行数据
+        .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))  // 表达式设定导出一列数据
+        .newItem().key("picture").parse("A5").value(pictureLoader) // 表达式设定导出图片
+    )
+    .fromAnnotatedObject(exportEntity);
+    SheetMeta sheetMeta = builder.build();
     Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
-    SheetMeta sheetMeta = new SheetMeta();
-    sheetMeta.fromExpression("cell_0", "A1", "This is title");
-    sheetMeta.fromExpression("line_0", "A1:A2", Arrays.asList(1, 2));
-    ...
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
+```
+
+> 默认导出的表格名称为 "Sheet 1"
+
+
+### 多表单(Sheet)支持
+
+导入和导出都支持 Excel 文档中的多表格，可以通过调用相应的 API 或者在表达式中指定表单，其表达式格式和 MS Excel 的一样：`$'<sheet name>'.`，例如
+
+```java
+public class SheetEntity {
+
+    @Mapping("$'sheet0'.B2:F2")
+    private List<String> line;
+
+    @Mapping("$'sheet1'.B2:C3")
+    private List<List<String>> matrix;
+
+}
+```
+
+直接调用底层API：
+
+```java
+    SheetMetaBuilder builder = new SheetMetaBuilder();
+    builder
+    .sheet("sheet 1")
+    .items(builder.itemBuilder()
+        .newItem().key("cell_0").from(0, 0)).value("This is title 1"))
+    .sheet("sheet 2")
+    .items(builder.itemBuilder()
+        .newItem().key("line_0").from(0, 0).to(0, 2).value(Arrays.asList("a", "b", "c"))
+        .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))
+    )
+    .fromAnnotatedObject(exportEntity);
+    SheetMeta sheetMeta = builder.build();
+    Exporter exporter = new SwiftBootSheetFactory().createExporter(fileType);
+    exporter.export(templateFileInputStream, sheetMeta, outputStream);
+```
+
+> 不指定表单的情况下，默认是第一个表单，且名称默认为 "Sheet 1".
+> 表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中.
+
+
+### 复制样式（导出）
+
+对于输出位置不确定但是需要给这个单元格设定样式的情况，使用 `MetaItemBuilder` 的 `copy()` 方法可以将其他区域的单元格样式复制过来。例如：
+
+```java
+builder.items(builder.itemBuilder()
+        .newItem().parse("A1").copy("A0").value("output value")) // 从 `A0` 单元格复制样式到 `A1` 单元格。
+```
+
+### 动态长度区域的样式处理（导出）
+
+虽然我们把数据处理和表单样式完全分离了，但是对于大小不固定的区域，无法预先在模版中设置好整个区域的样式，那么我们可以用 `copy()` 来从其他单元格复制样式。
+例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的任意单元格），例如：
+
+```java
+builder.items(builder.itemBuilder()
+        .newItem().parse("A0:?0").insert().copy("A0").value(Arrays.asList("foo", "bar"))) // 从 `A0` 单元格复制样式到第一行的若干（长度由数据长度决定）单元格
+```
+
+> 如果对于单元格样式有更灵活的要求的情况（例如根据值改变单元格的背景颜色等等），可以使用 `MetaItemBuilder.onCell()` 来直接操作 POI 的 `Cell` 对象（参考 [自定义表格处理](#自定义表格处理) ）.
+> 注意：对于动态长度的 `copy()`，会与` merge()` 产生冲突，因为 `merge()` 的 value 有可能是单个值
+
+
+### 自定义表格处理
+
+虽然 SwiftBoot-Sheet 提供了简洁而强大的功能，但是有些情况下用户可能还是需要自行操作表格，例如，
+```java
+SheetMetaBuilder builder = new SheetMetaBuilder();
+builder.sheet(0, "my first sheet")
+    .handler((SheetHandler<ExcelSheetInfo>) sheetInfo -> {
+        System.out.println(sheetInfo.getSheet());
+    }).
+    items(builder.itemBuilder()
+        .newItem().key("customized").parse("B2:F5").value(matrix).onCell((ExcelCellInfo info) -> {
+            System.out.printf("%s - %s - %s (%s.%s)%n", info.getWorkbook(), info.getSheet(), info.getCell(), info.getRowIdx(), info.getColIdx());
+        }))
+    ;
 ```
 
 
@@ -133,11 +217,6 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.0.0</version>
+  <version>2.1</version>
 </dependency>
 ```
-
-
-### 限制
-
-* 目前只支持导入和导出表格文件的第一个工作表。

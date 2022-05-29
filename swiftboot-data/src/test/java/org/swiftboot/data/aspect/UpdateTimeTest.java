@@ -53,9 +53,6 @@ public class UpdateTimeTest {
     @Resource
     private PlatformTransactionManager txManager;
 
-    @Resource
-    private TimeInterceptor timeInterceptor;
-
     @BeforeEach
     public void setup() {
 //        System.out.println(testEntityManager);
@@ -68,12 +65,11 @@ public class UpdateTimeTest {
     public void testParentWithChildrenInLong() {
         final String[] parentId = {null};
 
+        System.out.println("Prepare data (parent entity with one child)");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        // Prepare data
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                System.out.println("Trans: " + status.isNewTransaction());
                 ParentEntity entity = new ParentEntity();
                 entity.setName("君父");
                 ChildEntity childEntity = new ChildEntity();
@@ -85,12 +81,11 @@ public class UpdateTimeTest {
             }
         });
 
-        // Update data
+        System.out.println("Update parent and first child to cause updateTime set.");
         TransactionTemplate tmpl2 = new TransactionTemplate(txManager);
         tmpl2.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                System.out.println("Trans: " + status.isNewTransaction());
                 Optional<ParentEntity> optParent = parentDao.findById(parentId[0]);
                 Assertions.assertNotNull(optParent);
                 Assertions.assertTrue(optParent.isPresent());
@@ -106,12 +101,11 @@ public class UpdateTimeTest {
             }
         });
 
-        // Assert updateTime;
+        System.out.println("Assert updateTime of parent and child entities;");
         TransactionTemplate tmpl3 = new TransactionTemplate(txManager);
         tmpl3.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                System.out.println("Trans: " + status.isNewTransaction());
                 Optional<ParentEntity> optParent = parentDao.findById(parentId[0]);
                 Assertions.assertNotNull(optParent);
                 Assertions.assertTrue(optParent.isPresent());
@@ -139,11 +133,10 @@ public class UpdateTimeTest {
         final String[] parentId = {null};
 
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        // Prepare data
+        System.out.println("Prepare data (parent entity with one child)");
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                System.out.println("Trans: " + status.isNewTransaction());
                 ParentDateTimeEntity entity = new ParentDateTimeEntity();
                 entity.setName("君父");
                 ChildDateTimeEntity childEntity = new ChildDateTimeEntity();
@@ -155,12 +148,11 @@ public class UpdateTimeTest {
             }
         });
 
-        // Update data
+        System.out.println("Update parent and first child to cause updateTime set.");
         TransactionTemplate tmpl2 = new TransactionTemplate(txManager);
         tmpl2.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                System.out.println("Trans: " + status.isNewTransaction());
                 Optional<ParentDateTimeEntity> optParent = parentDateTimeDao.findById(parentId[0]);
                 Assertions.assertNotNull(optParent);
                 Assertions.assertTrue(optParent.isPresent());
@@ -176,13 +168,13 @@ public class UpdateTimeTest {
             }
         });
 
-        // Assert updateTime;
+        System.out.println("Assert updateTime of parent and child entities;");
         TransactionTemplate tmpl3 = new TransactionTemplate(txManager);
         tmpl3.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                System.out.println("Trans: " + status.isNewTransaction());
                 Optional<ParentDateTimeEntity> optParent = parentDateTimeDao.findById(parentId[0]);
+                // assert parent updateTime
                 Assertions.assertNotNull(optParent);
                 Assertions.assertTrue(optParent.isPresent());
                 ParentDateTimeEntity parentEntity = optParent.get();

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
 
 /**
- * @author allen
+ * @author swiftech
  */
 class CalculateUtilsTest {
 

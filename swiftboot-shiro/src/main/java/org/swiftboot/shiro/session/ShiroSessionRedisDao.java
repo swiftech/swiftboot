@@ -7,7 +7,7 @@ import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.service.service.RedisService;
-import org.swiftboot.shiro.SwiftbootShiroConfigBean;
+import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
@@ -22,7 +22,7 @@ import java.util.Collection;
  **/
 public class ShiroSessionRedisDao extends AbstractSessionDAO {
 
-    private Logger log = LoggerFactory.getLogger(ShiroSessionRedisDao.class);
+    private final Logger log = LoggerFactory.getLogger(ShiroSessionRedisDao.class);
 
     @Resource
     private RedisService redisService;

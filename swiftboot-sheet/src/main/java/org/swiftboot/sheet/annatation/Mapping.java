@@ -10,7 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Mapping between cell(s) in worksheet and one field of data object.
  *
- * @author allen
+ * @author swiftech
  */
 @Target({ElementType.FIELD})
 @Retention(RUNTIME)

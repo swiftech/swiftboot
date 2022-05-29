@@ -18,7 +18,7 @@ spring:
 logging:
   level:
     root: INFO
-    org.swiftboot: DEBUG
+    org.swiftboot: TRACE
 swiftboot:
   data:
     model:

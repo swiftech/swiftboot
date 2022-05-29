@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.data.Info;
 import org.swiftboot.data.R;
-import org.swiftboot.data.SwiftBootDataConfigBean;
+import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.util.GenericUtils;
 
@@ -26,7 +26,7 @@ import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.AUTO_UPDATE_TIM
 
 /**
  * 持久化实体类之前设置更新时间（updateTime）。由于 Hibernate 的 Interceptor 在数据没改变的情况下不能拦截，
- * 所以只有在 swiftboot.data.model.autoUpdateTimeStrategy 设置为 always 情况下才有效。
+ * 所以只有在 swiftboot.data.model.autoUpdateTimeStrategy 设置为 always 情况下才有效，并且不处理子实体。
  *
  * @author swiftech
  * @see org.swiftboot.data.model.interceptor.TimeInterceptor
@@ -48,12 +48,12 @@ public class UpdateTimeAspect {
 
     @Before(value = "pointcut()")
     public Object before(JoinPoint joinPoint) {
-        String flag = configBean.getModel().getAutoUpdateTimeStrategy();
-        if (AUTO_UPDATE_TIME_NOT_SET.equals(flag)
-                || AUTO_UPDATE_TIME_ON_CHANGE.equals(flag)) {
+        String strategy = configBean.getModel().getAutoUpdateTimeStrategy();
+        if (AUTO_UPDATE_TIME_NOT_SET.equals(strategy)
+                || AUTO_UPDATE_TIME_ON_CHANGE.equals(strategy)) {
             return null;
         }
-        log.debug(this.getClass().getSimpleName() + " before()");
+        log.debug(this.getClass().getSimpleName() + " executed before save()");
         // 检测前置条件
         Object[] args = joinPoint.getArgs();
         if (args == null || args.length == 0) {
@@ -93,7 +93,7 @@ public class UpdateTimeAspect {
             return null;
         }
         Type type = parameterizedType.getActualTypeArguments()[0];
-        System.out.println(type);
+        log.trace(String.valueOf(type));
         if (type == Long.class) {
             return Long.valueOf(System.currentTimeMillis());
         }

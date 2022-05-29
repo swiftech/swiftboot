@@ -11,7 +11,7 @@
 <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-service</artifactId>
-    <version>2.0.0</version>
+    <version>2.1</version>
 </dependency>
 
 ```
@@ -24,6 +24,7 @@ swiftboot:
     redis:
       host: localhost
       port: 6379
+      cluster: localhost:6379
   captcha:
     expiresIn: 300
 ```

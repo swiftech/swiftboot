@@ -22,7 +22,7 @@ public class AppUserEntity extends BaseEntity {
      * Login name of app user
      */
     @PropertyDescription(value = "Login name of app user", example = "13866669999")
-    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) UNIQUE NOT NULL COMMENT 'Login name of app user'")
+    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) NOT NULL COMMENT 'Login name of app user'")
     private String loginName;
 
     /**

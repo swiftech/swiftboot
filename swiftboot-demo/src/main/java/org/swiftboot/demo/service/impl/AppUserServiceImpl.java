@@ -3,7 +3,7 @@ package org.swiftboot.demo.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionBuilder;
 import org.swiftboot.auth.service.SessionService;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @Service
 public class AppUserServiceImpl implements AppUserService {
 
-    private Logger log = LoggerFactory.getLogger(AppUserServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(AppUserServiceImpl.class);
 
     @Resource
     private AppUserDao appUserDao;
@@ -61,10 +61,12 @@ public class AppUserServiceImpl implements AppUserService {
             ret.setSuccess(true);
 
             // session
-            Session session = new SessionBuilder().createSession();
-            session.setUserName(ret.getLoginName());
-            session.setUserId(ret.getId());
-            session.setGroup(authConfigBean.getSession().getGroup());
+            Session session = new SessionBuilder()
+                    .userName(ret.getLoginName())
+                    .userId(ret.getId())
+                    .group(authConfigBean.getSession().getGroup())
+                    .addition("some_addition", "some addition in session")
+                    .createSession();
             String token = IdUtils.makeUUID();
             sessionService.addSession(token, session);
             ret.setToken(token);

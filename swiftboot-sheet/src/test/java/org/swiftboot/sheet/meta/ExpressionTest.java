@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  *
- * @author allen
+ * @author swiftech
  * @see Expression
  */
 class ExpressionTest {
@@ -18,6 +18,8 @@ class ExpressionTest {
     static Expression expVertical2;
     static Expression expMatrix;
     static Expression expFreeSize;
+    static Expression expSheet;
+    static Expression expSheetSingle;
 
     @BeforeAll
     public static void setup() {
@@ -28,6 +30,17 @@ class ExpressionTest {
         expVertical2 = new Expression("a1|2");
         expMatrix = new Expression("a1:b2");
         expFreeSize = new Expression("a1:?");
+        expSheet = new Expression("$'sheet.0'.a1:b1");
+        expSheetSingle = new Expression("$'sheet.0'.a1");
+    }
+
+    @Test
+    void testSheet() {
+        Assertions.assertEquals("sheet.0", expSheet.getSheetName());
+        Assertions.assertEquals("a1:b1", expSheet.getCellsExp());
+
+        Assertions.assertEquals("sheet.0", expSheetSingle.getSheetName());
+        Assertions.assertEquals("a1", expSheetSingle.getCellsExp());
     }
 
     @Test
@@ -39,6 +52,7 @@ class ExpressionTest {
         Assertions.assertFalse(expVertical2.isRange());
         Assertions.assertTrue(expMatrix.isRange());
         Assertions.assertTrue(expFreeSize.isRange());
+        Assertions.assertTrue(expSheet.isRange());
     }
 
     @Test
@@ -93,5 +107,13 @@ class ExpressionTest {
     @Test
     void splitAsVerticalRange() {
         Assertions.assertArrayEquals(new String[]{"a1","2"}, expVertical2.splitAsVerticalRange());
+    }
+
+    @Test
+    public void testIllegal() {
+        Assertions.assertThrows(Exception.class, () -> {
+            new Expression("");
+        });
+
     }
 }

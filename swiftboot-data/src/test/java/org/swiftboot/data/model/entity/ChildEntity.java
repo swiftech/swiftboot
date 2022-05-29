@@ -8,7 +8,7 @@ import javax.persistence.*;
  * @author swiftech
  **/
 @Entity
-@Table(name = "CHILD_TABLE")
+@Table(name = "UT_CHILD_TABLE")
 public class ChildEntity extends BaseLongTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -18,6 +18,18 @@ public class ChildEntity extends BaseLongTimeEntity {
 
     @Column
     private String name;
+
+    public ChildEntity() {
+    }
+
+    public ChildEntity(String name) {
+        this.name = name;
+    }
+
+    public ChildEntity(String id, String name) {
+        super(id);
+        this.name = name;
+    }
 
     public ParentEntity getParent() {
         return parent;
@@ -33,5 +45,13 @@ public class ChildEntity extends BaseLongTimeEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "ChildEntity{" +
+                "id='" + getId() + "', " +
+                "name='" + name + '\'' +
+                '}';
     }
 }

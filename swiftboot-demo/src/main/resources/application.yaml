@@ -8,7 +8,6 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      dialect: org.hibernate.dialect.H2Dialect
       ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -18,10 +17,11 @@ spring:
     show-sql: false
     open-in-view: false
 logging:
-  file: /var/log/swiftboot-demo.log
   level:
     root: INFO
-    org.swiftboot: DEBUG
+    org.swiftboot: TRACE
+  file:
+    name: /var/log/swiftboot-demo.log
 swiftboot:
   web:
     filter:
@@ -32,10 +32,10 @@ swiftboot:
     model:
       autoGenerateId: true
       autoUpdateTimeStrategy: on-change
-      initData: true
-      initBaseDir: /Users/allen/Workspace/github/swiftboot/swiftboot-web/src/test/resources/init/
-      initBasePackages:
-        - org.swiftboot.demo.model.entity
+      initData:
+        enabled: true
+        baseDir: init/
+        fallback: true
 shiro:
   enabled: false
   annotations:

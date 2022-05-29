@@ -8,11 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
-import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
-import org.swiftboot.demo.command.OrderWithDetailSaveCommand;
 import org.swiftboot.demo.model.dao.OrderDao;
 import org.swiftboot.demo.model.dao.OrderDetailDao;
-import org.swiftboot.demo.model.entity.OrderDetailEntity;
 import org.swiftboot.demo.model.entity.OrderEntity;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
@@ -22,6 +19,7 @@ import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.web.command.IdListCommand;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +39,8 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     private OrderDetailDao orderDetailDao;
 
-    // for test edit detail of order
-    private String permanentDetailId = "12345678901234567890123456789012";
+    @Resource
+    private EntityManager entityManager;
 
     /**
      * 创建订单
@@ -53,27 +51,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderCreateResult createOrder(OrderCreateCommand cmd) {
         OrderEntity p = cmd.createEntity();
+        p.setUserId(cmd.getUserId()); // call explicitly for the field COULD be different.
         OrderEntity saved = orderDao.save(p);
         log.debug("创建订单: " + saved.getId());
-        return new OrderCreateResult(saved.getId());
-    }
-
-    /**
-     * 创建带有详情的订单
-     *
-     * @param cmd
-     * @return
-     */
-    @Override
-    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateCommand cmd) {
-        OrderEntity entity = cmd.createEntity();
-        // Add extra permanent detail ( will be merged if already existed)
-        OrderDetailEntity od = new OrderDetailEntity();
-        od.setId(permanentDetailId);
-        od.setDescription("固定订单明细项");
-        od.setOrder(entity);
-        entity.getOrderDetails().add(od);
-        OrderEntity saved = orderDao.save(entity);
         return new OrderCreateResult(saved.getId());
     }
 
@@ -96,52 +76,7 @@ public class OrderServiceImpl implements OrderService {
         return ret;
     }
 
-    /**
-     * 编辑订单，在原来明细上再添加新的明细。
-     *
-     * @param cmd
-     * @return
-     */
-    @Override
-    public OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveCommand cmd) {
-        OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
-        if (optEntity.isPresent()) {
-            OrderEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            for (OrderDetailEntity orderDetail : p.getOrderDetails()) {
-                System.out.printf("'%s' - '%s'%n", orderDetail.getId(), orderDetail.getDescription());
-            }
-            OrderEntity saved = orderDao.save(p);
-            ret.setOrderId(saved.getId());
-        }
-        else {
-            throw new RuntimeException("Order Not found: " + cmd.getId());
-        }
-        return ret;
-    }
 
-    /**
-     * 编辑订单， 删除原来的明细，添加新的明细
-     *
-     * @param cmd
-     * @return
-     */
-    public OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveCommand cmd) {
-        OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
-        if (optEntity.isPresent()) {
-            OrderEntity p = optEntity.get();
-            p.getOrderDetails().clear(); // remove old details
-            p = cmd.populateEntity(p);
-            OrderEntity saved = orderDao.save(p);
-            ret.setOrderId(saved.getId());
-        }
-        else {
-            throw new RuntimeException("Order Not found: " + cmd.getId());
-        }
-        return ret;
-    }
 
     /**
      * 逻辑删除订单
@@ -153,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<OrderEntity> optEntity = orderDao.findById(orderId);
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
-            p.setDelete(true);
+            p.setIsDelete(true);
             orderDao.save(p);
         }
     }
@@ -167,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrderList(IdListCommand cmd) {
         List<OrderEntity> entities = orderDao.findAllByIdIn(cmd.getIds());
         for (OrderEntity entity : entities) {
-            entity.setDelete(true);
+            entity.setIsDelete(true);
             orderDao.save(entity);
             // TODO 处理关联表的数据删除
         }
@@ -230,9 +165,9 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderListResult queryOrderList() {
+    public OrderListResult queryOrderList(String userId) {
         OrderListResult ret = new OrderListResult();
-        Iterable<OrderEntity> all = orderDao.findAll();
+        Iterable<OrderEntity> all = orderDao.findByIsDeleteFalseAndUserId(userId);
         if (all != null) {
             ret.populateByEntities(all);
             ret.setTotal(orderDao.count());

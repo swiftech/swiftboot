@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.auth.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.demo.command.AdminUserCreateCommand;
 import org.swiftboot.demo.command.AdminUserSaveCommand;
@@ -131,7 +131,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         Optional<AdminUserEntity> optEntity = adminUserDao.findById(adminUserId);
         if (optEntity.isPresent()) {
             AdminUserEntity p = optEntity.get();
-            p.setDelete(true);
+            p.setIsDelete(true);
             adminUserDao.save(p);
         }
     }
@@ -145,7 +145,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     public void deleteAdminUserList(IdListCommand cmd) {
         List<AdminUserEntity> entities = adminUserDao.findAllByIdIn(cmd.getIds());
         for (AdminUserEntity entity : entities) {
-            entity.setDelete(true);
+            entity.setIsDelete(true);
             adminUserDao.save(entity);
             // TODO 处理关联表的数据删除
         }

@@ -1,6 +1,7 @@
 package org.swiftboot.sheet.meta;
 
 import org.swiftboot.sheet.util.CalculateUtils;
+import org.swiftboot.sheet.util.IndexUtils;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -8,7 +9,7 @@ import java.util.function.BiFunction;
 /**
  * Position in sheet
  *
- * @author allen
+ * @author swiftech
  */
 public class Position {
 
@@ -23,6 +24,9 @@ public class Position {
     Integer column;
 
     public Position(Integer row, Integer column) {
+        if (!IndexUtils.isLegalRow(row) || !IndexUtils.isLegalColumn(column)) {
+            throw new RuntimeException("Row or column index is illegal for position");
+        }
         this.row = row;
         this.column = column;
     }
@@ -39,6 +43,9 @@ public class Position {
      * @return
      */
     public Position moveRows(Integer rows) {
+        if (!IndexUtils.isLegalRow(row)) {
+            throw new RuntimeException("Row index can is illegal for position");
+        }
         if (rows != null) {
             this.row += rows;
         }
@@ -52,6 +59,9 @@ public class Position {
      * @return
      */
     public Position moveColumns(Integer columns) {
+        if (!IndexUtils.isLegalColumn(column)) {
+            throw new RuntimeException("Column index can is illegal for position");
+        }
         if (columns != null) {
             this.column += columns;
         }
@@ -121,10 +131,9 @@ public class Position {
 
     @Override
     public String toString() {
-        return "Position{" +
-                "row=" + row +
-                ", column=" + column +
-                '}';
+        return "Position(" + row +
+                ", " + column +
+                ')';
     }
 
     @Override

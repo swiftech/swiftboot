@@ -1,7 +1,7 @@
 package org.swiftboot.sheet.util;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class LetterUtils {
 

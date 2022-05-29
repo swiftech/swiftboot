@@ -5,8 +5,9 @@ import java.io.IOException;
 /**
  * Picture loader for client to input picture data.
  *
- * @author allen
+ * @author swiftech
  */
+@FunctionalInterface
 public interface PictureLoader {
 
     /**

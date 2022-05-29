@@ -1,5 +1,6 @@
 package org.swiftboot.web.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
@@ -7,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author swiftech 2019-08-29
- *
  **/
 public class HttpServletCookieUtils {
 
@@ -18,4 +18,27 @@ public class HttpServletCookieUtils {
         }
         return cookieToken.getValue();
     }
+
+    /**
+     * Try to get value from header, if not exists, try to get it from cookie.
+     *
+     * @param request
+     * @param name
+     * @return
+     */
+    public static String getValueFromHeaderOrCookie(HttpServletRequest request, String name) {
+        String value = request.getHeader(name);
+        if (StringUtils.isBlank(value)) {
+            value = getCookieValue(request, name);
+            if (StringUtils.isNotBlank(value)) {
+                return value;
+            }
+        }
+        else {
+            return value;
+        }
+        return null;
+    }
+
+
 }

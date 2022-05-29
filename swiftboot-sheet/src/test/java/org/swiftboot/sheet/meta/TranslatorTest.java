@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test {@code Translator}
- * @author allen
+ *
+ * @author swiftech
  * @see Translator
  */
 class TranslatorTest {
@@ -41,7 +42,7 @@ class TranslatorTest {
         // too long
         Assertions.assertThrows(Exception.class, () -> translator.expToIndex("aaaaa"));
 
-        Area withSingle = new Area(new Position(0,0), null);
+        Area withSingle = new Area(new Position(0, 0), null);
         Assertions.assertEquals(withSingle, translator.toArea("a1"));
 
     }
@@ -87,7 +88,6 @@ class TranslatorTest {
 
     /**
      * Test uncertain data size ( only for export)
-     *
      */
     @Test
     public void testUncertainDataSize() {
@@ -118,8 +118,24 @@ class TranslatorTest {
     @Test
     public void testIllegalExpression() {
         Translator translator = new Translator();
+        Assertions.assertThrows(Exception.class, () -> translator.toArea(""));
         Assertions.assertThrows(Exception.class, () -> translator.toArea("A:J"));
         Assertions.assertThrows(Exception.class, () -> translator.toArea("1:10"));
+    }
+
+    @Test
+    public void testWithSheet() {
+        Translator translator = new Translator();
+        // the expression without sheet name should be translated to area with default sheet id.
+        Area area = translator.toArea("A1");
+        Assertions.assertNull(area.getSheetId());
+        Assertions.assertEquals(new Position(0, 0), area.getStartPosition());
+        Assertions.assertNull(area.getEndPosition());
+
+        Assertions.assertEquals(new Area(new SheetId(null, "sheet.0"), new Position(0, 0), new Position(9, 0)),
+                translator.toArea("$'sheet.0'.A1:A10"));
+        Assertions.assertEquals(new Area(new SheetId(null, "sheet.0"), new Position(0, 0), null),
+                translator.toArea("$'sheet.0'.A1"));
     }
 
 

@@ -1,15 +1,13 @@
 package org.swiftboot.demo.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.swiftboot.demo.command.OrderCreateCommand;
 import org.swiftboot.demo.command.OrderSaveCommand;
-import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
-import org.swiftboot.demo.command.OrderWithDetailSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
 import org.swiftboot.demo.result.OrderResult;
 import org.swiftboot.demo.result.OrderSaveResult;
 import org.swiftboot.web.command.IdListCommand;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 订单服务接口
@@ -28,14 +26,6 @@ public interface OrderService {
     OrderCreateResult createOrder(OrderCreateCommand cmd);
 
     /**
-     * 创建带有详情的订单
-     *
-     * @param cmd
-     * @return
-     */
-    OrderCreateResult createOrderWithDetail(OrderWithDetailCreateCommand cmd);
-
-    /**
      * 保存对订单的修改
      *
      * @param cmd
@@ -43,9 +33,6 @@ public interface OrderService {
      */
     OrderSaveResult saveOrder(OrderSaveCommand cmd);
 
-    OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveCommand cmd);
-
-    OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveCommand cmd);
 
     /**
      * 逻辑删除订单
@@ -87,10 +74,10 @@ public interface OrderService {
 
     /**
      * 查询所有订单
-     *
+     * @param userId
      * @return
      */
-    OrderListResult queryOrderList();
+    OrderListResult queryOrderList(String userId);
 
     /**
      * 分页查询订单

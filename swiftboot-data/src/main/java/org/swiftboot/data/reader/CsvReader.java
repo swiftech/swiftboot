@@ -17,7 +17,7 @@ import java.util.List;
 public class CsvReader {
 
 
-    private Logger log = LoggerFactory.getLogger(CsvReader.class);
+    private final Logger log = LoggerFactory.getLogger(CsvReader.class);
 
     /**
      * 逐行读取 CSV 格式的输入流，并通过 CsvReaderHandler 回调
@@ -27,6 +27,9 @@ public class CsvReader {
      * @throws Exception
      */
     public void readCsv(InputStream inputStream, CsvReaderHandler csvHandler) throws IOException {
+        if (inputStream == null) {
+            throw new RuntimeException("Input stream of CSV file is null.");
+        }
         List<String> lines = IoUtils.readToStringList(inputStream);
         inputStream.close();
         if (lines.size() < 2) {

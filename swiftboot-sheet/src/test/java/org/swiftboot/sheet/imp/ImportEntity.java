@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * entity for testing import.
  *
- * @author allen
+ * @author swiftech
  */
 public class ImportEntity {
 

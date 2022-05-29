@@ -8,7 +8,7 @@ import javax.persistence.Table;
  * @author swiftech
  **/
 @Entity
-@Table(name = "ORPHAN_TABLE")
+@Table(name = "UT_ORPHAN_TABLE")
 public class OrphanEntity extends BaseEntity {
 
     @Column

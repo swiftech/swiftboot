@@ -17,14 +17,14 @@ import javax.persistence.*;
 public class GoodsOrderRelEntity extends BaseEntity {
 
     /**
-     * 订单ID
+     * 订单 ID
      */
     @PropertyDescription(value = "订单ID", example = "527d36e654f9eaea6a9b46380d253fc9")
     @Column(name = "ORDER_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '订单ID'")
     private String orderId;
 
     /**
-     * 商品
+     * 商品 TODO 此处类型和Command不一致
      */
     @PropertyDescription(value = "商品", example = "41882f64aac9da0dee30a63068a0326a")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,14 +40,14 @@ public class GoodsOrderRelEntity extends BaseEntity {
     }
 
     /**
-     * 获取订单ID
+     * 获取订单 ID
      */
     public String getOrderId() {
         return orderId;
     }
 
     /**
-     * 设置订单ID
+     * 设置订单 ID
      */
     public void setOrderId(String orderId) {
         this.orderId = orderId;

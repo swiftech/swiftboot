@@ -9,7 +9,7 @@ import java.io.OutputStream;
 /**
  * Exporter to export data from an annotated object or a Map in {@link SheetMeta} to a sheet file stream.
  *
- * @author allen
+ * @author swiftech
  */
 public interface Exporter {
 
@@ -35,7 +35,7 @@ public interface Exporter {
     <T> void export(InputStream templateFileStream, Object dataObject, OutputStream outputStream) throws IOException;
 
     /**
-     * Export data from a map in {@SheetMet} to sheet file stream.
+     * Export data from a map in {@link SheetMeta} to sheet file stream.
      *
      * @param exportMeta
      * @param outputStream
@@ -44,7 +44,7 @@ public interface Exporter {
     void export(SheetMeta exportMeta, OutputStream outputStream) throws IOException;
 
     /**
-     * Export data from a map in {@SheetMet} to sheet file stream which with everything from template sheet file.
+     * Export data from a map in {@link SheetMeta} to sheet file stream which with everything from template sheet file.
      *
      * @param templateFileStream
      * @param exportMeta

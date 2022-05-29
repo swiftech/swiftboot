@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * entity for testing export.
  *
- * @author allen
+ * @author swiftech
  */
 public class ExportEntity {
 
@@ -27,6 +27,12 @@ public class ExportEntity {
 
     @Mapping("G4")
     private PictureLoader pictureToExport;
+
+    @Mapping("$'sheet.2'.B2:C3")
+    private List<List<Object>> matrix2;
+
+    @Mapping("$'sheet.3'.G4")
+    private PictureLoader pictureToExport2;
 
     public String getValue1() {
         return value1;
@@ -66,6 +72,22 @@ public class ExportEntity {
 
     public void setPictureToExport(PictureLoader pictureToExport) {
         this.pictureToExport = pictureToExport;
+    }
+
+    public List<List<Object>> getMatrix2() {
+        return matrix2;
+    }
+
+    public void setMatrix2(List<List<Object>> matrix2) {
+        this.matrix2 = matrix2;
+    }
+
+    public PictureLoader getPictureToExport2() {
+        return pictureToExport2;
+    }
+
+    public void setPictureToExport2(PictureLoader pictureToExport2) {
+        this.pictureToExport2 = pictureToExport2;
     }
 
     @Override

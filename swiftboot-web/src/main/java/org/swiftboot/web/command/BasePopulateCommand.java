@@ -28,7 +28,9 @@ import java.util.function.Predicate;
 public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpCommand {
 
     /**
-     * 创建对应的实体类 P 的实例并且用属性值填充实例
+     * 创建对应的实体类 P 的实例并且用属性值填充实例，
+     * 除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
+     * Command 中存在的属性实体类也必须存在（名称和类型一一对应），否则抛出异常。
      *
      * @return
      */
@@ -128,7 +130,7 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
                         if (target == null) {
                             // Populate collections for new created entity.
                             Collection<Object> newEntities = CollectionUtils.constructCollectionByType((Class<Collection<Object>>) targetField.getType());
-                            items.stream().forEach(item -> {
+                            items.forEach(item -> {
                                 if (!(item instanceof BasePopulateCommand)) return;// exclude non populatable elements;
                                 newEntities.add(((BasePopulateCommand) item).createEntity());
                             });

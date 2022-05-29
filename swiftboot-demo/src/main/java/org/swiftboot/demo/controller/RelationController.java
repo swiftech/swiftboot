@@ -15,7 +15,7 @@ import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
 import org.swiftboot.demo.command.OrderWithDetailSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderSaveResult;
-import org.swiftboot.demo.service.OrderService;
+import org.swiftboot.demo.service.OrderDetailRelationService;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.result.HttpResponse;
@@ -37,7 +37,7 @@ public class RelationController {
     private final Logger log = LoggerFactory.getLogger(RelationController.class);
 
     @Resource
-    private OrderService orderService;
+    private OrderDetailRelationService orderService;
 
     @ApiOperation(notes = "创建订单（带详情）", value = "创建订单（带详情）")
     @RequestMapping(value = "/with_detail/create", method = RequestMethod.POST)
@@ -49,10 +49,10 @@ public class RelationController {
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "保存订单（带详情）", value = "保存订单（带详情）")
+    @ApiOperation(notes = "编辑保存订单（带详情）", value = "编辑保存订单（带详情）")
     @RequestMapping(value = "/with_detail/save", method = RequestMethod.POST)
     public HttpResponse<OrderSaveResult> orderWithDetailSave(
-            @RequestBody @Validated @ApiParam("保存订单参数（带详情）") OrderWithDetailSaveCommand command,
+            @RequestBody @Validated @ApiParam("编辑保存订单参数（带详情）") OrderWithDetailSaveCommand command,
             BindingResult bindingResult) {
         log.info("> /order/with_detail/save");
         if (bindingResult.hasErrors()) {

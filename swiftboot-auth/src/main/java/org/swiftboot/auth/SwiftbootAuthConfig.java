@@ -6,24 +6,25 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.AuthFilter;
+import org.swiftboot.auth.interceptor.UserSessionArgumentResolver;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.auth.service.impl.MockSessionServiceImpl;
 import org.swiftboot.auth.service.impl.SessionServiceRedisImpl;
 import org.swiftboot.service.service.RedisService;
 
+import java.util.List;
+
 /**
- *
  * @author swiftech 2019-05-24
  **/
 @Configuration
 @EnableConfigurationProperties
-public class SwiftbootAuthConfig {
-
-    @Bean
-    public SwiftbootAuthConfigBean swiftbootAuthConfigBean() {
-        return new SwiftbootAuthConfigBean();
-    }
+@Order(2)
+public class SwiftbootAuthConfig implements WebMvcConfigurer {
 
     @Bean
     @ConditionalOnProperty(value = "swiftboot.auth.enabled", havingValue = "true")
@@ -52,6 +53,16 @@ public class SwiftbootAuthConfig {
     @ConditionalOnMissingBean(SessionService.class)
     public SessionService mockSessionService() {
         return new MockSessionServiceImpl();
+    }
+
+    @Bean
+    public UserSessionArgumentResolver userSessionArgumentResolver() {
+        return new UserSessionArgumentResolver();
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(userSessionArgumentResolver());
     }
 
 }
