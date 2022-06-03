@@ -27,6 +27,7 @@
 
 * `BufferedIoUtils` 带有缓存的IO流工具类
 
+* `PreferenceManager` A wrapper of Java Preference class to be easily access preferences.
 
 ### Maven
 

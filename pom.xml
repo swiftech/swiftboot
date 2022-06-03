@@ -13,7 +13,7 @@
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot</artifactId>
     <packaging>pom</packaging>
-    <version>2.2.1</version>
+    <version>2.3</version>
     <description>A rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise</description>
 
     <modules>
@@ -58,7 +58,7 @@
         <jedis.version>3.8.0</jedis.version>
         <json.version>20220320</json.version>
         <h2.version>1.4.200</h2.version>
-        <poi.version>4.1.2</poi.version>
+        <poi.version>5.2.2</poi.version>
         <pdfbox.version>2.0.20</pdfbox.version>
         <pdf2dom.version>1.9</pdf2dom.version>
         <itext.version>5.5.13.1</itext.version>
