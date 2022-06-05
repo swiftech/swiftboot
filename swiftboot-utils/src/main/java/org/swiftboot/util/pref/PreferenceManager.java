@@ -91,7 +91,10 @@ public class PreferenceManager {
     public void savePreference(String key, Object value) {
         if (value == null) return;
         key = absoluteKey(key);
-        if (value instanceof Integer) {
+        if (value instanceof String) {
+            prefs.put(key, (String) value);
+        }
+        else if (value instanceof Integer) {
             prefs.putInt(key, (Integer) value);
         }
         else if (value instanceof Long) {
@@ -102,6 +105,9 @@ public class PreferenceManager {
         }
         else if (value instanceof Double) {
             prefs.putDouble(key, (Double) value);
+        }
+        else if (value instanceof Float) {
+            prefs.putFloat(key, (Float) value);
         }
         else if (value instanceof byte[]) {
             prefs.putByteArray(key, (byte[]) value);
@@ -137,9 +143,7 @@ public class PreferenceManager {
                     }
                 }
             }
-//            else {
-//                prefs.put(key, String.valueOf(value));
-//            }
+            throw new RuntimeException("Not supported class type: " + value.getClass());
         }
     }
 

@@ -57,32 +57,33 @@ class PreferenceManagerTest {
 
     @Test
     void savePreference() {
+        PreferenceManager pm = PreferenceManager.getInstance();
         String key = String.valueOf(System.currentTimeMillis());
         System.out.println("Key: " + key);
         MyStrClass pref = new MyStrClassExt("saved", "preference");
         MyStrClass def = new MyStrClass("default", "value");
-        PreferenceManager.getInstance().savePreference(key, pref);
-        PreferenceManager.getInstance().savePreference(key, null); // null shouldn't work
+        pm.savePreference(key, pref);
+        pm.savePreference(key, null); // null shouldn't work
 
-        MyStrClass myStrClass = PreferenceManager.getInstance().getPreference(key, MyStrClass.class);
+        MyStrClass myStrClass = pm.getPreference(key, MyStrClass.class);
         Assertions.assertEquals("saved", myStrClass.getParam1());
         Assertions.assertEquals("preference", myStrClass.getParam2());
 
         // test not exist key
-        myStrClass = PreferenceManager.getInstance().getPreference("no_exist_key", MyStrClass.class);
+        myStrClass = pm.getPreference("no_exist_key", MyStrClass.class);
         Assertions.assertNull(myStrClass);
 
         // test default value
-        myStrClass = (MyStrClass) PreferenceManager.getInstance().getPreference("no_exist_key", def);
+        myStrClass = (MyStrClass) pm.getPreference("no_exist_key", def);
         Assertions.assertEquals(myStrClass, def);
         Assertions.assertSame(myStrClass, def);
 
         // test default value
-        myStrClass = PreferenceManager.getInstance().getPreference("no_exist_key", MyStrClass.class, def);
+        myStrClass = pm.getPreference("no_exist_key", MyStrClass.class, def);
         Assertions.assertEquals(myStrClass, def);
         Assertions.assertSame(myStrClass, def);
 
-        PreferenceManager.getInstance().removePreference(key);
+        pm.removePreference(key);
     }
 
     @Test
