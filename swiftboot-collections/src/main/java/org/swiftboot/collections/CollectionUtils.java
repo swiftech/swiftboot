@@ -149,4 +149,22 @@ public class CollectionUtils {
             return collection;
         }
     }
+
+    /**
+     * Whether a collections contains duplicate (by equals) elements.
+     *
+     * @param collection
+     * @return
+     * @param <T>
+     */
+    public static <T> boolean hasDuplicate(Collection<T> collection) {
+        Set<T> hashSet = new HashSet<>();
+        for (T t : collection) {
+            if (hashSet.contains(t)) {
+                return true;
+            }
+            hashSet.add(t);
+        }
+        return false;
+    }
 }

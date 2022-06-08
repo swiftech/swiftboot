@@ -28,7 +28,7 @@ class PreferenceManagerTest {
     @BeforeAll
     public static void setup() {
         PreferenceManager.getInstance(PreferenceManagerTest.class);
-        PreferenceManager.getInstance().addConverter(MyStrClass.class, new StringConverter<MyStrClass>() {
+        PreferenceManager.getInstance().setConverter(MyStrClass.class, new StringConverter<MyStrClass>() {
             @Override
             public MyStrClass deserialize(String prefString) {
                 String[] split = StringUtils.split(prefString, ",");
@@ -41,7 +41,7 @@ class PreferenceManagerTest {
             }
 
         });
-        PreferenceManager.getInstance().addConverter(MyIntClass.class, new IntegerConverter<MyIntClass>() {
+        PreferenceManager.getInstance().setConverter(MyIntClass.class, new IntegerConverter<MyIntClass>() {
             @Override
             public MyIntClass deserialize(Integer prefValue) {
                 return new MyIntClass(prefValue.byteValue());

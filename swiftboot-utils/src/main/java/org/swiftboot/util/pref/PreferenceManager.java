@@ -1,10 +1,11 @@
 package org.swiftboot.util.pref;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -16,6 +17,8 @@ import java.util.prefs.Preferences;
  * @since 2.3
  */
 public class PreferenceManager {
+
+    private final static Logger log = LoggerFactory.getLogger(PreferenceManager.class);
 
     /**
      * Class that identifies the application.
@@ -56,7 +59,7 @@ public class PreferenceManager {
             if (ownerClass == null) {
                 ownerClass = PreferenceManager.class;
             }
-            System.out.println("Initialize preference for class: " + ownerClass);
+            log.info("Initialize preference for class: " + ownerClass);
             instance = new PreferenceManager(ownerClass);
         }
         return instance;
@@ -80,8 +83,17 @@ public class PreferenceManager {
      * @param clazz
      * @param converter
      */
-    public void addConverter(Class clazz, Converter converter) {
+    public void setConverter(Class clazz, Converter converter) {
         converterMap.put(clazz, converter);
+    }
+
+    /**
+     * Remove converter for class.
+     *
+     * @param clazz
+     */
+    public void removeConverter(Class clazz) {
+        converterMap.remove(clazz);
     }
 
     /**
@@ -112,15 +124,12 @@ public class PreferenceManager {
         else if (value instanceof byte[]) {
             prefs.putByteArray(key, (byte[]) value);
         }
-        else if (value instanceof List) {
-            prefs.put(key, StringUtils.join((List) value, ","));
-        }
         else {
             for (Class c : converterMap.keySet()) {
                 if (c.isAssignableFrom(value.getClass())) {
                     Converter converter = converterMap.get(c);
                     Class saveAs = converter.getSaveAs();
-                    System.out.println("Save as: " + saveAs);
+                    log.info(String.format("Save %s as: %s", value.getClass(), saveAs));
                     Object serialized = converter.serialize(value);
                     if (saveAs == String.class) {
                         prefs.put(key, (String) serialized);

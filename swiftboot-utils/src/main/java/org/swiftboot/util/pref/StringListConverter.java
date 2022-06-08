@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Converter for string list.
+ * Converter for string list, you can create your own implementation.
  *
  * @author allen
  */
