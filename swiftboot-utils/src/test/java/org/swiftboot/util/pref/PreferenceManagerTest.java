@@ -24,6 +24,7 @@ class PreferenceManagerTest {
     static byte[] vbs = vs.getBytes();
     static MyStrClass vms = new MyStrClassExt("my", "pref");
     static MyIntClass vmi = new MyIntClass((byte) 'a');
+    static NotSupportedClass vnsc = new NotSupportedClass();
 
     @BeforeAll
     public static void setup() {
@@ -121,6 +122,7 @@ class PreferenceManagerTest {
         Assertions.assertArrayEquals(new byte[]{}, (byte[]) pm.getPreference("not_exists_key", new byte[]{}));
         Assertions.assertEquals(new MyStrClass("a", "b"), pm.getPreference("not_exists_key", new MyStrClass("a", "b")));
         Assertions.assertEquals(new MyIntClass((byte) 'x'), pm.getPreference("not_exists_key", new MyIntClass((byte) 'x')));
+        Assertions.assertEquals(vnsc, pm.getPreference("not_exists_key", vnsc));
 
         // test default value from fields
         MyPrefClass myPrefClass = new MyPrefClass();
@@ -171,13 +173,13 @@ class PreferenceManagerTest {
         Assertions.assertEquals(vmi, PreferenceManager.getInstance().getPreference(MyIntClass.class.toString(), MyIntClass.class));
 
         // test get preference by key with default value.
-        Assertions.assertEquals(vs, pm.getPreference(String.class.toString(), ""));
+        Assertions.assertEquals(vs, pm.getPreference(String.class.toString(), "xxx"));
         Assertions.assertEquals(vi, pm.getPreference(Integer.class.toString(), Integer.MIN_VALUE));
         Assertions.assertEquals(vl, pm.getPreference(Long.class.toString(), Long.MIN_VALUE));
         Assertions.assertEquals(vf, pm.getPreference(Float.class.toString(), Float.MIN_VALUE));
         Assertions.assertEquals(vd, pm.getPreference(Double.class.toString(), Double.MIN_VALUE));
         Assertions.assertEquals(vb, pm.getPreference(Boolean.class.toString(), Boolean.TRUE));
-        Assertions.assertArrayEquals(vbs, (byte[]) pm.getPreference(byte[].class.toString(), new byte[]{}));
+        Assertions.assertArrayEquals(vbs, pm.getPreference(byte[].class.toString(), new byte[]{}));
         Assertions.assertEquals(vms, pm.getPreference(MyStrClass.class.toString(), new MyStrClass()));
         Assertions.assertEquals(vmi, PreferenceManager.getInstance().getPreference(MyIntClass.class.toString(), MyIntClass.class, new MyIntClass()));
 
@@ -299,5 +301,9 @@ class PreferenceManagerTest {
         byte[] vbs = PreferenceManagerTest.vbs;
         boolean vb = PreferenceManagerTest.vb;
         String vs = PreferenceManagerTest.vs;
+    }
+
+    private static class NotSupportedClass implements Serializable {
+        String foobar;
     }
 }

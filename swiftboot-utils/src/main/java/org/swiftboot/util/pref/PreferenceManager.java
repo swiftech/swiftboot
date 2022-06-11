@@ -129,7 +129,7 @@ public class PreferenceManager {
                 if (c.isAssignableFrom(value.getClass())) {
                     Converter converter = converterMap.get(c);
                     Class saveAs = converter.getSaveAs();
-                    log.info(String.format("Save %s as: %s", value.getClass(), saveAs));
+                    log.trace(String.format("Save %s as: %s", value.getClass(), saveAs));
                     Object serialized = converter.serialize(value);
                     if (saveAs == String.class) {
                         prefs.put(key, (String) serialized);
@@ -371,28 +371,32 @@ public class PreferenceManager {
      * @param <T>
      * @return
      */
-    public <T> Object getPreference(String key, T def) {
+    public <T> T getPreference(String key, T def) {
         if (def == null) {
             throw new RuntimeException(String.format("default value for %s can't be null", key));
         }
         key = absoluteKey(key);
+        T val = null;
         if (def instanceof Integer) {
-            return prefs.getInt(key, (Integer) def);
+            val = (T) Integer.valueOf(prefs.getInt(key, (Integer) def));
         }
         else if (def instanceof Long) {
-            return prefs.getLong(key, (Long) def);
+            val = (T) Long.valueOf(prefs.getLong(key, (Long) def));
         }
         else if (def instanceof Boolean) {
-            return prefs.getBoolean(key, (Boolean) def);
+            val = (T) Boolean.valueOf(prefs.getBoolean(key, (Boolean) def));
         }
         else if (def instanceof Float) {
-            return prefs.getFloat(key, (Float) def);
+            val = (T) Float.valueOf(prefs.getFloat(key, (Float) def));
         }
         else if (def instanceof Double) {
-            return prefs.getDouble(key, (Double) def);
+            val = (T) Double.valueOf(prefs.getDouble(key, (Double) def));
         }
         else if (def instanceof byte[]) {
-            return prefs.getByteArray(key, (byte[]) def);
+            val = (T) prefs.getByteArray(key, (byte[]) def);
+        }
+        else if (def instanceof String) {
+            val = (T) prefs.get(key, (String) def);
         }
         else {
             for (Class clazz : converterMap.keySet()) {
@@ -401,27 +405,30 @@ public class PreferenceManager {
                     Class saveAs = converter.getSaveAs();
                     if (saveAs == String.class) {
                         String s = prefs.get(key, null);
-                        return s == null ? def : (T) converter.deserialize(s);
+                        val = s == null ? def : (T) converter.deserialize(s);
                     }
                     else if (saveAs == Integer.class) {
                         int v = prefs.getInt(key, Integer.MIN_VALUE);
-                        return v == Integer.MIN_VALUE ? def : (T) converter.deserialize(Integer.valueOf(v));
+                        val = v == Integer.MIN_VALUE ? def : (T) converter.deserialize(Integer.valueOf(v));
                     }
                     else if (saveAs == Long.class) {
                         long v = prefs.getLong(key, Long.MIN_VALUE);
-                        return v == Long.MIN_VALUE ? def : (T) converter.deserialize(Long.valueOf(v));
+                        val = v == Long.MIN_VALUE ? def : (T) converter.deserialize(Long.valueOf(v));
                     }
                     else if (saveAs == byte[].class) {
                         byte[] v = prefs.getByteArray(key, null);
-                        return v == null ? def : (T) converter.deserialize(v);
+                        val = v == null ? def : (T) converter.deserialize(v);
                     }
                     else {
                         throw new RuntimeException(String.format("Can't get preference as data type %s", saveAs));
                     }
                 }
             }
-            return prefs.get(key, String.valueOf(def));
         }
+        if (val == null) {
+            return def;
+        }
+        return (T) val;
     }
 
     public void removePreference(String key) {
