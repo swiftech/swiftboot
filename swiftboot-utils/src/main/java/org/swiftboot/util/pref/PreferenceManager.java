@@ -206,11 +206,11 @@ public class PreferenceManager {
                     }
                     else if (saveAs == Integer.class) {
                         int v = prefs.getInt(key, Integer.MIN_VALUE);
-                        val = v == Integer.MIN_VALUE ? field.getInt(target) : (T) converter.deserialize(Integer.valueOf(v));
+                        val = v == Integer.MIN_VALUE ? field.get(target) : (T) converter.deserialize(Integer.valueOf(v));
                     }
                     else if (saveAs == Long.class) {
                         long v = prefs.getLong(key, Long.MIN_VALUE);
-                        val = v == Long.MIN_VALUE ? field.getLong(target) : (T) converter.deserialize(v);
+                        val = v == Long.MIN_VALUE ? field.get(target) : (T) converter.deserialize(v);
                     }
                     else if (saveAs == byte[].class) {
                         byte[] v = prefs.getByteArray(key, null);
@@ -310,7 +310,7 @@ public class PreferenceManager {
      */
     public <T> T getPreference(String key, Class<T> clazz) {
         key = absoluteKey(key);
-        Object val = null;
+        T val = null;
         if (clazz == Integer.class || clazz == int.class) {
             val = (T) Integer.valueOf(prefs.getInt(key, Integer.MIN_VALUE));
         }
@@ -431,7 +431,7 @@ public class PreferenceManager {
         if (val == null) {
             return def;
         }
-        return (T) val;
+        return val;
     }
 
     public void removePreference(String key) {
