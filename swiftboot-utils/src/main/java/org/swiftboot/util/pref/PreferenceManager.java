@@ -84,6 +84,9 @@ public class PreferenceManager {
      * @param converter
      */
     public void setConverter(Class clazz, Converter converter) {
+        if (converterMap.containsKey(clazz)) {
+            throw new RuntimeException(String.format("Converter for class type %s already exists", clazz));
+        }
         converterMap.put(clazz, converter);
     }
 
