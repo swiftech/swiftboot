@@ -170,6 +170,12 @@ public class PreferenceManager {
      * @throws IllegalAccessException
      */
     public <T> T getPreference(String key, Field field, Object target) throws IllegalAccessException {
+        if (field == null) {
+            throw new RuntimeException("field can't be null");
+        }
+        if (target == null) {
+            throw new RuntimeException("target object can't be null");
+        }
         key = absoluteKey(key);
         Class<T> clazz = (Class<T>) field.getType();
         field.setAccessible(true);
@@ -239,6 +245,9 @@ public class PreferenceManager {
      * @return
      */
     public <T> T getPreference(String key, Class<T> clazz, T defaultValue) {
+        if (clazz == null) {
+            throw new RuntimeException("class type can't be null");
+        }
         if (defaultValue == null) {
             throw new RuntimeException(String.format("default value for %s can't be null", key));
         }
@@ -309,6 +318,9 @@ public class PreferenceManager {
      * @return
      */
     public <T> T getPreference(String key, Class<T> clazz) {
+        if (clazz == null) {
+            throw new RuntimeException("class type can't be null");
+        }
         key = absoluteKey(key);
         T val = null;
         if (clazz == Integer.class || clazz == int.class) {

@@ -152,6 +152,7 @@ class PreferenceManagerTest {
         pm.savePreference(MyIntClass.class.toString(), vmi);
 
         // test get preference by key and class type.
+        Assertions.assertThrows(Exception.class, ()-> pm.getPreference(Object.class.toString(), null));
         Assertions.assertEquals(vs, pm.getPreference(String.class.toString(), String.class));
         Assertions.assertEquals(vi, pm.getPreference(Integer.class.toString(), Integer.class));
         Assertions.assertEquals(vl, pm.getPreference(Long.class.toString(), Long.class));
