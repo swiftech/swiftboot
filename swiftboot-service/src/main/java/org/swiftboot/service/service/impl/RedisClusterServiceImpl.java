@@ -207,7 +207,7 @@ public class RedisClusterServiceImpl implements RedisService {
     }
 
     @Override
-    public Set<String> zrevrange(String key, long start, long end) {
+    public List<String> zrevrange(String key, long start, long end) {
         return redisCluster.zrevrange(key, start, end);
     }
 

@@ -259,7 +259,7 @@ public interface RedisService {
      * @param end
      * @return
      */
-    Set<String> zrevrange(final String key, final long start, final long end);
+    List<String> zrevrange(final String key, final long start, final long end);
 
     /**
      * 向名称为key的set中添加元素member

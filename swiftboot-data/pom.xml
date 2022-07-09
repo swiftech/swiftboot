@@ -41,6 +41,11 @@
             <version>${spring.boot.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -125,7 +130,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.22</version>
+            <version>8.0.29</version>
             <scope>test</scope>
         </dependency>
         <dependency>
