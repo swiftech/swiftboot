@@ -1,7 +1,5 @@
-2.1.1
+v2.1.1
 * `[web]` 修复自定义验证器没有加载资源的bug
-
-2.1 (2021-09-30)
 * `[data]` 增加逻辑删除的 JPA 扩展接口。
 * `[data]` 增加 `InterceptorLoader` 用于加载用户自定义的 Hibernate 拦截器
 * `[data]` 修复了自动填充 ID 时子对象重复填充的bug。
