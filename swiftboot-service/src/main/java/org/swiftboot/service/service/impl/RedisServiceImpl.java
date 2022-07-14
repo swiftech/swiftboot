@@ -348,7 +348,7 @@ public class RedisServiceImpl implements RedisService {
         }
     }
 
-    public Set<String> zrevrange(final String key, final long start, final long end) {
+    public List<String> zrevrange(final String key, final long start, final long end) {
         try (Jedis jedis = getJedis()) {
             return jedis.zrevrange(key, start, end);
         } catch (Exception e) {
