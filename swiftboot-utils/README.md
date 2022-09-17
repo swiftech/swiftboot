@@ -29,6 +29,7 @@
 
 * `PreferenceManager` A wrapper of Java Preference class to be easily access preferences.
 
+* `ElapsedTime` to calculate elapsed time in milliseconds
 ### Maven
 
 ```xml
@@ -36,7 +37,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-utils</artifactId>
-		<version>2.2.1</version>
+		<version>2.3</version>
 	</dependency>
 </dependencies>
 
