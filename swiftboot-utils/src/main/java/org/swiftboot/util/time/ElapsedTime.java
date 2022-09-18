@@ -2,12 +2,10 @@ package org.swiftboot.util.time;
 
 /**
  * Calculate elapsed time since start() method called.
- *
  */
 public class ElapsedTime {
 
     protected long startTime = 0L;
-    protected long cutoffTime = 0L;
 
     /**
      * Start to timing.
@@ -31,6 +29,6 @@ public class ElapsedTime {
      * Get elapsed time since started.
      */
     public long getElapsedTime() {
-        return System.currentTimeMillis() - this.startTime;
+        return Math.max(System.currentTimeMillis() - this.startTime, 0L);
     }
 }
