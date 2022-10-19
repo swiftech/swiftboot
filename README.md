@@ -1,6 +1,6 @@
 # SwiftBoot
 
-A rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise
+A lightweight rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise
 
 基于 Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
 
@@ -48,21 +48,32 @@ A rapid development framework based on Spring Boot, Spring MVC and Spring Data f
 
 ### 版本
 
-* Development: v2.3
-  * Dependencies upgrade, includes SpringBoot, Spring Hibernate, Jedis etc.
-  * Add wrapper class PreferenceManager for java preferences. 
+##### Development: v2.3
 
-* Stable：v2.2.1
+* Dependencies upgrade, includes:
+  * SpringBoot 2.6.11
+  * SpringDataJPA 2.7.2
+  * Hibernate 5.6.11.Final
+  * Jedis 4.2.3
+  * etc.
+* Add wrapper class PreferenceManager for java preferences. 
+* Add PreferenceManager class to enhance the management for Java preferences.
+* Update redis client dependencies and RedisService's implementation;
+* Add new TextUtils class for advanced indexing in text.
+* Add ElapsedTime class for calculating time elapsing.
+
+##### Stable：v2.2.1
+
   Update:
-  * add Tree class to collections.
-  * add missing error msg translating for AuthFilter
-  * change the way to implement user authentication.
-  * return user token through http response header instead of response body.
-  * add parameterized error message support to HttpResponse object.
-  * add parameterized error message support for user-defined validators. 
-  * refactored the error code support.
-  * re-implement the translating from error code to message by response advice. 
-  * phone number validator supports parameterized error message.
+* add Tree class to collections.
+* add missing error msg translating for AuthFilter
+* change the way to implement user authentication.
+* return user token through http response header instead of response body.
+* add parameterized error message support to HttpResponse object.
+* add parameterized error message support for user-defined validators. 
+* refactored the error code support.
+* re-implement the translating from error code to message by response advice. 
+* phone number validator supports parameterized error message.
 
 [完整更新记录](changelog.md)
 
