@@ -1,6 +1,6 @@
 # SwiftBoot
 
-A rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise
+A lightweight rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise
 
 基于 Spring Boot，Spring MVC，Spring Data 的企业Web应用快速开发框架。
 
@@ -48,21 +48,32 @@ A rapid development framework based on Spring Boot, Spring MVC and Spring Data f
 
 ### 版本
 
-* 最新版：v2.1
-  更新内容：
-  * `[data]` 增加逻辑删除的 JPA 扩展接口。
-  * `[data]` 增加 `InterceptorLoader` 用于加载用户自定义的 Hibernate 拦截器
-  * `[data]` 修复了自动填充 ID 时子对象重复填充的bug。
-  * `[sheet]` 导出增加多表格支持、复制单元格样式功能、合并单元格功能，修复bug和重构。
-  * `[web]` 废弃 `WebMessageConverter`，不再需要显式声明，简化使用。
-  * `[web]` 新增 `HeaderUtils` 和 `SpringWebUtils` 处理 HTTP 头。
-  * `[auth]` 增加将用户会话信息自动填充至接口参数对象或者变量的功能。
-  * `[auth]` 增加全部清除用户会话的功能。
-  * `[auth]` Mock会话服务增加磁盘存储。
-  * SpringBoot 配置文档化
-  * 修复了一些bug
-  * 大量代码重构和文档更新
-  * SpringBoot 及其他依赖库升级
+##### Development: v2.3
+
+* Dependencies upgrade, includes:
+  * SpringBoot 2.6.11
+  * SpringDataJPA 2.7.2
+  * Hibernate 5.6.11.Final
+  * Jedis 4.2.3
+  * etc.
+* Add wrapper class PreferenceManager for java preferences. 
+* Add PreferenceManager class to enhance the management for Java preferences.
+* Update redis client dependencies and RedisService's implementation;
+* Add new TextUtils class for advanced indexing in text.
+* Add ElapsedTime class for calculating time elapsing.
+
+##### Stable：v2.2.1
+
+  Update:
+* add Tree class to collections.
+* add missing error msg translating for AuthFilter
+* change the way to implement user authentication.
+* return user token through http response header instead of response body.
+* add parameterized error message support to HttpResponse object.
+* add parameterized error message support for user-defined validators. 
+* refactored the error code support.
+* re-implement the translating from error code to message by response advice. 
+* phone number validator supports parameterized error message.
 
 [完整更新记录](changelog.md)
 

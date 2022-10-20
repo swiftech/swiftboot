@@ -5,6 +5,7 @@ import java.io.OutputStream;
 /**
  * @author swiftech
  **/
+@FunctionalInterface
 public interface ConvertCallback {
 
     /**

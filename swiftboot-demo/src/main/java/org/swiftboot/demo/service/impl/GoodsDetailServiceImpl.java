@@ -31,7 +31,7 @@ import java.util.Optional;
 @Service
 public class GoodsDetailServiceImpl implements GoodsDetailService {
 
-    private Logger log = LoggerFactory.getLogger(GoodsDetailServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(GoodsDetailServiceImpl.class);
 
     @Resource
     private GoodsDao goodsDao;

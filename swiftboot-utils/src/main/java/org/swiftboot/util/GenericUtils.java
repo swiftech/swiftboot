@@ -1,7 +1,5 @@
 package org.swiftboot.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 

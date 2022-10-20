@@ -24,6 +24,8 @@ public @interface PhoneNo {
 
     String message() default "{org.swiftboot.constraints.PhoneNo.message}";
 
+    String prefix();
+
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

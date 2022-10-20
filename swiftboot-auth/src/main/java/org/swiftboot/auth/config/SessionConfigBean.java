@@ -38,6 +38,16 @@ public class SessionConfigBean {
      */
     private boolean updateExpireTime = false;
 
+    /**
+     * 启用 Cookie 来传递用户 Token，默认为不启用。
+     */
+    private boolean useCookie = false;
+
+    /**
+     * 设置 Cookie 中用户 Token 的有效路径，默认为 "/"。
+     */
+    private String cookiePath = "/";
+
 
     public String getType() {
         return type;
@@ -77,5 +87,21 @@ public class SessionConfigBean {
 
     public void setUpdateExpireTime(boolean updateExpireTime) {
         this.updateExpireTime = updateExpireTime;
+    }
+
+    public boolean isUseCookie() {
+        return useCookie;
+    }
+
+    public void setUseCookie(boolean useCookie) {
+        this.useCookie = useCookie;
+    }
+
+    public String getCookiePath() {
+        return cookiePath;
+    }
+
+    public void setCookiePath(String cookiePath) {
+        this.cookiePath = cookiePath;
     }
 }

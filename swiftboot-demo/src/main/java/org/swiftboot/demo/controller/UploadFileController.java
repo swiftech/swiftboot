@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/file")
 public class UploadFileController {
 
-    private Logger log = LoggerFactory.getLogger(UploadFileController.class);
+    private final Logger log = LoggerFactory.getLogger(UploadFileController.class);
 
 
     @ApiOperation(notes = "单个文件上传", consumes = "multipart/form-data", value = "单个文件上传")

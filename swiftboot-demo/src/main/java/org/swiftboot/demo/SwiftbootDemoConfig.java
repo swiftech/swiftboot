@@ -50,7 +50,7 @@ public class SwiftbootDemoConfig {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:message");
+        messageSource.setBasenames("classpath:message", "classpath:validation", "classpath:error_message");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

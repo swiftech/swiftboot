@@ -29,9 +29,9 @@ public class AppUserSigninResult extends BasePopulateResult<AppUserEntity> {
     @ApiModelProperty(value = "Sign in success", example = "true")
     private boolean success = false;
 
-    @ApiModelProperty(value = "Token for app user", example = "772eb2add9b64e40972468c779b3b952")
-    @JsonProperty("swiftboot_token")
-    private String token;
+//    @ApiModelProperty(value = "Token for app user", example = "772eb2add9b64e40972468c779b3b952")
+//    @JsonProperty("swiftboot_token")
+//    private String token;
 
 
     /**
@@ -96,11 +96,11 @@ public class AppUserSigninResult extends BasePopulateResult<AppUserEntity> {
         this.success = success;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
+//    public String getToken() {
+//        return token;
+//    }
+//
+//    public void setToken(String token) {
+//        this.token = token;
+//    }
 }

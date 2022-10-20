@@ -7,4 +7,6 @@ swiftboot:
       tokenKey: swiftboot_token
       expiresIn: 1800
       updateExpireTime: true
+      useCookie: true
+      cookiePath: /
 

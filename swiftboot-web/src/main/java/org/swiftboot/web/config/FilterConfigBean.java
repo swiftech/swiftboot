@@ -2,11 +2,9 @@ package org.swiftboot.web.config;
 
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * @author swiftech
+ * @see CorsFilter
  **/
 public class FilterConfigBean {
 
@@ -16,22 +14,6 @@ public class FilterConfigBean {
      */
     boolean cors = false;
 
-    /**
-     * 跨域访问允许的来源
-     * @deprecated
-     */
-    private String corsAllowOrigin = "*";
-
-    /**
-     * 允许的头
-     * @deprecated
-     */
-    private List<String> allowHeaders = new LinkedList<String>() {
-        {
-            add("*");
-        }
-    };
-
     public boolean isCors() {
         return cors;
     }
@@ -40,19 +22,4 @@ public class FilterConfigBean {
         this.cors = cors;
     }
 
-    public String getCorsAllowOrigin() {
-        return corsAllowOrigin;
-    }
-
-    public void setCorsAllowOrigin(String corsAllowOrigin) {
-        this.corsAllowOrigin = corsAllowOrigin;
-    }
-
-    public List<String> getAllowHeaders() {
-        return allowHeaders;
-    }
-
-    public void setAllowHeaders(List<String> allowHeaders) {
-        this.allowHeaders = allowHeaders;
-    }
 }

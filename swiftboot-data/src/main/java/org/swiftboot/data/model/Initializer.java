@@ -179,7 +179,7 @@ public class Initializer implements ApplicationContextAware {
                             log.info(String.format("row finished: %d", rowNow));
                         }
                     });
-                    System.out.println(outBuffer.toString());
+                    System.out.println(outBuffer);
                     FileOutputStream writer = new FileOutputStream(file);
                     writer.write(outBuffer.toString().getBytes());
                     writer.close();

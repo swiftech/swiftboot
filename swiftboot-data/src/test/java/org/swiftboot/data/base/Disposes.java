@@ -5,6 +5,7 @@ package org.swiftboot.data.base;
  *
  * @author allen
  */
+@FunctionalInterface
 public interface Disposes<T> {
 
     /**

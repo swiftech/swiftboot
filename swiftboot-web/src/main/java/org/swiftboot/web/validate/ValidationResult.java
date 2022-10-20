@@ -7,13 +7,16 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.swiftboot.util.AnnotationUtils;
 import org.swiftboot.util.BeanUtils;
-import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.util.JacksonUtils;
+import org.swiftboot.web.util.MessageUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * 表单提交输入验证返回值，出现表单验证错误时创建并填充　HttpResponse　对象。
+ * 表单提交输入验证返回值，出现表单验证错误时创建并填充　{@link org.swiftboot.web.result.HttpResponse}　对象。
  * 可以设置多个输入框对应错误消息（或者错误消息资源代码）
  *
  * @author swiftech
@@ -32,6 +35,9 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
         if (bindingResult.hasErrors()) {
             ValidationResult validationResult = new ValidationResult();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
+                if (objectError == null) {
+                    continue;
+                }
                 String k = getJsonPropertyKeyFromError(bean, objectError.getCodes());
                 FieldError fe = (FieldError) objectError;
                 String fieldDesc;
@@ -48,27 +54,19 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
                 } catch (Exception e) {
                     fieldDesc = k;
                 }
-                validationResult.addErrorMsg(k, fieldDesc + objectError.getDefaultMessage());
-            }
-            return validationResult;
-        }
-        return null;
-    }
 
-    /**
-     * 从校验结果生成可返回客户端的对象
-     *
-     * @param bean          校验的参数对象
-     * @param bindingResult 校验结果对象
-     * @return
-     * @deprecated
-     */
-    public static ValidationResult fromBindingResult(Object bean, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            ValidationResult validationResult = new ValidationResult();
-            for (ObjectError objectError : bindingResult.getAllErrors()) {
-                String k = getJsonPropertyKeyFromError(bean, objectError.getCodes());
-                validationResult.addErrorMsg(k, objectError.getDefaultMessage());
+                String actualMsg;
+                if (objectError.getArguments() != null && objectError.getArguments().length > 1) { // > 1 means there are message arguments.
+                    // handle the user-defined parameterized message;
+                    List<String> argumentList = Arrays.stream(objectError.getArguments()).map(String::valueOf).collect(Collectors.toList());
+                    String[] arguments = argumentList.subList(1, argumentList.size()).toArray(new String[]{}); // first one is not argument.
+                    actualMsg = MessageUtils.concatSentences(fieldDesc,
+                            MessageUtils.instantiateMessage(objectError.getDefaultMessage(), arguments));
+                }
+                else {
+                    actualMsg = MessageUtils.concatSentences(fieldDesc, objectError.getDefaultMessage());
+                }
+                validationResult.addErrorMsg(k, actualMsg);
             }
             return validationResult;
         }
@@ -91,16 +89,6 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
      */
     public void addErrorMsg(String key, String msg) {
         this.add(new InputError(key, msg));
-    }
-
-    /**
-     * 添加一个输入框对应的错误消息代码
-     *
-     * @param key
-     * @param errCode
-     */
-    public void addErrorCode(String key, String errCode) {
-        addErrorMsg(key, ErrorCodeSupport.getErrorMessage(errCode));
     }
 
     /**
@@ -128,14 +116,17 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
         /**
          * 输入　key　值
          */
-        @ApiModelProperty(value = "输入 key 值", example = "content")
+        @ApiModelProperty(value = "Key of Input", example = "content")
         String key;
 
         /**
          * 错误信息
          */
-        @ApiModelProperty(value = "错误信息", example = "长度需要在0和64之间")
+        @ApiModelProperty(value = "Error Message", example = "length must be between 0 and 64")
         String msg;
+
+        public InputError() {
+        }
 
         public InputError(String key, String msg) {
             this.key = key;
@@ -158,6 +149,5 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
             this.msg = msg;
         }
     }
-
 
 }

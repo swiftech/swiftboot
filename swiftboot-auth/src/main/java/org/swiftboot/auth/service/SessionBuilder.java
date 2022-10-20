@@ -12,6 +12,13 @@ import java.util.Map;
  * @see Session
  */
 public class SessionBuilder {
+
+    /**
+     * The user token here is used for {@link org.swiftboot.auth.interceptor.UserSessionResponseAdvice} to read.
+     *
+     */
+    private String userToken;
+
     /**
      * 会话分组名称，如果不提供，会话会被分配到默认的分组
      */
@@ -33,6 +40,11 @@ public class SessionBuilder {
     private Long expireTime;
 
     private final Map<String, Object> additions = new HashMap<>();
+
+    public SessionBuilder userToken(String userToken) {
+        this.userToken = userToken;
+        return this;
+    }
 
     public SessionBuilder group(String group) {
         this.group = group;
@@ -62,7 +74,7 @@ public class SessionBuilder {
     }
 
     public Session createSession() {
-        Session ret = new Session(group, userId, userName, expireTime);
+        Session ret = new Session(userToken, group, userId, userName, expireTime);
         if (!this.additions.isEmpty()) {
             ret.setAdditions(this.additions);
         }

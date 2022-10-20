@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  **/
 class FooBarBean {
 
-    private String field1 = "field1";
+    private final String field1 = "field1";
 
     @JsonIgnore
-    private String field2 = "field2";
+    private final String field2 = "field2";
 }

@@ -9,18 +9,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.controller.AuthenticatedResponse;
+import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.demo.command.AppUserSigninCommand;
 import org.swiftboot.demo.result.AppUserSigninResult;
-import org.swiftboot.demo.service.AppUserService;
 import org.swiftboot.web.result.HttpResponse;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 
 /**
- * 管理员
+ * App 用户认证接口
  *
  * @author swiftech 2020-02-05
  **/
@@ -33,23 +31,19 @@ public class AppUserController {
     private final Logger log = LoggerFactory.getLogger(AppUserController.class);
 
     @Resource
-    private AppUserService appUserService;
+    private UserAuthService userAuthService;
 
-    @Resource
-    private SwiftbootAuthConfigBean authConfigBean;
-
-    @ApiOperation(notes = "App user signin", value = "App user signin")
+    @ApiOperation(notes = "App user sign in", value = "App user sign in")
     @RequestMapping(value = "signin", method = RequestMethod.POST)
     public HttpResponse<AppUserSigninResult> appUserSign(
-            @RequestBody AppUserSigninCommand command,
-            HttpServletResponse response) {
+            @RequestBody AppUserSigninCommand command) {
         log.info("> /app/user/signin");
-        AppUserSigninResult appUserSigninResult = appUserService.appUserSignin(command);
-        Cookie cookie = new Cookie(authConfigBean.getSession().getTokenKey(), appUserSigninResult.getToken());
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return new HttpResponse<>(appUserSigninResult);
+        AuthenticatedResponse<AppUserSigninResult> response = userAuthService.userSignIn(command.getLoginName(), command.getLoginPwd());
+        AppUserSigninResult appUserSigninResult = new AppUserSigninResult();
+        appUserSigninResult.setId(response.getUserSession().getUserId());
+        appUserSigninResult.setLoginName(response.getUserSession().getUserName());
+        response.setResult(appUserSigninResult);
+        return response;
     }
-
 
 }

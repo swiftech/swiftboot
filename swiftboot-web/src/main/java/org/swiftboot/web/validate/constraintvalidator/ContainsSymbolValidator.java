@@ -20,9 +20,6 @@ public class ContainsSymbolValidator implements ConstraintValidator<ContainsSymb
 
     @Override
     public boolean isValid(String pwd, ConstraintValidatorContext constraintValidatorContext) {
-        if (!StringUtils.containsAny(pwd, ";',./~!@#$%^&*()_+|{}:\"<>?[]")) {
-            return false;
-        }
-        return true;
+        return StringUtils.containsAny(pwd, ";',./~!@#$%^&*()_+|{}:\"<>?[]");
     }
 }

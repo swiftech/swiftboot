@@ -142,6 +142,9 @@ public class SwiftbootShiroConfig {
         shiroFilterFactoryBean.setFilters(filterMap);
         shiroFilterFactoryBean.setLoginUrl(swiftbootShiroConfigBean.getLoginUrl());
         shiroFilterFactoryBean.setSuccessUrl(swiftbootShiroConfigBean.getSuccessUrl());
+        for (String m : filterMap.keySet()) {
+            System.out.printf("register filter: %s-%s%n", m, filterMap.get(m));
+        }
         return shiroFilterFactoryBean;
     }
 

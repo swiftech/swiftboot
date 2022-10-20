@@ -18,24 +18,24 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * 将验证结果转换为 JSON 格式，包含原始的 key 对应 的错误消息
- * 在控制器方法有 BindingResult 参数的时候
+ * 在控制器方法有 {@link BindingResult} 参数的时候有效。
  *
  * @author swiftech
  */
 @Aspect
 @Component
 public class ValidateResultAspect {
-    private static Logger log = getLogger(ValidateResultAspect.class);
+    private static final Logger log = getLogger(ValidateResultAspect.class);
 
     /**
-     * 切入带有 ConvertValidateResult 注解的方法
+     * 切入带有 {@link ConvertValidateResult} 注解的方法
      */
     @Pointcut("@annotation(org.swiftboot.web.validate.ConvertValidateResult)")
     private void annotatedMethod() {
     }
 
     /**
-     * 切入带有 ConvertValidateResult 注解的类
+     * 切入带有 {@link ConvertValidateResult} 注解的类
      */
     @Pointcut("@within(org.swiftboot.web.validate.ConvertValidateResult)")
     private void annotatedClass() {
@@ -43,7 +43,7 @@ public class ValidateResultAspect {
 
     @Before("annotatedMethod() || annotatedClass()")
     public void process(JoinPoint joinPoint) {
-        log.debug("@ConvertValidateResult ...");
+        log.trace("validate arguments ...");
         Object[] args = joinPoint.getArgs();
         Object result = ArrayUtils.getFirstMatch(args, BindingResult.class);
         if (result != null) {
@@ -53,11 +53,11 @@ public class ValidateResultAspect {
             if (!allErrors.isEmpty()) {
                 ValidationResult validationResult =
                         ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
-                throw new ValidationException("参数验证不通过", validationResult);
+                throw new ValidationException("Arguments validation failed", validationResult);
             }
         }
         else {
-            log.debug("没有验证错误");
+            log.debug("No arguments to be validated.");
         }
     }
 

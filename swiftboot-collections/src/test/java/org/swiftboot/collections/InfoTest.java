@@ -15,7 +15,7 @@ public class InfoTest {
     public void test() {
         Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
         System.out.println(Info.get(QueueMap.class, R.QUEUE_SIZE_NOT_MATCH2));
-        System.out.println(Info.get(CollectionUtils.class, R.COLLECTION_TYPE_NOT_SUPPORTED1));;
-        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));;
+        System.out.println(Info.get(CollectionUtils.class, R.COLLECTION_TYPE_NOT_SUPPORTED1));
+        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));
     }
 }

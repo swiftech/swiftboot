@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  */
 public class CaptchaServiceImpl implements CaptchaService {
 
-    private Logger log = org.slf4j.LoggerFactory.getLogger(CaptchaServiceImpl.class);
+    private final Logger log = org.slf4j.LoggerFactory.getLogger(CaptchaServiceImpl.class);
 
     @Resource
     private RedisService redisService;

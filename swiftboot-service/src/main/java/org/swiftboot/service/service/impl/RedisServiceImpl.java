@@ -23,7 +23,7 @@ import java.util.Set;
  */
 public class RedisServiceImpl implements RedisService {
 
-    private Logger log = LoggerFactory.getLogger(RedisServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(RedisServiceImpl.class);
 
     private JedisPool jedisPool;
 
@@ -348,7 +348,7 @@ public class RedisServiceImpl implements RedisService {
         }
     }
 
-    public Set<String> zrevrange(final String key, final long start, final long end) {
+    public List<String> zrevrange(final String key, final long start, final long end) {
         try (Jedis jedis = getJedis()) {
             return jedis.zrevrange(key, start, end);
         } catch (Exception e) {
@@ -423,10 +423,7 @@ public class RedisServiceImpl implements RedisService {
                 return true;
             }
             exValue = jedis.setex(key, seconds, value);
-            if (exValue == null || !exValue.equals("OK")) {
-                return false;
-            }
-            return true;
+            return exValue != null && exValue.equals("OK");
         } catch (Exception e) {
             return false;
         }

@@ -120,6 +120,7 @@ public class ZipUtils {
     /**
      * 读取文件部分内容
      */
+    @FunctionalInterface
     public interface ZipBuffer {
         void onReadBuffer(ZipEntry zipEntry, byte[] buffer);
     }
@@ -127,6 +128,7 @@ public class ZipUtils {
     /**
      * 完整读取文件内容
      */
+    @FunctionalInterface
     public interface ZipReader {
         void onInputStream(ZipEntry zipEntry, InputStream ins) throws Exception;
     }
@@ -134,6 +136,7 @@ public class ZipUtils {
     /**
      * 一个文件读取完成
      */
+    @FunctionalInterface
     public interface OneFileCompleted {
         void onCompleted(ZipEntry zipEntry);
     }

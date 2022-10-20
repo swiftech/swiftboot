@@ -1,8 +1,6 @@
 package org.swiftboot.demo.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.swiftboot.demo.command.AppUserSigninCommand;
-import org.swiftboot.demo.result.AppUserSigninResult;
 
 /**
  * 管理员服务接口
@@ -11,14 +9,6 @@ import org.swiftboot.demo.result.AppUserSigninResult;
  **/
 @Transactional
 public interface AppUserService {
-
-    /**
-     * App user signin
-     *
-     * @param command
-     * @return
-     */
-    AppUserSigninResult appUserSignin(AppUserSigninCommand command);
 
 
 }

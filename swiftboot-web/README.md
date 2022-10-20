@@ -32,7 +32,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>2.1</version>
+    <version>2.2.1</version>
   </dependency>
   ```
 
@@ -41,6 +41,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 ### 配置
 
 * 配置
+
 
   ```java
   @Configuration
@@ -115,6 +116,52 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 
 > `@ResponseBody` 注解会把接口方法返回的 `HttpResponse` 对象及其内嵌的对象一起转换成 JSON 格式返回给访问接口的客户端。
 
+
+* 错误处理
+
+构造 `HttpResponse` 可以将错误代码传入，`ErrorCodeSupport` 这个类提供了一些常见的错误代码（从 3000 开始）。例如：
+
+```java
+return new HttpResponse(ErrorCodeSupport.CODE_PARAMS_ERROR); // 返回 '输入参数错误' 给客户端
+```
+
+```json
+{
+  "code": "4001",
+  "msg": "输入参数错误"
+}
+```
+
+> 如果需要改变错误信息输出，那么可以传入第二个参数： `new HttpResponse(ErrorCodeSupport.CODE_PARAMS_ERROR, "我的错误信息");`，
+> 如果资源存在参数化：`new ResponseBuilder<Void>().code(ErrorCodeSupport.CODE_PARAMS_ERROR).msg("我的错误信息: {0} {1}").msgParams("参数0", "参数1"")";`
+> `ResponseBuilder` 也可以创建非参数化的 `HttpResponse`
+
+如果需要自定义错误代码，那么实现一个 Bean，将错误代码定义以静态字符串变量放入这个 Bean 中，变量名需要以 `CODE_` 开头，并在启动时进行加载，例如：
+
+```java
+@Component
+public class ErrorCode {
+
+    public static final String CODE_MY_ERR_CODE1 = "4000";
+    public static final String CODE_MY_ERR_CODE2 = "4001";
+
+    @Resource
+    private ErrorCodeSupport errorCodeSupport;
+
+    @PostConstruct
+    public void init() {
+        try {
+            errorCodeSupport.loadFromClass(this.getClass());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+> 为了不和默认的 code 冲突，自定义的错误代码取值从4000开始
+
+
 * 统一 API 异常处理
 
   控制器中抛出的异常直接抛出会使得客户端的错误处理非常不友好，而通过代码去捕获即繁琐又容易遗留，SwiftBoot 实现了控制器增强 `ExceptionProcessor`，他将异常信息以统一的 `JSON` 格式输出给客户端，配置方法如下：
@@ -149,7 +196,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
 * 输入参数验证
 
 
-  除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 `JSON` 输出格式。（自动从 Command 对象的注解中获取到参数对应的描述信息）
+  除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 `JSON` 输出格式。（自动从 Command 对象的 `ApiModelProperty` 注解中获取到参数对应的描述信息）
   配置：
   ```java
   @Bean
@@ -168,10 +215,6 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
   public class OrderController {
   }
   ```
-
-* 错误处理
-
-接口
 
 * HTTP 头处理
 

@@ -29,7 +29,7 @@ public class ExcelExporter extends BaseExporter {
 
     private final Logger log = LoggerFactory.getLogger(ExcelExporter.class);
 
-    private ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
+    private final ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
 
     public ExcelExporter(String fileType) {
         super(fileType);

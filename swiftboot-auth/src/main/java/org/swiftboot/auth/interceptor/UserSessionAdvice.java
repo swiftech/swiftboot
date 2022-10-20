@@ -46,7 +46,7 @@ public class UserSessionAdvice extends RequestBodyAdviceAdapter {
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         if (log.isTraceEnabled()) log.trace("SessionAdvice.afterBodyRead()");
         if (log.isTraceEnabled()) log.trace("Handle command: " + body.getClass());
-        BaseAuthenticatedCommand command = (BaseAuthenticatedCommand) body;
+        BaseAuthenticatedCommand<?> command = (BaseAuthenticatedCommand<?>) body;
         System.out.println(JsonUtils.object2PrettyJson(command));
 
         String tokenKey = configBean.getSession().getTokenKey();

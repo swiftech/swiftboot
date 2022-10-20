@@ -26,7 +26,7 @@ swiftboot:
     filter:
       cors: true
     validation:
-      resultInJson: false
+      resultInJson: true
   data:
     model:
       autoGenerateId: true
@@ -46,3 +46,5 @@ swiftboot:
       group: swiftboot_session
       tokenKey: swiftboot_token
       expiresIn: 0
+      useCookie: false
+      cookiePath: /

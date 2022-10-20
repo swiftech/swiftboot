@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.demo.command.SessionCommand;
+import org.swiftboot.demo.command.HttpHeaderCommand;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ConvertValidateResult;
@@ -29,7 +29,7 @@ public class HttpHeaderController {
     public
     @ResponseBody
     HttpResponse<Void> httpHeaderPost(
-            @RequestBody @Validated @ApiParam("会话") SessionCommand command) {
+            @RequestBody @Validated @ApiParam("会话") HttpHeaderCommand command) {
         log.info("> /http/header/post");
         log.debug(JsonUtils.object2PrettyJson(command));
         return new HttpResponse<>();

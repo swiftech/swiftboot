@@ -17,7 +17,7 @@ public class CsvReaderTest {
 
     public static final char QUOTE = '"';
 
-    private StringBuilder CSV_DATA = new StringBuilder();
+    private final StringBuilder CSV_DATA = new StringBuilder();
 
     @BeforeEach
     public void setup() {

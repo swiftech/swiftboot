@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.web.command.BasePopulateCommand;
+import org.swiftboot.web.validate.constraint.DecimalString;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -32,8 +33,14 @@ public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
 
     @ApiModelProperty(value = "商品价格", example = "12.5")
     @JsonProperty("price")
-    @NotNull
     private Double price;
+
+    @ApiModelProperty(value = "商品重量", example = "35.7")
+    @JsonProperty("weight")
+    @Length(max = 32)
+    @NotNull
+    @DecimalString
+    private String weight;
 
     @ApiModelProperty(value = "生产时间", example = "2020-01-16 00:00:00")
     @JsonProperty("production_time")
@@ -97,6 +104,14 @@ public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
      */
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 
     /**

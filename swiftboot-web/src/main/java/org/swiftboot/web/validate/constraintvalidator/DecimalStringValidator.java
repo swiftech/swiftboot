@@ -1,5 +1,6 @@
 package org.swiftboot.web.validate.constraintvalidator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.web.validate.constraint.DecimalString;
 
 import javax.validation.ConstraintValidator;
@@ -20,6 +21,7 @@ public class DecimalStringValidator implements ConstraintValidator<DecimalString
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value.matches("^[0-9]*\\.?[0-9]*$");
+        // this validator doesn't validate 'null' value
+        return value == null || (StringUtils.isNotBlank(value) && value.matches("^[0-9]*\\.?[0-9]*$"));
     }
 }

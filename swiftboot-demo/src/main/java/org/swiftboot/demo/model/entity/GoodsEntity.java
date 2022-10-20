@@ -40,6 +40,10 @@ public class GoodsEntity extends BaseEntity {
     @Column(name = "PRICE", scale = 8, precision = 2)//, columnDefinition = "DOUBLE(8.2) COMMENT '商品价格'")
     private Double price;
 
+    @PropertyDescription(value = "商品重量", example = "35.7")
+    @Column(name = "WEIGHT", length = 32)
+    private String weight;
+
     @PropertyDescription(value = "生产时间", example = "2020-01-16 00:00:00")
     @Column(name = "PRODUCTION_TIME", columnDefinition = "TIMESTAMP COMMENT '生产时间'")
     private LocalDateTime productionTime;
@@ -111,6 +115,14 @@ public class GoodsEntity extends BaseEntity {
      */
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 
     public LocalDateTime getProductionTime() {

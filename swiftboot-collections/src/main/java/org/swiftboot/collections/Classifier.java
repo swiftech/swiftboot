@@ -18,11 +18,11 @@ import java.util.*;
  */
 public final class Classifier<T extends Comparable<T>, E> {
 
-    private Trait<T, E> trait;
-    private Filter<E> filter;
-    private SubCollection<E> subCollectionCreator;
-    private Comparator<T> traitComparator;
-    private Comparator<E> collectionComparator;
+    private final Trait<T, E> trait;
+    private final Filter<E> filter;
+    private final SubCollection<E> subCollectionCreator;
+    private final Comparator<T> traitComparator;
+    private final Comparator<E> collectionComparator;
     private Converter<E, ?> converter; // TODO
 
     public Classifier(Trait<T, E> trait,
@@ -120,6 +120,7 @@ public final class Classifier<T extends Comparable<T>, E> {
      * @param <T>
      * @param <E>
      */
+    @FunctionalInterface
     public interface Trait<T, E> {
         T trait(E e);
     }
@@ -129,6 +130,7 @@ public final class Classifier<T extends Comparable<T>, E> {
      *
      * @param <E>
      */
+    @FunctionalInterface
     public interface Filter<E> {
         /**
          * 返回 true 则保留，返回 false 则过滤掉
@@ -144,10 +146,12 @@ public final class Classifier<T extends Comparable<T>, E> {
      *
      * @param <E>
      */
+    @FunctionalInterface
     public interface SubCollection<E> {
         Collection<E> create();
     }
 
+    @FunctionalInterface
     public interface Converter<S, T> {
         T convert(S s);
     }

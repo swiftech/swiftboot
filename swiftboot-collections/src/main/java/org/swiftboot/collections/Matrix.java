@@ -15,6 +15,34 @@ import java.util.List;
 public class Matrix<E> {
     private List<List<E>> m;
 
+    /**
+     * Create a matrix from a list with all elements.
+     *
+     * @param list
+     * @param col
+     */
+    public Matrix(List<E> list, int col) {
+        m = new ArrayList<>();
+        int rowIdx = 0;
+        int colIdx = 0;
+        for (int i = 0; i < list.size(); i++) {
+            E glyphNode = list.get(i);
+            colIdx = i % col;
+            if (colIdx == 0) {
+                rowIdx = i / col;
+                m.add(rowIdx, new ArrayList<>(col));
+            }
+            List<E> row = m.get(rowIdx);
+            row.add(glyphNode);
+        }
+    }
+
+    /**
+     * Create a fixed size matrix with all null values.
+     *
+     * @param row
+     * @param col
+     */
     public Matrix(int row, int col) {
         m = new ArrayList<>(row);
         for (int i = 0; i < row; i++) {
@@ -24,6 +52,10 @@ public class Matrix<E> {
             }
             m.add(sub);
         }
+    }
+
+    public List<E> getRow(int rowIdx) {
+        return m.get(rowIdx);
     }
 
     public E get(int i, int j) {
