@@ -30,7 +30,8 @@ public class SwiftBootWebCorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
+//                .allowedOrigins("*")
                 .allowedHeaders("*")
                 .allowCredentials(true).maxAge(3000);
     }
