@@ -1,0 +1,44 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: swiftboot-demo
+#  datasource:
+#    driverClassName: org.h2.Driver
+#    url: jdbc:h2:file:./target/swiftboot
+#    initialization-mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    show-sql: false
+    open-in-view: false
+logging:
+  level:
+    root: INFO
+    org.swiftboot: TRACE
+  file:
+    name: /var/log/swiftboot-demo.log
+swiftboot:
+  web:
+    filter:
+      cors: true
+    validation:
+      resultInJson: false
+  data:
+    model:
+      autoGenerateId: true
+      autoUpdateTimeStrategy: on-change
+      initData:
+        enabled: true
+        baseDir: init/
+        fallback: true
+shiro:
+  enabled: false
+  annotations:
+    enabled: false

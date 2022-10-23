@@ -45,13 +45,13 @@
         <junit.version>5.9.0</junit.version>
         <spring.version>5.3.23</spring.version>
         <spring.boot.version>2.6.11</spring.boot.version>
-        <spring.data.version>2.7.2</spring.data.version>
-        <spring.data.jpa.version>2.7.2</spring.data.jpa.version>
+        <spring.data.version>2.7.5</spring.data.version>
+        <spring.data.jpa.version>2.7.5</spring.data.jpa.version>
         <servlet.version>4.0.1</servlet.version>
         <swagger.version>1.6.6</swagger.version>
         <aspectj.version>1.9.9.1</aspectj.version>
         <validation.api.version>2.0.1.Final</validation.api.version>
-        <hibernate.version>5.6.11.Final</hibernate.version>
+        <hibernate.version>5.6.12.Final</hibernate.version>
         <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>
         <hibernate.validator.version>6.2.5.Final</hibernate.validator.version>
 <!--        <shiro.version>1.9.0</shiro.version>-->

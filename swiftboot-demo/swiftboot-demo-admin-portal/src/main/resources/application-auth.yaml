@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: swiftboot-demo-admin-portal
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/swiftboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 12345678
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    show-sql: true
+    open-in-view: false
+logging:
+  level:
+    root: INFO
+    org.swiftboot: DEBUG
+swiftboot:
+  web:
+    filter:
+      cors: true
+    validation:
+      resultInJson: true
+  data:
+    model:
+      autoGenerateId: true
+      autoUpdateTimeStrategy: on-change
+      initData:
+        enabled: true
+        baseDir: init/
+        fallback: true
+  service:
+    redis:
+      host: localhost
+      port: 6379
+  auth:
+    enabled: true
+    session:
+      type: redis
+      group: swiftboot_session
+      tokenKey: swiftboot_token
+      expiresIn: 0
+      useCookie: false
+      cookiePath: /
