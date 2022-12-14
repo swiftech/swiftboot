@@ -55,7 +55,7 @@ public class Info {
     }
 
     /**
-     * Ge information by a tag with params for class
+     * Get information by a tag with params for class
      *
      * @param clazz Class for which you lookup information
      * @param tag   Indicate which information
