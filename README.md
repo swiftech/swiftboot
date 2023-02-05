@@ -50,17 +50,16 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 
 ##### Development: v2.3
 
+* Add wrapper class PreferenceManager to enhance the management for Java preferences.
+* Update redis client dependencies and RedisService's implementation;
+* Add new TextUtils class for advanced indexing in text.
+* Add ElapsedTime class for calculating time elapsing.
 * Dependencies upgrade, includes:
   * SpringBoot 2.6.11
   * SpringDataJPA 2.7.2
   * Hibernate 5.6.11.Final
   * Jedis 4.2.3
   * etc.
-* Add wrapper class PreferenceManager for java preferences. 
-* Add PreferenceManager class to enhance the management for Java preferences.
-* Update redis client dependencies and RedisService's implementation;
-* Add new TextUtils class for advanced indexing in text.
-* Add ElapsedTime class for calculating time elapsing.
 
 ##### Stable：v2.2.1
 

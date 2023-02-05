@@ -1,3 +1,29 @@
+v2.3
+* `[utils]`Add wrapper class PreferenceManager to enhance the management for Java preferences.
+* `[service]`Update redis client dependencies and RedisService's implementation;
+* `[web]`Add new TextUtils class for advanced indexing in text.
+* `[web]`Add ElapsedTime class for calculating time elapsing.
+* Dependencies upgrade, includes:
+    * SpringBoot 2.6.11
+    * SpringDataJPA 2.7.2
+    * Hibernate 5.6.11.Final
+    * Jedis 4.2.3
+    * etc.
+
+v2.2.1
+* Dependencies update
+
+v2.2
+* `[collection]`add Tree class to collections.
+* `[web]`add missing error msg translating for AuthFilter
+* `[web]`change the way to implement user authentication.
+* `[web]`return user token through http response header instead of response body.
+* `[web]`add parameterized error message support to HttpResponse object.
+* `[web]`add parameterized error message support for user-defined validators.
+* `[web]`refactored the error code support.
+* `[web]`re-implement the translating from error code to message by response advice.
+* `[web]`phone number validator supports parameterized error message.
+
 v2.1.1
 * `[web]` 修复自定义验证器没有加载资源的bug
 * `[data]` 增加逻辑删除的 JPA 扩展接口。
