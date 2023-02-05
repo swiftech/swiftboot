@@ -23,7 +23,7 @@
         <java.version>17</java.version>
         <swiftboot.version>2.3</swiftboot.version>
 <!--        <junit.version>5.5.2</junit.version>-->
-        <postgres.version>42.5.0</postgres.version>
+        <postgres.version>42.5.1</postgres.version>
     </properties>
 
     <dependencies>
