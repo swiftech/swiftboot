@@ -178,8 +178,8 @@ public class CollectionUtilsTest {
 
     @Test
     public void hasDuplicate() {
-        List noDupList  = Arrays.asList("a", "b", "c");
-        List dupList  = Arrays.asList("a", "b", "a");
+        List<String> noDupList  = Arrays.asList("a", "b", "c");
+        List<String> dupList  = Arrays.asList("a", "b", "a");
         Assertions.assertFalse(CollectionUtils.hasDuplicate(noDupList));
         Assertions.assertTrue(CollectionUtils.hasDuplicate(dupList));
     }

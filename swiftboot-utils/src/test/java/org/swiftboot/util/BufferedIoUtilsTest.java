@@ -31,7 +31,7 @@ public class BufferedIoUtilsTest {
     public static void main(String[] args) {
         BufferedIoUtilsTest test = new BufferedIoUtilsTest();
         test.testReadRemoteFile();
-        test.testCallback();
+        test.testConsumer();
     }
 
     /**
@@ -54,7 +54,7 @@ public class BufferedIoUtilsTest {
     /**
      * TODO
      */
-    public void testCallback() {
+    public void testConsumer() {
         File outFile = createOutputFile("swiftboot-master.zip");
         try (FileOutputStream fout = new FileOutputStream(outFile)) {
             URL url = new URL(path);
@@ -62,10 +62,14 @@ public class BufferedIoUtilsTest {
             System.out.println("download " + path);
             InputStream inputStream = httpConn.getInputStream();
             FileOutputStream finalFout = fout;
-            BufferedIoUtils.readInputStream(inputStream, 1024,
+            BufferedIoUtils.readFrom(inputStream, 1024,
                     t -> {
                         System.out.println(t.length);
-                        finalFout.write(t);
+                        try {
+                            finalFout.write(t);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     });
             System.out.println("complete: " + outFile);
         } catch (Exception e) {

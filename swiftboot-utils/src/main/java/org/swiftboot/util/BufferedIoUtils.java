@@ -3,6 +3,7 @@ package org.swiftboot.util;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.*;
+import java.util.function.Consumer;
 
 /**
  * 缓存的 IO 工具类，可以处理任何的输入流
@@ -12,14 +13,29 @@ import java.io.*;
 public class BufferedIoUtils {
 
     /**
+     * Read all from input stream as string.
+     *
+     * @param in
+     * @return
+     */
+    public static String readAllAsString(InputStream in) {
+        StringBuffer buf = new StringBuffer();
+        BufferedIoUtils.readFrom(in, 1024, bytes -> {
+            String s = new String(bytes);
+            buf.append(s);
+        });
+        return buf.toString();
+    }
+
+
+    /**
      * 读取输入流数据到缓存并通过回调返回给调用者
      *
      * @param in
      * @param bufSize  缓存大小 256字节 ~ 10K字节
-     * @param callback 读取的字节数组，最大数量为 bufSize
-     * @throws Exception
+     * @param consumer max size is bufSize
      */
-    public static void readInputStream(InputStream in, int bufSize, Callback<byte[]> callback) throws Exception {
+    public static void readFrom(InputStream in, int bufSize, Consumer<byte[]> consumer) {
         int properBufferSize = properBufferSize(bufSize);
         byte[] buf = new byte[properBufferSize];
         BufferedInputStream bin = null;
@@ -28,7 +44,7 @@ public class BufferedIoUtils {
             int read;
             while ((read = bin.read(buf)) != -1) {
                 System.out.println(read);
-                callback.on(ArrayUtils.subarray(buf, 0, read));
+                consumer.accept(ArrayUtils.subarray(buf, 0, read));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,6 +58,25 @@ public class BufferedIoUtils {
                 }
             }
         }
+    }
+
+    /**
+     * 读取输入流数据到缓存并通过回调返回给调用者
+     *
+     * @param in
+     * @param bufSize  缓存大小 256字节 ~ 10K字节
+     * @param callback 读取的字节数组，最大数量为 bufSize
+     * @throws Exception
+     * @deprecated
+     */
+    public static void readInputStream(InputStream in, int bufSize, Callback<byte[]> callback) throws Exception {
+        readFrom(in, bufSize, bytes -> {
+            try {
+                callback.on(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -94,6 +129,7 @@ public class BufferedIoUtils {
      * Generic Callback
      *
      * @author swiftech
+     * @deprecated
      **/
     @FunctionalInterface
     public interface Callback<T> {

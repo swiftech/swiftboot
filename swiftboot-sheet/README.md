@@ -117,8 +117,8 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
     SheetMetaBuilder builder = new SheetMetaBuilder();
     builder
     .items(builder.itemBuilder()
-        .newItem().key("cell_0").from(0, 0).value("This is title 1")) // 直接位置设定设定导出单元格（从0开始）
-        .newItem().key("cell_0").parse("B1").value("This is title 2")) // 表达式设定导出单元格
+        .newItem().key("cell_0").from(0, 0).value("This is title 1") // 直接位置设定设定导出单元格（从0开始）
+        .newItem().key("cell_0").parse("B1").value("This is title 2") // 表达式设定导出单元格
         .newItem().key("line_0").from(1, 0).to(1, 2).value(Arrays.asList("a", "b", "c"))  // 位置设定导出一行数据
         .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))  // 表达式设定导出一列数据
         .newItem().key("picture").parse("A5").value(pictureLoader) // 表达式设定导出图片
@@ -155,7 +155,7 @@ public class SheetEntity {
     builder
     .sheet("sheet 1")
     .items(builder.itemBuilder()
-        .newItem().key("cell_0").from(0, 0)).value("This is title 1"))
+        .newItem().key("cell_0").from(0, 0).value("This is title 1"))
     .sheet("sheet 2")
     .items(builder.itemBuilder()
         .newItem().key("line_0").from(0, 0).to(0, 2).value(Arrays.asList("a", "b", "c"))

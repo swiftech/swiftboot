@@ -147,7 +147,13 @@ public class HttpServletIOUtils {
             }
             out = response.getOutputStream();
             OutputStream finalOut = out;
-            BufferedIoUtils.readInputStream(inputStream, 1024, finalOut::write);
+            BufferedIoUtils.readFrom(inputStream, 1024, b -> {
+                try {
+                    finalOut.write(b);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());

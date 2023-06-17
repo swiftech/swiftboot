@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.12</version>
+        <version>2.7.9</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.swiftboot</groupId>
@@ -23,7 +23,7 @@
         <java.version>17</java.version>
         <swiftboot.version>2.3</swiftboot.version>
 <!--        <junit.version>5.5.2</junit.version>-->
-        <postgres.version>42.5.0</postgres.version>
+        <postgres.version>42.5.1</postgres.version>
     </properties>
 
     <dependencies>
