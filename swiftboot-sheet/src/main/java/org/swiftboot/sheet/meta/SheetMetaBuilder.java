@@ -204,7 +204,7 @@ public class SheetMetaBuilder {
      * @param converter
      * @return
      */
-    public SheetMetaBuilder imageConverter(Function<byte[], ?> converter) {
+    public SheetMetaBuilder imageConverter(Function<Picture, ?> converter) {
         if (sheetId == null) {
             sheetId = SheetId.DEFAULT_SHEET; // be the first sheet (index is 0 and name is 'Sheet 1') if not provides
         }

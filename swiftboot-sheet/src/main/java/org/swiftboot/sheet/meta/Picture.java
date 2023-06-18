@@ -1,7 +1,7 @@
 package org.swiftboot.sheet.meta;
 
 /**
- * Stands for a picture that will be export to Excel sheet.
+ * Stands for a picture that will be import from or export to Excel sheets.
  *
  * @author swiftech
  */
@@ -18,6 +18,11 @@ public class Picture {
      * Data of picture in binary.
      */
     byte[] data;
+
+    /**
+     * used for import only.
+     */
+    String mimeType;
 
     public Picture(int poiPictureType, byte[] data) {
         this.poiPictureType = poiPictureType;
@@ -42,4 +47,12 @@ public class Picture {
         return this;
     }
 
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public Picture setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+        return this;
+    }
 }

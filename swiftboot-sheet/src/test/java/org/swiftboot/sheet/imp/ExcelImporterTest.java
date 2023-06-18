@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
 import org.swiftboot.sheet.meta.BaseCellInfo;
+import org.swiftboot.sheet.meta.Picture;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 import org.swiftboot.util.CryptoUtils;
@@ -112,8 +113,8 @@ class ExcelImporterTest extends BaseImporterTest {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         SheetMeta sheetMeta = builder
                 .withImages()
-                .imageConverter((Function<byte[], String>) bytes -> {
-                    return CryptoUtils.md5(bytes);
+                .imageConverter((Function<Picture, ?>) pic -> {
+                    return CryptoUtils.md5(pic.getData());
                 })
                 .items(builder.itemBuilder()
                 .newItem().key("test-image").from("A6")

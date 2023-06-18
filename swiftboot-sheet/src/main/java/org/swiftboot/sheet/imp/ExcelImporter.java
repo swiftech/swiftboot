@@ -1,11 +1,8 @@
 package org.swiftboot.sheet.imp;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Picture;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
@@ -142,10 +139,12 @@ public class ExcelImporter extends BaseImporter {
                     && j < basePosition.get().getColumn() + colCount) {
                 if (pictureMap.get() != null && pictureMap.get().containsKey(new Position(row.getRowNum(), j))) {
                     Picture picture = pictureMap.get().get(new Position(row.getRowNum(), j));
-                    byte[] picData = picture.getPictureData().getData();
-                    Function<byte[], ?> imageConverter = sheetMeta.getMetaMap().getImageConverter(sheetId.get());
+                    PictureData picData = picture.getPictureData();
+                    org.swiftboot.sheet.meta.Picture p = new org.swiftboot.sheet.meta.Picture(picData.getPictureType(), picData.getData());
+                    p.setMimeType(picData.getMimeType());
+                    Function<org.swiftboot.sheet.meta.Picture, ?> imageConverter = sheetMeta.getMetaMap().getImageConverter(sheetId.get());
                     if (imageConverter != null) {
-                        values.add(imageConverter.apply(picData));
+                        values.add(imageConverter.apply(p));
                     }
                     else {
                         values.add(picData);

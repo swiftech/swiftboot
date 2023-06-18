@@ -20,7 +20,7 @@ public class MetaMap {
      * to indicate that extract images during parsing Excel sheet, for import only.
      */
     boolean withImages = false;
-    Map<SheetId, Function<byte[], ?>> imageConverters = new HashMap<>();
+    Map<SheetId, Function<Picture, ?>> imageConverters = new HashMap<>();
 
     public void setSheetHandler(SheetId id, SheetHandler<? extends SheetInfo> handler) {
         handlers.put(id, handler);
@@ -38,11 +38,11 @@ public class MetaMap {
         this.withImages = withImages;
     }
 
-    public void setImageConverter(SheetId id,Function<byte[], ?> converter) {
+    public void setImageConverter(SheetId id,Function<Picture, ?> converter) {
         this.imageConverters.put(id, converter);
     }
 
-    public Function<byte[], ?> getImageConverter(SheetId id) {
+    public Function<Picture, ?> getImageConverter(SheetId id) {
         return this.imageConverters.get(id);
     }
 
