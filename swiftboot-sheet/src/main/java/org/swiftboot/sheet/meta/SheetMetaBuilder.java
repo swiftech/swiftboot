@@ -9,6 +9,7 @@ import org.swiftboot.util.BeanUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -184,6 +185,30 @@ public class SheetMetaBuilder {
         });
         this.items(itemBuilder);
         this.fields = fields;
+        return this;
+    }
+
+    /**
+     * Enable reading images from Excel sheets.
+     *
+     * @return
+     */
+    public SheetMetaBuilder withImages() {
+        this.metaMap.setWithImages(true);
+        return this;
+    }
+
+    /**
+     * Converters to convert image data form Excel sheets into any format you want.
+     *
+     * @param converter
+     * @return
+     */
+    public SheetMetaBuilder imageConverter(Function<byte[], ?> converter) {
+        if (sheetId == null) {
+            sheetId = SheetId.DEFAULT_SHEET; // be the first sheet (index is 0 and name is 'Sheet 1') if not provides
+        }
+        this.metaMap.setImageConverter(this.sheetId, converter);
         return this;
     }
 

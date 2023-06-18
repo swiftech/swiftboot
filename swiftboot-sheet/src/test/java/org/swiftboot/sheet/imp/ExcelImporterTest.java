@@ -10,11 +10,13 @@ import org.swiftboot.sheet.excel.ExcelCellInfo;
 import org.swiftboot.sheet.meta.BaseCellInfo;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
+import org.swiftboot.util.CryptoUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -96,11 +98,44 @@ class ExcelImporterTest extends BaseImporterTest {
                 }));
 
         Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
-        Assertions.assertEquals(1, result.size());
-        for (String key : result.keySet()) {
-            List one = (List) result.get(key);
-            System.out.printf("%s -> %s%n", key, StringUtils.join(one, ", "));
-        }
+        displayData(result);
     }
 
+    @Test
+    public void testImportImage() throws IOException {
+        String fileType = SheetFileType.TYPE_XLS;
+        Importer importer = factory.createImporter(fileType);
+
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource("imp/import." + fileType);
+
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta sheetMeta = builder
+                .withImages()
+                .imageConverter((Function<byte[], String>) bytes -> {
+                    return CryptoUtils.md5(bytes);
+                })
+                .items(builder.itemBuilder()
+                .newItem().key("test-image").from("A6")
+        ).build();
+        Map<String, Object> result = importer.importFromStream(url.openStream(), sheetMeta);
+        displayData(result);
+    }
+
+    private void displayData(Map<String, Object> result) {
+        Assertions.assertEquals(1, result.size());
+        for (String key : result.keySet()) {
+            System.out.printf("Sheet: %s%n", key);
+            Object item = result.get(key);
+            if (item instanceof List) {
+                List l = (List) item;
+                System.out.printf("%s -> %s%n", key, StringUtils.join(l, ", "));
+            }
+            else if (item instanceof String) {
+                String str = (String) item;
+                System.out.printf("%s -> %s%n", key, str);
+            }
+
+        }
+    }
 }

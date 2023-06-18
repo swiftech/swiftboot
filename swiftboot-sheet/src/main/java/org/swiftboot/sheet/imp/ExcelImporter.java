@@ -2,6 +2,7 @@ package org.swiftboot.sheet.imp;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
 import org.swiftboot.sheet.excel.ExcelSheetInfo;
+import org.swiftboot.sheet.excel.PictureAdapter;
 import org.swiftboot.sheet.meta.*;
 import org.swiftboot.sheet.util.PoiUtils;
 
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import static org.swiftboot.sheet.util.PoiUtils.getValueFromCell;
 
@@ -34,6 +37,8 @@ public class ExcelImporter extends BaseImporter {
     private final ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
     private final ThreadLocal<Boolean> foundTarget = new ThreadLocal<>();
     private final ThreadLocal<Position> basePosition = new ThreadLocal<>();
+    private final ThreadLocal<Map<Position, Picture>> pictureMap = new ThreadLocal<>();
+    private final ThreadLocal<SheetId> sheetId = new ThreadLocal<>();
 
     /**
      * @param fileType SheetFileType.TYPE_XLS or SheetFileType.TYPE_XLSX
@@ -51,8 +56,10 @@ public class ExcelImporter extends BaseImporter {
         Map<String, Object> ret = new HashMap<>();
 
         final AtomicReference<Sheet> sheetRef = new AtomicReference<>();
+
         meta.accept(sheetId -> {
-            log.trace("Sheet: " + sheetId);
+            log.debug("Sheet: " + sheetId);
+            this.sheetId.set(sheetId);
             sheetRef.set(PoiUtils.getSheet(wb, sheetId.getSheetIndex()));
             if (sheetRef.get() == null) {
                 log.warn("No sheet found: " + sheetId);
@@ -65,8 +72,13 @@ public class ExcelImporter extends BaseImporter {
                 SheetHandler<ExcelSheetInfo> handler = (SheetHandler<ExcelSheetInfo>) meta.getSheetHandler(sheetId);
                 handler.onSheet(sheetInfo);
             }
+            if (meta.getMetaMap().isWithImages()) {
+                PictureAdapter pictureAdapter = PictureAdapter.createAdapter(getFileType());
+                pictureMap.set(pictureAdapter.getPictures(sheetRef.get()));
+            }
         }, (metaItem, startPos, rowCount, columnCount) -> {
-            basePosition.set(isStaticWay(metaItem) ? startPos: null);
+            basePosition.set(isStaticWay(metaItem) ? startPos : null);
+
             log.trace(String.format("Item: '%s' %s %s-%s", metaItem.getKey(), startPos, rowCount, columnCount));
             List<List<Object>> matrix = new ArrayList<>();
             for (int i = 0; i < sheetRef.get().getPhysicalNumberOfRows(); i++) {
@@ -86,7 +98,7 @@ public class ExcelImporter extends BaseImporter {
                     log.warn("No row found at " + i);
                     continue;
                 }
-                List<Object> values = getValuesInRow(metaItem, row, columnCount, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler());
+                List<Object> values = getValuesInRow(meta, metaItem, row, columnCount, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler());
                 if (CollectionUtils.isNotEmpty(values)) matrix.add(values);
             }
             Object value = shrinkMatrix(matrix, rowCount, columnCount);
@@ -105,7 +117,7 @@ public class ExcelImporter extends BaseImporter {
      * @param cellHandler
      * @return
      */
-    private List<Object> getValuesInRow(MetaItem metaItem, Row row, int columnCount, CellHandler<ExcelCellInfo> cellHandler) {
+    private List<Object> getValuesInRow(SheetMeta sheetMeta, MetaItem metaItem, Row row, int columnCount, CellHandler<ExcelCellInfo> cellHandler) {
         if (row == null) {
             return null;
         }
@@ -114,7 +126,7 @@ public class ExcelImporter extends BaseImporter {
 
         for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
             Cell cell = row.getCell(j);
-            log.debug(String.format("Get value from [%d,%d] as %s", row.getRowNum(), j, cell.getCellType()));
+            log.trace(String.format("Get value from [%d,%d] as %s", row.getRowNum(), j, cell.getCellType()));
             Object valueFromCell = getValueFromCell(cell);
             cellInfo.get().setCell(cell);
             cellInfo.get().setValue(valueFromCell);
@@ -128,10 +140,23 @@ public class ExcelImporter extends BaseImporter {
 
             if (j >= basePosition.get().getColumn()
                     && j < basePosition.get().getColumn() + colCount) {
-                cellInfo.get().setColIdx(j);
-                values.add(valueFromCell);
-                if (cellHandler != null) {
-                    cellHandler.onCell(cellInfo.get());
+                if (pictureMap.get() != null && pictureMap.get().containsKey(new Position(row.getRowNum(), j))) {
+                    Picture picture = pictureMap.get().get(new Position(row.getRowNum(), j));
+                    byte[] picData = picture.getPictureData().getData();
+                    Function<byte[], ?> imageConverter = sheetMeta.getMetaMap().getImageConverter(sheetId.get());
+                    if (imageConverter != null) {
+                        values.add(imageConverter.apply(picData));
+                    }
+                    else {
+                        values.add(picData);
+                    }
+                }
+                else {
+                    cellInfo.get().setColIdx(j);
+                    values.add(valueFromCell);
+                    if (cellHandler != null) {
+                        cellHandler.onCell(cellInfo.get());
+                    }
                 }
             }
         }
