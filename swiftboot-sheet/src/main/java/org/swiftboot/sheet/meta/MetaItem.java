@@ -2,6 +2,8 @@ package org.swiftboot.sheet.meta;
 
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.function.Predicate;
+
 /**
  * A meta item represent information about one cell or a group cells in sheet.
  *
@@ -16,7 +18,8 @@ public class MetaItem implements Comparable<MetaItem> {
 
     private Object value;
 
-    private CellHandler<?> cellHandler;
+    private CellHandler<? extends CellInfo> cellHandler;
+    private Predicate<? extends CellInfo> predicate;
 
     /**
      * The area to access data in sheet.
@@ -77,6 +80,14 @@ public class MetaItem implements Comparable<MetaItem> {
 
     public void setCellHandler(CellHandler<? extends CellInfo> cellHandler) {
         this.cellHandler = cellHandler;
+    }
+
+    public <T> Predicate<T> getPredicate() {
+        return (Predicate<T>) predicate;
+    }
+
+    public void setPredicate(Predicate<? extends CellInfo> predicate) {
+        this.predicate = predicate;
     }
 
     public Area getArea() {

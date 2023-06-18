@@ -190,8 +190,18 @@ public class PoiUtils {
         if (cell != null) {
             switch (cell.getCellType()) {
                 case STRING:
-                case FORMULA:
                     return cell.getStringCellValue();
+                case FORMULA:
+                    switch (cell.getCachedFormulaResultType()) {
+                        case NUMERIC:
+                            return cell.getNumericCellValue();
+                        case STRING:
+                            return cell.getStringCellValue();
+                        case BOOLEAN:
+                            return cell.getBooleanCellValue();
+                        default:
+                            return cell.getCellFormula();
+                    }
                 case NUMERIC:
                     if (DateUtil.isCellDateFormatted(cell)) {
                         return cell.getDateCellValue();

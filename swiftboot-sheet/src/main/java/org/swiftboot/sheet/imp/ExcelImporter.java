@@ -1,5 +1,6 @@
 package org.swiftboot.sheet.imp;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -22,16 +23,21 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.swiftboot.sheet.util.PoiUtils.getValueFromCell;
 
 /**
- * Importer for Microsoft Microsoft Excel 97-2003 and 2007
+ * Importer for Microsoft Excel 97-2003 and 2007
  *
  * @author swiftech
  */
 public class ExcelImporter extends BaseImporter {
 
-    Logger log = LoggerFactory.getLogger(ExcelImporter.class);
+    private static final Logger log = LoggerFactory.getLogger(ExcelImporter.class);
 
-    ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
+    private final ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
+    private final ThreadLocal<Boolean> foundTarget = new ThreadLocal<>();
+    private final ThreadLocal<Position> basePosition = new ThreadLocal<>();
 
+    /**
+     * @param fileType SheetFileType.TYPE_XLS or SheetFileType.TYPE_XLSX
+     */
     public ExcelImporter(String fileType) {
         super(fileType);
     }
@@ -60,17 +66,28 @@ public class ExcelImporter extends BaseImporter {
                 handler.onSheet(sheetInfo);
             }
         }, (metaItem, startPos, rowCount, columnCount) -> {
+            basePosition.set(isStaticWay(metaItem) ? startPos: null);
             log.trace(String.format("Item: '%s' %s %s-%s", metaItem.getKey(), startPos, rowCount, columnCount));
             List<List<Object>> matrix = new ArrayList<>();
-            for (int i = 0; i < rowCount; i++) {
+            for (int i = 0; i < sheetRef.get().getPhysicalNumberOfRows(); i++) {
                 cellInfo.get().setRowIdx(i);
-                int rowIdx = startPos.getRow() + i;
-                Row row = sheetRef.get().getRow(rowIdx);
+                Row row;
+                if (isStaticWay(metaItem)
+                        && (i < basePosition.get().getRow() || i >= (basePosition.get().getRow() + rowCount))) {
+                    continue; // skip for static way.
+                }
+                else {
+                    if (basePosition.get() != null && i >= (basePosition.get().getRow() + rowCount)) {
+                        break;
+                    }
+                    row = sheetRef.get().getRow(i); // retrieve to be detected for predict way.
+                }
                 if (row == null) {
-                    log.warn("No row found at " + rowIdx);
+                    log.warn("No row found at " + i);
                     continue;
                 }
-                matrix.add(getValuesInRow(row, startPos, columnCount, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler()));
+                List<Object> values = getValuesInRow(metaItem, row, columnCount, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler());
+                if (CollectionUtils.isNotEmpty(values)) matrix.add(values);
             }
             Object value = shrinkMatrix(matrix, rowCount, columnCount);
             ret.put(metaItem.getKey(), value);
@@ -82,27 +99,48 @@ public class ExcelImporter extends BaseImporter {
     /**
      * Get values from {@code startPos} by {@code columnCount} in {@code row}.
      *
+     * @param metaItem
      * @param row
-     * @param startPos
      * @param columnCount
      * @param cellHandler
      * @return
      */
-    private List<Object> getValuesInRow(Row row, Position startPos, int columnCount, CellHandler<ExcelCellInfo> cellHandler) {
-        if (row == null || startPos == null) {
+    private List<Object> getValuesInRow(MetaItem metaItem, Row row, int columnCount, CellHandler<ExcelCellInfo> cellHandler) {
+        if (row == null) {
             return null;
         }
         int colCount = Math.max(columnCount, 1);
         List<Object> values = new ArrayList<>();
-        for (int j = 0; j < colCount; j++) {
-            Cell cell = row.getCell(startPos.getColumn() + j);
-            values.add(getValueFromCell(cell));
+
+        for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
+            Cell cell = row.getCell(j);
+            log.debug(String.format("Get value from [%d,%d] as %s", row.getRowNum(), j, cell.getCellType()));
+            Object valueFromCell = getValueFromCell(cell);
             cellInfo.get().setCell(cell);
-            if (cellHandler != null) {
-                cellHandler.onCell(cellInfo.get());
+            cellInfo.get().setValue(valueFromCell);
+            if (isNeedPredict(metaItem)) {
+                if (!metaItem.getPredicate().test(cellInfo.get())) {
+                    continue; // not the anchor cell and keep processing.
+                }
+                foundTarget.set(true);
+                basePosition.set(new Position(row.getRowNum(), j));
+            }
+
+            if (j >= basePosition.get().getColumn()
+                    && j < basePosition.get().getColumn() + colCount) {
+                cellInfo.get().setColIdx(j);
+                values.add(valueFromCell);
+                if (cellHandler != null) {
+                    cellHandler.onCell(cellInfo.get());
+                }
             }
         }
         return values;
+    }
+
+    private boolean isNeedPredict(MetaItem metaItem) {
+        return (foundTarget.get() == null || !foundTarget.get())
+                && metaItem.getPredicate() != null;
     }
 
 }

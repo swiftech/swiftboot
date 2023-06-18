@@ -1,17 +1,21 @@
 package org.swiftboot.sheet.imp;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.excel.ExcelCellInfo;
+import org.swiftboot.sheet.meta.BaseCellInfo;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * @author swiftech
@@ -66,13 +70,37 @@ class ExcelImporterTest extends BaseImporterTest {
         URL url = loader.getResource("imp/import." + fileType);
 
         SheetMetaBuilder builder = new SheetMetaBuilder();
-        builder.items(builder.itemBuilder().newItem().parse("B2").onCell((ExcelCellInfo target) -> {
+        builder.items(builder.itemBuilder().newItem().key("GET-B2").parse("B2").onCell((ExcelCellInfo target) -> {
             CellStyle cellStyle = target.getCell().getCellStyle();
-            System.out.println(cellStyle.getFillBackgroundColor());
+            System.out.printf("backcolor: %s%n", cellStyle.getFillBackgroundColor());
             Assertions.assertEquals(IndexedColors.AUTOMATIC.index, cellStyle.getFillBackgroundColor());
         }));
 
         importer.importFromStream(url.openStream(), builder.build());
+    }
+
+    @Test
+    public void testImportDynamical() throws IOException {
+        String fileType = SheetFileType.TYPE_XLS;
+        Importer importer = factory.createImporter(fileType);
+
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource("imp/import." + fileType);
+
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        builder.items(builder.itemBuilder()
+                .newItem().key("GET-C3").predict((Predicate<BaseCellInfo>) cellInfo ->
+                        "c3".equals(cellInfo.getValue()), 3, 2)
+                .onCell((ExcelCellInfo target) -> {
+                    System.out.printf("found: [%d,%d]%n", target.getRowIdx(), target.getColIdx());
+                }));
+
+        Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
+        Assertions.assertEquals(1, result.size());
+        for (String key : result.keySet()) {
+            List one = (List) result.get(key);
+            System.out.printf("%s -> %s%n", key, StringUtils.join(one, ", "));
+        }
     }
 
 }

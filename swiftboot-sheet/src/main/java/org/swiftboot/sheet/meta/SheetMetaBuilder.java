@@ -9,6 +9,7 @@ import org.swiftboot.util.BeanUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Builder to build {@link SheetMeta}
@@ -50,6 +51,7 @@ public class SheetMetaBuilder {
 
     /**
      * Identity a sheet by index.
+     *
      * @param index
      * @return
      */
@@ -76,7 +78,7 @@ public class SheetMetaBuilder {
      * The index has higher priority than the name.
      *
      * @param index
-     * @param name Should follow the Excel's sheet name rule, if not, it will be converted by force.
+     * @param name  Should follow the Excel's sheet name rule, if not, it will be converted by force.
      * @return
      */
     public SheetMetaBuilder sheet(int index, String name) {
@@ -261,6 +263,40 @@ public class SheetMetaBuilder {
             return this;
         }
 
+//        /**
+//         *
+//         * @param predicate
+//         * @param height
+//         * @return
+//         */
+//        public MetaItemBuilder predict(Predicate<? extends CellInfo> predicate, Integer height) {
+//            return this.predict(predicate, null, height);
+//        }
+
+        /**
+         * Predict whether a cell is base one to start, Only works for Import.
+         *
+         * @param predicate
+         * @param width
+         * @param height
+         * @return
+         */
+        public MetaItemBuilder predict(Predicate<? extends CellInfo> predicate, Integer width, Integer height) {
+            if (item.getArea() != null
+                    && (item.getArea().getStartPosition() != null || item.getArea().getEndPosition() != null)) {
+                throw new RuntimeException("The predict function can't be used since the area position has been setup");
+            }
+            this.item.setPredicate(predicate);
+            this.item.setArea(new Area(new Dimension(width, height)));
+            return this;
+        }
+
+        private void checkPredictFunction() {
+            if (item.getPredicate() != null) {
+                throw new RuntimeException("The area position can't be used since the predict function has been setup");
+            }
+        }
+
         /**
          * Create an area by parsing expression.
          *
@@ -268,6 +304,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder parse(String expression) {
+            this.checkPredictFunction();
             Area area = translator.toArea(expression);
             item.setArea(area);
             return this;
@@ -280,6 +317,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder from(String expression) {
+            this.checkPredictFunction();
             Position position = translator.toSinglePosition(expression);
             return from(position);
         }
@@ -291,6 +329,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder from(Position startPosition) {
+            this.checkPredictFunction();
             if (item.getArea() == null) {
                 item.setArea(new Area(startPosition));
             }
@@ -306,6 +345,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder from(Integer rowIdx, Integer columnIdx) {
+            this.checkPredictFunction();
             if (item.getArea() == null) {
                 item.setArea(new Area(new Position(rowIdx, columnIdx)));
             }
@@ -320,6 +360,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder to(String expression) {
+            this.checkPredictFunction();
             Position position = translator.toSinglePosition(expression);
             return to(position);
         }
@@ -331,6 +372,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder to(Position endPosition) {
+            this.checkPredictFunction();
             if (item.getArea() == null || item.getArea().getStartPosition() == null) {
                 return this;
             }
@@ -346,6 +388,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder to(Integer rowIdx, Integer columnIdx) {
+            this.checkPredictFunction();
             if (item.getArea() == null || item.getArea().getStartPosition() == null) {
                 return this;
             }

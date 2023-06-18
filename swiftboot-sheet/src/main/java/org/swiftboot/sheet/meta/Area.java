@@ -26,6 +26,12 @@ public class Area {
      */
     Position endPosition;
 
+    /**
+     * Dimension of area, if specified, the startPosition and endPosition won't work.
+     * only for import now.
+     */
+    Dimension dimension;
+
     public static Area newHorizontal(Position startPosition, int length) {
         return new Area(startPosition, new Position(startPosition.getRow(), startPosition.getColumn() + length - 1));
     }
@@ -63,12 +69,24 @@ public class Area {
         this.endPosition = new Position(row2, column2);
     }
 
+    public Area(Dimension dimension) {
+        this.dimension = dimension;
+    }
+
+    public Area(SheetId sheetId, Dimension dimension) {
+        this.sheetId = sheetId;
+        this.dimension = dimension;
+    }
+
     /**
      * Row count from start position to end position
      *
      * @return
      */
     public Integer rowCount() {
+        if (dimension != null) {
+            return dimension.getHeight();
+        }
         if (startPosition == null) {
             return 0;
         }
@@ -87,6 +105,9 @@ public class Area {
      * @return
      */
     public Integer columnCount() {
+        if (dimension != null) {
+            return dimension.getWidth();
+        }
         if (startPosition == null) {
             return 0;
         }
@@ -114,8 +135,8 @@ public class Area {
     }
 
     public boolean isLine() {
-        return startPosition.getRow().equals(endPosition.getRow())
-                || startPosition.getColumn().equals(endPosition.getColumn());
+        return (startPosition != null && startPosition.getRow().equals(endPosition.getRow()))
+                || (startPosition != null && startPosition.getColumn().equals(endPosition.getColumn()));
     }
 
     /**
@@ -163,6 +184,14 @@ public class Area {
 
     public void setEndPosition(Position endPosition) {
         this.endPosition = endPosition;
+    }
+
+    public Dimension getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
     }
 
     @Override

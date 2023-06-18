@@ -2,6 +2,7 @@ package org.swiftboot.sheet.imp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.sheet.meta.MetaItem;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 import org.swiftboot.util.BeanUtils;
@@ -78,6 +79,10 @@ public abstract class BaseImporter implements Importer {
         else {
             return matrix;
         }
+    }
+
+    protected boolean isStaticWay(MetaItem metaItem) {
+        return metaItem.getPredicate() == null;
     }
 
     public String getFileType() {

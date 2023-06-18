@@ -65,4 +65,28 @@ public class SheetMetaBuilderTest {
         Assertions.assertNotNull(items);
         Assertions.assertEquals(6, items.size());
     }
+
+    @Test
+    public void predict() {
+
+        Assertions.assertThrows(Exception.class, () -> {
+            SheetMetaBuilder builder = new SheetMetaBuilder();
+            builder.items(builder.itemBuilder()
+                    .key("test").from(0, 0).predict(cellInfo -> false, 1, 1));
+        });
+
+        Assertions.assertThrows(Exception.class, () -> {
+            SheetMetaBuilder builder = new SheetMetaBuilder();
+            builder.items(builder.itemBuilder()
+                    .key("test").from("B2").predict(cellInfo -> false, 1, 1));
+        });
+
+        Assertions.assertThrows(Exception.class, () -> {
+            SheetMetaBuilder builder = new SheetMetaBuilder();
+            builder.items(builder.itemBuilder()
+                    .key("test").predict(cellInfo -> false, 1, 1).from(0, 0));
+        });
+
+
+    }
 }

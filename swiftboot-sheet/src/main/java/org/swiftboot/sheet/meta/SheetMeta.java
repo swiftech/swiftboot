@@ -84,33 +84,34 @@ public class SheetMeta {
             List<MetaItem> items = metaMap.sheetItems(sheetId);
             for (MetaItem meta : items) {
                 Area area = meta.getArea();
-                Position startingPos = area.getStartPosition();
-                log.debug(String.format("'%s' -> %s", meta.getKey(), meta.getArea()));
-                if (area.isSingleCell()) {
-                    itemVisitor.visitMetaItem(meta, startingPos, 1, 1);
-                }
-                else {
-                    Integer rowCount = area.rowCount();
-                    Integer columnCount = area.columnCount();
-                    log.debug(String.format("row count %d, column count %d", rowCount, columnCount));
-                    if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
-                        throw new RuntimeException("Free size expression is not allowed");
-                    }
-                    else if (area.isLine()) {
-                        // Only one row is horizontal
-                        if (rowCount != null && rowCount == 1) {
-                            itemVisitor.visitMetaItem(meta, startingPos, 1, columnCount);
-                        }
-                        else if (columnCount != null && columnCount == 1) { // Only one column is vertical
-                            itemVisitor.visitMetaItem(meta, startingPos, rowCount, 1);
-                        }
+                if (area != null) {
+                    Position startingPos = area.getStartPosition();
+                    log.debug(String.format("'%s' -> %s", meta.getKey(), meta.getArea()));
+                    if (area.isSingleCell()) {
+                        itemVisitor.visitMetaItem(meta, startingPos, 1, 1);
                     }
                     else {
-                        itemVisitor.visitMetaItem(meta, startingPos, rowCount, columnCount);
+                        Integer rowCount = area.rowCount();
+                        Integer columnCount = area.columnCount();
+                        log.debug(String.format("row count %d, column count %d", rowCount, columnCount));
+                        if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
+                            throw new RuntimeException("Free size expression is not allowed");
+                        }
+                        else if (area.isLine()) {
+                            // Only one row is horizontal
+                            if (rowCount != null && rowCount == 1) {
+                                itemVisitor.visitMetaItem(meta, startingPos, 1, columnCount);
+                            }
+                            else if (columnCount != null && columnCount == 1) { // Only one column is vertical
+                                itemVisitor.visitMetaItem(meta, startingPos, rowCount, 1);
+                            }
+                        }
+                        else {
+                            itemVisitor.visitMetaItem(meta, startingPos, rowCount, columnCount);
+                        }
                     }
                 }
             }
-
         }
     }
 
