@@ -15,7 +15,7 @@ public class CollectionUtils {
      * @param array
      * @return
      */
-    public static LinkedList<Object> toLinkedList(Object[] array) {
+    public static LinkedList<Object> toLinkedList(Object... array) {
         LinkedList<Object> ret = new LinkedList<>();
         Collections.addAll(ret, array);
         return ret;
