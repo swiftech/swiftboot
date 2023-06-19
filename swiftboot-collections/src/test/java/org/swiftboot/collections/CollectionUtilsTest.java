@@ -25,6 +25,18 @@ public class CollectionUtilsTest {
     }
 
     @Test
+    public void toLinkedList() {
+        String[] a = new String[]{"a", "b", "c"};
+        LinkedList<Object> linkedList = CollectionUtils.toLinkedList(a);
+        Assertions.assertNotNull(linkedList);
+        Assertions.assertEquals(3, linkedList.size());
+
+        LinkedList<Object> linkedList1 = CollectionUtils.toLinkedList("a", "b", "c");
+        Assertions.assertNotNull(linkedList1);
+        Assertions.assertEquals(3, linkedList1.size());
+    }
+
+    @Test
     public void testContains() {
         List<Object> list = Arrays.asList("a", new TestBean("b", "v"));
         Assertions.assertTrue(CollectionUtils.contains(list, TestBean.class));
