@@ -13,6 +13,8 @@ import java.util.function.BiFunction;
  */
 public class Position {
 
+    public static final Position ZERO = new Position(0, 0);
+
     /**
      * Row index starts from 0
      */

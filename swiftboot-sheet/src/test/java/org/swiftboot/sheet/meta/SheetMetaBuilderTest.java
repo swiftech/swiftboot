@@ -69,22 +69,39 @@ public class SheetMetaBuilderTest {
     @Test
     public void predict() {
 
+        // can't use from() and predict() at the same time
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
                     .key("test").from(0, 0).predict(cellInfo -> false, 1, 1));
         });
 
+        // can't use from() and predict() at the same time
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
                     .key("test").from("B2").predict(cellInfo -> false, 1, 1));
         });
 
+        // can't use from() and predict() at the same time
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
                     .key("test").predict(cellInfo -> false, 1, 1).from(0, 0));
+        });
+
+        // muse specify rows for predict()
+        Assertions.assertThrows(Exception.class, () -> {
+            SheetMetaBuilder builder = new SheetMetaBuilder();
+            builder.items(builder.itemBuilder()
+                    .key("test").predict(cellInfo -> false, null, 1));
+        });
+
+        // muse specify columns for predict()
+        Assertions.assertThrows(Exception.class, () -> {
+            SheetMetaBuilder builder = new SheetMetaBuilder();
+            builder.items(builder.itemBuilder()
+                    .key("test").predict(cellInfo -> false, 1, null));
         });
 
 

@@ -1,5 +1,6 @@
 package org.swiftboot.sheet.meta;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,7 @@ public class SheetMeta {
             for (MetaItem meta : items) {
                 Area area = meta.getArea();
                 if (area != null) {
-                    Position startingPos = area.getStartPosition();
+                    Position startingPos = ObjectUtils.firstNonNull(area.getStartPosition(), Position.ZERO);
                     log.debug(String.format("'%s' -> %s", meta.getKey(), meta.getArea()));
                     if (area.isSingleCell()) {
                         itemVisitor.visitMetaItem(meta, startingPos, 1, 1);
@@ -93,7 +94,7 @@ public class SheetMeta {
                     else {
                         Integer rowCount = area.rowCount();
                         Integer columnCount = area.columnCount();
-                        log.debug(String.format("row count %d, column count %d", rowCount, columnCount));
+                        log.debug(String.format("row count %s, column count %d", ObjectUtils.firstNonNull(rowCount, "is uncertain"), columnCount));
                         if (!isAllowFreeSize && (rowCount == null || columnCount == null)) {
                             throw new RuntimeException("Free size expression is not allowed");
                         }

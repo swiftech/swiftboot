@@ -302,17 +302,21 @@ public class SheetMetaBuilder {
          * Predict whether a cell is base one to start, Only works for Import.
          *
          * @param predicate
-         * @param width
-         * @param height
+         * @param rows
+         * @param columns
          * @return
          */
-        public MetaItemBuilder predict(Predicate<? extends CellInfo> predicate, Integer width, Integer height) {
+        public MetaItemBuilder predict(Predicate<? extends CellInfo> predicate, Integer rows, Integer columns) {
             if (item.getArea() != null
                     && (item.getArea().getStartPosition() != null || item.getArea().getEndPosition() != null)) {
-                throw new RuntimeException("The predict function can't be used since the area position has been setup");
+                throw new RuntimeException("The predict function can't be used since the area position has been setup.");
+            }
+            if (columns == null || rows == null) {
+                // if rows is not provided, the reading might stop once getting first empty row, which is usually NOT the last row that you want.
+                throw new RuntimeException("The rows or columns must be provided.");
             }
             this.item.setPredicate(predicate);
-            this.item.setArea(new Area(new Dimension(width, height)));
+            this.item.setArea(new Area(new Dimension(columns, rows)));
             return this;
         }
 

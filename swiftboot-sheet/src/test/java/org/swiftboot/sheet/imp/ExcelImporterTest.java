@@ -83,6 +83,25 @@ class ExcelImporterTest extends BaseImporterTest {
     }
 
     @Test
+    public void testImportUncertainRows() throws IOException {
+        String fileType = SheetFileType.TYPE_XLS;
+        Importer importer = factory.createImporter(fileType);
+
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource("imp/import." + fileType);
+
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        builder.items(builder.itemBuilder()
+                .newItem().key("GET-C3").parse("B2").to(null, 5)
+                .onCell((ExcelCellInfo target) -> {
+                    System.out.printf("found: [%d,%d]%n", target.getRowIdx(), target.getColIdx());
+                }));
+
+        Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
+        displayData(result);
+    }
+
+    @Test
     public void testImportDynamical() throws IOException {
         String fileType = SheetFileType.TYPE_XLS;
         Importer importer = factory.createImporter(fileType);
@@ -93,7 +112,7 @@ class ExcelImporterTest extends BaseImporterTest {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         builder.items(builder.itemBuilder()
                 .newItem().key("GET-C3").predict((Predicate<BaseCellInfo>) cellInfo ->
-                        "c3".equals(cellInfo.getValue()), 3, 2)
+                        "c3".equals(cellInfo.getValue()), 2, 3)
                 .onCell((ExcelCellInfo target) -> {
                     System.out.printf("found: [%d,%d]%n", target.getRowIdx(), target.getColIdx());
                 }));
