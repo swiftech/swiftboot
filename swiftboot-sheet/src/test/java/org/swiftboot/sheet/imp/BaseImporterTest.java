@@ -5,11 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.swiftboot.sheet.SwiftBootSheetFactory;
 import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.excel.ExcelSheetInfo;
-import org.swiftboot.sheet.meta.SheetHandler;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author swiftech
@@ -28,7 +31,7 @@ public class BaseImporterTest {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         // Single cells
         SheetMeta meta = builder
-                .handler((SheetHandler<ExcelSheetInfo>) sheetInfo -> System.out.println(sheetInfo.getSheet()))
+                .handler((Consumer<ExcelSheetInfo>) sheetInfo -> System.out.println(sheetInfo.getSheet()))
                 .items(builder.itemBuilder()
                         .newItem().key("key-b1").parse("B1")
                         .newItem().key("key-a2").parse("A2")

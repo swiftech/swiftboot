@@ -3,7 +3,6 @@ package org.swiftboot.sheet.imp;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.text.StringTokenizer;
 import org.swiftboot.sheet.CsvCellInfo;
-import org.swiftboot.sheet.meta.CellHandler;
 import org.swiftboot.sheet.meta.Position;
 import org.swiftboot.sheet.meta.SheetMeta;
 import org.swiftboot.util.IoUtils;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Importer for CSV data sheet.
@@ -65,7 +65,7 @@ public class CsvImporter extends BaseImporter {
                         values.add(next);
                         if (metaItem.getCellHandler() != null) {
                             CsvCellInfo csvCellInfo = new CsvCellInfo(next);
-                            ((CellHandler<CsvCellInfo>) metaItem.getCellHandler()).onCell(csvCellInfo);
+                            ((Consumer<CsvCellInfo>) metaItem.getCellHandler()).accept(csvCellInfo);
                         }
                         cursor++;
                     }

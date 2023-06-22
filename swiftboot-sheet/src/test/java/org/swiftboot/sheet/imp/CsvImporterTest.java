@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -42,7 +43,7 @@ class CsvImporterTest extends BaseImporterTest {
         builder.items(builder.itemBuilder()
                 .newItem().key("GET-B2").predict((Predicate<BaseCellInfo>) cellInfo -> {
                     return "c3".equals(cellInfo.getValue().toString().trim());
-                }, 2, 2).onCell((CellHandler<CsvCellInfo>) cellInfo -> {
+                }, 2, 2).onCell((Consumer<CsvCellInfo>) cellInfo -> {
                     System.out.println("# " + cellInfo.getValue());
                 })
         );

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.swiftboot.sheet.util.PoiUtils.getValueFromCell;
@@ -69,8 +70,8 @@ public class ExcelImporter extends BaseImporter {
             // callback to user client to handle the sheet.
             if (meta.getSheetHandler(sheetId) != null) {
                 ExcelSheetInfo sheetInfo = new ExcelSheetInfo(wb, sheetRef.get());
-                SheetHandler<ExcelSheetInfo> handler = (SheetHandler<ExcelSheetInfo>) meta.getSheetHandler(sheetId);
-                handler.onSheet(sheetInfo);
+                Consumer<ExcelSheetInfo> handler = (Consumer<ExcelSheetInfo>) meta.getSheetHandler(sheetId);
+                handler.accept(sheetInfo);
             }
             if (meta.getMetaMap().isWithImages()) {
                 PictureAdapter pictureAdapter = PictureAdapter.createAdapter(getFileType());
@@ -99,7 +100,7 @@ public class ExcelImporter extends BaseImporter {
                         }
                     }
                     row = sheetRef.get().getRow(i); // retrieve to be detected.
-                    List<Object> rowValues = getValuesInRow(meta, metaItem, row, columnCount, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler());
+                    List<Object> rowValues = getValuesInRow(meta, metaItem, row, columnCount, (Consumer<ExcelCellInfo>) metaItem.getCellHandler());
                     if (rowValues == null || rowValues.isEmpty()) {
                         log.debug(String.format("no data of this row: %d", i));
                         break;
@@ -127,7 +128,7 @@ public class ExcelImporter extends BaseImporter {
                         log.warn("No row found at " + i);
                         continue;
                     }
-                    List<Object> rowValues = getValuesInRow(meta, metaItem, row, columnCount, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler());
+                    List<Object> rowValues = getValuesInRow(meta, metaItem, row, columnCount, (Consumer<ExcelCellInfo>) metaItem.getCellHandler());
                     if (CollectionUtils.isNotEmpty(rowValues)) matrix.add(rowValues);
                 }
             }
@@ -148,7 +149,7 @@ public class ExcelImporter extends BaseImporter {
      * @param cellHandler
      * @return
      */
-    private List<Object> getValuesInRow(SheetMeta sheetMeta, MetaItem metaItem, Row row, int columnCount, CellHandler<ExcelCellInfo> cellHandler) {
+    private List<Object> getValuesInRow(SheetMeta sheetMeta, MetaItem metaItem, Row row, int columnCount, Consumer<ExcelCellInfo> cellHandler) {
         if (row == null) {
             return null;
         }
@@ -195,7 +196,7 @@ public class ExcelImporter extends BaseImporter {
                     cellInfo.get().setColIdx(j);
                     values.add(valueFromCell);
                     if (cellHandler != null) {
-                        cellHandler.onCell(cellInfo.get());
+                        cellHandler.accept(cellInfo.get());
                     }
                 }
             }

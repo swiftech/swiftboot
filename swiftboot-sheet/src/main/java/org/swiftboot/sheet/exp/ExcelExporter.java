@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 
 /**
@@ -70,8 +71,8 @@ public class ExcelExporter extends BaseExporter {
             // callback to user client to handle the sheet.
             if (exportMeta.getSheetHandler(sheetId) != null) {
                 ExcelSheetInfo sheetInfo = new ExcelSheetInfo(wb, sheetRef.get());
-                SheetHandler<ExcelSheetInfo> handler = (SheetHandler<ExcelSheetInfo>) exportMeta.getSheetHandler(sheetId);
-                handler.onSheet(sheetInfo);
+                Consumer<ExcelSheetInfo> handler = (Consumer<ExcelSheetInfo>) exportMeta.getSheetHandler(sheetId);
+                handler.accept(sheetInfo);
             }
         }, (metaItem, startPos, rowCount, columnCount) -> {
             Sheet sheet = sheetRef.get();
@@ -139,7 +140,7 @@ public class ExcelExporter extends BaseExporter {
                         cellInfo.get().setRowIdx(i);
                         List<Object> values = matrix.get(i);
                         Row row = sheetRef.get().getRow(startPos.getRow() + i);
-                        setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values, (CellHandler<ExcelCellInfo>) metaItem.getCellHandler());
+                        setValuesToRow(row, startPos.clone().moveRows(i), actualColumnCount, values, (Consumer<ExcelCellInfo>) metaItem.getCellHandler());
                     }
                 }
             }
@@ -249,7 +250,7 @@ public class ExcelExporter extends BaseExporter {
      * @param values
      * @param cellHandler
      */
-    private void setValuesToRow(Row row, Position startPos, int columnCount, List<Object> values, CellHandler<ExcelCellInfo> cellHandler) {
+    private void setValuesToRow(Row row, Position startPos, int columnCount, List<Object> values, Consumer<ExcelCellInfo> cellHandler) {
         if (row == null || startPos == null) {
             return;
         }
@@ -265,7 +266,7 @@ public class ExcelExporter extends BaseExporter {
             cellInfo.get().setCell(cell);
             cellInfo.get().setValue(cellValue);
             if (cellHandler != null) {
-                cellHandler.onCell(cellInfo.get());
+                cellHandler.accept(cellInfo.get());
             }
         }
     }

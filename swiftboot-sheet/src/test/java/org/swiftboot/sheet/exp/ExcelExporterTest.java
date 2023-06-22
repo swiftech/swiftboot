@@ -58,7 +58,7 @@ public class ExcelExporterTest extends BaseExporterTest {
     }
 
     /**
-     * Do export to a excel whose type is specified by fileType, if inputStream is null,
+     * Do export to a Excel whose type is specified by fileType, if inputStream is null,
      * export it without template.
      *
      * @param inputStream input stream of template excel file.

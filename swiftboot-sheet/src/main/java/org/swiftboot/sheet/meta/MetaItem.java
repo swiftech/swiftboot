@@ -2,6 +2,7 @@ package org.swiftboot.sheet.meta;
 
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -18,7 +19,7 @@ public class MetaItem implements Comparable<MetaItem> {
 
     private Object value;
 
-    private CellHandler<? extends CellInfo> cellHandler;
+    private Consumer<? extends CellInfo> cellHandler;
     private Predicate<? extends CellInfo> predicate;
 
     /**
@@ -74,11 +75,11 @@ public class MetaItem implements Comparable<MetaItem> {
         this.value = value;
     }
 
-    public CellHandler<? extends CellInfo> getCellHandler() {
+    public Consumer<? extends CellInfo> getCellHandler() {
         return cellHandler;
     }
 
-    public void setCellHandler(CellHandler<? extends CellInfo> cellHandler) {
+    public void setCellHandler(Consumer<? extends CellInfo> cellHandler) {
         this.cellHandler = cellHandler;
     }
 

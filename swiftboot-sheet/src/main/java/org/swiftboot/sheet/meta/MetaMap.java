@@ -3,6 +3,7 @@ package org.swiftboot.sheet.meta;
 import org.apache.commons.collections4.ListUtils;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -14,7 +15,7 @@ public class MetaMap {
      */
     Map<SheetId, List<MetaItem>> data = new LinkedHashMap<>();
 
-    Map<SheetId, SheetHandler<? extends SheetInfo>> handlers = new HashMap<>();
+    Map<SheetId, Consumer<? extends SheetInfo>> handlers = new HashMap<>();
 
     /**
      * to indicate that extract images during parsing Excel sheet, for import only.
@@ -22,11 +23,11 @@ public class MetaMap {
     boolean withImages = false;
     Map<SheetId, Function<Picture, ?>> imageConverters = new HashMap<>();
 
-    public void setSheetHandler(SheetId id, SheetHandler<? extends SheetInfo> handler) {
+    public void setSheetHandler(SheetId id, Consumer<? extends SheetInfo> handler) {
         handlers.put(id, handler);
     }
 
-    public SheetHandler<? extends SheetInfo> getSheetHandler(SheetId id) {
+    public Consumer<? extends SheetInfo> getSheetHandler(SheetId id) {
         return handlers.get(id);
     }
 

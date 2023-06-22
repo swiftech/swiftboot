@@ -6,11 +6,11 @@ import org.swiftboot.sheet.BaseTest;
 import org.swiftboot.sheet.TestUtils;
 import org.swiftboot.sheet.constant.SheetFileType;
 import org.swiftboot.sheet.excel.ExcelSheetInfo;
-import org.swiftboot.sheet.meta.SheetHandler;
 import org.swiftboot.sheet.meta.SheetMetaBuilder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author swiftech
@@ -69,7 +69,7 @@ public class BaseExporterTest extends BaseTest {
         );
 
         // table titles
-        builder.sheet(0, "my first sheet").handler((SheetHandler<ExcelSheetInfo>) sheetInfo -> {
+        builder.sheet(0, "my first sheet").handler((Consumer<ExcelSheetInfo>) sheetInfo -> {
             System.out.println(sheetInfo.getWorkbook());
             System.out.println(sheetInfo.getSheet());
         });

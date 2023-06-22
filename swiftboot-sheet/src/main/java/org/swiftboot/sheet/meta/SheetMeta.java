@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,7 +39,7 @@ public class SheetMeta {
         this.metaMap = metaMap;
     }
 
-    public SheetHandler<? extends SheetInfo> getSheetHandler(SheetId sheetId) {
+    public Consumer<? extends SheetInfo> getSheetHandler(SheetId sheetId) {
         return this.metaMap.getSheetHandler(sheetId);
     }
 

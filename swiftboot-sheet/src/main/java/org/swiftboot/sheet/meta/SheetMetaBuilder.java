@@ -9,6 +9,7 @@ import org.swiftboot.util.BeanUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -23,7 +24,7 @@ import java.util.function.Predicate;
  * use method {@code itemBuilder()} create a new {@link MetaItemBuilder} to build items.
  * use method {@code sheet()} to indicate a sheet by name or index.
  * use method {@code items()} to collect all items from {@link MetaItemBuilder} to current sheet in builder.
- * use method {@code handler()} with a {@link SheetHandler} to access a POI sheet object directly.
+ * use method {@code handler()} with a {@link Consumer} to access a POI sheet object directly.
  * </pre>
  *
  * @author swiftech
@@ -95,7 +96,7 @@ public class SheetMetaBuilder {
      * @param sheetHandler
      * @return
      */
-    public SheetMetaBuilder handler(SheetHandler<?> sheetHandler) {
+    public SheetMetaBuilder handler(Consumer<? extends SheetInfo> sheetHandler) {
         if (sheetId == null) {
             sheetId = SheetId.DEFAULT_SHEET; // be the first sheet (index is 0 and name is 'Sheet 1') if not provides
         }
@@ -283,20 +284,10 @@ public class SheetMetaBuilder {
          * @param cellHandler
          * @return
          */
-        public MetaItemBuilder onCell(CellHandler<? extends CellInfo> cellHandler) {
+        public MetaItemBuilder onCell(Consumer<? extends CellInfo> cellHandler) {
             item.setCellHandler(cellHandler);
             return this;
         }
-
-//        /**
-//         *
-//         * @param predicate
-//         * @param height
-//         * @return
-//         */
-//        public MetaItemBuilder predict(Predicate<? extends CellInfo> predicate, Integer height) {
-//            return this.predict(predicate, null, height);
-//        }
 
         /**
          * Predict whether a cell is base one to start, Only works for Import.
