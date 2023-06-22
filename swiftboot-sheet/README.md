@@ -10,9 +10,20 @@ SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data fro
 * Microsoft Excel 2007
 * CSV
 
+### 特性
+* 多表单支持，表达式支持。
+* 通过注解（Annotation）对象的属性来实现针对数据对象的导入和导出。
+* 通过Builder API实现动态位置导入和导出。
+* 支持图片的导入和导出，并且图片可以在导入过程中进行格式转换。
+* 导入：
+  * 从符合自定义条件的单元格开始导入数据。
+  * 导入行数可以不指定（不能和自定义条件功能一起使用）
+* 导出
+  * 支持表格样式复制，无需代码实现样式写入。
+
 ### 依赖
 
-* POI 4.1.x
+* POI 5.2.x
 
 
 ### 使用
@@ -89,6 +100,8 @@ exportEntity.setPictureToExport(() -> {
 exporter.export(templateFileInputStream, exportEntity, outputStream);
 ```
 
+> 导出图片只支持 Excel，不支持 CSV
+
 ### 表达式
 
 * 表达式中字母表示列，数字表示行，例如 `E2` 表示第二行第五列
@@ -113,6 +126,8 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 如果你想导入或者导出的表格位置是动态的(例如位置保存在配置文件或者数据库中），那么也可以直接调用底层的 API 来实现，例如：
 
+* 导出
+
 ```java
     SheetMetaBuilder builder = new SheetMetaBuilder();
     builder
@@ -131,6 +146,20 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 > 默认导出的表格名称为 "Sheet 1"
 
+* 导入
+```java
+builder.items(builder.itemBuilder()
+    .newItem().key("GET-B2-D5").from("B2").to("D5")
+    .newItem().key("GET-HEADER").predict((Predicate<BaseCellInfo>) cellInfo ->
+    "Header".equals(cellInfo.getValue()), 1, 10) // 读取动态的表格头
+    .newItem().key("GET-CONTENT").predict((Predicate<BaseCellInfo>) cellInfo ->
+    "R001".equals(cellInfo.getValue()), null, 10) // 从动态位置读取至最后一行
+    .withImages().imageConverter((Function<Picture, ?>) pic -> CryptoUtils.md5(pic.getData())) // 读取文件中的图片
+);
+Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
+```
+> 动态定位读取位置和不指定读取行数不能同时使用，因为读取过程有可能遇到中间的空行而无法进行下去。
+> 图片可以用 imageConverter() 来定义转换器，如果不进行转换，则直接得到图片的二进制数据（byte[])
 
 ### 多表单(Sheet)支持
 
@@ -204,7 +233,8 @@ builder.sheet(0, "my first sheet")
         System.out.println(sheetInfo.getSheet());
     }).
     items(builder.itemBuilder()
-        .newItem().key("customized").parse("B2:F5").value(matrix).onCell((ExcelCellInfo info) -> {
+        .newItem().key("customized").parse("B2:F5").value(matrix)
+        .onCell((ExcelCellInfo info) -> {
             System.out.printf("%s - %s - %s (%s.%s)%n", info.getWorkbook(), info.getSheet(), info.getCell(), info.getRowIdx(), info.getColIdx());
         }))
     ;

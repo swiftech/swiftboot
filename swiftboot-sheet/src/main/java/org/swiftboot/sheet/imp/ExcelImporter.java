@@ -36,6 +36,7 @@ public class ExcelImporter extends BaseImporter {
     private final ThreadLocal<Boolean> foundTarget = new ThreadLocal<>();
     // base position is the position of cell from where the extracting start.
     private final ThreadLocal<Position> basePosition = new ThreadLocal<>();
+    // store the pictures that reads from Excel file.
     private final ThreadLocal<Map<Position, Picture>> pictureMap = new ThreadLocal<>();
     private final ThreadLocal<SheetId> sheetId = new ThreadLocal<>();
 

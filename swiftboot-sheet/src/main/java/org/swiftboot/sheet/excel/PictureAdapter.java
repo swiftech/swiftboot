@@ -12,6 +12,11 @@ import java.util.Map;
  */
 public interface PictureAdapter {
 
+    /**
+     *
+     * @param sheet
+     * @return
+     */
     Map<Position, Picture> getPictures(Sheet sheet);
 
     static PictureAdapter createAdapter(String fileType) {

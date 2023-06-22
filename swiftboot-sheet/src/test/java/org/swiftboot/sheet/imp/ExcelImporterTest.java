@@ -92,17 +92,19 @@ class ExcelImporterTest extends BaseImporterTest {
 
         SheetMetaBuilder builder = new SheetMetaBuilder();
         builder.items(builder.itemBuilder()
-                .newItem().key("GET-C3").parse("B2").to(null, 5)
+                .newItem().key("GET-B2-C3").parse("B2:C3")
+                .newItem().key("GET-B2-5?").from("B2").to(null, 5)
                 .onCell((ExcelCellInfo target) -> {
                     System.out.printf("found: [%d,%d]%n", target.getRowIdx(), target.getColIdx());
                 }));
 
         Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
+        Assertions.assertEquals(2, result.size());
         displayData(result);
     }
 
     @Test
-    public void testImportDynamical() throws IOException {
+    public void testImportFromPredicatedPosition() throws IOException {
         String fileType = SheetFileType.TYPE_XLS;
         Importer importer = factory.createImporter(fileType);
 
@@ -118,6 +120,7 @@ class ExcelImporterTest extends BaseImporterTest {
                 }));
 
         Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
+        Assertions.assertEquals(1, result.size());
         displayData(result);
     }
 
@@ -132,18 +135,16 @@ class ExcelImporterTest extends BaseImporterTest {
         SheetMetaBuilder builder = new SheetMetaBuilder();
         SheetMeta sheetMeta = builder
                 .withImages()
-                .imageConverter((Function<Picture, ?>) pic -> {
-                    return CryptoUtils.md5(pic.getData());
-                })
+                .imageConverter((Function<Picture, ?>) pic -> CryptoUtils.md5(pic.getData()))
                 .items(builder.itemBuilder()
                 .newItem().key("test-image").from("A6")
         ).build();
         Map<String, Object> result = importer.importFromStream(url.openStream(), sheetMeta);
+        Assertions.assertEquals(1, result.size());
         displayData(result);
     }
 
     private void displayData(Map<String, Object> result) {
-        Assertions.assertEquals(1, result.size());
         for (String key : result.keySet()) {
             System.out.printf("Sheet: %s%n", key);
             Object item = result.get(key);
