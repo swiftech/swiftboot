@@ -122,7 +122,7 @@ public class ExcelImporter extends BaseImporter {
                         if (basePosition.get() != null && i >= (basePosition.get().getRow() + rowCount)) {
                             break;
                         }
-                        row = sheetRef.get().getRow(i); // retrieve to be detected for predict way.
+                        row = sheetRef.get().getRow(i); // retrieve to be detected for predicate way.
                     }
                     if (row == null) {
                         log.warn("No row found at " + i);
@@ -169,7 +169,7 @@ public class ExcelImporter extends BaseImporter {
             Object valueFromCell = getValueFromCell(cell);
             cellInfo.get().setCell(cell);
             cellInfo.get().setValue(valueFromCell);
-            if (isNeedPredict(metaItem)) {
+            if (isNeedPredicate(metaItem)) {
                 if (!metaItem.getPredicate().test(cellInfo.get())) {
                     continue; // not the anchor cell and keep processing.
                 }
@@ -207,7 +207,7 @@ public class ExcelImporter extends BaseImporter {
         return values;
     }
 
-    private boolean isNeedPredict(MetaItem metaItem) {
+    private boolean isNeedPredicate(MetaItem metaItem) {
         return (foundTarget.get() == null || !foundTarget.get())
                 && metaItem.getPredicate() != null;
     }

@@ -150,9 +150,9 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 ```java
 builder.items(builder.itemBuilder()
     .newItem().key("GET-B2-D5").from("B2").to("D5")
-    .newItem().key("GET-HEADER").predict((Predicate<BaseCellInfo>) cellInfo ->
+    .newItem().key("GET-HEADER").from((Predicate<BaseCellInfo>) cellInfo ->
     "Header".equals(cellInfo.getValue()), 1, 10) // 读取动态的表格头
-    .newItem().key("GET-CONTENT").predict((Predicate<BaseCellInfo>) cellInfo ->
+    .newItem().key("GET-CONTENT").from((Predicate<BaseCellInfo>) cellInfo ->
     "R001".equals(cellInfo.getValue()), null, 10) // 从动态位置读取至最后一行
     .withImages().imageConverter((Function<Picture, ?>) pic -> CryptoUtils.md5(pic.getData())) // 读取文件中的图片
 );

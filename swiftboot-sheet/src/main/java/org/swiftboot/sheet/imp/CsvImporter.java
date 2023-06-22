@@ -44,7 +44,7 @@ public class CsvImporter extends BaseImporter {
                     if (startPos != null && i >= (startPos.getRow() + rowCount)) {
                         break;
                     }
-                    row = lines.get(i); // retrieve to be detected for predict way.
+                    row = lines.get(i); // retrieve to be detected for predicate way.
                 }
                 StringTokenizer valueTokenizer = StringTokenizer.getCSVInstance(row);
                 List<Object> values = new ArrayList<>();

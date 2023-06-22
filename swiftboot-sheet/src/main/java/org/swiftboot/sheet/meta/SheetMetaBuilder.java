@@ -290,17 +290,17 @@ public class SheetMetaBuilder {
         }
 
         /**
-         * Predict whether a cell is base one to start, Only works for Import.
+         * Set Predicate function to determine from where starts to read, Only works for Import.
          *
          * @param predicate
          * @param rows
          * @param columns
          * @return
          */
-        public MetaItemBuilder predict(Predicate<? extends CellInfo> predicate, Integer rows, Integer columns) {
+        public MetaItemBuilder from(Predicate<? extends CellInfo> predicate, Integer rows, Integer columns) {
             if (item.getArea() != null
                     && (item.getArea().getStartPosition() != null || item.getArea().getEndPosition() != null)) {
-                throw new RuntimeException("The predict function can't be used since the area position has been setup.");
+                throw new RuntimeException("The predicate function can't be used since the area position has been setup.");
             }
             if (columns == null || rows == null) {
                 // if rows is not provided, the reading might stop once getting first empty row, which is usually NOT the last row that you want.
@@ -311,9 +311,9 @@ public class SheetMetaBuilder {
             return this;
         }
 
-        private void checkPredictFunction() {
+        private void checkPredicateFunction() {
             if (item.getPredicate() != null) {
-                throw new RuntimeException("The area position can't be used since the predict function has been setup");
+                throw new RuntimeException("The area position can't be used since the predicate function has been setup");
             }
         }
 
@@ -324,7 +324,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder parse(String expression) {
-            this.checkPredictFunction();
+            this.checkPredicateFunction();
             Area area = translator.toArea(expression);
             item.setArea(area);
             return this;
@@ -337,7 +337,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder from(String expression) {
-            this.checkPredictFunction();
+            this.checkPredicateFunction();
             Position position = translator.toSinglePosition(expression);
             return from(position);
         }
@@ -349,7 +349,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder from(Position startPosition) {
-            this.checkPredictFunction();
+            this.checkPredicateFunction();
             if (item.getArea() == null) {
                 item.setArea(new Area(startPosition));
             }
@@ -365,7 +365,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder from(Integer rowIdx, Integer columnIdx) {
-            this.checkPredictFunction();
+            this.checkPredicateFunction();
             if (item.getArea() == null) {
                 item.setArea(new Area(new Position(rowIdx, columnIdx)));
             }
@@ -380,7 +380,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder to(String expression) {
-            this.checkPredictFunction();
+            this.checkPredicateFunction();
             Position position = translator.toSinglePosition(expression);
             return to(position);
         }
@@ -392,7 +392,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder to(Position endPosition) {
-            this.checkPredictFunction();
+            this.checkPredicateFunction();
             if (item.getArea() == null || item.getArea().getStartPosition() == null) {
                 return this;
             }
@@ -408,7 +408,7 @@ public class SheetMetaBuilder {
          * @return
          */
         public MetaItemBuilder to(Integer rowIdx, Integer columnIdx) {
-            this.checkPredictFunction();
+            this.checkPredicateFunction();
             if (item.getArea() == null || item.getArea().getStartPosition() == null) {
                 return this;
             }

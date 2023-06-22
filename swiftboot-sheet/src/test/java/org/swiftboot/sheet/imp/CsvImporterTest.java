@@ -41,7 +41,7 @@ class CsvImporterTest extends BaseImporterTest {
         Importer importer = factory.createImporter(SheetFileType.TYPE_CSV);
         SheetMetaBuilder builder = new SheetMetaBuilder();
         builder.items(builder.itemBuilder()
-                .newItem().key("GET-B2").predict((Predicate<BaseCellInfo>) cellInfo -> {
+                .newItem().key("GET-B2").from((Predicate<BaseCellInfo>) cellInfo -> {
                     return "c3".equals(cellInfo.getValue().toString().trim());
                 }, 2, 2).onCell((Consumer<CsvCellInfo>) cellInfo -> {
                     System.out.println("# " + cellInfo.getValue());

@@ -113,7 +113,7 @@ class ExcelImporterTest extends BaseImporterTest {
 
         SheetMetaBuilder builder = new SheetMetaBuilder();
         builder.items(builder.itemBuilder()
-                .newItem().key("GET-C3").predict((Predicate<BaseCellInfo>) cellInfo ->
+                .newItem().key("GET-C3").from((Predicate<BaseCellInfo>) cellInfo ->
                         "c3".equals(cellInfo.getValue()), 2, 3)
                 .onCell((ExcelCellInfo target) -> {
                     System.out.printf("found: [%d,%d]%n", target.getRowIdx(), target.getColIdx());

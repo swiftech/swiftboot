@@ -67,41 +67,41 @@ public class SheetMetaBuilderTest {
     }
 
     @Test
-    public void predict() {
+    public void predicate() {
 
-        // can't use from() and predict() at the same time
+        // can't use numbers and function for method from() at the same time
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
-                    .key("test").from(0, 0).predict(cellInfo -> false, 1, 1));
+                    .key("test").from(0, 0).from(cellInfo -> false, 1, 1));
         });
 
-        // can't use from() and predict() at the same time
+        // can't use numbers and function for method from() at the same time
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
-                    .key("test").from("B2").predict(cellInfo -> false, 1, 1));
+                    .key("test").from("B2").from(cellInfo -> false, 1, 1));
         });
 
-        // can't use from() and predict() at the same time
+        // can't use numbers and function for method from() at the same time
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
-                    .key("test").predict(cellInfo -> false, 1, 1).from(0, 0));
+                    .key("test").from(cellInfo -> false, 1, 1).from(0, 0));
         });
 
-        // muse specify rows for predict()
+        // muse specify rows for predicate
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
-                    .key("test").predict(cellInfo -> false, null, 1));
+                    .key("test").from(cellInfo -> false, null, 1));
         });
 
-        // muse specify columns for predict()
+        // muse specify columns for predicate
         Assertions.assertThrows(Exception.class, () -> {
             SheetMetaBuilder builder = new SheetMetaBuilder();
             builder.items(builder.itemBuilder()
-                    .key("test").predict(cellInfo -> false, 1, null));
+                    .key("test").from(cellInfo -> false, 1, null));
         });
 
 

@@ -147,10 +147,10 @@ exportEntity.setPictureToExport(() -> {
 ```java
 builder.items(builder.itemBuilder()
     .newItem().key("GET-B2-D5").from("B2").to("D5")
-    .newItem().key("GET-HEADER").predict((Predicate<BaseCellInfo>) cellInfo ->
+    .newItem().key("GET-HEADER").predicate((Predicate<BaseCellInfo>) cellInfo ->
     "Header".equals(cellInfo.getValue()), 1, 10) // read header row
-    .newItem().key("GET-CONTENT").predict((Predicate<BaseCellInfo>) cellInfo ->
-    "R001".equals(cellInfo.getValue()), null, 10) // read from predicted row to last row
+    .newItem().key("GET-CONTENT").predicate((Predicate<BaseCellInfo>) cellInfo ->
+    "R001".equals(cellInfo.getValue()), null, 10) // read from predicated row to last row
     .withImages().imageConverter((Function<Picture, ?>) pic -> CryptoUtils.md5(pic.getData())) // read images anchrored to cells
 );
 Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
