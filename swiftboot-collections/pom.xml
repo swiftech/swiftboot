@@ -10,10 +10,7 @@
     </parent>
 
     <artifactId>swiftboot-collections</artifactId>
-    <description>企业开发常用集合类</description>
-    <properties>
-<!--        <junit.version>5.5.2</junit.version>-->
-    </properties>
+    <description>Extended collections classes for enterprise development</description>
 
     <dependencies>
         <dependency>

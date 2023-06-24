@@ -1,9 +1,6 @@
 package org.swiftboot.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +13,7 @@ public class IoUtils {
 
     /**
      * 从输入流中读取所有字节内容（不能用于大数据量）
+     *
      * @param ins
      * @return
      */
@@ -52,6 +50,21 @@ public class IoUtils {
     }
 
     /**
+     * Read data stream form {@link Reader} as String.
+     *
+     * @param reader
+     * @return
+     * @throws IOException
+     */
+    public static String readAllToString(Reader reader) throws IOException {
+        StringBuilder buf = new StringBuilder();
+        while (reader.ready()) {
+            buf.append((char) reader.read());
+        }
+        return buf.toString();
+    }
+
+    /**
      * 从输入流中按行读取所有字符串内容
      *
      * @param inputStream
@@ -70,6 +83,7 @@ public class IoUtils {
 
     /**
      * 从输入流中按行读取所有字符串内容
+     *
      * @param inputStream
      * @return
      * @throws IOException
