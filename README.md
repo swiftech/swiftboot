@@ -47,20 +47,6 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 
 
 ### 版本
-
-##### Development: v2.3
-
-* Add wrapper class PreferenceManager to enhance the management for Java preferences.
-* Update redis client dependencies and RedisService's implementation;
-* Add new TextUtils class for advanced indexing in text.
-* Add ElapsedTime class for calculating time elapsing.
-* Dependencies upgrade, includes:
-  * SpringBoot 2.6.11
-  * SpringDataJPA 2.7.2
-  * Hibernate 5.6.11.Final
-  * Jedis 4.2.3
-  * etc.
-
 ##### Stable：v2.2.1
 
   Update:
@@ -74,8 +60,22 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 * re-implement the translating from error code to message by response advice. 
 * phone number validator supports parameterized error message.
 
-[完整更新记录](changelog.md)
+##### Unstable: v2.3.1
 
+* `[utils]` Add CalcUtils for calculating.
+* `[utils]` Add support for Reader to IoUtils.
+* `[utils]` Add readAllAsString() method to BufferedIoUtils.
+* `[collections]` Improve the CollectionUtils.toLinkedList() method.
+* Dependencies update:
+  * SpringBoot 2.7.12
+  * SpringDataJPA 2.7.9
+  * Hibernate 5.6.14.Final
+  * Jedis 4.3.1
+  * Poi 5.2.3
+  * JSON 20220320
+  * etc.
+
+[完整更新记录](changelog.md)
 
 ### 概览
 

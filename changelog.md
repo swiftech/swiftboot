@@ -1,3 +1,17 @@
+v2.3.1
+* `[utils]` Add CalcUtils for calculating.
+* `[utils]` Add support for Reader to IoUtils.
+* `[utils]` Add readAllAsString() method to BufferedIoUtils.
+* `[collections]` Improve the CollectionUtils.toLinkedList() method.
+* Dependencies update: 
+  * SpringBoot 2.7.12
+  * SpringDataJPA 2.7.9
+  * Hibernate 5.6.14.Final
+  * Jedis 4.3.1
+  * Poi 5.2.3
+  * JSON 20220320
+  * etc.
+
 v2.3
 * `[utils]`Add wrapper class PreferenceManager to enhance the management for Java preferences.
 * `[service]`Update redis client dependencies and RedisService's implementation;
