@@ -1,11 +1,11 @@
 v2.4
 * `[sheet]`: Add support for reading images from Excel.
-* `[sheet]`: Add support for reading csv/excel data from dynamic position(which determined by a function);
+* `[sheet]`: Add support for reading csv/excel data from dynamic position(which is determined by a function).
 * `[sheet]`: Add support for reading uncertain rows for Excel(stops when getting first empty row).
-* `[sheet]`: Replace SheetHandler/CellHandler interfaces with Consumer
-* `[sheet]`: Fix some bugs of importing csv and Excel files;
-* `[sheet]`: Fix bug of reading value of FORMULA Excel cell
-* dependencies update and doc update
+* `[sheet]`: Replace SheetHandler/CellHandler interfaces with Consumer.
+* `[sheet]`: Fix some bugs of importing csv and Excel files.
+* `[sheet]`: Fix bug of reading value of Excel FORMULA cell.
+* dependencies update and doc update.
 
 v2.3.1
 * `[utils]` Add CalcUtils for calculating.
