@@ -3,7 +3,9 @@ package org.swiftboot.util;
 import org.apache.commons.codec.binary.StringUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * @author swiftech 2019-03-26
@@ -19,6 +21,17 @@ public class IoUtilsTest {
         byte[] bytesUsAscii = StringUtils.getBytesUsAscii(s);
         System.out.println(org.apache.commons.lang3.StringUtils.join(bytesUsAscii, '\\'));
         System.out.println();
+    }
 
+    @Test
+    public void testReadAllToStringFromReader() throws IOException {
+        InputStream resourceAsStream =
+                this.getClass().getResourceAsStream("/IoUtilsTest.txt");
+        InputStreamReader insReader = new InputStreamReader(resourceAsStream);
+        String s = IoUtils.readAllToString(insReader);
+        System.out.println("/" + s + "/");
+        byte[] bytesUsAscii = StringUtils.getBytesUsAscii(s);
+        System.out.println(org.apache.commons.lang3.StringUtils.join(bytesUsAscii, '\\'));
+        System.out.println();
     }
 }
