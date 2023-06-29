@@ -40,7 +40,7 @@
         <commons.codec.version>1.15</commons.codec.version>
         <commons.collections.version>4.4</commons.collections.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
-        <commons.text.version>1.9</commons.text.version>
+        <commons.text.version>1.10.0</commons.text.version>
         <commons.io.version>2.11.0</commons.io.version>
         <junit.version>5.9.3</junit.version>
         <spring.version>5.3.28</spring.version>

@@ -47,20 +47,8 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 
 
 ### 版本
-##### Stable：v2.2.1
 
-  Update:
-* add Tree class to collections.
-* add missing error msg translating for AuthFilter
-* change the way to implement user authentication.
-* return user token through http response header instead of response body.
-* add parameterized error message support to HttpResponse object.
-* add parameterized error message support for user-defined validators. 
-* refactored the error code support.
-* re-implement the translating from error code to message by response advice. 
-* phone number validator supports parameterized error message.
-
-##### Unstable: v2.3.1
+##### Stable: v2.3.1
 
 * `[utils]` Add CalcUtils for calculating.
 * `[utils]` Add support for Reader to IoUtils.
@@ -74,6 +62,16 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
   * Poi 5.2.3
   * JSON 20220320
   * etc.
+
+##### Unstable: v2.4
+
+* `[sheet]`: Add support for reading images from Excel.
+* `[sheet]`: Add support for reading csv/excel data from dynamic position(which is determined by a function).
+* `[sheet]`: Add support for reading uncertain rows for Excel(stops when getting first empty row).
+* `[sheet]`: Replace SheetHandler/CellHandler interfaces with Consumer.
+* `[sheet]`: Fix some bugs of importing csv and Excel files.
+* `[sheet]`: Fix bug of reading value of Excel FORMULA cell.
+* dependencies update and doc update.
 
 [完整更新记录](changelog.md)
 
