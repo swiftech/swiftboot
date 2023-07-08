@@ -2,7 +2,6 @@
 
 提供一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。只需要给导入或导出指定数据对应的位置，而无需关心导入或导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
 
-SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data from or export data to sheet files (including xlsx, xls, csv), regardless of the style of the sheet. In other words, users can edit the style of template sheet file whatever he/she likes without affecting the import or export of data.
 
 ### 支持的文件格式：
 
@@ -11,13 +10,15 @@ SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data fro
 * CSV
 
 ### 特性
-* 多表单支持，表达式支持。
-* 通过注解（Annotation）对象的属性来实现针对数据对象的导入和导出。
+* 支持多表单的导入和导出。
+* 支持用表达式来定位一个或者多个单元格。
+* 通过注解（Annotation）对象的属性来实现于单元格的映射
 * 通过Builder API实现动态位置导入和导出。
-* 支持图片的导入和导出，并且图片可以在导入过程中进行格式转换。
+* 支持图片的导入和导出。
 * 导入：
   * 从符合自定义条件的单元格开始导入数据。
   * 导入行数可以不指定（不能和自定义条件功能一起使用）
+  * 图片可以在导入过程中进行格式转换。
 * 导出
   * 支持表格样式复制，无需代码实现样式写入。
 
@@ -47,7 +48,7 @@ public class SheetEntity {
 }
 ```
 
-* 导出
+* 导出表单数据  
   创建指定文件类型的 `Exporter` ，然后调用 `export()` 方法将实体对象中的数据导出到数据表格文件中，例如：
 
 
@@ -68,7 +69,7 @@ public class SheetEntity {
 > `templateFileInputStream` 是导出时指定的模版文件，在这个文件里你可以任意的修改表格的样式，SwiftBoot-Sheet 只处理数据，表格样式会被原封不动的复制到 `outputStream` 中
 > 如果没有模版，那么可以调用 `exporter.export(exportEntity, outputStream);` 直接导出到一个新的无样式的表格文件中。
 
-* 导入  
+* 从表单导入  
   实现方式和导出类似，数据会从表格文件导入到实体对象中，例如
 
 ```java
@@ -94,7 +95,7 @@ public class SheetEntity {
 
 ```java
 exportEntity.setPictureToExport(() -> {
-  byte[]bytesPic=... // 加载图片
+  byte[]bytesPic=... // 加载图片二进制数据
   return new Picture(Workbook.PICTURE_TYPE_JPEG, bytesPic);
 });
 exporter.export(templateFileInputStream, exportEntity, outputStream);
