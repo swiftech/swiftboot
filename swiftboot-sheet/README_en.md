@@ -104,25 +104,25 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 ### Expression
 
-* 表达式中字母表示列，数字表示行，例如 `E2` 表示第二行第五列
-* 表达式字母和数字顺序可颠倒，例如`E2` 和 `2E` 是一样的。
-* 表达式中字母可为大写或小写，例如`E2` 和 `e2` 是一样的。
-* 用 '-' 或 '|' 加上数字代表行或列
-* 用 '?' 表示不确定长度
-* 起始点和终止点的顺序可以颠倒，也就是说终止点写在起始点前面效果是一样的，最终都是由小至大。
-* 导出：如果表达式的范围小于给出的数据大小，则只导出表达式给定的范围的数据。
-* 对于合并单元格，只需要给出合并范围内的任一单元格位置即可。
+* Like MS Excel, the letters in expression represents columns, the digits in expression represents rows, eg: `E2` means the second row and fifth column.
+* The positions of letter and digit are exchangeable, eg: `E2` and `2E` are the same.
+* Letter case is not sensitive，eg: `E2` and `e2` are the same.
+* `-` or `|` with digits represents row or column
+* `?` uncertain length.
+* The positions of start and end are exchangeable, which means the end position can be set before start position in expression, and the result remains。
+* For export: if the area determined by expression is smaller than the data matrix size, only the sub-matrix of data will be exported.  
+* For merged cells, give any position of cell that within the merged cell in the expression. 
 
-| 表达式示例                                                      | 解释                                       |
-| --------------------------------------------------------------- | ------------------------------------------ |
-| `E2` 或 `2E`                                                    | 第二行第五单元格                           |
-| `E2:E3`，`2:E3`，`E2:3`，`2E:3`，`2:3E`，E2&#124;3 或 2E&#124;3 | 第二行至第三行的第五个单元格               |
-| `E2:H2`, `2E:H`，`E:H2`，`E2-3` 或 `2E-3`                                | 第二行的第五至第八个单元格                 |
-| `E2:H3`                                                         | 第二行至第三行，第五列至第八列的所有单元格 |
-| `E2:E?`，`E2:?3`, `E2:?`                                      | （仅用于导出）不定长度数据范围，取决于实际导出的数据集合的大小                                           |
+| Expression example                                        | Explain                         |
+|-----------------------------------------------------------|---------------------------------|
+| `E2` 或 `2E`                                               | 第二行第五单元格                        |
+| `E2:E3`，`2:E3`，`E2:3`，`2E:3`，`2:3E`，E2&#124;3 或 2E&#124;3 | 第二行至第三行的第五个单元格                  |
+| `E2:H2`, `2E:H`，`E:H2`，`E2-3` 或 `2E-3`                    | 第二行的第五至第八个单元格                   |
+| `E2:H3`                                                   | 第二行至第三行，第五列至第八列的所有单元格           |
+| `E2:E?`，`E2:?3`, `E2:?`                                   | （仅用于导出）不定长度数据范围，取决于实际导出的数据集合的大小 |
 
 
-### 底层 API
+### Low level API
 
 如果你想导入或者导出的表格位置是动态的(例如位置保存在配置文件或者数据库中），那么也可以直接调用底层的 API 来实现，例如：
 
