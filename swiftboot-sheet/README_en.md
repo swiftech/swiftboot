@@ -9,7 +9,7 @@ SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data fro
 * Microsoft Excel 2007
 * CSV
 
-### 特性
+### Features
 * Supports multiple sheets import and export.
 * Supports locating cells(s) by expression.
 * Mapping data object to cells(s) by annotation on object's attributes.
@@ -113,16 +113,16 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 * For export: if the area determined by expression is smaller than the data matrix size, only the sub-matrix of data will be exported.  
 * For merged cells, give any position of cell that within the merged cell in the expression. 
 
-| Expression example                                        | Explain                         |
-|-----------------------------------------------------------|---------------------------------|
-| `E2` 或 `2E`                                               | 第二行第五单元格                        |
-| `E2:E3`，`2:E3`，`E2:3`，`2E:3`，`2:3E`，E2&#124;3 或 2E&#124;3 | 第二行至第三行的第五个单元格                  |
-| `E2:H2`, `2E:H`，`E:H2`，`E2-3` 或 `2E-3`                    | 第二行的第五至第八个单元格                   |
-| `E2:H3`                                                   | 第二行至第三行，第五列至第八列的所有单元格           |
-| `E2:E?`，`E2:?3`, `E2:?`                                   | （仅用于导出）不定长度数据范围，取决于实际导出的数据集合的大小 |
+| Expression example                                        | Explain                                                                       |
+|-----------------------------------------------------------|-------------------------------------------------------------------------------|
+| `E2` 或 `2E`                                               | The fifth cell in second row                                                  |
+| `E2:E3`，`2:E3`，`E2:3`，`2E:3`，`2:3E`，E2&#124;3 或 2E&#124;3 | The fifth cells from second row to third row                                  |
+| `E2:H2`, `2E:H`，`E:H2`，`E2-3` 或 `2E-3`                    | The fifth cell to eighth cell in the second row                               |
+| `E2:H3`                                                   | All cells from second row to third row, and fifth column to eighth column     |
+| `E2:E?`，`E2:?3`, `E2:?`                                   | (for export only) uncertain size range, depends on actual size of data matrix |
 
 
-### Low level API
+### Low Level API
 
 If the position that you want to export data to is dynamic(eg: the positions saved in files or database), the low level API is ready for you to get it done. 
 
@@ -144,7 +144,7 @@ If the position that you want to export data to is dynamic(eg: the positions sav
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
 
-> 默认导出的表格名称为 "Sheet 1"
+> Default sheet name in exported file is `Sheet 1`
 
 * Import (since v2.4)
 ```java
@@ -161,9 +161,9 @@ Map<String, Object> result = importer.importFromStream(url.openStream(), builder
 > 动态定位读取位置和不指定读取行数不能同时使用，因为读取过程有可能遇到中间的空行而无法进行下去。
 > 图片可以用 imageConverter() 来定义转换器，如果不进行转换，则直接得到图片的二进制数据（byte[])
 
-### 多表单(Sheet)支持
+### Multiple Sheets Support
 
-导入和导出都支持 Excel 文档中的多表格，可以通过调用相应的 API 或者在表达式中指定表单，其表达式格式和 MS Excel 的一样：`$'<sheet name>'.`，例如
+Both import and export are support multiple sheets for MS Excel document, you can use relevant API or specify sheet in expression, the format of expression is like the one in MS Excel `$'<sheet name>'.`, eg:
 
 ```java
 public class SheetEntity {
@@ -177,7 +177,7 @@ public class SheetEntity {
 }
 ```
 
-直接调用底层API：
+Use low level API to handle multiple sheets：
 
 ```java
     SheetMetaBuilder builder = new SheetMetaBuilder();
@@ -196,11 +196,11 @@ public class SheetEntity {
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
 
-> 不指定表单的情况下，默认是第一个表单，且名称默认为 "Sheet 1".
-> 表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中.
+> If no sheet specified, then first sheet will be used, and the default name is `Sheet 1`.
+> If there is sheet name provided in expression, the one from `sheet()` method will be ignored.
 
 
-### 复制样式（导出）
+### Copy styles（for Export）
 
 对于输出位置不确定但是需要给这个单元格设定样式的情况，使用 `MetaItemBuilder` 的 `copy()` 方法可以将其他区域的单元格样式复制过来。例如：
 
@@ -223,7 +223,7 @@ builder.items(builder.itemBuilder()
 > 注意：对于动态长度的 `copy()`，会与` merge()` 产生冲突，因为 `merge()` 的 value 有可能是单个值
 
 
-### 自定义表格处理
+### Custom Handler
 
 虽然 SwiftBoot-Sheet 提供了简洁而强大的功能，但是有些情况下用户可能还是需要自行操作表格，例如，
 ```java

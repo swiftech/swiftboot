@@ -178,7 +178,7 @@ public class SheetEntity {
 }
 ```
 
-直接调用底层API：
+直接调用底层API来处理多表单：
 
 ```java
     SheetMetaBuilder builder = new SheetMetaBuilder();
@@ -197,7 +197,7 @@ public class SheetEntity {
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
 
-> 不指定表单的情况下，默认是第一个表单，且名称默认为 "Sheet 1".
+> 不指定表单的情况下，默认是第一个表单，且名称默认为 `Sheet 1`.
 > 表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中.
 
 
