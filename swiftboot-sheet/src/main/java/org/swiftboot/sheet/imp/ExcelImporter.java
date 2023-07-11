@@ -165,7 +165,7 @@ public class ExcelImporter extends BaseImporter {
             else {
                 isRowEmpty = isRowEmpty && false;
             }
-            log.trace(String.format("Get value from [%d,%d] as %s", row.getRowNum(), j, cell.getCellType()));
+            log.trace(String.format("Get value from [%d,%d] as %s", row.getRowNum(), j, cell == null ? "NULL" : cell.getCellType()));
             Object valueFromCell = getValueFromCell(cell);
             cellInfo.get().setCell(cell);
             cellInfo.get().setValue(valueFromCell);

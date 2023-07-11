@@ -133,7 +133,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
     SheetMetaBuilder builder = new SheetMetaBuilder();
     builder
     .items(builder.itemBuilder()
-        .newItem().key("cell_0").from(0, 0).value("This is title 1") // 直接位置设定设定导出单元格（从0开始）
+        .newItem().key("cell_0").from(0, 0).value("This is title 1") // 直接位置设定导出单元格（从0开始）
         .newItem().key("cell_0").parse("B1").value("This is title 2") // 表达式设定导出单元格
         .newItem().key("line_0").from(1, 0).to(1, 2).value(Arrays.asList("a", "b", "c"))  // 位置设定导出一行数据
         .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))  // 表达式设定导出一列数据
@@ -147,7 +147,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 > 默认导出的表格名称为 "Sheet 1"
 
-* 导入
+* 导入 (v2.4)
 ```java
 builder.items(builder.itemBuilder()
     .newItem().key("GET-B2-D5").from("B2").to("D5")
@@ -248,6 +248,6 @@ builder.sheet(0, "my first sheet")
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.2.1</version>
+  <version>2.4</version>
 </dependency>
 ```

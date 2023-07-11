@@ -124,19 +124,19 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 ### Low level API
 
-如果你想导入或者导出的表格位置是动态的(例如位置保存在配置文件或者数据库中），那么也可以直接调用底层的 API 来实现，例如：
+If the position that you want to export data to is dynamic(eg: the positions saved in files or database), the low level API is ready for you to get it done. 
 
-* 导出
+* Export
 
 ```java
     SheetMetaBuilder builder = new SheetMetaBuilder();
     builder
     .items(builder.itemBuilder()
-        .newItem().key("cell_0").from(0, 0).value("This is title 1") // 直接位置设定设定导出单元格（从0开始）
-        .newItem().key("cell_0").parse("B1").value("This is title 2") // 表达式设定导出单元格
-        .newItem().key("line_0").from(1, 0).to(1, 2).value(Arrays.asList("a", "b", "c"))  // 位置设定导出一行数据
-        .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))  // 表达式设定导出一列数据
-        .newItem().key("picture").parse("A5").value(pictureLoader) // 表达式设定导出图片
+        .newItem().key("cell_0").from(0, 0).value("This is title 1") // setting cell(s) by position（from 0）
+        .newItem().key("cell_0").parse("B1").value("This is title 2") // setting cells(s) by expression
+        .newItem().key("line_0").from(1, 0).to(1, 2).value(Arrays.asList("a", "b", "c"))  // setting row(s) by position
+        .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))  // setting column(s) by expression
+        .newItem().key("picture").parse("A5").value(pictureLoader) // setting where image export to by expression
     )
     .fromAnnotatedObject(exportEntity);
     SheetMeta sheetMeta = builder.build();
@@ -146,7 +146,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 > 默认导出的表格名称为 "Sheet 1"
 
-* 导入
+* Import (since v2.4)
 ```java
 builder.items(builder.itemBuilder()
     .newItem().key("GET-B2-D5").from("B2").to("D5")
@@ -247,6 +247,6 @@ builder.sheet(0, "my first sheet")
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.2.1</version>
+  <version>2.4</version>
 </dependency>
 ```
