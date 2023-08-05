@@ -14,7 +14,7 @@ SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data fro
 * Supports locating cells(s) by expression.
 * Mapping data object to cells(s) by annotation on object's attributes.
 * Mapping cells dynamically by Builder API.
-* Supports image import&export, and 
+* Supports image import&export. 
 * Import：
   * Customizable condition to determine from which cell the import starts. 
   * Supports reading uncertain rows(not with the customizable condition) 
@@ -65,7 +65,7 @@ public class SheetEntity {
 ```
 
 > File types: `TYPE_XLSX`，`TYPE_XLS` 和 `TYPE_CSV`。
-> `templateFileInputStream` is the template file for export, you can edit style as you want, SwiftBoot-Sheet only deal with data, style will be copied as it is
+> `templateFileInputStream` is the template file for export, you can edit style as you want, SwiftBoot-Sheet only deal with data, style will be copied as it is.
 > If no template file provided, call `exporter.export(exportEntity, outputStream);` to export data into a sheet file without any styles.
 
 * Import from sheet  
@@ -163,7 +163,7 @@ Map<String, Object> result = importer.importFromStream(url.openStream(), builder
 
 ### Multiple Sheets Support
 
-Both import and export are support multiple sheets for MS Excel document, you can use relevant API or specify sheet in expression, the format of expression is like the one in MS Excel `$'<sheet name>'.`, eg:
+Both import and export are support multiple sheets for MS Excel document, you can use the relevant API or specify sheet in expression, the format of expression is like the one in MS Excel `$'<sheet name>'.`, eg:
 
 ```java
 public class SheetEntity {
@@ -211,12 +211,12 @@ builder.items(builder.itemBuilder()
 
 ### Styles for uncertain size area for Export）
 
-Despite the separation of data handling and style formatting, we still can't set up styles for uncertain size cells area, also use `copy()` to copy styles from some cell. 
-For example if wee need export uncertain size data arrays to a row like `A0:?0`, just set the style for first cell `A0` (or another cell out of this area):
+Despite the separation of data handling and style formatting, we still can't set up styles for uncertain size cell's area, also use `copy()` to copy styles from some cell. 
+For example if you need export uncertain size data arrays to a row like `A0:?0`, just set the style for first cell `A0` (or another cell out of this area):
 
 ```java
 builder.items(builder.itemBuilder()
-        .newItem().parse("A0:?0").insert().copy("A0").value(Arrays.asList("foo", "bar"))) // copy style from cell `A0` to cells of first row(the size of data array determines how many columns)
+        .newItem().parse("A0:?0").insert().copy("A0").value(Arrays.asList("foo", "bar"))) // copy style from cell `A0` to cells of the first row(the size of data array determines how many columns)
 ```
 
 > If more specific cases needs to be fulfilled(such as changing cell background color as per it's value), use `MetaItemBuilder.onCell()` to directly manipulate `Cell` object from POI(reference: [Custom Handler](#Custom Handler) )
