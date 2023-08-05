@@ -158,8 +158,8 @@ builder.items(builder.itemBuilder()
 );
 Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
 ```
-> 动态定位读取位置和不指定读取行数不能同时使用，因为读取过程有可能遇到中间的空行而无法进行下去。
-> 图片可以用 imageConverter() 来定义转换器，如果不进行转换，则直接得到图片的二进制数据（byte[])
+> Dynamic position and reading uncertain rows can't be applied at the same time, because any read empty row is ambiguous to proceed.
+> Use `imageConverter()` to define converter for read pictures, if absent, binary data (byte[]) will be read and return.
 
 ### Multiple Sheets Support
 
@@ -202,30 +202,31 @@ Use low level API to handle multiple sheets：
 
 ### Copy styles（for Export）
 
-对于输出位置不确定但是需要给这个单元格设定样式的情况，使用 `MetaItemBuilder` 的 `copy()` 方法可以将其他区域的单元格样式复制过来。例如：
+To set styles for specific cell(s) whose position is uncertain, use  `copy()` method of `MetaItemBuilder` to copy styles from other cell. eg：
 
 ```java
 builder.items(builder.itemBuilder()
-        .newItem().parse("A1").copy("A0").value("output value")) // 从 `A0` 单元格复制样式到 `A1` 单元格。
+        .newItem().parse("A1").copy("A0").value("output value")) // copy style from cell `A0` to cell `A1`。
 ```
 
-### 动态长度区域的样式处理（导出）
+### Styles for uncertain size area for Export）
 
-虽然我们把数据处理和表单样式完全分离了，但是对于大小不固定的区域，无法预先在模版中设置好整个区域的样式，那么我们可以用 `copy()` 来从其他单元格复制样式。
-例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的任意单元格），例如：
+Despite the separation of data handling and style formatting, we still can't set up styles for uncertain size cells area, also use `copy()` to copy styles from some cell. 
+For example if wee need export uncertain size data arrays to a row like `A0:?0`, just set the style for first cell `A0` (or another cell out of this area):
 
 ```java
 builder.items(builder.itemBuilder()
-        .newItem().parse("A0:?0").insert().copy("A0").value(Arrays.asList("foo", "bar"))) // 从 `A0` 单元格复制样式到第一行的若干（长度由数据长度决定）单元格
+        .newItem().parse("A0:?0").insert().copy("A0").value(Arrays.asList("foo", "bar"))) // copy style from cell `A0` to cells of first row(the size of data array determines how many columns)
 ```
 
-> 如果对于单元格样式有更灵活的要求的情况（例如根据值改变单元格的背景颜色等等），可以使用 `MetaItemBuilder.onCell()` 来直接操作 POI 的 `Cell` 对象（参考 [自定义表格处理](#自定义表格处理) ）.
-> 注意：对于动态长度的 `copy()`，会与` merge()` 产生冲突，因为 `merge()` 的 value 有可能是单个值
+> If more specific cases needs to be fulfilled(such as changing cell background color as per it's value), use `MetaItemBuilder.onCell()` to directly manipulate `Cell` object from POI(reference: [Custom Handler](#Custom Handler) )
+> Notice: It might have conflict between methods `copy()` and `merge()` for uncertain size cells, since the value to `merge()` might be single.
 
 
 ### Custom Handler
 
-虽然 SwiftBoot-Sheet 提供了简洁而强大的功能，但是有些情况下用户可能还是需要自行操作表格，例如，
+Despite the SwiftBoot-Sheet provides powerful and flexible features to import/export, but still there might be some cases that users need to manipulate cells directly(through POI), if so, do it like this:
+
 ```java
 SheetMetaBuilder builder = new SheetMetaBuilder();
 builder.sheet(0, "my first sheet")
@@ -247,6 +248,6 @@ builder.sheet(0, "my first sheet")
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.4</version>
+  <version>2.4.1</version>
 </dependency>
 ```

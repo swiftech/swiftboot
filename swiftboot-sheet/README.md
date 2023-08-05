@@ -160,7 +160,7 @@ builder.items(builder.itemBuilder()
 Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
 ```
 > 动态定位读取位置和不指定读取行数不能同时使用，因为读取过程有可能遇到中间的空行而无法进行下去。
-> 图片可以用 imageConverter() 来定义转换器，如果不进行转换，则直接得到图片的二进制数据（byte[])
+> 图片可以用 `imageConverter()` 来定义转换器，如果不进行转换，则直接得到图片的二进制数据（byte[])
 
 ### 多表单(Sheet)支持
 
@@ -213,7 +213,7 @@ builder.items(builder.itemBuilder()
 ### 动态长度区域的样式处理（导出）
 
 虽然我们把数据处理和表单样式完全分离了，但是对于大小不固定的区域，无法预先在模版中设置好整个区域的样式，那么我们可以用 `copy()` 来从其他单元格复制样式。
-例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的任意单元格），例如：
+例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的任意单元格）：
 
 ```java
 builder.items(builder.itemBuilder()
@@ -248,6 +248,6 @@ builder.sheet(0, "my first sheet")
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.4</version>
+  <version>2.4.1</version>
 </dependency>
 ```

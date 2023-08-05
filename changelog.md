@@ -1,4 +1,4 @@
-v2.4
+v2.4.1
 * `[sheet]`: Add support for reading images from Excel.
 * `[sheet]`: Add support for reading csv/excel data from dynamic position(which is determined by a function).
 * `[sheet]`: Add support for reading uncertain rows for Excel(stops when getting first empty row).
