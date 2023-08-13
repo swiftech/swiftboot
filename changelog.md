@@ -1,4 +1,11 @@
+v2.4.2
+* `[sheet]`: Fix exception when read any shapes other than picture.
+* dependencies update and doc update. 
+
 v2.4.1
+* `[sheet]`: Fix exception when read a null cell.
+
+v2.4.0
 * `[sheet]`: Add support for reading images from Excel.
 * `[sheet]`: Add support for reading csv/excel data from dynamic position(which is determined by a function).
 * `[sheet]`: Add support for reading uncertain rows for Excel(stops when getting first empty row).
