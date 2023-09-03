@@ -293,8 +293,8 @@ public class SheetMetaBuilder {
          * Set Predicate function to determine from where starts to read, Only works for Import.
          *
          * @param predicate
-         * @param rows
-         * @param columns
+         * @param rows how many rows to read.
+         * @param columns how many columns to read.
          * @return
          */
         public MetaItemBuilder from(Predicate<? extends CellInfo> predicate, Integer rows, Integer columns) {
