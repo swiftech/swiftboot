@@ -1,3 +1,8 @@
+v2.4.3
+* `[sheet]`: Fix exception when selecting sheet by name.
+* `[sheet]`: Fix exception when reading cells with blank cell ahead.
+* update spring boot and spring data to 2.7.15
+
 v2.4.2
 * `[sheet]`: Fix exception when read any shapes other than picture.
 * dependencies update and doc update. 
