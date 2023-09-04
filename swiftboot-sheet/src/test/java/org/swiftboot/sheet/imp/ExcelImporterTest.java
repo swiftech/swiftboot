@@ -144,6 +144,34 @@ class ExcelImporterTest extends BaseImporterTest {
         displayData(result);
     }
 
+    @Test
+    public void testImportWithEmptyCells() throws IOException {
+        String fileType = SheetFileType.TYPE_XLS;
+        Importer importer = factory.createImporter(fileType);
+
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource("imp/import." + fileType);
+
+        SheetMetaBuilder builder = new SheetMetaBuilder();
+        SheetMeta sheetMeta = builder
+                .sheet("Sheet3")
+                .items(builder.itemBuilder()
+                        .newItem().key("row-with-empty").from("B2").to("G2")
+                ).build();
+        Map<String, Object> result = importer.importFromStream(url.openStream(), sheetMeta);
+        Assertions.assertEquals(1, result.size());
+        Object row = result.get("row-with-empty");
+        Assertions.assertTrue(row instanceof List);
+        Assertions.assertEquals(6, ((List<?>) row).size());
+        Assertions.assertEquals("b2", ((List<?>) row).get(0));
+        Assertions.assertEquals("c2", ((List<?>) row).get(1));
+        Assertions.assertEquals("d2", ((List<?>) row).get(2));
+        Assertions.assertNull( ((List<?>) row).get(3));
+        Assertions.assertEquals("f2", ((List<?>) row).get(4));
+        Assertions.assertEquals("g2", ((List<?>) row).get(5));
+        displayData(result);
+    }
+
     private void displayData(Map<String, Object> result) {
         for (String key : result.keySet()) {
             System.out.printf("Sheet: %s%n", key);

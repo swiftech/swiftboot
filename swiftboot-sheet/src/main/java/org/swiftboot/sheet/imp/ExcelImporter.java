@@ -61,7 +61,7 @@ public class ExcelImporter extends BaseImporter {
         meta.accept(sheetId -> {
             log.debug("Sheet: " + sheetId);
             this.sheetId.set(sheetId);
-            sheetRef.set(PoiUtils.getSheet(wb, sheetId.getSheetIndex()));
+            sheetRef.set(PoiUtils.getSheet(wb, sheetId));
             if (sheetRef.get() == null) {
                 log.warn("No sheet found: " + sheetId);
                 return;
