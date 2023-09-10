@@ -63,15 +63,11 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
   * JSON 20220320
   * etc.
 
-##### Unstable: v2.4
+##### Unstable: v2.4.3
 
-* `[sheet]`: Add support for reading images from Excel.
-* `[sheet]`: Add support for reading csv/excel data from dynamic position(which is determined by a function).
-* `[sheet]`: Add support for reading uncertain rows for Excel(stops when getting first empty row).
-* `[sheet]`: Replace SheetHandler/CellHandler interfaces with Consumer.
-* `[sheet]`: Fix some bugs of importing csv and Excel files.
-* `[sheet]`: Fix bug of reading value of Excel FORMULA cell.
-* dependencies update and doc update.
+* `[sheet]`: Fix exception when selecting sheet by name.
+* `[sheet]`: Fix exception when reading cells with blank cell ahead.
+* update spring boot and spring data to 2.7.15
 
 [完整更新记录](changelog.md)
 
