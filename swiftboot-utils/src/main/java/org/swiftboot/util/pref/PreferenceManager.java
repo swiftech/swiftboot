@@ -160,6 +160,16 @@ public class PreferenceManager {
     }
 
     /**
+     * Get preference by key, return null if it doesn't exist.
+     *
+     * @param key
+     * @return
+     */
+    public Object getPreference(String key) {
+        return prefs.get(key, null);
+    }
+
+    /**
      * Get preference by field of an object, if not exists, return the field value of object.
      *
      * @param key

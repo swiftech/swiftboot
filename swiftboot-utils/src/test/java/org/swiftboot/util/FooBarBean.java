@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * @author swiftech 2019-04-01
  **/
-class FooBarBean {
+class FooBarBean extends BaseBean {
 
-    private final String field1 = "field1";
+    private final String field1 = "field 1";
 
     @JsonIgnore
-    private final String field2 = "field2";
+    private final String field2 = "field 2";
 }
