@@ -193,7 +193,7 @@ public class BeanUtils {
     public static Map<String, Object> forceGetProperties(Object object) {
         Map<String, Object> ret = new LinkedHashMap<>();
         for (Field field : getAllFields(object.getClass())) {
-            if ((field.getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT | Modifier.FINAL)) != 0) {
+            if ((field.getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) != 0) {
                 continue;
             }
             Object item = forceGetProperty(object, field);
@@ -350,7 +350,7 @@ public class BeanUtils {
                 continue;
             }
             Object v = data.get(field.getName());
-            if (v == null || v.getClass() != field.getType()) {
+            if (v == null || field.getType().isPrimitive() || v.getClass() != field.getType()) {
                 continue;
             }
             forceSetProperty(bean, field, v);

@@ -7,8 +7,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  **/
 class FooBarBean extends BaseBean {
 
-    private final String field1 = "field 1";
+    private String field1 = "field 1";
 
     @JsonIgnore
-    private final String field2 = "field 2";
+    private String field2 = "field 2";
+
+    // test primitive type
+    private int field3 = 3;
 }
