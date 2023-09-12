@@ -350,7 +350,7 @@ public class BeanUtils {
                 continue;
             }
             Object v = data.get(field.getName());
-            if (v == null || field.getType().isPrimitive() || v.getClass() != field.getType()) {
+            if (v == null || (!field.getType().isPrimitive() && v.getClass() != field.getType())) {
                 continue;
             }
             forceSetProperty(bean, field, v);
