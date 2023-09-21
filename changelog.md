@@ -1,3 +1,7 @@
+v2.4.4.1
+* `[utils]`: add forceGetProperties(Object) and forceSetProperties(Object, Map) to BeanUtils.
+* `[utils]`: add getPreference(String) method to PreferenceManager
+
 v2.4.3
 * `[sheet]`: Fix exception when selecting sheet by name.
 * `[sheet]`: Fix exception when reading cells with blank cell ahead.

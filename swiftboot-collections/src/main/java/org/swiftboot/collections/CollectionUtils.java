@@ -93,10 +93,10 @@ public class CollectionUtils {
             Collection coll = ret.get(key);
             if (coll == null) {
                 if (srcCollection instanceof List) {
-                    coll = new ArrayList();
+                    coll = new ArrayList<>();
                 }
                 else if (srcCollection instanceof Set) {
-                    coll = new HashSet();
+                    coll = new HashSet<>();
                 }
                 else {
                     throw new RuntimeException(Info.get(CollectionUtils.class, R.COLLECTION_TYPE_NOT_SUPPORTED1, srcCollection.getClass()));
