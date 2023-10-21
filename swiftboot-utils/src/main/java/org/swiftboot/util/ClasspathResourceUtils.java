@@ -23,6 +23,27 @@ public class ClasspathResourceUtils {
     }
 
     /**
+     * Read resource to String, return null if not exists or reading exception.
+     *
+     * @param resourceUri
+     * @return
+     * @since 2.4.5
+     */
+    public static String readResourceToString(String resourceUri) {
+        URL uri = getResourceURI(resourceUri);
+        if (uri == null) {
+            return null;
+        }
+        try {
+            InputStream inputStream = uri.openStream();
+            return IoUtils.readAllToString(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * 从 CLASSPATH 目录中打开资源路径表示的文件输入流
      *
      * @param resourceUri 资源路径 URI，开头和结尾都都没有 "/"
@@ -30,12 +51,11 @@ public class ClasspathResourceUtils {
      * @throws IOException
      */
     public static InputStream openResourceStream(String resourceUri) throws IOException {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL url = loader.getResource(resourceUri);
-        if (url == null) {
+        URL uri = getResourceURI(resourceUri);
+        if (uri == null) {
             return null;
         }
-        return url.openStream();
+        return uri.openStream();
     }
 
     /**

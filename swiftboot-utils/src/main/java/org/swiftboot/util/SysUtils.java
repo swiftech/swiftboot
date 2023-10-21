@@ -21,4 +21,19 @@ public class SysUtils {
         }
         return ret;
     }
+
+    /**
+     * Whether a system property's value is true.
+     *
+     * @param evnName
+     * @return
+     * @since 2.4.5
+     */
+    public static boolean isSystemPropValTrue(String evnName) {
+        String v = System.getProperty(evnName);
+        if (v == null) {
+            return false;
+        }
+        return Boolean.parseBoolean(v);
+    }
 }

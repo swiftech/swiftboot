@@ -11,12 +11,7 @@ public class EnvUtils {
     public static void main(String[] args) {
 //        printSystemProperties();
 
-        displaySystemPropsInStdout("", new SysPropertyExtractor() {
-            @Override
-            public boolean matched(Map.Entry propEntry, String str) {
-                return propEntry.getKey().toString().contains(str);
-            }
-        });
+        displaySystemPropsInStdout("", (propEntry, str) -> propEntry.getKey().toString().contains(str));
     }
 
     public static void printSystemProperties() {

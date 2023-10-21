@@ -30,6 +30,13 @@
 * `PreferenceManager` A wrapper of Java Preference class to be easily access preferences.
 
 * `ElapsedTime` to calculate elapsed time in milliseconds
+
+* `WordUtils` to handle the english words
+
+* `UrlUtils` to handle the URL
+
+* `PathUtils` to handle file path
+
 ### Maven
 
 ```xml
@@ -37,7 +44,7 @@
 	<dependency>
 		<groupId>com.github.swiftech</groupId>
 		<artifactId>swiftboot-utils</artifactId>
-		<version>2.4.4.1</version>
+		<version>2.4.5</version>
 	</dependency>
 </dependencies>
 
