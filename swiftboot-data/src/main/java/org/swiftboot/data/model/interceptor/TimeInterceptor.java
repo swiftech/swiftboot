@@ -30,7 +30,7 @@ public class TimeInterceptor extends EmptyInterceptor {
     public static final String CREATE_TIME = "createTime";
     public static final String UPDATE_TIME = "updateTime";
 
-    private final Logger log = LoggerFactory.getLogger(TimeInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(TimeInterceptor.class);
 
     @Resource
     private SwiftBootDataConfigBean configBean;

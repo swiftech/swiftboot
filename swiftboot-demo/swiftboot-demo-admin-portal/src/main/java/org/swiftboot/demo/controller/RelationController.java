@@ -34,7 +34,7 @@ import javax.annotation.Resource;
 @ConvertValidateResult
 public class RelationController {
 
-    private final Logger log = LoggerFactory.getLogger(RelationController.class);
+    private static final Logger log = LoggerFactory.getLogger(RelationController.class);
 
     @Resource
     private OrderDetailRelationService orderService;

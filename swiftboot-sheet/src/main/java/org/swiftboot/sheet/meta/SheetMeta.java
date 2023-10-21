@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  */
 public class SheetMeta {
 
-    private final Logger log = LoggerFactory.getLogger(SheetMeta.class);
+    private static final Logger log = LoggerFactory.getLogger(SheetMeta.class);
 
     /**
      * relation: sheet id -> list of meta item(key, export value and area in sheet)

@@ -34,7 +34,7 @@ import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.AUTO_UPDATE_TIM
 @Aspect
 public class UpdateTimeAspect {
 
-    private final Logger log = LoggerFactory.getLogger(UpdateTimeAspect.class);
+    private static final Logger log = LoggerFactory.getLogger(UpdateTimeAspect.class);
 
     @Resource
     private EntityManager entityManager;

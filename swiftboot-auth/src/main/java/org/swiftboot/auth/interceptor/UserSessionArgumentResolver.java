@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class UserSessionArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final Logger log = LoggerFactory.getLogger(UserSessionArgumentResolver.class);
+    private static final Logger log = LoggerFactory.getLogger(UserSessionArgumentResolver.class);
 
     @Resource
     private SwiftbootAuthConfigBean configBean;

@@ -17,7 +17,7 @@ import java.util.Iterator;
  */
 public class IdInterceptor extends EmptyInterceptor {
 
-    private final Logger log = LoggerFactory.getLogger(IdInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(IdInterceptor.class);
 
     @Resource
     private IdPopulator idPopulator;

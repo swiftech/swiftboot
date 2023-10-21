@@ -38,7 +38,7 @@ import java.util.Optional;
 @ActiveProfiles("id-h2")
 public class EntityIdAspectTest {
 
-    private final Logger log = LoggerFactory.getLogger(EntityIdAspectTest.class);
+    private static final Logger log = LoggerFactory.getLogger(EntityIdAspectTest.class);
 
     @Resource
     private ParentDao parentDao;

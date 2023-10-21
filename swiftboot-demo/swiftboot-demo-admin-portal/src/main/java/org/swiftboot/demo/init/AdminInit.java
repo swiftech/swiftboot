@@ -32,7 +32,7 @@ import java.util.*;
 @ConditionalOnProperty(value = "swiftboot.shiro.enabled", havingValue = "true")
 public class AdminInit {
 
-    private final Logger log = LoggerFactory.getLogger(AdminInit.class);
+    private static final Logger log = LoggerFactory.getLogger(AdminInit.class);
 
     public static final String PERMISSION_CODE_SEPARATOR = ":";
 

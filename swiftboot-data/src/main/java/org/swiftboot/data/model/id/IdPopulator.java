@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class IdPopulator {
 
-    private final Logger log = LoggerFactory.getLogger(IdPopulator.class);
+    private static final Logger log = LoggerFactory.getLogger(IdPopulator.class);
 
     @Resource
     private IdGenerator<IdPersistable> idGenerator;

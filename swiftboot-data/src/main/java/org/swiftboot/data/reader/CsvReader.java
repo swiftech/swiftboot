@@ -17,7 +17,7 @@ import java.util.List;
 public class CsvReader {
 
 
-    private final Logger log = LoggerFactory.getLogger(CsvReader.class);
+    private static final Logger log = LoggerFactory.getLogger(CsvReader.class);
 
     /**
      * 逐行读取 CSV 格式的输入流，并通过 CsvReaderHandler 回调

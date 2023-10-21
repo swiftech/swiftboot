@@ -34,7 +34,7 @@ import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYP
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class AuthFilter extends OncePerRequestFilter {
 
-    private final Logger log = LoggerFactory.getLogger(AuthFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
 
     @Resource
     private SessionService sessionService;

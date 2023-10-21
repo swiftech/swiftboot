@@ -34,7 +34,7 @@ import java.util.function.Predicate;
  */
 public class SheetMetaBuilder {
 
-    private final Logger log = LoggerFactory.getLogger(SheetMetaBuilder.class);
+    private static final Logger log = LoggerFactory.getLogger(SheetMetaBuilder.class);
 
     /**
      * current sheet id
@@ -237,7 +237,7 @@ public class SheetMetaBuilder {
      * @see SheetMetaBuilder
      */
     public static class MetaItemBuilder {
-        private final Logger log = LoggerFactory.getLogger(MetaItemBuilder.class);
+        private static final Logger log = LoggerFactory.getLogger(MetaItemBuilder.class);
         // Translator to translate expression to actual positions in sheet.
         private static final Translator translator = new Translator();
 

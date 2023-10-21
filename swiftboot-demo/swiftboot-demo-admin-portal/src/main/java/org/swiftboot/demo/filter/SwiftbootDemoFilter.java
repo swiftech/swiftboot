@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SwiftbootDemoFilter extends OncePerRequestFilter {
-    private final Logger log = LoggerFactory.getLogger(SwiftbootDemoFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(SwiftbootDemoFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

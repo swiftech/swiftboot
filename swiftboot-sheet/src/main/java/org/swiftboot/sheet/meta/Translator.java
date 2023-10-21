@@ -37,7 +37,7 @@ import static org.swiftboot.sheet.util.CalculateUtils.powForExcel;
  * @author swiftech
  */
 public class Translator {
-    private final Logger log = LoggerFactory.getLogger(Translator.class);
+    private static final Logger log = LoggerFactory.getLogger(Translator.class);
 
     private final int[] sequences = {26 * 26 * 26, 26 * 26, 26, 1};
 

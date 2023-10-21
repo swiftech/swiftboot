@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
  */
 public class DefaultPasswordManager implements PasswordManager {
 
-    private final Logger log = LoggerFactory.getLogger(DefaultPasswordManager.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultPasswordManager.class);
 
     @PostConstruct
     public void init() {

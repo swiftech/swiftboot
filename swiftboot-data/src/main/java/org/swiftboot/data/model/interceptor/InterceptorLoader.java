@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class InterceptorLoader implements ApplicationContextAware {
 
-    private final Logger log = LoggerFactory.getLogger(InterceptorLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(InterceptorLoader.class);
 
     private ApplicationContext applicationContext;
 

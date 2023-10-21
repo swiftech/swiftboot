@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 public class OrderDetailRelationServiceImpl implements OrderDetailRelationService {
 
-    private final Logger log = LoggerFactory.getLogger(OrderDetailRelationServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderDetailRelationServiceImpl.class);
 
     // for test edit detail of order
     private final String permanentDetailId = "12345678901234567890123456789012";

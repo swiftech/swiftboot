@@ -27,7 +27,7 @@ import java.util.Set;
 @EnableConfigurationProperties
 public class SwiftbootServiceConfig {
 
-    private final Logger log = LoggerFactory.getLogger(SwiftbootServiceConfig.class);
+    private static final Logger log = LoggerFactory.getLogger(SwiftbootServiceConfig.class);
 
     @Resource
     SwiftbootServiceConfigBean swiftbootServiceConfigBean;

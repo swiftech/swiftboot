@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public class InterceptorProxy implements Interceptor, Serializable {
 
-    private final Logger log = LoggerFactory.getLogger(InterceptorProxy.class);
+    private static final Logger log = LoggerFactory.getLogger(InterceptorProxy.class);
 
     /**
      * All interceptors
