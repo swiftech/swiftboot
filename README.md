@@ -63,10 +63,11 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
   * JSON 20220320
   * etc.
 
-##### Unstable: v2.4.4.1
+##### Unstable: v2.4.5
 
-* `[utils]`: add forceGetProperties(Object) and forceSetProperties(Object, Map) to BeanUtils.
-* `[utils]`: add getPreference(String) method to PreferenceManager
+* `[utils]`: add new PathUtils, UrlUtils classes, and new method to ClasspathResourceUtils, SysUtils, EnvUtils, WordUtils.
+* `[collections]`: remove deprecated classes.
+* refactor for logger and update docs
 
 
 [完整更新记录](changelog.md)
