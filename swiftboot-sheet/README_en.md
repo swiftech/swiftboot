@@ -64,7 +64,7 @@ public class SheetEntity {
     }
 ```
 
-> File types: `TYPE_XLSX`，`TYPE_XLS` 和 `TYPE_CSV`。
+> File types: `TYPE_XLSX`，`TYPE_XLS` and `TYPE_CSV`。
 > `templateFileInputStream` is the template file for export, you can edit style as you want, SwiftBoot-Sheet only deal with data, style will be copied as it is.
 > If no template file provided, call `exporter.export(exportEntity, outputStream);` to export data into a sheet file without any styles.
 
@@ -248,6 +248,6 @@ builder.sheet(0, "my first sheet")
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.4.3</version>
+  <version>2.4.5</version>
 </dependency>
 ```
