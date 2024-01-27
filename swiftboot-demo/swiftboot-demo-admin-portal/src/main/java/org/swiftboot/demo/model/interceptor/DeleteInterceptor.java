@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 public class DeleteInterceptor extends EmptyInterceptor {
 
-    private final Logger log = LoggerFactory.getLogger(DeleteInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(DeleteInterceptor.class);
 
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {

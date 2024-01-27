@@ -1,3 +1,33 @@
+v2.4.5
+* `[utils]`: add new PathUtils, UrlUtils classes, and new method to ClasspathResourceUtils, SysUtils, EnvUtils, WordUtils.
+* `[collections]`: remove deprecated classes.
+* refactor for logger and update docs
+
+v2.4.4.1
+* `[utils]`: add forceGetProperties(Object) and forceSetProperties(Object, Map) to BeanUtils.
+* `[utils]`: add getPreference(String) method to PreferenceManager
+
+v2.4.3
+* `[sheet]`: Fix exception when selecting sheet by name.
+* `[sheet]`: Fix exception when reading cells with blank cell ahead.
+* update spring boot and spring data to 2.7.15
+
+v2.4.2
+* `[sheet]`: Fix exception when read any shapes other than picture.
+* dependencies update and doc update. 
+
+v2.4.1
+* `[sheet]`: Fix exception when read a null cell.
+
+v2.4.0
+* `[sheet]`: Add support for reading images from Excel.
+* `[sheet]`: Add support for reading csv/excel data from dynamic position(which is determined by a function).
+* `[sheet]`: Add support for reading uncertain rows for Excel(stops when getting first empty row).
+* `[sheet]`: Replace SheetHandler/CellHandler interfaces with Consumer.
+* `[sheet]`: Fix some bugs of importing csv and Excel files.
+* `[sheet]`: Fix bug of reading value of Excel FORMULA cell.
+* dependencies update and doc update.
+
 v2.3.1
 * `[utils]` Add CalcUtils for calculating.
 * `[utils]` Add support for Reader to IoUtils.

@@ -23,7 +23,7 @@ import java.util.Set;
  */
 public class RedisServiceImpl implements RedisService {
 
-    private final Logger log = LoggerFactory.getLogger(RedisServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(RedisServiceImpl.class);
 
     private JedisPool jedisPool;
 

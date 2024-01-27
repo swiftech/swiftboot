@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 public class AppUserAuthServiceImpl implements UserAuthService {
 
-    private final Logger log = LoggerFactory.getLogger(AppUserAuthServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(AppUserAuthServiceImpl.class);
 
     @Resource
     private AppUserDao appUserDao;

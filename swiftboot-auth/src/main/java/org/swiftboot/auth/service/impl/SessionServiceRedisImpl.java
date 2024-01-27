@@ -29,7 +29,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  */
 public class SessionServiceRedisImpl implements SessionService {
 
-    private final Logger log = LoggerFactory.getLogger(SessionServiceRedisImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SessionServiceRedisImpl.class);
 
     private final ObjectMapper mapper = new ObjectMapper();
 

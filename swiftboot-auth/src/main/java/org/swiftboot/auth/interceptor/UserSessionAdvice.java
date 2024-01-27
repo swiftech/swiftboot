@@ -29,7 +29,7 @@ import java.lang.reflect.Type;
 @ControllerAdvice
 public class UserSessionAdvice extends RequestBodyAdviceAdapter {
 
-    private final Logger log = LoggerFactory.getLogger(UserSessionAdvice.class);
+    private static final Logger log = LoggerFactory.getLogger(UserSessionAdvice.class);
 
     @Resource
     private SwiftbootAuthConfigBean configBean;

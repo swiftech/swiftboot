@@ -21,7 +21,7 @@ import org.swiftboot.web.validate.ConvertValidateResult;
 @RequestMapping("/http/header")
 public class HttpHeaderController {
 
-    private final Logger log = LoggerFactory.getLogger(HttpHeaderController.class);
+    private static final Logger log = LoggerFactory.getLogger(HttpHeaderController.class);
 
     @ApiOperation(notes = "自动获取 http header 值", value = "自动获取 http header 值")
     @RequestMapping(value = "post", method = RequestMethod.POST)

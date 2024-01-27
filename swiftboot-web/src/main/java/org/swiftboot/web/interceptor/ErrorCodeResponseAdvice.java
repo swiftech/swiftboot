@@ -31,7 +31,7 @@ import javax.annotation.Resource;
 @ControllerAdvice
 public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyAdvice {
 
-    private final Logger log = LoggerFactory.getLogger(ErrorCodeResponseAdvice.class);
+    private static final Logger log = LoggerFactory.getLogger(ErrorCodeResponseAdvice.class);
 
     @Resource
     private ErrorCodeSupport errorCodeSupport;

@@ -28,7 +28,7 @@ import static org.swiftboot.shiro.constant.ShiroSessionConstants.SESSION_KEY_USE
 @Transactional
 public class UserAuthorizingRealm extends AuthorizingRealm {
 
-    private final Logger log = LoggerFactory.getLogger(UserAuthorizingRealm.class);
+    private static final Logger log = LoggerFactory.getLogger(UserAuthorizingRealm.class);
 
     @Resource
     private ShiroSecurityService shiroSecurityService;

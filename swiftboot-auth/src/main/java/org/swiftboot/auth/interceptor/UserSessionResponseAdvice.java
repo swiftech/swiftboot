@@ -32,7 +32,7 @@ import javax.servlet.http.Cookie;
 @ControllerAdvice
 public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBodyAdvice {
 
-    private final Logger log = LoggerFactory.getLogger(UserSessionResponseAdvice.class);
+    private static final Logger log = LoggerFactory.getLogger(UserSessionResponseAdvice.class);
 
     @Resource
     private SwiftbootAuthConfigBean authConfigBean;

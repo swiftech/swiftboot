@@ -53,7 +53,7 @@ public abstract class BaseImporter implements Importer {
     }
 
     /**
-     * Shrink a matrix which is from import file to it's inner data type.
+     * Shrink a matrix which is from import file to its inner data type.
      *
      * @param matrix
      * @param rowCount

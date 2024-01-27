@@ -16,7 +16,7 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class PhoneNoValidator implements ConstraintValidator<PhoneNo, String> {
 
-    private final Logger log = LoggerFactory.getLogger(PhoneNoValidator.class);
+    private static final Logger log = LoggerFactory.getLogger(PhoneNoValidator.class);
 
     private String prefix;
 

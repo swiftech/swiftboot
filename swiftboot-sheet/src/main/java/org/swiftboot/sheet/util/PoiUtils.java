@@ -87,6 +87,22 @@ public class PoiUtils {
     }
 
     /**
+     * Get sheet of workbook by name.
+     *
+     * @param workbook
+     * @param sheetId
+     * @return
+     */
+    public static Sheet getSheet(Workbook workbook, SheetId sheetId) {
+        if (sheetId.getSheetIndex() != null && sheetId.getSheetIndex() < workbook.getNumberOfSheets()) {
+            return workbook.getSheetAt(sheetId.getSheetIndex());
+        }
+        else {
+            return workbook.getSheet(sheetId.getSheetName());
+        }
+    }
+
+    /**
      * Try to get sheet by index and name.
      * If found a sheet by index, it's name will be overwritten by specified name,
      * if not, new sheet will be created with the name.
@@ -309,8 +325,8 @@ public class PoiUtils {
      * Copy style of area 'from' to area 'to' repeatedly.
      *
      * @param sheet
-     * @param from area copied from must has fixed size.
-     * @param to area copy to must has fixed size
+     * @param from  area copied from must has fixed size.
+     * @param to    area copy to must has fixed size
      */
     public static void copyCells(Sheet sheet, Area from, Area to) {
         // collect all cells style
@@ -319,7 +335,7 @@ public class PoiUtils {
         for (int i = 0; i < from.rowCount(); i++) {
             int rowIdx = from.getStartPosition().getRow() + i;
             Row row = sheet.getRow(rowIdx);
-            if (row == null){
+            if (row == null) {
                 throw new RuntimeException(String.format("No row found at %d to copy from", rowIdx));
             }
             rowHeights.add(row.getHeightInPoints());

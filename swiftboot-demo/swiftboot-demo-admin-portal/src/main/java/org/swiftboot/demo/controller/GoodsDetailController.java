@@ -33,7 +33,7 @@ import javax.annotation.Resource;
 @ResponseBody
 public class GoodsDetailController {
 
-    private final Logger log = LoggerFactory.getLogger(GoodsDetailController.class);
+    private static final Logger log = LoggerFactory.getLogger(GoodsDetailController.class);
 
     @Resource
     private GoodsDetailService goodsDetailService;

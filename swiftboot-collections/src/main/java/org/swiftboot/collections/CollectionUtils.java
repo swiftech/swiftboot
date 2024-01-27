@@ -1,7 +1,5 @@
 package org.swiftboot.collections;
 
-import org.swiftboot.util.Info;
-
 import java.util.*;
 
 /**
@@ -78,35 +76,6 @@ public class CollectionUtils {
         return null;
     }
 
-    /**
-     * 按照 ClassifyFilter 接口返回的 key 值分类存放元素集合（和原集合相同类型的集合）
-     *
-     * @param srcCollection
-     * @param classifyFilter
-     * @return
-     * @deprecated Classifier
-     */
-    public static <T> Map<Object, Collection> classify(Collection<T> srcCollection, ClassifyFilter classifyFilter) {
-        Map<Object, Collection> ret = new HashMap<>();
-        for (Object o : srcCollection) {
-            Object key = classifyFilter.filter(o);
-            Collection coll = ret.get(key);
-            if (coll == null) {
-                if (srcCollection instanceof List) {
-                    coll = new ArrayList();
-                }
-                else if (srcCollection instanceof Set) {
-                    coll = new HashSet();
-                }
-                else {
-                    throw new RuntimeException(Info.get(CollectionUtils.class, R.COLLECTION_TYPE_NOT_SUPPORTED1, srcCollection.getClass()));
-                }
-                ret.put(key, coll);
-            }
-            coll.add(o);
-        }
-        return ret;
-    }
 
     /**
      * 根据不同的集合类型构造不同的集合实例

@@ -29,7 +29,7 @@ import java.util.List;
  * @since 1.2
  **/
 public class ShiroSecurityServiceImpl implements ShiroSecurityService, ApplicationContextAware {
-    private final Logger log = LoggerFactory.getLogger(ShiroSecurityServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ShiroSecurityServiceImpl.class);
 
     private ApplicationContext applicationContext;
 

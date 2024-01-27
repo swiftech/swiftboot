@@ -32,7 +32,7 @@ import java.util.Map;
 @Component
 public class ErrorCodeSupport {
 
-    private final Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
+    private static final Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
 
     public static final String CODE_OK = "2000";
     public static final String CODE_OK_WITH_CONTENT = "2002";

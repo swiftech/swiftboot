@@ -33,7 +33,7 @@ import java.util.Optional;
 @Service
 public class GoodsServiceImpl implements GoodsService {
 
-    private final Logger log = LoggerFactory.getLogger(GoodsServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(GoodsServiceImpl.class);
 
     @Resource
     private GoodsDao goodsDao;

@@ -97,4 +97,16 @@ public class WordUtils {
         }
         return ret;
     }
+
+    /**
+     * Extract last word in a string.
+     *
+     * @param text
+     * @return
+     * @since 2.4.5
+     */
+    public static String extractLastWord(String text) {
+        int i = StringUtils.lastIndexOfAny(text, " ", "\t") + 1;
+        return StringUtils.substring(text, Math.max(0, i), text.length());
+    }
 }

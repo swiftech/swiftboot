@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 @ResponseBody
 public class AppUserController {
 
-    private final Logger log = LoggerFactory.getLogger(AppUserController.class);
+    private static final Logger log = LoggerFactory.getLogger(AppUserController.class);
 
     @Resource
     private UserAuthService userAuthService;

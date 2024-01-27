@@ -61,7 +61,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  */
 public class Initializer implements ApplicationContextAware {
 
-    private final Logger log = LoggerFactory.getLogger(Initializer.class);
+    private static final Logger log = LoggerFactory.getLogger(Initializer.class);
 
     @Resource
     private SwiftBootDataConfigBean swiftBootDataConfigBean;

@@ -47,20 +47,8 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 
 
 ### 版本
-##### Stable：v2.2.1
 
-  Update:
-* add Tree class to collections.
-* add missing error msg translating for AuthFilter
-* change the way to implement user authentication.
-* return user token through http response header instead of response body.
-* add parameterized error message support to HttpResponse object.
-* add parameterized error message support for user-defined validators. 
-* refactored the error code support.
-* re-implement the translating from error code to message by response advice. 
-* phone number validator supports parameterized error message.
-
-##### Unstable: v2.3.1
+##### Stable: v2.3.1
 
 * `[utils]` Add CalcUtils for calculating.
 * `[utils]` Add support for Reader to IoUtils.
@@ -74,6 +62,13 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
   * Poi 5.2.3
   * JSON 20220320
   * etc.
+
+##### Unstable: v2.4.5
+
+* `[utils]`: add new PathUtils, UrlUtils classes, and new method to ClasspathResourceUtils, SysUtils, EnvUtils, WordUtils.
+* `[collections]`: remove deprecated classes.
+* refactor for logger and update docs
+
 
 [完整更新记录](changelog.md)
 

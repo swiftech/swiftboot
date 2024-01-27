@@ -2,7 +2,6 @@
 
 提供一种简单、直观但是灵活的方式从表单导入数据或导出数据至模版化的表格文件（xlsx, xls, csv)。只需要给导入或导出指定数据对应的位置，而无需关心导入或导出的表格样式。换句话说，用户可以任意的修改文件模版的样式而不会影响数据的导入导出。
 
-SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data from or export data to sheet files (including xlsx, xls, csv), regardless of the style of the sheet. In other words, users can edit the style of template sheet file whatever he/she likes without affecting the import or export of data.
 
 ### 支持的文件格式：
 
@@ -11,13 +10,15 @@ SwiftBoot-Sheet provides a simple, intuitive but flexible way to import data fro
 * CSV
 
 ### 特性
-* 多表单支持，表达式支持。
-* 通过注解（Annotation）对象的属性来实现针对数据对象的导入和导出。
-* 通过Builder API实现动态位置导入和导出。
-* 支持图片的导入和导出，并且图片可以在导入过程中进行格式转换。
+* 支持多表单的导入和导出。
+* 支持用表达式来定位一个或者多个单元格。
+* 通过注解（Annotation）对象的属性来实现于单元格的映射
+* 通过 Builder API 实现动态位置导入和导出。
+* 支持图片的导入和导出。
 * 导入：
   * 从符合自定义条件的单元格开始导入数据。
   * 导入行数可以不指定（不能和自定义条件功能一起使用）
+  * 图片可以在导入过程中进行格式转换。
 * 导出
   * 支持表格样式复制，无需代码实现样式写入。
 
@@ -47,7 +48,7 @@ public class SheetEntity {
 }
 ```
 
-* 导出
+* 导出表单数据  
   创建指定文件类型的 `Exporter` ，然后调用 `export()` 方法将实体对象中的数据导出到数据表格文件中，例如：
 
 
@@ -68,7 +69,7 @@ public class SheetEntity {
 > `templateFileInputStream` 是导出时指定的模版文件，在这个文件里你可以任意的修改表格的样式，SwiftBoot-Sheet 只处理数据，表格样式会被原封不动的复制到 `outputStream` 中
 > 如果没有模版，那么可以调用 `exporter.export(exportEntity, outputStream);` 直接导出到一个新的无样式的表格文件中。
 
-* 导入  
+* 从表单导入  
   实现方式和导出类似，数据会从表格文件导入到实体对象中，例如
 
 ```java
@@ -94,7 +95,7 @@ public class SheetEntity {
 
 ```java
 exportEntity.setPictureToExport(() -> {
-  byte[]bytesPic=... // 加载图片
+  byte[]bytesPic=... // 加载图片二进制数据
   return new Picture(Workbook.PICTURE_TYPE_JPEG, bytesPic);
 });
 exporter.export(templateFileInputStream, exportEntity, outputStream);
@@ -107,8 +108,8 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 * 表达式中字母表示列，数字表示行，例如 `E2` 表示第二行第五列
 * 表达式字母和数字顺序可颠倒，例如`E2` 和 `2E` 是一样的。
 * 表达式中字母可为大写或小写，例如`E2` 和 `e2` 是一样的。
-* 用 '-' 或 '|' 加上数字代表行或列
-* 用 '?' 表示不确定长度
+* 用 `-` 或 `|` 加上数字代表行或列
+* 用 `?` 表示不确定长度
 * 起始点和终止点的顺序可以颠倒，也就是说终止点写在起始点前面效果是一样的，最终都是由小至大。
 * 导出：如果表达式的范围小于给出的数据大小，则只导出表达式给定的范围的数据。
 * 对于合并单元格，只需要给出合并范围内的任一单元格位置即可。
@@ -132,7 +133,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
     SheetMetaBuilder builder = new SheetMetaBuilder();
     builder
     .items(builder.itemBuilder()
-        .newItem().key("cell_0").from(0, 0).value("This is title 1") // 直接位置设定设定导出单元格（从0开始）
+        .newItem().key("cell_0").from(0, 0).value("This is title 1") // 直接位置设定导出单元格（从0开始）
         .newItem().key("cell_0").parse("B1").value("This is title 2") // 表达式设定导出单元格
         .newItem().key("line_0").from(1, 0).to(1, 2).value(Arrays.asList("a", "b", "c"))  // 位置设定导出一行数据
         .newItem().key("column_0").parse("A2:A4").value(Arrays.asList(10, 20, 30))  // 表达式设定导出一列数据
@@ -146,7 +147,7 @@ exporter.export(templateFileInputStream, exportEntity, outputStream);
 
 > 默认导出的表格名称为 "Sheet 1"
 
-* 导入
+* 导入 (v2.4)
 ```java
 builder.items(builder.itemBuilder()
     .newItem().key("GET-B2-D5").from("B2").to("D5")
@@ -159,7 +160,7 @@ builder.items(builder.itemBuilder()
 Map<String, Object> result = importer.importFromStream(url.openStream(), builder.build());
 ```
 > 动态定位读取位置和不指定读取行数不能同时使用，因为读取过程有可能遇到中间的空行而无法进行下去。
-> 图片可以用 imageConverter() 来定义转换器，如果不进行转换，则直接得到图片的二进制数据（byte[])
+> 图片可以用 `imageConverter()` 来定义转换器，如果不进行转换，则直接得到图片的二进制数据（byte[])
 
 ### 多表单(Sheet)支持
 
@@ -177,7 +178,7 @@ public class SheetEntity {
 }
 ```
 
-直接调用底层API：
+直接调用底层API来处理多表单：
 
 ```java
     SheetMetaBuilder builder = new SheetMetaBuilder();
@@ -196,7 +197,7 @@ public class SheetEntity {
     exporter.export(templateFileInputStream, sheetMeta, outputStream);
 ```
 
-> 不指定表单的情况下，默认是第一个表单，且名称默认为 "Sheet 1".
+> 不指定表单的情况下，默认是第一个表单，且名称默认为 `Sheet 1`.
 > 表达式中如果包含 sheet 名称，那么会忽略 `sheet()` 方法指向的表格，而加入到它自己的表格中.
 
 
@@ -212,7 +213,7 @@ builder.items(builder.itemBuilder()
 ### 动态长度区域的样式处理（导出）
 
 虽然我们把数据处理和表单样式完全分离了，但是对于大小不固定的区域，无法预先在模版中设置好整个区域的样式，那么我们可以用 `copy()` 来从其他单元格复制样式。
-例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的任意单元格），例如：
+例如我们需要导出一行长度不固定的数值到区域 `A0:?0`，那么只需要设定第一个单元格 `A0` 的样式（也可以是区域之外的任意单元格）：
 
 ```java
 builder.items(builder.itemBuilder()
@@ -247,6 +248,6 @@ builder.sheet(0, "my first sheet")
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.2.1</version>
+  <version>2.4.5</version>
 </dependency>
 ```

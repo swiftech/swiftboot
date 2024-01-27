@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserServiceImpl implements AppUserService {
 
-    private final Logger log = LoggerFactory.getLogger(AppUserServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(AppUserServiceImpl.class);
 
 
 }

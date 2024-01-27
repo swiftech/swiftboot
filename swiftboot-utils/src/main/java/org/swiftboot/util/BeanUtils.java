@@ -184,6 +184,27 @@ public class BeanUtils {
     }
 
     /**
+     * Force to get all(includes super classes) properties from target bean object, ignoring the private, protected modifier.
+     * Static, Transient and Final properties will not be returned.
+     *
+     * @param object
+     * @return
+     */
+    public static Map<String, Object> forceGetProperties(Object object) {
+        Map<String, Object> ret = new LinkedHashMap<>();
+        for (Field field : getAllFields(object.getClass())) {
+            if ((field.getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) != 0) {
+                continue;
+            }
+            Object item = forceGetProperty(object, field);
+            if (item != null) {
+                ret.put(field.getName(), item);
+            }
+        }
+        return ret;
+    }
+
+    /**
      * 强制获取对象变量值，忽略 private、protected 修饰符的限制。
      *
      * @param object       对象
@@ -265,54 +286,74 @@ public class BeanUtils {
      * 强制设置对象变量值，忽略private、protected修饰符的限制。
      * 根据变量的类型强制转换
      *
-     * @param entity    对象
+     * @param bean      对象
      * @param fieldName 属性名
      * @param value     属性值
      * @throws NoSuchFieldException
      * @throws ParseException
      * @since 1.1
      */
-    public static void forceSetPropertyFromString(Object entity, String fieldName, String value)
+    public static void forceSetPropertyFromString(Object bean, String fieldName, String value)
             throws NoSuchFieldException, ParseException {
-        Field field = BeanUtils.getDeclaredField(entity, fieldName);
-        forceSetPropertyFromString(entity, field, value);
+        Field field = BeanUtils.getDeclaredField(bean, fieldName);
+        forceSetPropertyFromString(bean, field, value);
     }
 
     /**
      * 强制设置对象变量值，忽略private、protected修饰符的限制。
      * 根据变量的类型强制转换
      *
-     * @param entity    对象
-     * @param field     属性
-     * @param value     属性值
+     * @param bean  对象
+     * @param field 属性
+     * @param value 属性值
      * @throws ParseException
      * @since 1.1
      */
-    public static void forceSetPropertyFromString(Object entity, Field field, String value)
+    public static void forceSetPropertyFromString(Object bean, Field field, String value)
             throws ParseException {
         if (field.getType() == Integer.class) {
-            BeanUtils.forceSetProperty(entity, field, Integer.parseInt(value));
+            BeanUtils.forceSetProperty(bean, field, Integer.parseInt(value));
         }
         else if (field.getType() == Long.class) {
-            BeanUtils.forceSetProperty(entity, field, Long.parseLong(value));
+            BeanUtils.forceSetProperty(bean, field, Long.parseLong(value));
         }
         else if (field.getType() == Float.class) {
-            BeanUtils.forceSetProperty(entity, field, Float.parseFloat(value));
+            BeanUtils.forceSetProperty(bean, field, Float.parseFloat(value));
         }
         else if (field.getType() == Double.class) {
-            BeanUtils.forceSetProperty(entity, field, Double.parseDouble(value));
+            BeanUtils.forceSetProperty(bean, field, Double.parseDouble(value));
         }
         else if (field.getType() == BigDecimal.class) {
-            BeanUtils.forceSetProperty(entity, field, BigDecimal.valueOf(Double.parseDouble(value)));
+            BeanUtils.forceSetProperty(bean, field, BigDecimal.valueOf(Double.parseDouble(value)));
         }
         else if (field.getType() == Date.class) {
-            BeanUtils.forceSetProperty(entity, field, FastDateFormat.getInstance().parse(value));
+            BeanUtils.forceSetProperty(bean, field, FastDateFormat.getInstance().parse(value));
         }
         else if (field.getType() == Boolean.class) {
-            BeanUtils.forceSetProperty(entity, field, Boolean.valueOf(value));
+            BeanUtils.forceSetProperty(bean, field, Boolean.valueOf(value));
         }
         else {
-            BeanUtils.forceSetProperty(entity, field, value);
+            BeanUtils.forceSetProperty(bean, field, value);
+        }
+    }
+
+    /**
+     * Force set bean's properties from a map by name and class type, ignoring the private, protected modifier.
+     * Static, Transient and Final properties will not be returned.
+     *
+     * @param bean
+     * @param data
+     */
+    public static void forceSetProperties(Object bean, Map<String, Object> data) {
+        for (Field field : getAllFields(bean.getClass())) {
+            if ((field.getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT | Modifier.FINAL)) != 0) {
+                continue;
+            }
+            Object v = data.get(field.getName());
+            if (v == null || (!field.getType().isPrimitive() && v.getClass() != field.getType())) {
+                continue;
+            }
+            forceSetProperty(bean, field, v);
         }
     }
 
@@ -362,7 +403,7 @@ public class BeanUtils {
         List<Field> ret = new ArrayList<>();
         for (Class<?> superClass = targetClass; superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Field field : superClass.getDeclaredFields()) {
-                if (field.getAnnotation(annoClass) == null){
+                if (field.getAnnotation(annoClass) == null) {
                     continue;
                 }
                 ret.add(field);

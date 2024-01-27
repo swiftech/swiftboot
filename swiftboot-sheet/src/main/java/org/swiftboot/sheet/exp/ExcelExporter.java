@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  */
 public class ExcelExporter extends BaseExporter {
 
-    private final Logger log = LoggerFactory.getLogger(ExcelExporter.class);
+    private static final Logger log = LoggerFactory.getLogger(ExcelExporter.class);
 
     private final ThreadLocal<ExcelCellInfo> cellInfo = new ThreadLocal<>();
 

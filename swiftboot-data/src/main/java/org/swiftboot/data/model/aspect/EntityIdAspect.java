@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 @Aspect
 public class EntityIdAspect {
 
-    private final Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
+    private static final Logger log = LoggerFactory.getLogger(EntityIdAspect.class);
 
     @Resource
     private SwiftBootDataConfigBean dataConfigBean;

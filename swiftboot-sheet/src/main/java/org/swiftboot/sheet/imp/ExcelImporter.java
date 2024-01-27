@@ -61,7 +61,7 @@ public class ExcelImporter extends BaseImporter {
         meta.accept(sheetId -> {
             log.debug("Sheet: " + sheetId);
             this.sheetId.set(sheetId);
-            sheetRef.set(PoiUtils.getSheet(wb, sheetId.getSheetIndex()));
+            sheetRef.set(PoiUtils.getSheet(wb, sheetId));
             if (sheetRef.get() == null) {
                 log.warn("No sheet found: " + sheetId);
                 return;
@@ -157,7 +157,9 @@ public class ExcelImporter extends BaseImporter {
         List<Object> values = new ArrayList<>();
 
         boolean isRowEmpty = true;
-        for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
+        int lastColIdx = actualNumberOfCells(metaItem, row);
+        // read from 0 for there might be prediction required.
+        for (int j = 0; j < lastColIdx; j++) {
             Cell cell = row.getCell(j);
             if (cell == null || cell.getCellType() == CellType.BLANK || StringUtils.isBlank(cell.toString())) {
                 isRowEmpty = isRowEmpty && true;
@@ -165,7 +167,7 @@ public class ExcelImporter extends BaseImporter {
             else {
                 isRowEmpty = isRowEmpty && false;
             }
-            log.trace(String.format("Get value from [%d,%d] as %s", row.getRowNum(), j, cell.getCellType()));
+            log.trace(String.format("Get value from [%d,%d] as %s", row.getRowNum(), j, cell == null ? "NULL" : cell.getCellType()));
             Object valueFromCell = getValueFromCell(cell);
             cellInfo.get().setCell(cell);
             cellInfo.get().setValue(valueFromCell);
@@ -205,6 +207,24 @@ public class ExcelImporter extends BaseImporter {
             return null;
         }
         return values;
+    }
+
+    /**
+     * Since the getPhysicalNumberOfCells() method returns actual filled cells number in a row(excludes blank cells),
+     * but the reading process need to read cells out of the area (for something like prediction) even there are blank cells,
+     * so the actual size of cells that needs to be read must be determined by the end position you provided.
+     *
+     * @param metaItem
+     * @param row
+     * @return
+     */
+    private int actualNumberOfCells(MetaItem metaItem, Row row) {
+        if (metaItem.getArea().getEndPosition() == null) {
+            return row.getPhysicalNumberOfCells();
+        }
+        else {
+            return Math.max(row.getPhysicalNumberOfCells(), metaItem.getArea().getEndPosition().getColumn() + 1);
+        }
     }
 
     private boolean isNeedPredicate(MetaItem metaItem) {

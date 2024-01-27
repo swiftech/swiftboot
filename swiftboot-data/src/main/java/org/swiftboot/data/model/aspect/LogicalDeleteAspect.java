@@ -19,7 +19,7 @@ import javax.persistence.EntityManager;
 @Aspect
 public class LogicalDeleteAspect {
 
-    private final Logger log = LoggerFactory.getLogger(LogicalDeleteAspect.class);
+    private static final Logger log = LoggerFactory.getLogger(LogicalDeleteAspect.class);
 
     @Resource
     private EntityManager entityManager;

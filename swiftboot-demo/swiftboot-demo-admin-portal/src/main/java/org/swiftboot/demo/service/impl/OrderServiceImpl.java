@@ -31,7 +31,7 @@ import java.util.Optional;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Resource
     private OrderDao orderDao;

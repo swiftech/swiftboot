@@ -20,7 +20,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/test/validation")
 public class ValidationController {
-    private final Logger log = LoggerFactory.getLogger(ValidationController.class);
+    private static final Logger log = LoggerFactory.getLogger(ValidationController.class);
 
     @RequestMapping(value = "phone_no", method = RequestMethod.POST)
     public

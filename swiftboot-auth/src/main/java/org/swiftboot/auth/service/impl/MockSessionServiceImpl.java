@@ -28,7 +28,7 @@ import java.io.IOException;
  */
 public class MockSessionServiceImpl implements SessionService, ApplicationContextAware {
 
-    private final Logger log = LoggerFactory.getLogger(MockSessionServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(MockSessionServiceImpl.class);
 
     private ApplicationContext applicationContext;
 

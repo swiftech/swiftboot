@@ -22,7 +22,7 @@ import org.swiftboot.web.result.ResponseBuilder;
 @RequestMapping("/test")
 public class TestController {
 
-    private final Logger log = LoggerFactory.getLogger(TestController.class);
+    private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @ApiOperation(notes = "测试资源", value = "测试资源")
     @RequestMapping(value = "message/resource/code", method = RequestMethod.GET)

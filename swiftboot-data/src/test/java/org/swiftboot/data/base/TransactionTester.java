@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class TransactionTester {
 
-    private final Logger log = LoggerFactory.getLogger(TransactionTester.class);
+    private static final Logger log = LoggerFactory.getLogger(TransactionTester.class);
 
     private final PlatformTransactionManager txManager;
 
