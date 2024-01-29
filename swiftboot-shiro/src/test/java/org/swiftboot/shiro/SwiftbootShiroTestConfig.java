@@ -5,6 +5,7 @@ import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.context.annotation.*;
 import org.swiftboot.data.SwiftBootDataConfig;
+import org.swiftboot.data.config.SwiftBootDataConfigBean;
 
 /**
  * @author swiftech
@@ -15,6 +16,11 @@ import org.swiftboot.data.SwiftBootDataConfig;
         SwiftBootDataConfig.class, SwiftbootShiroConfig.class
 })
 public class SwiftbootShiroTestConfig {
+
+    @Bean
+    SwiftBootDataConfigBean swiftBootDataConfig() {
+        return new SwiftBootDataConfigBean();
+    }
 
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
