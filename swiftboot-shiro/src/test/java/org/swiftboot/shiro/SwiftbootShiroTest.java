@@ -88,7 +88,7 @@ public class SwiftbootShiroTest {
     }
 
     @Test
-    public void testSatff() throws Exception {
+    public void testStaff() throws Exception {
         MvcResult signinResult = mvc.perform(get("/unit-test/signin")
                 .param("loginName", TestConstants.staffUser)
                 .param("loginPwd", TestConstants.staffPassword))

@@ -7,12 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.swiftboot.data.aspect.EntityIdAspectTestConfig;
-import org.swiftboot.data.base.BaseTransactionalTest;
-import org.swiftboot.data.base.TransactionTester;
 import org.swiftboot.data.base.Asserts;
 import org.swiftboot.data.base.Prepares;
 import org.swiftboot.data.base.Tests;
+import org.swiftboot.data.base.TransactionTester;
 import org.swiftboot.data.model.dao.BoolLogicalDeleteDao;
 import org.swiftboot.data.model.entity.BoolLogicalDeleteEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
@@ -28,8 +28,12 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Import(EntityIdAspectTestConfig.class)
-@ActiveProfiles("id-mysql")
-class BooleanLogicalDeleteExtendTest extends BaseTransactionalTest {
+@ActiveProfiles("id-h2")
+//@ActiveProfiles("id-mysql")
+class BooleanLogicalDeleteExtendTest {
+
+    @Resource
+    protected PlatformTransactionManager txManager;
 
     @Resource
     BoolLogicalDeleteDao logicalDeleteDao;
