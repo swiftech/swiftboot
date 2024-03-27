@@ -313,6 +313,23 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>aliyun</id>
+            <repositories>
+                <repository>
+                    <id>aliyun</id>
+                    <name>aliyun mirror</name>
+                    <url>https://maven.aliyun.com/repository/central</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>aliyun-plugin</id>
+                    <name>aliyun plugin mirror</name>
+                    <url>https://maven.aliyun.com/repository/central</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
     </profiles>
 
     <licenses>
