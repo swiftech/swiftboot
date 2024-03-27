@@ -20,8 +20,16 @@ public class PathUtils {
         return StringUtils.startsWith(path, "/") || isWindowsPath(path);
     }
 
+    /**
+     * @param folder
+     * @param file
+     * @return
+     */
     public static boolean isParentFolder(File folder, File file) {
-        return StringUtils.startsWith(file.getParentFile().getPath(), folder.getPath());
+        String parentFolderPath = StringUtils.endsWith(folder.getPath(), File.separator)
+                ? folder.getPath()
+                : folder.getPath() + File.separator;
+        return StringUtils.startsWith(file.getPath(), parentFolderPath);
     }
 
     /**
@@ -42,7 +50,7 @@ public class PathUtils {
      * @param ancestorPath
      * @return like "a/b/c" or "../a/b/c"
      */
-    public static String getRelativePath(String path, String ancestorPath){
+    public static String getRelativePath(String path, String ancestorPath) {
         return new File(ancestorPath).toPath().relativize(new File(path).toPath()).toString();
 //        return Path.of(ancestorPath).relativize(Path.of(path)).toString();  // java 11+
     }
