@@ -1,3 +1,6 @@
+v2.4.7
+* `[utils]` add getPreferenceAlias() methods to PreferenceManager for migrating preferences.
+
 v2.4.6
 * `[utils]`: fix PathUtils.isParentFolder doesn't work well;
 * update dependencies.
