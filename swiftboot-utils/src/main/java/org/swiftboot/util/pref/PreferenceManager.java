@@ -11,7 +11,10 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
- * A single wrapper class for Java Preference class.
+ * A singleton wrapper class for Java Preference class.
+ * There are getPreference() methods for retrieving preference in different manner, and call savePreference() to save preferences.
+ * As of 2.4.7, use getPreferenceAlias() if you want to read preference from different keys, it is very useful when you decide to
+ * migrate one preference key to another.
  *
  * @author allen
  * @since 2.3
@@ -169,6 +172,14 @@ public class PreferenceManager {
         return prefs.get(key, null);
     }
 
+    public Object getPreferenceAlias(String key, String alias) {
+        Object v = this.getPreference(key);
+        if (v == null && alias != null) {
+            v = this.getPreference(alias);
+        }
+        return v;
+    }
+
     /**
      * Get preference by field of an object, if not exists, return the field value of object.
      *
@@ -177,9 +188,8 @@ public class PreferenceManager {
      * @param target
      * @param <T>
      * @return
-     * @throws IllegalAccessException
      */
-    public <T> T getPreference(String key, Field field, Object target) throws IllegalAccessException {
+    public <T> T getPreference(String key, Field field, Object target) {
         if (field == null) {
             throw new RuntimeException("field can't be null");
         }
@@ -190,59 +200,72 @@ public class PreferenceManager {
         Class<T> clazz = (Class<T>) field.getType();
         field.setAccessible(true);
         Object val = null;
-        if (clazz == Integer.class || clazz == int.class) {
-            val = prefs.getInt(key, field.getInt(target));
-        }
-        else if (clazz == Long.class || clazz == long.class) {
-            val = prefs.getLong(key, field.getLong(target));
-        }
-        else if (clazz == Boolean.class || clazz == boolean.class) {
-            val = prefs.getBoolean(key, field.getBoolean(target));
-        }
-        else if (clazz == Float.class || clazz == float.class) {
-            val = prefs.getFloat(key, field.getFloat(target));
-        }
-        else if (clazz == Double.class || clazz == double.class) {
-            val = prefs.getDouble(key, field.getDouble(target));
-        }
-        else if (clazz == byte[].class) {
-            val = prefs.getByteArray(key, (byte[]) field.get(target));
-        }
-        else if (clazz == String.class) {
-            val = prefs.get(key, (String) field.get(target));
-        }
-        else {
-            for (Class c : converterMap.keySet()) {
-                if (c.isAssignableFrom(clazz)) {
-                    Converter converter = converterMap.get(clazz);
-                    Class saveAs = converter.getSaveAs();
-                    if (saveAs == String.class) {
-                        String s = prefs.get(key, null);
-                        val = s == null ? field.get(target) : (T) converter.deserialize(s);
+        try {
+            if (clazz == Integer.class || clazz == int.class) {
+                val = prefs.getInt(key, field.getInt(target));
+            }
+            else if (clazz == Long.class || clazz == long.class) {
+                val = prefs.getLong(key, field.getLong(target));
+            }
+            else if (clazz == Boolean.class || clazz == boolean.class) {
+                val = prefs.getBoolean(key, field.getBoolean(target));
+            }
+            else if (clazz == Float.class || clazz == float.class) {
+                val = prefs.getFloat(key, field.getFloat(target));
+            }
+            else if (clazz == Double.class || clazz == double.class) {
+                val = prefs.getDouble(key, field.getDouble(target));
+            }
+            else if (clazz == byte[].class) {
+                val = prefs.getByteArray(key, (byte[]) field.get(target));
+            }
+            else if (clazz == String.class) {
+                val = prefs.get(key, (String) field.get(target));
+            }
+            else {
+                for (Class c : converterMap.keySet()) {
+                    if (c.isAssignableFrom(clazz)) {
+                        Converter converter = converterMap.get(clazz);
+                        Class saveAs = converter.getSaveAs();
+                        if (saveAs == String.class) {
+                            String s = prefs.get(key, null);
+                            val = s == null ? field.get(target) : (T) converter.deserialize(s);
+                        }
+                        else if (saveAs == Integer.class) {
+                            int v = prefs.getInt(key, Integer.MIN_VALUE);
+                            val = v == Integer.MIN_VALUE ? field.get(target) : (T) converter.deserialize(Integer.valueOf(v));
+                        }
+                        else if (saveAs == Long.class) {
+                            long v = prefs.getLong(key, Long.MIN_VALUE);
+                            val = v == Long.MIN_VALUE ? field.get(target) : (T) converter.deserialize(v);
+                        }
+                        else if (saveAs == byte[].class) {
+                            byte[] v = prefs.getByteArray(key, null);
+                            val = v == null ? (byte[]) field.get(target) : (T) converter.deserialize(v);
+                        }
+                        else {
+                            throw new RuntimeException(String.format("Can't get preference as data type %s", saveAs));
+                        }
+                        break;
                     }
-                    else if (saveAs == Integer.class) {
-                        int v = prefs.getInt(key, Integer.MIN_VALUE);
-                        val = v == Integer.MIN_VALUE ? field.get(target) : (T) converter.deserialize(Integer.valueOf(v));
-                    }
-                    else if (saveAs == Long.class) {
-                        long v = prefs.getLong(key, Long.MIN_VALUE);
-                        val = v == Long.MIN_VALUE ? field.get(target) : (T) converter.deserialize(v);
-                    }
-                    else if (saveAs == byte[].class) {
-                        byte[] v = prefs.getByteArray(key, null);
-                        val = v == null ? (byte[]) field.get(target) : (T) converter.deserialize(v);
-                    }
-                    else {
-                        throw new RuntimeException(String.format("Can't get preference as data type %s", saveAs));
-                    }
-                    break;
                 }
             }
+        } catch (IllegalAccessException | RuntimeException e) {
+            e.printStackTrace();
+            return null;
         }
         if (val == null) {
             return null;
         }
         return (T) val;
+    }
+
+    public <T> T getPreferenceAlias(String key, String alias, Field field, Object target) {
+        T v = this.getPreference(key, field, target);
+        if (v == null && alias != null) {
+            v = this.getPreference(alias, field, target);
+        }
+        return v;
     }
 
     /**
@@ -318,6 +341,17 @@ public class PreferenceManager {
         return (T) val;
     }
 
+
+    public <T> T getPreferenceAlias(String key, String alias, Class<T> clazz, T defaultValue) {
+        key = absoluteKey(key);
+        Object check = prefs.get(key, null);
+        T v = null;
+        if (check == null && alias != null) {
+            v = this.getPreference(alias, clazz, defaultValue);
+        }
+        return v;
+    }
+
     /**
      * Get preference by class type, if not exists, return MIN_VALUE for integer/long or float/double type, empty bytes array for byte array type
      * false for boolean type, "" for string type, null for user customized object.
@@ -388,6 +422,21 @@ public class PreferenceManager {
         return (T) val;
     }
 
+
+    public <T> T getPreferenceAlias(String key, String alias, Class<T> clazz) {
+        key = absoluteKey(key);
+        Object check = prefs.get(key, null);
+        T v;
+        if (check == null && alias != null) {
+            v = this.getPreference(absoluteKey(alias), clazz);
+        }
+        else {
+            v = this.getPreference(key, clazz);
+        }
+        return v;
+    }
+
+
     /**
      * Get preference only by key, if not exists, return user provided default value.
      *
@@ -454,6 +503,19 @@ public class PreferenceManager {
             return def;
         }
         return val;
+    }
+
+    public <T> T getPreferenceAlias(String key, String alias, T defaultValue) {
+        key = absoluteKey(key);
+        Object check = prefs.get(key, null);
+        T v;
+        if (check == null && alias != null) {
+            v = this.getPreference(absoluteKey(alias), defaultValue);
+        }
+        else {
+            v = this.getPreference(key, defaultValue);
+        }
+        return v;
     }
 
     public void removePreference(String key) {

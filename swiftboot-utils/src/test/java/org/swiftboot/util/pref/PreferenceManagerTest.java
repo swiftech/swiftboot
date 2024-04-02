@@ -119,7 +119,7 @@ class PreferenceManagerTest {
         Assertions.assertEquals(Float.MIN_VALUE, pm.getPreference("not_exists_key", Float.MIN_VALUE));
         Assertions.assertEquals(Double.MIN_VALUE, pm.getPreference("not_exists_key", Double.MIN_VALUE));
         Assertions.assertEquals(Boolean.TRUE, pm.getPreference("not_exists_key", Boolean.TRUE));
-        Assertions.assertArrayEquals(new byte[]{}, (byte[]) pm.getPreference("not_exists_key", new byte[]{}));
+        Assertions.assertArrayEquals(new byte[]{}, pm.getPreference("not_exists_key", new byte[]{}));
         Assertions.assertEquals(new MyStrClass("a", "b"), pm.getPreference("not_exists_key", new MyStrClass("a", "b")));
         Assertions.assertEquals(new MyIntClass((byte) 'x'), pm.getPreference("not_exists_key", new MyIntClass((byte) 'x')));
         Assertions.assertEquals(vnsc, pm.getPreference("not_exists_key", vnsc));
@@ -152,7 +152,7 @@ class PreferenceManagerTest {
         pm.savePreference(MyIntClass.class.toString(), vmi);
 
         // test get preference by key and class type.
-        Assertions.assertThrows(Exception.class, ()-> pm.getPreference(Object.class.toString(), null));
+        Assertions.assertThrows(Exception.class, () -> pm.getPreference(Object.class.toString(), null));
         Assertions.assertEquals(vs, pm.getPreference(String.class.toString(), String.class));
         Assertions.assertEquals(vi, pm.getPreference(Integer.class.toString(), Integer.class));
         Assertions.assertEquals(vl, pm.getPreference(Long.class.toString(), Long.class));
@@ -184,6 +184,24 @@ class PreferenceManagerTest {
         Assertions.assertEquals(vms, pm.getPreference(MyStrClass.class.toString(), new MyStrClass()));
         Assertions.assertEquals(vmi, PreferenceManager.getInstance().getPreference(MyIntClass.class.toString(), MyIntClass.class, new MyIntClass()));
 
+    }
+
+    @Test
+    void getPreferenceAlias() {
+        PreferenceManager pm = PreferenceManager.getInstance();
+        String EXIST_PREF_KEY = "EXIST_PREF";
+        pm.savePreference(EXIST_PREF_KEY, "some value");
+        Assertions.assertEquals("some value", pm.getPreference(EXIST_PREF_KEY));
+        Assertions.assertNotNull(pm.getPreferenceAlias("not_exists_key", EXIST_PREF_KEY));
+        Assertions.assertNotNull(pm.getPreferenceAlias("not_exists_key", EXIST_PREF_KEY, "default value"));
+        Assertions.assertEquals("some value", pm.getPreferenceAlias("not_exists_key", EXIST_PREF_KEY, "default value"));
+        Assertions.assertNotNull(pm.getPreferenceAlias("not_exists_key", EXIST_PREF_KEY, String.class));
+        Assertions.assertEquals("some value", pm.getPreferenceAlias("not_exists_key", EXIST_PREF_KEY, String.class));
+        Assertions.assertNotNull(pm.getPreferenceAlias("not_exists_key", EXIST_PREF_KEY, String.class, "default value"));
+        Assertions.assertEquals("some value", pm.getPreferenceAlias("not_exists_key", EXIST_PREF_KEY, String.class, "default value"));
+
+        //
+        Assertions.assertNull(pm.getPreference("not_exists_key"));
     }
 
     private static class MyStrClassExt extends MyStrClass {
