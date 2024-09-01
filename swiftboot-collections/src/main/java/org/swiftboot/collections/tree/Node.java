@@ -2,6 +2,7 @@ package org.swiftboot.collections.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Node in Tree with data object reference, parent Node reference, node level(depth) in tree and children list.
@@ -31,6 +32,16 @@ public class Node {
             throw new NullPointerException();
         }
         children.add(child);
+    }
+
+    public Node findAncestor(Predicate<Node> predicate) {
+        if (this.parent == null) {
+            return this;// stop at the top.
+        }
+        if (predicate.test((this.parent))) {
+            return this.parent;
+        }
+        return this.parent.findAncestor(predicate);
     }
 
     public boolean isLeaf() {

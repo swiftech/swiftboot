@@ -20,4 +20,17 @@ class TextUtilsTest {
         Assertions.assertEquals(3, TextUtils.lastIndexOf("__###__", "##",  4));
 
     }
+
+    @Test
+    void removeQuotes() {
+        Assertions.assertEquals("foobar", TextUtils.removeQuotes("'foobar'"));
+        Assertions.assertEquals("foobar", TextUtils.removeQuotes("\"foobar\""));
+        Assertions.assertEquals("foobar", TextUtils.removeQuotes("`foobar`"));
+
+        Assertions.assertEquals("foo`bar", TextUtils.removeQuotes("`foo`bar`"));
+        Assertions.assertEquals("foo'bar", TextUtils.removeQuotes("`foo'bar`"));
+
+        Assertions.assertEquals("foobar", TextUtils.removeQuotes("'foobar`"));
+
+    }
 }

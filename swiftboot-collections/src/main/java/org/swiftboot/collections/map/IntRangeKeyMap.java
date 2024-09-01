@@ -12,7 +12,7 @@ import java.util.Map;
  * @param <K>
  * @param <V>
  */
-public class IntRangeKeyMap<K extends Comparable, V> {
+public class IntRangeKeyMap<K extends Comparable<K>, V> {
 	Map<Range<K>, V> internalMap = new HashMap<>();
 
 	/**
@@ -70,11 +70,11 @@ public class IntRangeKeyMap<K extends Comparable, V> {
 	 * @param value
 	 */
 	public void put(K begin, K to, V value) {
-		Range<K> key = Range.between(begin, to);
+		Range<K> key = Range.of(begin, to);
 		for (Range<K> rangeKey : internalMap.keySet()) {
 			// 合并两个key作为新的key并移除旧的
 			if (rangeKey.isOverlappedBy(key)) {
-				Range<K> newRange = Range.between(
+				Range<K> newRange = Range.of(
 						key.getMinimum().compareTo(rangeKey.getMinimum()) < 0 ? key.getMinimum() : rangeKey.getMinimum(),
 						key.getMaximum().compareTo(rangeKey.getMaximum()) > 0 ? key.getMaximum() : rangeKey.getMaximum()
 				);
