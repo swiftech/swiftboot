@@ -63,10 +63,10 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
   * JSON 20220320
   * etc.
 
-##### Unstable: v2.4.7
+##### Unstable: v2.4.8
 
-v2.4.7
-* `[utils]` add getPreferenceAlias() methods to PreferenceManager for migrating preferences.
+* add `findAncestor()` to Node class
+* add `removeQuotes()` to `TextUtils` class
 
 
 [完整更新记录](changelogs)
