@@ -18,7 +18,7 @@ import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
+import jakarta.servlet.http.Cookie;
 
 /**
  * Automatically save session of current authenticated user from the

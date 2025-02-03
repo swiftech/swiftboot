@@ -2,6 +2,8 @@ spring:
   application:
     name: swiftboot-demo
   datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:file:./target/swiftboot
 #    driverClassName: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/swiftboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
 #    username: root

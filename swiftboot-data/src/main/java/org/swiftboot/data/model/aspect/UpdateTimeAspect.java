@@ -14,7 +14,7 @@ import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.util.GenericUtils;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

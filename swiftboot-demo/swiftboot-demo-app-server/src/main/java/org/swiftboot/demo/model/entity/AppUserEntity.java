@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  * App用户
@@ -22,14 +22,14 @@ public class AppUserEntity extends BaseEntity {
      * Login name of app user
      */
     @PropertyDescription(value = "Login name of app user", example = "13866669999")
-    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) NOT NULL COMMENT 'Login name of app user'")
+    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) NOT NULL")
     private String loginName;
 
     /**
      * Login password to login name (MD5 with salt)
      */
     @PropertyDescription(value = "Login password to login name", notes = "MD5 with salt", example = "a43b66902590c003c213a5ed1b6f92e3")
-    @Column(name = "LOGIN_PWD", length = 64, nullable = false, columnDefinition = "VARCHAR(64) NOT NULL COMMENT 'Login password to login name(MD5 with salt)'")
+    @Column(name = "LOGIN_PWD", length = 64, nullable = false, columnDefinition = "VARCHAR(64) NOT NULL")
     private String loginPwd;
 
 

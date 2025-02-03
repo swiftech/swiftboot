@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.data.config.SwiftBootDataConfigBean;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 /**
  * 持久化实体类之前设置逻辑删除字段

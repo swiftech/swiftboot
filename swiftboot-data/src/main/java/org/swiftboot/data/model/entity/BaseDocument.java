@@ -2,8 +2,8 @@ package org.swiftboot.data.model.entity;
 
 import org.swiftboot.data.annotation.PropertyDescription;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 
 /**
  * Base class for MongoDB document

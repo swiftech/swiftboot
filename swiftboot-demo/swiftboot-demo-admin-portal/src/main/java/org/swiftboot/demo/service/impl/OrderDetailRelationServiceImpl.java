@@ -14,7 +14,7 @@ import org.swiftboot.demo.result.OrderSaveResult;
 import org.swiftboot.demo.service.OrderDetailRelationService;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.Optional;
 
 /**

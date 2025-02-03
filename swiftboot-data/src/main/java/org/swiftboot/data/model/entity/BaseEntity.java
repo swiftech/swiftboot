@@ -2,8 +2,8 @@ package org.swiftboot.data.model.entity;
 
 import org.swiftboot.data.annotation.PropertyDescription;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
 /**
  *
@@ -17,7 +17,7 @@ public abstract class BaseEntity extends BaseLongTimeEntity implements LogicalDe
      * 是否逻辑删除
      */
     @PropertyDescription(value = "Is deleted", example = "false")
-    @Column(name = "IS_DELETE", columnDefinition = "BIT DEFAULT FALSE COMMENT 'Is deleted'")
+    @Column(name = "IS_DELETE", columnDefinition = "BOOL DEFAULT FALSE")
     private Boolean isDelete = Boolean.FALSE;
 
     public BaseEntity() {

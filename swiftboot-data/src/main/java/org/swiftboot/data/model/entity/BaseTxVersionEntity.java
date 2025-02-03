@@ -2,9 +2,9 @@ package org.swiftboot.data.model.entity;
 
 import org.swiftboot.data.annotation.PropertyDescription;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 
 /**
  *

@@ -2,7 +2,7 @@ package org.swiftboot.web.command;
 
 import org.swiftboot.data.model.entity.WifeEntity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author swiftech

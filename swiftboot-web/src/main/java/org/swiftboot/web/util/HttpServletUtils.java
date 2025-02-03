@@ -2,7 +2,7 @@ package org.swiftboot.web.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * HttpServlet 工具类

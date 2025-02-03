@@ -3,11 +3,11 @@ package org.swiftboot.data.model.dao.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.data.model.entity.IdPersistable;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 /**
  * 自定义 Jpa Dao 接口的基类

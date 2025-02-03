@@ -26,8 +26,8 @@ import org.swiftboot.util.WordUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

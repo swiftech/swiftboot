@@ -4,9 +4,9 @@ import org.springframework.data.annotation.Immutable;
 import org.swiftboot.data.model.entity.BaseIdEntity;
 import org.swiftboot.shiro.model.entity.PermissionEntityStub;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  *

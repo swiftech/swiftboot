@@ -1,13 +1,23 @@
 server:
-  port: 8080
+  port: 8088
 spring:
   application:
     name: swiftboot-demo-app-server
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:file:./target/swiftboot
+#    driverClassName: org.h2.Driver
+#    url: jdbc:h2:file:./target/swiftboot
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/swiftboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+#    username: root
+#    password: 12345678
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/swiftboot
+    username: postgres
+    password: mandalorian2023
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
       naming:
@@ -15,8 +25,22 @@ spring:
     properties:
       hibernate:
         current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-    show-sql: false
+    show-sql: true
     open-in-view: false
+#  datasource:
+#    driverClassName: org.h2.Driver
+#    url: jdbc:h2:file:./target/swiftboot
+#  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      ddl-auto: update
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    properties:
+#      hibernate:
+#        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+#    show-sql: false
+#    open-in-view: false
   sql:
     init:
       mode: always

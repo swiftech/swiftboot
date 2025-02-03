@@ -19,7 +19,7 @@ import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.web.command.IdListCommand;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 

@@ -3,9 +3,9 @@ package org.swiftboot.shiro;
 import org.swiftboot.data.model.entity.BaseIdEntity;
 import org.swiftboot.shiro.model.entity.UserEntityStub;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  * @author swiftech

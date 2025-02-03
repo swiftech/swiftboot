@@ -2,7 +2,7 @@ package org.swiftboot.data.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author swiftech

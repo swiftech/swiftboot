@@ -2,9 +2,9 @@ package org.swiftboot.data.model.interceptor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.CallbackException;
-import org.hibernate.EntityMode;
 import org.hibernate.Interceptor;
 import org.hibernate.Transaction;
+import org.hibernate.metamodel.RepresentationMode;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,7 +139,7 @@ public class InterceptorProxy implements Interceptor, Serializable {
     }
 
     @Override
-    public Object instantiate(String entityName, EntityMode entityMode, Serializable id) throws CallbackException {
+    public Object instantiate(String entityName, RepresentationMode representationMode, Object id) throws CallbackException {
         log.trace(String.format("Proxy instantiate() %s[%s]", entityName, id));
         log.trace("this method will never invokes any interceptors");
         return null;
@@ -177,12 +177,12 @@ public class InterceptorProxy implements Interceptor, Serializable {
         interceptors.forEach(interceptor -> interceptor.afterTransactionCompletion(tx));
     }
 
-    @Override
-    public String onPrepareStatement(String sql) {
-        log.trace("Proxy onPrepareStatement()");
-        log.trace("this method will never invokes any interceptors");
-        return sql;
-    }
+//    @Override
+//    public String onPrepareStatement(String sql) {
+//        log.trace("Proxy onPrepareStatement()");
+//        log.trace("this method will never invokes any interceptors");
+//        return sql;
+//    }
 
     void printDebugInfo() {
         log.trace(interceptors.size() + " interceptors in total");

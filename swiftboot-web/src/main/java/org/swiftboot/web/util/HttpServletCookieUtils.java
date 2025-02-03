@@ -3,8 +3,8 @@ package org.swiftboot.web.util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.WebUtils;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author swiftech 2019-08-29

@@ -2,7 +2,7 @@ package org.swiftboot.data.model.entity;
 
 import org.swiftboot.data.annotation.PropertyDescription;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 /**
@@ -18,7 +18,7 @@ public abstract class BaseIdEntity implements IdPersistable {
      */
     @PropertyDescription(value = "Entity ID", example = "basident20191119010450544siobnic")
     @Id()
-    @Column(name = "ID", columnDefinition = "char(32) COMMENT 'Entity ID'")
+    @Column(name = "ID", columnDefinition = "char(32)")
     private String id;
 
     public BaseIdEntity() {

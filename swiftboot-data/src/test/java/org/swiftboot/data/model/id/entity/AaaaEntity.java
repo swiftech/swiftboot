@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  * @author swiftech 2019-04-08

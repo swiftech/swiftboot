@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * 用户角色关联

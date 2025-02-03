@@ -2,8 +2,8 @@ package org.swiftboot.data.model.entity;
 
 import org.swiftboot.data.annotation.PropertyDescription;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
 /**
  * 基于 {@coee java.lang.Long} 的实体类基类。
@@ -17,13 +17,13 @@ public abstract class BaseLongTimeEntity extends BaseIdEntity implements TimePer
      * 创建时间
      */
     @PropertyDescription(value = "Creation time", example = "1545355038524")
-    @Column(name = "CREATE_TIME", columnDefinition = "BIGINT COMMENT 'Creation time'")
+    @Column(name = "CREATE_TIME", columnDefinition = "BIGINT")
     private Long createTime;
     /**
      * 修改时间
      */
     @PropertyDescription(value = "Updating time", example = "1545355038524")
-    @Column(name = "UPDATE_TIME", columnDefinition = "BIGINT COMMENT 'Updating time'")
+    @Column(name = "UPDATE_TIME", columnDefinition = "BIGINT")
     private Long updateTime;
 
     public BaseLongTimeEntity() {

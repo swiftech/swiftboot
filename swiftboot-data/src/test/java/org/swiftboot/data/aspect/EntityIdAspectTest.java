@@ -24,7 +24,7 @@ import org.swiftboot.data.model.entity.ParentEntity;
 import org.swiftboot.util.JsonUtils;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Optional;
 

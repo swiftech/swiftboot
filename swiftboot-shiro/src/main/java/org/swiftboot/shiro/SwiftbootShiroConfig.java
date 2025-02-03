@@ -28,7 +28,7 @@ import org.swiftboot.shiro.session.ShiroSessionListener;
 import org.swiftboot.shiro.session.ShiroSessionRedisDao;
 
 import javax.annotation.Resource;
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 import java.util.ArrayList;
 import java.util.Map;
 

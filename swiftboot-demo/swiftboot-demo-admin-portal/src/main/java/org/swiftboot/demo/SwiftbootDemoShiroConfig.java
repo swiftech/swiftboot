@@ -1,7 +1,7 @@
 package org.swiftboot.demo;
 
-import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
-import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+//import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
+//import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,21 +16,21 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(value = "swiftboot.shiro.enabled", havingValue = "true")
 public class SwiftbootDemoShiroConfig {
 
-    @Bean
-    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
-        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
-        chainDefinition.addPathDefinition("/admin/user/**", "authc, perms[admin:user]");
-
-        // Module Goods
-        chainDefinition.addPathDefinition("/goods/create/**", "authc, perms[goods:create]");
-        chainDefinition.addPathDefinition("/goods/delete/**", "authc, perms[goods:delete]");
-        chainDefinition.addPathDefinition("/goods/**", "authc, perms[goods]");
-
-        // Module Order
-        chainDefinition.addPathDefinition("/order/**", "authc, perms[order]");
-
-        // No authentication and permissions required
-        chainDefinition.addPathDefinition("/**", "anon");
-        return chainDefinition;
-    }
+//    @Bean
+//    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
+//        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+//        chainDefinition.addPathDefinition("/admin/user/**", "authc, perms[admin:user]");
+//
+//        // Module Goods
+//        chainDefinition.addPathDefinition("/goods/create/**", "authc, perms[goods:create]");
+//        chainDefinition.addPathDefinition("/goods/delete/**", "authc, perms[goods:delete]");
+//        chainDefinition.addPathDefinition("/goods/**", "authc, perms[goods]");
+//
+//        // Module Order
+//        chainDefinition.addPathDefinition("/order/**", "authc, perms[order]");
+//
+//        // No authentication and permissions required
+//        chainDefinition.addPathDefinition("/**", "anon");
+//        return chainDefinition;
+//    }
 }

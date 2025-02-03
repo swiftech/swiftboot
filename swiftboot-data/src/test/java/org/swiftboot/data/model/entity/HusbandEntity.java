@@ -1,6 +1,6 @@
 package org.swiftboot.data.model.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author swiftech
