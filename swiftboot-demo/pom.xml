@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>swiftboot-demo-admin-portal</module>
+        <!--        <module>swiftboot-demo-admin-portal</module>-->
         <module>swiftboot-demo-app-server</module>
     </modules>
     <parent>
@@ -15,15 +15,16 @@
     </parent>
     <groupId>org.swiftboot</groupId>
     <artifactId>swiftboot-demo</artifactId>
-    <version>2.4.8</version>
+    <version>3.0.0</version>
     <name>swiftboot-demo</name>
     <description>Demo project for SwiftBoot</description>
 
     <properties>
         <java.version>17</java.version>
-        <swiftboot.version>2.4.8</swiftboot.version>
-<!--        <junit.version>5.5.2</junit.version>-->
-        <postgres.version>42.5.1</postgres.version>
+        <swiftboot.version>3.0.0</swiftboot.version>
+        <!--        <junit.version>5.5.2</junit.version>-->
+        <mysql.version>9.2.0</mysql.version>
+        <postgres.version>42.7.5</postgres.version>
     </properties>
 
     <dependencies>
@@ -67,23 +68,22 @@
             <scope>test</scope>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.junit.jupiter</groupId>-->
-<!--            <artifactId>junit-jupiter</artifactId>-->
-<!--            <version>${junit.version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.junit.jupiter</groupId>-->
+        <!--            <artifactId>junit-jupiter</artifactId>-->
+        <!--            <version>${junit.version}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
