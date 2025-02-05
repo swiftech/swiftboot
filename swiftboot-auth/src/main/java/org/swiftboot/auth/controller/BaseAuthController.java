@@ -63,7 +63,7 @@ public class BaseAuthController {
      * @return
      */
     public String fetchUserIdFromSession(HttpServletRequest request) {
-        String tokenKey = authConfigBean.getSession().getTokenKey();
+        String tokenKey = authConfigBean.getTokenKey();
         String token = request.getHeader(tokenKey);
         if (StringUtils.isBlank(token)) {
             Cookie cookie = WebUtils.getCookie(request, tokenKey);

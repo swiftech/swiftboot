@@ -5,11 +5,11 @@
 ### 特性
 * 非常少的代码即可实现完整的用户认证，只要实现校验用户凭证的代码逻辑和配置认证过滤有效的 URL 即可。
 
-* 你只需要实现 UserAuthService 接口实现用户身份校验，并在你的 Controller 方法中嗲用 UserAuthService.userSignIn() 方法，用户 Token 会被自动写入到 Cookie 
+* 你只需要实现 UserAuthService 接口实现用户身份校验，并在你的 Controller 方法中嗲用 `UserAuthService.userSignIn()` 方法，用户 Token 会被自动写入到 Cookie 
 或者 Header 中返回给客户端，由客户端保存并加入到请求的 Header 中。
 
 * 一旦引用了 SwiftBoot-Auth，其内建的过滤器就会检查请求 Header 或 Cookie 中是否存在令牌（Token）以及令牌对应的会话（session）是否有效，
-  令牌的名称通过 `swiftboot.auth.session.tokenKey` 来设定，过滤器需要过滤哪些 API 通过在配置 `FilterRegistrationBean` 中注册相应的 URI 来指定（例子请看后面的章节）
+  令牌的名称通过 `swiftboot.auth.tokenKey` 来设定，过滤器需要过滤哪些 API 通过在配置 `FilterRegistrationBean` 中注册相应的 URI 来指定（例子请看后面的章节）
 
 
 ### Maven
@@ -56,8 +56,8 @@ public class MySigninServiceImpl implements UserAuthService {
 
 * Controller 
 
-  将用户认证后得到的 `AuthenticatedResponse` 对象返回给客户端即可，分配给用户的 Token 会被自动写入 Cookie 或者 Header（取决于 useCookie 是否为 true）
-  如果写入的是 Header，那么客户端从接口返回的 Header 中取得 Token 后需要放入后续请求的 Header 中，名称和配置的 `swiftboot.auth.session.tokenKey` 一样，例如 `my_token`
+  将用户认证后得到的 `AuthenticatedResponse` 对象返回给客户端即可，分配给用户的 Token 会被自动写入 Cookie 或者 Header（取决于 `useCookie` 是否为 true）
+  如果写入的是 Header，那么客户端从接口返回的 Header 中取得 Token 后需要放入后续请求的 Header 中，名称和配置的 `swiftboot.auth.tokenKey` 一样，例如 `user_token`
 
 ```java
 @Resource
@@ -69,7 +69,7 @@ public HttpResponse<AppUserSigninResult> userSignIn(@RequestBody UserSignInComma
         UserSignInResult result = new UserSigninResult(); // 自定义返回对象
         result.setXXX(xxx);
         response.setResult(result);
-        return response
+        return response;
 }
 ```
 
@@ -137,10 +137,10 @@ public HttpResponse<?> getOrderList(@UserId String userId) {
 swiftboot:
   auth:
     enabled: true
+    tokenKey: user_token
     session:
       type: redis
-      group: my_session
-      tokenKey: my_token
+      group: user_session
       expiresIn: 1800
       updateExpireTime: true
       useCookie: true
@@ -157,10 +157,10 @@ swiftboot:
       配置为 `mock`，使用内存存储会话，仅用于调试。
 
   * group
-      默认的会话分组名称，用这个值来创建会话存储（Redis）中的集合，默认为 `swiftboot_token`。
+      默认的会话分组名称，用这个值来创建会话存储（Redis）中的集合。
 
   * tokenKey
-      传递用户认证后得到的 Token 的 Key 的名称，无论是在 Cookie 还是在 Header 中都是用这个名字进行存储。 
+      传递用户认证后得到的 Token 的 Key 的名称，无论是在 Cookie 还是在 Header 中都是用这个名字进行存储，默认为`access_token`。 
 
   * expiresIn
       会话超时时间长度，单位秒，默认 `1800` 秒（即30分钟）
@@ -173,3 +173,6 @@ swiftboot:
   
   * cookiePath
       Cookie 中用户 Token 的有效路径，默认为 `/`，只有在 `useCookie` 为 `true` 时有效。
+
+## 开发计划
+* 支持 JWT

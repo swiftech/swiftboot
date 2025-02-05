@@ -54,7 +54,7 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
                                   WebDataBinderFactory binderFactory) throws Exception {
         ServletWebRequest servletWebRequest = (ServletWebRequest) webRequest;
         // Try to get token from headers, if the token is in Cookie, it must have been extracted from Cookie in previous AuthFilter
-        String token = servletWebRequest.getHeader(configBean.getSession().getTokenKey());
+        String token = servletWebRequest.getHeader(configBean.getTokenKey());
         if (StringUtils.isBlank(token)) {
             log.trace("No token found in headers");
             return null;
@@ -65,7 +65,7 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
                 log.trace("No session found in for token: " + token);
                 return null;
             }
-            log.info("Find and pre-set user id: " + session.getUserId());
+            log.info("Find and pre-set user id: %s".formatted(session.getUserId()));
             if (parameter.hasParameterAnnotation(UserId.class)) {
                 return session.getUserId();
             }

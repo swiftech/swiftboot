@@ -58,7 +58,7 @@ public class AuthFilter extends OncePerRequestFilter {
             }
         }
 
-        String tokenKey = configBean.getSession().getTokenKey();
+        String tokenKey = configBean.getTokenKey();
         String token = HttpServletCookieUtils.getValueFromHeaderOrCookie(request, tokenKey);
 
         if (isBlank(token)) {

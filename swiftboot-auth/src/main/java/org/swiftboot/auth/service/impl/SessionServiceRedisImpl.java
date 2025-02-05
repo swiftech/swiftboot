@@ -143,7 +143,7 @@ public class SessionServiceRedisImpl implements SessionService {
                 throw new RuntimeException("Session is invalid");
             }
         } catch (Exception e) {
-            log.error("Get session error, token=" + token, e);
+            log.error("Get session error, token=%s".formatted(token), e);
             return null;
         }
     }
@@ -171,7 +171,7 @@ public class SessionServiceRedisImpl implements SessionService {
             }
         }
         if (result <= 0) {
-            throw new RuntimeException("Remove session failed, token: " + token);
+            throw new RuntimeException("Remove session failed, token: %s".formatted(token));
         }
     }
 

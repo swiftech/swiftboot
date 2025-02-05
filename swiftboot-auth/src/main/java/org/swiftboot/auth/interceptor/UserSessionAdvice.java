@@ -45,11 +45,11 @@ public class UserSessionAdvice extends RequestBodyAdviceAdapter {
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         if (log.isTraceEnabled()) log.trace("SessionAdvice.afterBodyRead()");
-        if (log.isTraceEnabled()) log.trace("Handle command: " + body.getClass());
+        if (log.isTraceEnabled()) log.trace("Handle command: %s".formatted(body.getClass()));
         BaseAuthenticatedCommand<?> command = (BaseAuthenticatedCommand<?>) body;
         System.out.println(JsonUtils.object2PrettyJson(command));
 
-        String tokenKey = configBean.getSession().getTokenKey();
+        String tokenKey = configBean.getTokenKey();
 
         String token = SpringWebUtils.getHeader(tokenKey, inputMessage);
         if (StringUtils.isBlank(token)) {
@@ -63,10 +63,10 @@ public class UserSessionAdvice extends RequestBodyAdviceAdapter {
         else {
             Session session = sessionService.getSession(token);
             if (session == null) {
-                if (log.isTraceEnabled()) log.trace("No session found for token: " + token);
+                if (log.isTraceEnabled()) log.trace("No session found for token: %s".formatted(token));
                 return command;
             }
-            if (log.isDebugEnabled()) log.debug("Find and pre-set user id: " + session.getUserId());
+            if (log.isDebugEnabled()) log.debug("Find and pre-set user id: %s".formatted(session.getUserId()));
             command.setUserId(session.getUserId());
             command.setUserName(session.getUserName());
         }

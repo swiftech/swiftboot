@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
  * swiftboot.auth.session
  *
  * @author swiftech 2019-06-10
+ * @see SwiftbootAuthConfigBean
  **/
 public class SessionConfigBean {
 
@@ -22,11 +23,6 @@ public class SessionConfigBean {
      *
      */
     private String group = StringUtils.EMPTY;
-
-    /**
-     * 会话令牌的名称，作为客户端保存和传递时的 key
-     */
-    private String tokenKey = "swiftboot_token";
 
     /**
      * 会话超时时间长度, 单位秒, 默认30分钟，设置为 0 或者 <0 表示不超时
@@ -71,14 +67,6 @@ public class SessionConfigBean {
 
     public void setExpiresIn(int expiresIn) {
         this.expiresIn = expiresIn;
-    }
-
-    public String getTokenKey() {
-        return tokenKey;
-    }
-
-    public void setTokenKey(String tokenKey) {
-        this.tokenKey = tokenKey;
     }
 
     public boolean isUpdateExpireTime() {

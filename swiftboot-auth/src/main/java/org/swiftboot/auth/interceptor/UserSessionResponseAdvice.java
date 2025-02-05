@@ -47,7 +47,8 @@ public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBod
     }
 
     @Override
-    protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType, ServerHttpRequest request, ServerHttpResponse response) {
+    protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType,
+                                           ServerHttpRequest request, ServerHttpResponse response) {
         if (log.isDebugEnabled()) log.debug("Handle user session and cookie after authenticated.");
         AuthenticatedResponse<?> authenticatedResponse = (AuthenticatedResponse<?>) bodyContainer.getValue();
         Session userSession = authenticatedResponse.getUserSession();
@@ -61,16 +62,16 @@ public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBod
         // return cookie to client
         ServletServerHttpResponse servletResponse = (ServletServerHttpResponse) response;
         if (authConfigBean.getSession().isUseCookie()) {
-            Cookie cookie = new Cookie(authConfigBean.getSession().getTokenKey(), userToken);
+            Cookie cookie = new Cookie(authConfigBean.getTokenKey(), userToken);
             cookie.setPath(authConfigBean.getSession().getCookiePath());
             int expiresIn = authConfigBean.getSession().getExpiresIn();
             cookie.setMaxAge(expiresIn == 0 ? Integer.MAX_VALUE : expiresIn);
             servletResponse.getServletResponse().addCookie(cookie);
-            log.debug("Response with cookie " + authConfigBean.getSession().getTokenKey());
+            log.debug("Response with cookie %s".formatted(authConfigBean.getTokenKey()));
         }
         else {
-            servletResponse.getServletResponse().setHeader(authConfigBean.getSession().getTokenKey(), userToken);
-            log.debug("Response with header " + authConfigBean.getSession().getTokenKey());
+            servletResponse.getServletResponse().setHeader(authConfigBean.getTokenKey(), userToken);
+            log.debug("Response with header %s".formatted(authConfigBean.getTokenKey()));
         }
     }
 }
