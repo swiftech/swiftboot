@@ -13,7 +13,7 @@ import org.swiftboot.auth.controller.AuthenticatedResponse;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.web.result.HttpResponse;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * App 用户认证接口
@@ -40,6 +40,7 @@ public class AppUserController {
         AppUserSigninResult appUserSigninResult = new AppUserSigninResult();
         appUserSigninResult.setId(response.getUserSession().getUserId());
         appUserSigninResult.setLoginName(response.getUserSession().getUserName());
+        appUserSigninResult.setAccessToken(response.getUserSession().getUserToken());
         response.setResult(appUserSigninResult);
         return response;
     }

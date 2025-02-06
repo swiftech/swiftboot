@@ -13,7 +13,7 @@ import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.shiro.service.ShiroSecurityService;
 import org.swiftboot.web.exception.ErrMessageException;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import static org.swiftboot.shiro.constant.ShiroSessionConstants.SESSION_KEY_LOGIN_NAME;
 import static org.swiftboot.shiro.constant.ShiroSessionConstants.SESSION_KEY_USER_ID;

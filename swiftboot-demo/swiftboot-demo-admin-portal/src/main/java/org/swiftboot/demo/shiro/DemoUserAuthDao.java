@@ -6,7 +6,7 @@ import org.swiftboot.demo.model.entity.AdminUserEntity;
 import org.springframework.stereotype.Component;
 import org.swiftboot.shiro.model.dao.UserAuthDaoStub;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Optional;
 
 /**

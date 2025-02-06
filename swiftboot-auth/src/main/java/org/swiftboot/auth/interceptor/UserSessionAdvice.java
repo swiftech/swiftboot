@@ -15,7 +15,7 @@ import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.util.SpringWebUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.lang.reflect.Type;
 
 /**

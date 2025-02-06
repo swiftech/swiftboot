@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.data.config.SwiftBootDataConfigBean;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 
 /**

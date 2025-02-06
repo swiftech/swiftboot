@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.data.model.id.IdPopulator;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Iterator;
 
 /**

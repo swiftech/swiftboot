@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.swiftboot.shiro.model.dao.UserAuthDaoStub;
 import org.swiftboot.shiro.service.PasswordManager;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @author swiftech

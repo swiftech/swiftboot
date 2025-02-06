@@ -16,7 +16,7 @@ import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.util.MessageUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * Populate the error message for {@link HttpResponse} with error code only.

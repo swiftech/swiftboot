@@ -1,8 +1,9 @@
-package org.swiftboot.demo;
+package org.swiftboot.demo.service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.swiftboot.auth.controller.AuthenticatedResponse;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionBuilder;
@@ -15,14 +16,11 @@ import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.Optional;
 
 /**
  * @author allen
  */
-@Service
 public class AppUserAuthServiceImpl implements UserAuthService {
 
     private static final Logger log = LoggerFactory.getLogger(AppUserAuthServiceImpl.class);
@@ -34,7 +32,7 @@ public class AppUserAuthServiceImpl implements UserAuthService {
     public void initData() {
         // create a new user for testing
         Optional<AppUserEntity> optUser = appUserDao.findByLoginName("13866669999");
-        if (!optUser.isPresent()){
+        if (optUser.isEmpty()){
             AppUserEntity newEntity = new AppUserEntity();
             newEntity.setLoginName("13866669999");
             newEntity.setLoginPwd(PasswordUtils.createPassword("12345678"));

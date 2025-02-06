@@ -2,11 +2,13 @@ swiftboot:
   auth:
     enabled: true
     tokenKey: access_token
-    session:
-      type: redis
-      group: user_session
-      expiresIn: 1800
-      updateExpireTime: true
-      useCookie: true
-      cookiePath: /
-
+#    session:
+#      type: redis
+#      group: user_session
+#      expiresIn: 1800
+#      updateExpireTime: true
+#      useCookie: true
+#      cookiePath: /
+    jwt:
+      secret: xxx
+      expirationSeconds: 600

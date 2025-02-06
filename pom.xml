@@ -31,7 +31,6 @@
 
     <properties>
         <java.version>17</java.version>
-        <javax.annotations.version>1.3.2</javax.annotations.version>
         <slf4j.version>1.7.36</slf4j.version>
         <log4j2.version>2.24.1</log4j2.version>
         <jackson.version>2.18.2</jackson.version>
@@ -57,6 +56,7 @@
         <jakarta.transaction.api.version>2.0.1</jakarta.transaction.api.version>
         <jakarta.persistent.api.version>3.1.0</jakarta.persistent.api.version>
         <jakarta.servlet.api.version>6.1.0</jakarta.servlet.api.version>
+        <jakarta.annotations.version>3.0.0</jakarta.annotations.version>
         <shiro.version>1.13.0</shiro.version>
         <jedis.version>5.1.5</jedis.version>
         <json.version>20250107</json.version>

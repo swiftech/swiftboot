@@ -12,7 +12,7 @@ import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.data.model.id.IdPopulator;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 拦截 Spring Data JPA 的保存（{@code save()}）动作，设置实体类的 ID 包括所有子类的 ID

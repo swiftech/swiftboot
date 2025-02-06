@@ -10,7 +10,7 @@ import org.swiftboot.service.service.RedisService;
 import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import redis.clients.jedis.Jedis;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.*;
 import java.util.Collection;
 

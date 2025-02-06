@@ -10,7 +10,7 @@ import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.data.util.HibernateUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.Serializable;
 import java.util.Objects;
 

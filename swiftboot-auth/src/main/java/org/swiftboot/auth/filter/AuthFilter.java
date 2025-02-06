@@ -1,28 +1,24 @@
 package org.swiftboot.auth.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.OncePerRequestFilter;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
-import org.swiftboot.auth.service.SessionService;
-import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
-import org.swiftboot.web.util.HttpServletCookieUtils;
-
-import javax.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.service.SessionService;
+import org.swiftboot.web.exception.ErrMessageException;
+import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.util.HttpServletCookieUtils;
+
+import jakarta.annotation.Resource;
 import java.io.IOException;
 import java.util.Enumeration;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYPE;
 
 /**
  * 拦截客户端的请求，用 Header 或者 Cookie 中的令牌来验证用户请求的合法性。
@@ -32,7 +28,7 @@ import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYP
  * @author swiftech
  */
 @Order(Ordered.LOWEST_PRECEDENCE)
-public class AuthFilter extends OncePerRequestFilter {
+public class AuthFilter extends BaseAuthFilter {
 
     private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
 
@@ -65,7 +61,7 @@ public class AuthFilter extends OncePerRequestFilter {
             if (log.isWarnEnabled()) {
                 log.warn(String.format("No token '%s' in Headers or Cookies", tokenKey));
             }
-            this.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
+            super.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
         }
         else {
             try {
@@ -74,10 +70,10 @@ public class AuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(new TokenRequestWrapper(request, tokenKey), response);
             } catch (ErrMessageException e) {
                 e.printStackTrace();
-                this.responseWithError(response, e.getErrorCode());
+                super.responseWithError(response, e.getErrorCode());
             } catch (Exception e) {
                 e.printStackTrace();
-                this.responseWithError(response, ErrorCodeSupport.CODE_SYS_ERR);
+                super.responseWithError(response, ErrorCodeSupport.CODE_SYS_ERR);
             }
         }
     }
@@ -103,20 +99,5 @@ public class AuthFilter extends OncePerRequestFilter {
         }
     }
 
-    private void responseWithError(HttpServletResponse response, String errorCode) throws IOException {
-        HttpResponse<?> resp = new HttpResponse<>(errorCode);
-        resp.setMsg(ErrorCodeSupport.getErrorMessage(errorCode));
-        response.setCharacterEncoding("utf-8");
-        response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
-        response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
-        response.flushBuffer();
-        response.getWriter().close();
-    }
-
-//    private void responseWithHttpStatus(HttpServletResponse response) throws IOException {
-//        response.setStatus(HttpStatus.FORBIDDEN.value());
-//        response.flushBuffer();
-//        response.getWriter().close();
-//    }
 
 }

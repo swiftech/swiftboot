@@ -19,7 +19,7 @@ import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ConvertValidateResult;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 测试事务的接口

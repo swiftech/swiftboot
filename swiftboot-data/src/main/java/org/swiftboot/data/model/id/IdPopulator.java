@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.util.BeanUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;

@@ -8,7 +8,7 @@ import org.swiftboot.demo.model.entity.AdminUserPermissionView;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.shiro.AdminUserPermissionDao;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

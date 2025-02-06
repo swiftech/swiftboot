@@ -18,6 +18,11 @@ public class SwiftbootAuthConfigBean {
     private boolean enabled = false;
 
     /**
+     * type of authentication, use jwt or session
+     */
+    private String authType;
+
+    /**
      * 会话令牌的名称，作为客户端保存和传递时的 key
      */
     private String tokenKey = "access_token";
@@ -28,12 +33,23 @@ public class SwiftbootAuthConfigBean {
     @NestedConfigurationProperty
     private SessionConfigBean session = new SessionConfigBean();
 
+    @NestedConfigurationProperty
+    private JwtConfigBean jwt = new JwtConfigBean();
+
     public boolean isEnabled() {
         return enabled;
     }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getAuthType() {
+        return authType;
+    }
+
+    public void setAuthType(String authType) {
+        this.authType = authType;
     }
 
     public String getTokenKey() {
@@ -52,4 +68,11 @@ public class SwiftbootAuthConfigBean {
         this.session = session;
     }
 
+    public JwtConfigBean getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(JwtConfigBean jwt) {
+        this.jwt = jwt;
+    }
 }

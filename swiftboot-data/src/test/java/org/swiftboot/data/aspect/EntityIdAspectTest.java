@@ -23,7 +23,7 @@ import org.swiftboot.data.model.entity.CustomizedEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
 import org.swiftboot.util.JsonUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Optional;

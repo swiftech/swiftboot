@@ -14,7 +14,7 @@ import org.swiftboot.web.config.SwiftBootWebConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ValidationResult;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;

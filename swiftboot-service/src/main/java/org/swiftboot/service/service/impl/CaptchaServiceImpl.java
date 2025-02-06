@@ -9,7 +9,7 @@ import org.swiftboot.service.service.RedisService;
 import org.swiftboot.service.util.CaptchaUtils;
 import org.swiftboot.util.IdUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  *

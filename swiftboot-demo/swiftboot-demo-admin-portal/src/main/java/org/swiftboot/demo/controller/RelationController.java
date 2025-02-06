@@ -21,7 +21,7 @@ import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ConvertValidateResult;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 测试实体类关联

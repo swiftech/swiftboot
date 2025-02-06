@@ -16,7 +16,7 @@ import org.swiftboot.service.service.impl.RedisServiceImpl;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
 

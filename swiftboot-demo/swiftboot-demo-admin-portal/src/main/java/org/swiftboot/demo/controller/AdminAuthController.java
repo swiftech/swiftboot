@@ -18,7 +18,7 @@ import org.swiftboot.demo.service.AdminUserService;
 import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.web.result.HttpResponse;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 

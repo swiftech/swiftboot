@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.shiro.service.PasswordManager;
 import org.swiftboot.util.CryptoUtils;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * 默认的密码管理器，用 md5 来生成加密密码，不同的应用需实现自己的密码管理器，一旦实现并加载为 bean ，此默认管理器失效。

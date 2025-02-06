@@ -3,8 +3,8 @@ package org.swiftboot.demo.exception;
 import org.springframework.stereotype.Component;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 
 /**
  * @author swiftech 2019-03-05

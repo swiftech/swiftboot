@@ -17,7 +17,7 @@ import org.swiftboot.auth.controller.AuthenticatedResponse;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 
 /**

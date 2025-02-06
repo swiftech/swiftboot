@@ -12,7 +12,7 @@ import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.util.IoUtils;
 import org.swiftboot.util.JsonUtils;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

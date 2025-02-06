@@ -10,7 +10,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.AuthFilter;
+import org.swiftboot.auth.filter.JwtAuthFilter;
 import org.swiftboot.auth.interceptor.UserSessionArgumentResolver;
+import org.swiftboot.auth.service.JwtTokenProvider;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.auth.service.impl.MockSessionServiceImpl;
 import org.swiftboot.auth.service.impl.SessionServiceRedisImpl;
@@ -27,9 +29,21 @@ import java.util.List;
 public class SwiftbootAuthConfig implements WebMvcConfigurer {
 
     @Bean
-    @ConditionalOnProperty(value = "swiftboot.auth.enabled", havingValue = "true")
+    @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
     public AuthFilter authFilter() {
         return new AuthFilter();
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "jwt")
+    public JwtAuthFilter jwtAuthFilter() {
+        return new JwtAuthFilter();
+    }
+
+    @Bean
+    @ConditionalOnBean(JwtAuthFilter.class)
+    public JwtTokenProvider jwtTokenProvider() {
+        return new JwtTokenProvider();
     }
 
     /**

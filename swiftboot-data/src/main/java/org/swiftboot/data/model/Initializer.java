@@ -24,8 +24,8 @@ import org.swiftboot.util.ClasspathResourceUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.io.*;

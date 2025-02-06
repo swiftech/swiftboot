@@ -17,7 +17,7 @@ import org.swiftboot.data.model.dao.BoolLogicalDeleteDao;
 import org.swiftboot.data.model.entity.BoolLogicalDeleteEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

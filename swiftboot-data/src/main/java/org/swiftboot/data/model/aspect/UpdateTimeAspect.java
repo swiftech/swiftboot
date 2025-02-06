@@ -13,7 +13,7 @@ import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.util.GenericUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 
 import java.lang.reflect.ParameterizedType;

@@ -1,4 +1,4 @@
-package org.swiftboot.demo;
+package org.swiftboot.demo.service;
 
 import org.springframework.transaction.annotation.Transactional;
 

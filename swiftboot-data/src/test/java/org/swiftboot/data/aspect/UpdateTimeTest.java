@@ -22,7 +22,7 @@ import org.swiftboot.data.model.entity.ParentEntity;
 import org.swiftboot.data.model.interceptor.TimeInterceptor;
 import org.swiftboot.util.JsonUtils;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

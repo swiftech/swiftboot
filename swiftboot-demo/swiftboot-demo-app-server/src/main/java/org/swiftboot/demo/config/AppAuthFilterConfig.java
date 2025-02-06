@@ -1,6 +1,6 @@
-package org.swiftboot.demo;
+package org.swiftboot.demo.config;
 
-import org.swiftboot.demo.filter.SwiftbootDemoFilter;
+import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -8,15 +8,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.AuthFilter;
-
-import jakarta.annotation.Resource;
+import org.swiftboot.auth.service.UserAuthService;
+import org.swiftboot.demo.service.AppUserAuthServiceImpl;
 
 /**
+ *
  * @author swiftech
+ * @since 3.0.0
  */
 @Configuration
-@ConditionalOnProperty(value = "swiftboot.auth.enabled", havingValue = "true")
-public class SwiftBootDemoFilterConfig implements WebMvcConfigurer {
+@ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
+public class AppAuthFilterConfig implements WebMvcConfigurer {
 
     @Resource
     AuthFilter authFilter;
@@ -25,24 +27,15 @@ public class SwiftBootDemoFilterConfig implements WebMvcConfigurer {
     public FilterRegistrationBean<AuthFilter> regAuthFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(authFilter);
-        registrationBean.addUrlPatterns("/goods/*");
-        registrationBean.addUrlPatterns("/order/*");
+        registrationBean.addUrlPatterns("/app/secure");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;
     }
 
     @Bean
-    public SwiftbootDemoFilter swiftbootDemoFilter() {
-        return new SwiftbootDemoFilter();
+    @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
+    public UserAuthService userAuthService() {
+        return new AppUserAuthServiceImpl();
     }
-
-    @Bean
-    public FilterRegistrationBean<SwiftbootDemoFilter> regDemoFilter(SwiftbootDemoFilter filter) {
-        FilterRegistrationBean<SwiftbootDemoFilter> registrationBean = new FilterRegistrationBean<>(filter);
-//        registrationBean.setEnabled(false);
-        registrationBean.setOrder(Ordered.LOWEST_PRECEDENCE);
-        return registrationBean;
-    }
-
 
 }

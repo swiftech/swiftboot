@@ -18,8 +18,8 @@ import org.swiftboot.demo.model.dao.*;
 import org.swiftboot.demo.model.entity.*;
 import org.swiftboot.shiro.service.PasswordManager;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import java.util.*;
 
 /**

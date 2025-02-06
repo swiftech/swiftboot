@@ -14,7 +14,7 @@ import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.data.model.id.IdPopulator;
 import org.swiftboot.data.model.interceptor.*;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * @author swiftech
