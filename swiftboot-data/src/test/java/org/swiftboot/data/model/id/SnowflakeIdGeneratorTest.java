@@ -5,7 +5,7 @@ import org.swiftboot.data.model.id.entity.AEntity;
 import org.swiftboot.data.model.id.entity.AaaaBbbbCcccDdddEeeeEntity;
 
 /**
- * @author allen
+ * @author swiftech
  */
 class SnowflakeIdGeneratorTest {
 

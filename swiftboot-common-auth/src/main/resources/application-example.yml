@@ -1,0 +1,5 @@
+swiftboot:
+  auth:
+    jwt:
+      secret: xxx
+      expirationSeconds: 600

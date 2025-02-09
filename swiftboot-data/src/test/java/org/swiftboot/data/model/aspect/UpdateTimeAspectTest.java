@@ -7,7 +7,7 @@ import org.swiftboot.data.model.entity.ParentEntity;
 /**
  * 仅测试 UpdateTimeAspect
  *
- * @author allen
+ * @author swiftech
  */
 public class UpdateTimeAspectTest {
 

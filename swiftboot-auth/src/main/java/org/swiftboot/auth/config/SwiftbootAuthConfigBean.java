@@ -33,8 +33,8 @@ public class SwiftbootAuthConfigBean {
     @NestedConfigurationProperty
     private SessionConfigBean session = new SessionConfigBean();
 
-    @NestedConfigurationProperty
-    private JwtConfigBean jwt = new JwtConfigBean();
+//    @NestedConfigurationProperty
+//    private JwtConfigBean jwt = new JwtConfigBean();
 
     public boolean isEnabled() {
         return enabled;
@@ -68,11 +68,11 @@ public class SwiftbootAuthConfigBean {
         this.session = session;
     }
 
-    public JwtConfigBean getJwt() {
-        return jwt;
-    }
-
-    public void setJwt(JwtConfigBean jwt) {
-        this.jwt = jwt;
-    }
+//    public JwtConfigBean getJwt() {
+//        return jwt;
+//    }
+//
+//    public void setJwt(JwtConfigBean jwt) {
+//        this.jwt = jwt;
+//    }
 }

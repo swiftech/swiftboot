@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 
 /**
- * @author allen
+ * @author swiftech
  */
 @Description("订单支付")
 @Entity

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
-import org.swiftboot.auth.service.JwtTokenProvider;
+import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 import io.jsonwebtoken.JwtException;
 

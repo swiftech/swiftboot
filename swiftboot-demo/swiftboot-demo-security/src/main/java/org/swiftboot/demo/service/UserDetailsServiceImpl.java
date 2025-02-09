@@ -10,14 +10,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
+
 import java.util.Collections;
 
 /**
- * @author allen
+ * @author swiftech
  */
-//@Service
-public class UserDetailServiceImpl implements UserDetailsService {
+@Service
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 

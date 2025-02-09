@@ -19,14 +19,16 @@
     <modules>
         <module>swiftboot-utils</module>
         <module>swiftboot-collections</module>
-        <module>swiftboot-fileconvert</module>
+<!--        <module>swiftboot-fileconvert</module>-->
         <module>swiftboot-data</module>
         <module>swiftboot-web</module>
         <module>swiftboot-rpc</module>
         <module>swiftboot-service</module>
         <module>swiftboot-auth</module>
+        <module>swiftboot-security</module>
 <!--        <module>swiftboot-shiro</module>-->
         <module>swiftboot-sheet</module>
+        <module>swiftboot-common-auth</module>
     </modules>
 
     <properties>
@@ -46,6 +48,7 @@
         <spring.boot.version>3.4.2</spring.boot.version>
         <spring.data.version>3.4.2</spring.data.version>
         <spring.data.jpa.version>3.4.2</spring.data.jpa.version>
+        <spring.security.version>6.4.2</spring.security.version>
         <servlet.version>4.0.1</servlet.version>
         <swagger.version>1.6.15</swagger.version>
         <aspectj.version>1.9.19</aspectj.version>
@@ -57,6 +60,7 @@
         <jakarta.persistent.api.version>3.1.0</jakarta.persistent.api.version>
         <jakarta.servlet.api.version>6.1.0</jakarta.servlet.api.version>
         <jakarta.annotations.version>3.0.0</jakarta.annotations.version>
+        <jwt.version>0.12.6</jwt.version>
         <shiro.version>1.13.0</shiro.version>
         <jedis.version>5.1.5</jedis.version>
         <json.version>20250107</json.version>

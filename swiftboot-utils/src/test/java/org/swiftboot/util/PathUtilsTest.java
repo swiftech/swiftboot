@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class PathUtilsTest {
 

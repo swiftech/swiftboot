@@ -1,7 +1,7 @@
 package org.swiftboot.demo.command;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class AuthCommand {
     String userName;

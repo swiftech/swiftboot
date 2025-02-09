@@ -1,5 +1,6 @@
 package org.swiftboot.auth;
 
+import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,10 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.AuthFilter;
 import org.swiftboot.auth.filter.JwtAuthFilter;
 import org.swiftboot.auth.interceptor.UserSessionArgumentResolver;
-import org.swiftboot.auth.service.JwtTokenProvider;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.auth.service.impl.MockSessionServiceImpl;
 import org.swiftboot.auth.service.impl.SessionServiceRedisImpl;
+import org.swiftboot.common.auth.JwtConfigBean;
 import org.swiftboot.service.service.RedisService;
 
 import java.util.List;
@@ -28,6 +29,9 @@ import java.util.List;
 @Order(2)
 public class SwiftbootAuthConfig implements WebMvcConfigurer {
 
+    @Resource
+    private JwtConfigBean jwtConfigBean;
+
     @Bean
     @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
     public AuthFilter authFilter() {
@@ -38,12 +42,6 @@ public class SwiftbootAuthConfig implements WebMvcConfigurer {
     @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "jwt")
     public JwtAuthFilter jwtAuthFilter() {
         return new JwtAuthFilter();
-    }
-
-    @Bean
-    @ConditionalOnBean(JwtAuthFilter.class)
-    public JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider();
     }
 
     /**

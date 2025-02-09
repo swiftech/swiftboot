@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class HSSFPictureAdapter implements PictureAdapter {
 

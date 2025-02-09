@@ -14,7 +14,7 @@ import org.swiftboot.web.result.HttpResponse;
 import javax.validation.Valid;
 
 /**
- * @author allen
+ * @author swiftech
  */
 @Api("测试Validation")
 @Controller

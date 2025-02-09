@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class DocDemo {
 

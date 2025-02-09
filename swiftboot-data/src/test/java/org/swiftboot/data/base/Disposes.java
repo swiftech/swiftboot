@@ -3,7 +3,7 @@ package org.swiftboot.data.base;
 /**
  * Dispose test data
  *
- * @author allen
+ * @author swiftech
  */
 @FunctionalInterface
 public interface Disposes<T> {

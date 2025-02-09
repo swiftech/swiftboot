@@ -16,7 +16,7 @@ import java.util.prefs.Preferences;
  * As of 2.4.7, use getPreferenceAlias() if you want to read preference from different keys, it is very useful when you decide to
  * migrate one preference key to another.
  *
- * @author allen
+ * @author swiftech
  * @since 2.3
  */
 public class PreferenceManager {

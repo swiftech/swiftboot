@@ -5,13 +5,18 @@
     <parent>
         <artifactId>swiftboot-demo</artifactId>
         <groupId>org.swiftboot</groupId>
-        <version>2.4</version>
+        <version>3.0.0</version>
     </parent>
     <artifactId>swiftboot-demo-security</artifactId>
-    <version>2.4</version>
+    <version>3.0.0</version>
     <name>swiftboot-demo-security</name>
     <description>swiftboot-demo-security</description>
     <dependencies>
+        <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-security</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -24,12 +29,12 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.11.5</version>
+            <version>${jwt.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.11.5</version>
+            <version>${jwt.version}</version>
         </dependency>
     </dependencies>
 

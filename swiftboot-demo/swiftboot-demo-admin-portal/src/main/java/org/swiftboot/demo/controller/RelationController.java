@@ -26,7 +26,7 @@ import jakarta.annotation.Resource;
 /**
  * 测试实体类关联
  *
- * @author allen
+ * @author swiftech
  */
 @Controller
 @RequestMapping("/order")

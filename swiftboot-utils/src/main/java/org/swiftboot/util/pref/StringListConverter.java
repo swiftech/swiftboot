@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Converter for string List, you can create your own implementation.
  *
- * @author allen
+ * @author swiftech
  */
 public class StringListConverter extends StringConverter<List<String>> {
 

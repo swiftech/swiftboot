@@ -6,6 +6,7 @@
     <modules>
         <!--        <module>swiftboot-demo-admin-portal</module>-->
         <module>swiftboot-demo-app-server</module>
+        <module>swiftboot-demo-security</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -25,15 +26,16 @@
         <!--        <junit.version>5.5.2</junit.version>-->
         <mysql.version>9.2.0</mysql.version>
         <postgres.version>42.7.5</postgres.version>
+        <jwt.version>0.12.6</jwt.version>
     </properties>
 
     <dependencies>
 
-        <dependency>
-            <groupId>com.github.swiftech</groupId>
-            <artifactId>swiftboot-auth</artifactId>
-            <version>${swiftboot.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.swiftech</groupId>-->
+<!--            <artifactId>swiftboot-auth</artifactId>-->
+<!--            <version>${swiftboot.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.github.swiftech</groupId>
             <artifactId>swiftboot-service</artifactId>

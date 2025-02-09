@@ -3,7 +3,7 @@ package org.swiftboot.demo.result;
 import org.swiftboot.web.result.Result;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class UserInfoResult implements Result {
 

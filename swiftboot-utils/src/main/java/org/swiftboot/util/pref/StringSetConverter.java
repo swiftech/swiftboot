@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Converter for string Set, you can create your own implementation.
  *
- * @author allen
+ * @author swiftech
  */
 public class StringSetConverter extends StringConverter<Set<String>> {
 

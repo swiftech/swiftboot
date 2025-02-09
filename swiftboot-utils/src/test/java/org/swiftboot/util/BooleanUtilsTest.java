@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static java.lang.Boolean.*;
 
 /**
- * @author allen
+ * @author swiftech
  */
 class BooleanUtilsTest {
 

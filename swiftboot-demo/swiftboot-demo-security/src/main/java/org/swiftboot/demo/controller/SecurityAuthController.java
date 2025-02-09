@@ -1,7 +1,8 @@
 package org.swiftboot.demo.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.demo.command.AuthCommand;
 import org.swiftboot.demo.result.AuthResult;
 import org.swiftboot.web.result.HttpResponse;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author swiftech
@@ -34,6 +33,9 @@ public class SecurityAuthController {
     @Resource
     private AuthenticationManager authenticationManager;
 
+    @Resource
+    private JwtTokenProvider jwtTokenProvider;
+
     @RequestMapping(value = "signin", method = RequestMethod.POST)
     public HttpResponse<AuthResult> adminUserSignin(
             @RequestBody AuthCommand command, HttpServletResponse response) {
@@ -45,8 +47,14 @@ public class SecurityAuthController {
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authentication);
 
+//        authentication.getPrincipal()
+
+        String accessToken = jwtTokenProvider.generateToken(command.getUserName());
+
         log.info("User longed in: " + command.getUserName());
-        return new HttpResponse<>();
+        AuthResult authResult = new AuthResult();
+        authResult.setAccessToken(accessToken);
+        return new HttpResponse<>(authResult);
     }
 
 //    @ApiOperation(notes = "user signout", value = "user signout")

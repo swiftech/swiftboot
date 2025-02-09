@@ -6,7 +6,7 @@ import org.swiftboot.data.model.entity.ChildEntity;
 import java.util.Optional;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public interface ChildDao extends CrudRepository<ChildEntity, String> {
 

@@ -1,7 +1,7 @@
 package org.swiftboot.sheet.meta;
 
 /**
- * @author allen
+ * @author swiftech
  * @since 2.4
  */
 public class Dimension {

@@ -8,7 +8,7 @@ import org.swiftboot.sheet.meta.Position;
 import java.util.Map;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public interface PictureAdapter {
 

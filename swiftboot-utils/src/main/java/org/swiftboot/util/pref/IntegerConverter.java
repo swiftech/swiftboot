@@ -3,7 +3,7 @@ package org.swiftboot.util.pref;
 /**
  * Converter for object save as integer.
  *
- * @author allen
+ * @author swiftech
  */
 public abstract class IntegerConverter<O> implements Converter<O, Integer> {
 

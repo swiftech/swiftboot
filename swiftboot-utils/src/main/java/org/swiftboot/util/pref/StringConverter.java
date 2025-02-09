@@ -3,7 +3,7 @@ package org.swiftboot.util.pref;
 /**
  * Converter for object save as string.
  *
- * @author allen
+ * @author swiftech
  */
 public abstract class StringConverter<O> implements Converter<O, String> {
 

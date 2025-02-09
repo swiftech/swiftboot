@@ -19,7 +19,7 @@ import org.swiftboot.web.exception.ErrorCodeSupport;
 import java.util.Optional;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class AppUserAuthServiceImpl implements UserAuthService {
 

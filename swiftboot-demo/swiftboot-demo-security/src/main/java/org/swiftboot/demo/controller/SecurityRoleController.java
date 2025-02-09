@@ -10,7 +10,7 @@ import org.swiftboot.demo.result.SomeResult;
 import org.swiftboot.web.result.HttpResponse;
 
 /**
- * @author allen
+ * @author swiftech
  */
 @Api(tags = {"Security Realm APIs for Admin"})
 @Controller

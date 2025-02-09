@@ -1,7 +1,7 @@
 package org.swiftboot.shiro;
 
 /**
- * @author allen
+ * @author swiftech
  */
 public class TestData {
 

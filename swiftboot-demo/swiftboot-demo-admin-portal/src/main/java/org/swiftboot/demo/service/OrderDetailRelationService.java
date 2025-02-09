@@ -7,7 +7,7 @@ import org.swiftboot.demo.result.OrderSaveResult;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author allen
+ * @author swiftech
  */
 @Transactional
 public interface OrderDetailRelationService {

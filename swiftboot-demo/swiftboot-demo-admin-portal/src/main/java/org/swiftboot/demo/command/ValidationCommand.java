@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import org.swiftboot.web.validate.constraint.PhoneNo;
 
 /**
- * @author allen
+ * @author swiftech
  */
 @ApiModel
 public class ValidationCommand {

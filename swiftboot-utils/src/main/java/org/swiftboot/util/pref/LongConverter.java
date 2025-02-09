@@ -3,7 +3,7 @@ package org.swiftboot.util.pref;
 /**
  * Converter for object save as long.
  *
- * @author allen
+ * @author swiftech
  */
 public abstract class LongConverter<O> implements Converter<O, Long> {
 

@@ -5,7 +5,7 @@ import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.auth.controller.AuthenticatedResponse;
-import org.swiftboot.auth.service.JwtTokenProvider;
+import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionBuilder;
 import org.swiftboot.auth.service.UserAuthService;

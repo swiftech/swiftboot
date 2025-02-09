@@ -3,7 +3,7 @@ package org.swiftboot.sheet;
 import org.swiftboot.sheet.meta.BaseCellInfo;
 
 /**
- * @author allen
+ * @author swiftech
  * @since 2.4
  */
 public class CsvCellInfo extends BaseCellInfo {

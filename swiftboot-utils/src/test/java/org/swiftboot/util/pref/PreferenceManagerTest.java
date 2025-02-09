@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * @author allen
+ * @author swiftech
  */
 class PreferenceManagerTest {
     static int vi = 35234;
