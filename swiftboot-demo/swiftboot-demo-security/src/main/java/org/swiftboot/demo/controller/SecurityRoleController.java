@@ -26,7 +26,7 @@ public class SecurityRoleController {
     @PreAuthorize("hasRole('ADMIN')")
     public HttpResponse<SomeResult> requireAdmin() {
         SomeResult result = new SomeResult();
-        result.setData("for admin");
+        result.setData("this endpoint is only authorized to admin");
         return new HttpResponse<>(result);
     }
 
@@ -39,7 +39,7 @@ public class SecurityRoleController {
     @PreAuthorize("hasAuthority('MANAGER')")
     public HttpResponse<SomeResult> requireManager() {
         SomeResult result = new SomeResult();
-        result.setData("for manager");
+        result.setData("this endpoint is only authorized to admin");
         return new HttpResponse<>(result);
     }
 }

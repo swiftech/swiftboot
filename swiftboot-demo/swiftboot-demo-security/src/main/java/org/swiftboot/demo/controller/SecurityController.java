@@ -24,7 +24,7 @@ public class SecurityController {
     @ResponseBody
     public HttpResponse<UserInfoResult> userInfo() {
         UserInfoResult ui = new UserInfoResult();
-        ui.setUserName("fake");
+        ui.setUserName("dummy");
         return new HttpResponse<>(ui);
     }
 }

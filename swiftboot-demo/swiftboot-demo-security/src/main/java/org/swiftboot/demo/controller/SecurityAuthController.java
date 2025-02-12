@@ -28,7 +28,7 @@ import org.swiftboot.web.result.HttpResponse;
 @RequestMapping("/security/auth")
 @ResponseBody
 public class SecurityAuthController {
-    private final Logger log = LoggerFactory.getLogger(SecurityAuthController.class);
+    private static final Logger log = LoggerFactory.getLogger(SecurityAuthController.class);
 
     @Resource
     private AuthenticationManager authenticationManager;

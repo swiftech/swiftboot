@@ -21,7 +21,7 @@ import java.util.Collections;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private Logger log = LoggerFactory.getLogger(UserDetailsService.class);
+    private static final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 
     @Resource
     private PasswordEncoder passwordEncoder;

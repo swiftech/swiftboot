@@ -137,6 +137,11 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * As of the Java 8, the time implementation has been changed wit new classes.
+     *
+     * @return
+     */
     public static ObjectMapper getJava8ObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
