@@ -10,7 +10,7 @@
     <artifactId>swiftboot-demo-security</artifactId>
     <version>3.0.0</version>
     <name>swiftboot-demo-security</name>
-    <description>swiftboot-demo-security</description>
+    <description>Demo of basic usage of Spring Security</description>
     <dependencies>
         <dependency>
             <groupId>com.github.swiftech</groupId>

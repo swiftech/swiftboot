@@ -11,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.demo.command.AuthCommand;
 import org.swiftboot.demo.result.AuthResult;
@@ -36,7 +33,7 @@ public class SecurityAuthController {
     @Resource
     private JwtTokenProvider jwtTokenProvider;
 
-    @RequestMapping(value = "signin", method = RequestMethod.POST)
+    @PostMapping(value = "signin")
     public HttpResponse<AuthResult> adminUserSignin(
             @RequestBody AuthCommand command, HttpServletResponse response) {
         log.info("> /security/auth/signin");

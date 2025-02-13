@@ -23,14 +23,14 @@ import static org.swiftboot.demo.constants.PermissionConstants.PERM_B;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
+    private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Resource
     private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.debug("Load user for : " + username);
+        log.debug("Load user for : %s".formatted(username));
         GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
         GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
         GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);

@@ -37,11 +37,10 @@ public class SecurityRoleController {
      * @return
      */
     @GetMapping(value = "/require/manager")
-//    @PreAuthorize("hasRole('MANAGER')")
-    @PreAuthorize("hasAuthority('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER')")
     public HttpResponse<SomeResult> requireManager() {
         SomeResult result = new SomeResult();
-        result.setData("this endpoint is only authorized to admin");
+        result.setData("this endpoint is only authorized to manager");
         return new HttpResponse<>(result);
     }
 }
