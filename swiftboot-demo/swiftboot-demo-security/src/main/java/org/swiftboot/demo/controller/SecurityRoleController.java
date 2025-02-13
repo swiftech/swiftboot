@@ -19,6 +19,7 @@ import org.swiftboot.web.result.HttpResponse;
 public class SecurityRoleController {
 
     /**
+     * Endpoint requires admin role.
      *
      * @return
      */
@@ -31,6 +32,7 @@ public class SecurityRoleController {
     }
 
     /**
+     * Endpoint requires manage role.
      *
      * @return
      */

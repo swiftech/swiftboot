@@ -26,16 +26,6 @@ public class SecurityConfig {
     @Resource
     private UserDetailsService userDetailService;
 
-//    @Resource
-//    private SwiftbootAuthenticationEntryPoint swiftbootAuthenticationEntryPoint;
-
-//    @Resource
-//    private SwiftbootAccessDeniedHandler swiftbootAccessDeniedHandler;
-
-//    @Resource
-//    @Qualifier("delegatedAuthenticationEntryPoint")
-//    private DelegatedAuthenticationEntryPoint delegatedAuthenticationEntryPoint;
-
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // Enable CORS and disable CSRF
@@ -60,7 +50,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                 // let auth methods go.
                 .requestMatchers("/error/**").permitAll()
-                .requestMatchers("/security/auth/*").permitAll()
+                .requestMatchers("/security/auth/*").permitAll() // allow authentication endpoints.
                 // others need authenticated.
                 .anyRequest().authenticated()
         );
@@ -68,12 +58,5 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-
-//    @Bean
-//    WebServerFactoryCustomizer<TomcatServletWebServerFactory> cookieProcessorCustomizer() {
-//        return tomcatServletWebServerFactory ->
-//                tomcatServletWebServerFactory.addContextCustomizers(context ->
-//                        context.setCookieProcessor(new LegacyCookieProcessor()));
-//    }
 
 }

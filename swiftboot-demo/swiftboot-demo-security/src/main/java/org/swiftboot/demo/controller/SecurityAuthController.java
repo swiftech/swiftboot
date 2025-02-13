@@ -51,7 +51,7 @@ public class SecurityAuthController {
 
         String accessToken = jwtTokenProvider.generateToken(command.getUserName());
 
-        log.info("User longed in: " + command.getUserName());
+        log.info("User longed in: %s".formatted(command.getUserName()));
         AuthResult authResult = new AuthResult();
         authResult.setAccessToken(accessToken);
         return new HttpResponse<>(authResult);

@@ -1,5 +1,6 @@
 package org.swiftboot.demo.service;
 
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,11 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.List;
+
+import static org.swiftboot.demo.constants.PermissionConstants.PERM_A;
+import static org.swiftboot.demo.constants.PermissionConstants.PERM_B;
 
 /**
  * @author swiftech
@@ -29,8 +31,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Load user for : " + username);
-        GrantedAuthority ga = new SimpleGrantedAuthority("ROLE_ADMIN");
-        User user = new User("admin", passwordEncoder.encode("123456"), Collections.singleton(ga));
-        return user;
+        GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
+        GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
+        GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);
+        if (username.equals("admin")) {
+            return new User("admin", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA, gaPermissionB}));
+        }
+        else if (username.equals("manager")) {
+            return new User("manager", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA}));
+        }
+        else {
+            return new User("staff", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionB}));
+        }
     }
 }
