@@ -1,17 +1,18 @@
 package org.swiftboot.common.auth;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 
 /**
- *
- * @since 3.0.0
  * @see JwtConfigBean
+ * @since 3.0.0
  */
 public class JwtTokenProvider {
 
@@ -22,9 +23,9 @@ public class JwtTokenProvider {
     }
 
     // generate JWT token
-    public String generateToken(String username) {
+    public String generateAccessToken(String username) {
         Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + jwtConfig.getExpirationSeconds() * 1000);
+        Date expireDate = new Date(currentDate.getTime() + jwtConfig.getAccessTokenExpirationSeconds() * 1000);
         String token = Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
@@ -32,6 +33,29 @@ public class JwtTokenProvider {
                 .signWith(key())
                 .compact();
         return token;
+    }
+
+    public String generateRefreshToken(String username) {
+        Date currentDate = new Date();
+        Date expireDate = new Date(currentDate.getTime() + jwtConfig.getRefreshTokenExpirationSeconds() * 1000);
+        String token = Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(expireDate)
+                .signWith(key())
+                .compact();
+        return token;
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        if (!validateToken(refreshToken)) {
+            throw new IllegalStateException("Invalid refresh token");
+        }
+        String username = this.getUsername(refreshToken);
+        if (StringUtils.isBlank(username)) {
+            throw new IllegalStateException("Invalid username");
+        }
+        return this.generateAccessToken(username);
     }
 
     private Key key() {
@@ -51,11 +75,13 @@ public class JwtTokenProvider {
 
     // validate JWT token
     public boolean validateToken(String token) {
-        Jwts.parser()
+        Claims body = Jwts.parser()
                 .verifyWith((SecretKey) key())
                 .build()
-                .parse(token);
-        return true;
-
+                .parseSignedClaims(token)
+                .getPayload();
+        Date expiration = body.getExpiration();
+        String username = body.getSubject();
+        return StringUtils.isNotBlank(username) && !expiration.before(new Date());
     }
 }

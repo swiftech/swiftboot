@@ -11,8 +11,28 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties("swiftboot.auth.jwt")
 public class JwtConfigBean {
+
+
     private String secret;
-    private long expirationSeconds;
+
+    /**
+     * default is 10 minutes.
+     */
+    private long accessTokenExpirationSeconds = 10 * 60;
+
+    /**
+     * default is 24 hours.
+     */
+    private long refreshTokenExpirationSeconds = 24 * 60 * 60;
+
+    /**
+     * `direct` | `refresh` , default is `direct`
+     */
+    private String revokeType = "direct";
+
+    public boolean isRefreshRevokeType() {
+        return "refresh".equalsIgnoreCase(revokeType);
+    }
 
     public String getSecret() {
         return secret;
@@ -22,11 +42,27 @@ public class JwtConfigBean {
         this.secret = secret;
     }
 
-    public long getExpirationSeconds() {
-        return expirationSeconds;
+    public long getAccessTokenExpirationSeconds() {
+        return accessTokenExpirationSeconds;
     }
 
-    public void setExpirationSeconds(long expirationSeconds) {
-        this.expirationSeconds = expirationSeconds;
+    public void setAccessTokenExpirationSeconds(long accessTokenExpirationSeconds) {
+        this.accessTokenExpirationSeconds = accessTokenExpirationSeconds;
+    }
+
+    public long getRefreshTokenExpirationSeconds() {
+        return refreshTokenExpirationSeconds;
+    }
+
+    public void setRefreshTokenExpirationSeconds(long refreshTokenExpirationSeconds) {
+        this.refreshTokenExpirationSeconds = refreshTokenExpirationSeconds;
+    }
+
+    public String getRevokeType() {
+        return revokeType;
+    }
+
+    public void setRevokeType(String revokeType) {
+        this.revokeType = revokeType;
     }
 }

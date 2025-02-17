@@ -49,7 +49,7 @@ public class AppUserJwtAuthServiceImpl implements UserAuthService {
         Optional<AppUserEntity> optUser = appUserDao.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
             log.debug(optUser.get().getId());
-            String accessToken = jwtTokenProvider.generateToken(loginId);
+            String accessToken = jwtTokenProvider.generateAccessToken(loginId);
             Session session = new SessionBuilder()
                     .userToken(accessToken)
                     .userId(optUser.get().getId())

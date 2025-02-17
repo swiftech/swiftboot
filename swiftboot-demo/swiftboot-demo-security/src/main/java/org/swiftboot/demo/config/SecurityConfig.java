@@ -1,6 +1,7 @@
 package org.swiftboot.demo.config;
 
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -10,7 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.swiftboot.security.JwtAuthenticationFilter;
+import org.swiftboot.security.RevokedTokenDao;
 
 /**
  * @author swiftech
@@ -25,6 +29,13 @@ public class SecurityConfig {
 
     @Resource
     private UserDetailsService userDetailService;
+
+    // for logout redirection.
+    @Value("${swiftboot.demo.security.baseUrl}")
+    private String baseUrl;
+
+    @Resource
+    private RevokedTokenDao revokedTokenDao;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -46,9 +57,16 @@ public class SecurityConfig {
 //            cfg.authenticationEntryPoint(delegatedAuthenticationEntryPoint);
         });
 
+        httpSecurity.logout(logout -> {
+            logout.logoutUrl("/security/auth/logout"); // override the default URL to do logout.
+            logout.logoutSuccessHandler(logoutSuccessHandler()); // handle the logout success
+        });
+
         // Set permissions on endpoints
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                 // let auth methods go.
+                .requestMatchers("/security/auth/logout").permitAll()
+                .requestMatchers("/security/auth/logout_success").permitAll()
                 .requestMatchers("/error/**").permitAll()
                 .requestMatchers("/security/auth/*").permitAll() // allow authentication endpoints.
                 // others need authenticated.
@@ -58,5 +76,10 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        SimpleUrlLogoutSuccessHandler logoutSuccessHandler = new SimpleUrlLogoutSuccessHandler();
+        logoutSuccessHandler.setDefaultTargetUrl(baseUrl + "/security/auth/logout_success");
+        return logoutSuccessHandler;
+    }
 
 }

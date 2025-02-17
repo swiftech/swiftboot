@@ -43,7 +43,8 @@ public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyA
     }
 
     @Override
-    protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType, ServerHttpRequest request, ServerHttpResponse response) {
+    protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType,
+                                           ServerHttpRequest request, ServerHttpResponse response) {
         if (log.isDebugEnabled()) log.debug("Handle message for HttpResponse.");
         HttpResponse<?> httpResponse = (HttpResponse<?>) bodyContainer.getValue();
         String errorCode = httpResponse.getCode();

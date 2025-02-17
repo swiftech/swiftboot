@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author swiftech
+ * @since 3.0.0
  */
 @Configuration
 public class SwiftBootSecurityConfig {
