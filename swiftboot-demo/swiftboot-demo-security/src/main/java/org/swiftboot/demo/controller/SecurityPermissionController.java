@@ -9,7 +9,7 @@ import org.swiftboot.demo.result.SomeResult;
 import org.swiftboot.web.result.HttpResponse;
 
 /**
- * Test with permission cods.
+ * Test with user permission codes.
  */
 @Controller
 @RequestMapping("/security/api")
