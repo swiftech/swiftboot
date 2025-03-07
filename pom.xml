@@ -13,7 +13,7 @@
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot</artifactId>
     <packaging>pom</packaging>
-    <version>2.4.8</version>
+    <version>2.4.9</version>
     <description>A rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise</description>
 
     <modules>
