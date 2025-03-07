@@ -1,5 +1,9 @@
 package org.swiftboot.util;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +52,37 @@ public class TextUtils {
             return matcher.group(1);
         }
         return text;
+    }
+
+    /**
+     * Join list of strings ignoring the null or the blank strings.
+     *
+     * @param list
+     * @param separator
+     * @return
+     * @since 2.4.9
+     */
+    public static String join(List<String> list, String separator) {
+        list.removeIf(s -> s == null || StringUtils.isBlank(s));
+        return StringUtils.join(list, separator);
+    }
+
+    /**
+     * Join array of strings ignoring the null or the blank strings.
+     *
+     * @param array
+     * @param separator
+     * @return
+     * @since 2.4.9
+     */
+    public static String join(String[] array, String separator) {
+        List<String> withoutNullOrBlank = new ArrayList<>();
+        for (String s : array) {
+            if (StringUtils.isNotBlank(s)) {
+                withoutNullOrBlank.add(s);
+            }
+        }
+        return StringUtils.join(withoutNullOrBlank, separator);
     }
 
 }
