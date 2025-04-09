@@ -34,10 +34,9 @@ public class ClasspathResourceUtils {
         if (uri == null) {
             return null;
         }
-        try {
-            InputStream inputStream = uri.openStream();
+        try (InputStream inputStream = uri.openStream()) {
             return IoUtils.readAllToString(inputStream);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
