@@ -3,9 +3,9 @@ package org.swiftboot.web.command;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
 
 /**
  * 只包含单个业务 ID
