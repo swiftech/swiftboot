@@ -33,7 +33,7 @@ public class HttpServletIOUtils {
      */
     public static void writeFileToResponseStream(File file, HttpServletResponse response) {
         String encodedFileName = new String(file.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
-        Map<String, String> headers = new HashMap<String, String>() {
+        Map<String, String> headers = new HashMap<>() {
             {
                 put("Content-Disposition", "attachment; filename=" + encodedFileName);
             }

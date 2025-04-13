@@ -22,7 +22,7 @@
 <!--        <module>swiftboot-fileconvert</module>-->
         <module>swiftboot-data</module>
         <module>swiftboot-web</module>
-        <module>swiftboot-rpc</module>
+<!--        <module>swiftboot-rpc</module>-->
         <module>swiftboot-service</module>
         <module>swiftboot-auth</module>
         <module>swiftboot-security</module>
@@ -33,8 +33,8 @@
 
     <properties>
         <java.version>17</java.version>
-        <slf4j.version>1.7.36</slf4j.version>
-        <log4j2.version>2.24.1</log4j2.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <log4j2.version>2.24.3</log4j2.version>
         <jackson.version>2.18.2</jackson.version>
         <jackson.databind.version>2.18.2</jackson.databind.version>
         <commons.lang.version>3.17.0</commons.lang.version>
@@ -43,27 +43,28 @@
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.text.version>1.13.0</commons.text.version>
         <commons.io.version>2.18.0</commons.io.version>
-        <junit.version>5.11.4</junit.version>
+        <junit.version>5.12.1</junit.version>
         <spring.version>6.2.2</spring.version>
-        <spring.boot.version>3.4.2</spring.boot.version>
-        <spring.data.version>3.4.2</spring.data.version>
-        <spring.data.jpa.version>3.4.2</spring.data.jpa.version>
-        <spring.security.version>6.4.2</spring.security.version>
-        <servlet.version>4.0.1</servlet.version>
+        <spring.boot.version>3.4.4</spring.boot.version>
+        <spring.data.version>3.4.4</spring.data.version>
+        <spring.data.jpa.version>3.4.4</spring.data.jpa.version>
+        <spring.security.version>6.4.4</spring.security.version>
         <swagger.version>1.6.15</swagger.version>
         <aspectj.version>1.9.19</aspectj.version>
         <validation.api.version>2.0.1.Final</validation.api.version>
-        <hibernate.version>6.6.5.Final</hibernate.version>
+        <hibernate.version>6.6.13.Final</hibernate.version>
 <!--        <hibernate.jpa.version>1.0.2.Final</hibernate.jpa.version>-->
         <hibernate.validator.version>7.0.5.Final</hibernate.validator.version>
         <jakarta.transaction.api.version>2.0.1</jakarta.transaction.api.version>
-        <jakarta.persistent.api.version>3.1.0</jakarta.persistent.api.version>
+        <jakarta.persistent.api.version>3.2.0</jakarta.persistent.api.version>
         <jakarta.servlet.api.version>6.1.0</jakarta.servlet.api.version>
         <jakarta.annotations.version>3.0.0</jakarta.annotations.version>
+        <jakarta.validation.version>3.1.1</jakarta.validation.version>
         <jwt.version>0.12.6</jwt.version>
         <shiro.version>1.13.0</shiro.version>
         <jedis.version>5.1.5</jedis.version>
         <json.version>20250107</json.version>
+        <mysql.version>9.2.0</mysql.version>
         <h2.version>2.1.214</h2.version>
         <poi.version>5.3.0</poi.version>
         <pdfbox.version>2.0.31</pdfbox.version>
@@ -110,6 +111,108 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--  Spring Security-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring.boot.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-oauth2-client</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+            <!-- Spring Data -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring.data.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons</artifactId>
+                <version>${spring.data.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring.data.jpa.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+
+            <!-- Jakarta -->
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta.annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.transaction</groupId>
+                <artifactId>jakarta.transaction-api</artifactId>
+                <version>${jakarta.transaction.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>${jakarta.persistent.api.version}</version>
+            </dependency>
+
+            <!-- POI -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <!-- Tools and Utils -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
@@ -131,6 +234,21 @@
                 <version>${slf4j.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>${log4j2.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang.version}</version>
@@ -146,6 +264,48 @@
                 <version>${commons.collections.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons.text.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+
+            <!-- testing -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-test</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-test-autoconfigure</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
@@ -154,7 +314,6 @@
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
-                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

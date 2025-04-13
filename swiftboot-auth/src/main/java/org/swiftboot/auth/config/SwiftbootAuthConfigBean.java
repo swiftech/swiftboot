@@ -18,7 +18,7 @@ public class SwiftbootAuthConfigBean {
     private boolean enabled = false;
 
     /**
-     * type of authentication, use jwt or session
+     * type of authentication, use 'jwt' or 'session'
      */
     private String authType;
 
