@@ -1,7 +1,6 @@
 package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.collections.CollectionUtils;
@@ -26,7 +25,7 @@ import java.util.function.Predicate;
  * @param <P> 对应的实体类
  * @author swiftech
  */
-@ApiModel
+//@Schema(name="")
 public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpCommand {
 
     private static final Logger log = LoggerFactory.getLogger(BasePopulateCommand.class);

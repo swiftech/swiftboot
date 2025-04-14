@@ -1,8 +1,7 @@
 package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
@@ -12,13 +11,13 @@ import org.hibernate.validator.constraints.Length;
  *
  * @author swiftech
  */
-@ApiModel
+@Schema(name="D")
 public class IdCommand extends HttpCommand {
 
     /**
      * 业务对象ID
      */
-    @ApiModelProperty("Business object ID")
+    @Schema(description="Business object ID")
     @JsonProperty("id")
     @NotBlank
     @Length(min = 32, max = 32)

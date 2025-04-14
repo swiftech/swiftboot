@@ -1,6 +1,6 @@
 package org.swiftboot.web.validate;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -42,14 +42,14 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
                 FieldError fe = (FieldError) objectError;
                 String fieldDesc;
                 try {
-                    ApiModelProperty apiModelAnno =
-                            (ApiModelProperty) AnnotationUtils.getFieldAnnotation(
-                                    BeanUtils.getDeclaredField(bean, fe.getField()), ApiModelProperty.class);
-                    if (apiModelAnno == null || StringUtils.isBlank(apiModelAnno.value())) {
+                    Schema apiModelAnno =
+                            (Schema) AnnotationUtils.getFieldAnnotation(
+                                    BeanUtils.getDeclaredField(bean, fe.getField()), Schema.class);
+                    if (apiModelAnno == null || StringUtils.isBlank(apiModelAnno.description())) {
                         fieldDesc = k; // 不存在的话退回实用 key 值来标识
                     }
                     else {
-                        fieldDesc = apiModelAnno.value();
+                        fieldDesc = apiModelAnno.description();
                     }
                 } catch (Exception e) {
                     fieldDesc = k;
@@ -116,13 +116,13 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
         /**
          * 输入　key　值
          */
-        @ApiModelProperty(value = "Key of Input", example = "content")
+        @Schema(description = "Key of Input", example = "content")
         String key;
 
         /**
          * 错误信息
          */
-        @ApiModelProperty(value = "Error Message", example = "length must be between 0 and 64")
+        @Schema(description = "Error Message", example = "length must be between 0 and 64")
         String msg;
 
         public InputError() {

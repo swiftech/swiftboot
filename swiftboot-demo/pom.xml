@@ -27,6 +27,7 @@
         <mysql.version>9.2.0</mysql.version>
         <postgres.version>42.7.5</postgres.version>
         <jwt.version>0.12.6</jwt.version>
+        <springdoc.version>2.8.6</springdoc.version>
     </properties>
 
     <dependencies>
@@ -64,18 +65,26 @@
             <optional>true</optional>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+
+        <!-- This dependency is WORKAROUND for swagger since somehow it relies on old version jaxb-api, replace if possible -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.junit.jupiter</groupId>-->
-        <!--            <artifactId>junit-jupiter</artifactId>-->
-        <!--            <version>${junit.version}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -99,6 +108,13 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.junit.jupiter</groupId>-->
+        <!--            <artifactId>junit-jupiter</artifactId>-->
+        <!--            <version>${junit.version}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -110,49 +126,49 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.github.kongchen</groupId>
-                <artifactId>swagger-maven-plugin</artifactId>
-                <version>3.1.8</version>
-                <configuration>
-                    <apiSources>
-                        <apiSource>
-                            <springmvc>true</springmvc>
-                            <locations>
-                                <location>org.swiftboot.demo</location>
-                            </locations>
-                            <schemes>
-                                <schema>http</schema>
-                            </schemes>
-                            <host>localhost</host>
-                            <basePath>/${project.name}</basePath>
-                            <info>
-                                <title>${project.name}接口</title>
-                                <version>V${project.version}</version>
-                                <description>${project.name}</description>
-                            </info>
-                            <!--<templatePath>${basedir}/src/main/swagger/template/strapdown.html.hbs</templatePath>-->
-                            <!--<outputPath>${basedir}/src/main/swagger/api-doc.html</outputPath>-->
-                            <swaggerDirectory>${project.basedir}/docs/api</swaggerDirectory>
-                            <outputFormats>json</outputFormats>
-                            <securityDefinitions>
-                                <securityDefinition>
-                                    <name>MybasicAuth</name>
-                                    <type>basic</type>
-                                </securityDefinition>
-                            </securityDefinitions>
-                        </apiSource>
-                    </apiSources>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.github.kongchen</groupId>-->
+<!--                <artifactId>swagger-maven-plugin</artifactId>-->
+<!--                <version>3.1.8</version>-->
+<!--                <configuration>-->
+<!--                    <apiSources>-->
+<!--                        <apiSource>-->
+<!--                            <springmvc>true</springmvc>-->
+<!--                            <locations>-->
+<!--                                <location>org.swiftboot.demo</location>-->
+<!--                            </locations>-->
+<!--                            <schemes>-->
+<!--                                <schema>http</schema>-->
+<!--                            </schemes>-->
+<!--                            <host>localhost</host>-->
+<!--                            <basePath>/${project.name}</basePath>-->
+<!--                            <info>-->
+<!--                                <title>${project.name}接口</title>-->
+<!--                                <version>V${project.version}</version>-->
+<!--                                <description>${project.name}</description>-->
+<!--                            </info>-->
+<!--                            &lt;!&ndash;<templatePath>${basedir}/src/main/swagger/template/strapdown.html.hbs</templatePath>&ndash;&gt;-->
+<!--                            &lt;!&ndash;<outputPath>${basedir}/src/main/swagger/api-doc.html</outputPath>&ndash;&gt;-->
+<!--                            <swaggerDirectory>${project.basedir}/docs/api</swaggerDirectory>-->
+<!--                            <outputFormats>json</outputFormats>-->
+<!--                            <securityDefinitions>-->
+<!--                                <securityDefinition>-->
+<!--                                    <name>MybasicAuth</name>-->
+<!--                                    <type>basic</type>-->
+<!--                                </securityDefinition>-->
+<!--                            </securityDefinitions>-->
+<!--                        </apiSource>-->
+<!--                    </apiSources>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>compile</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

@@ -1,5 +1,6 @@
 package org.swiftboot.demo.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.swiftboot.web.result.HttpResponse;
 /**
  * Test with user permission codes.
  */
+@Tag(name = "Security Permission", description = "Security endpoints for testing permissions.")
 @Controller
 @RequestMapping("/security/api")
 public class SecurityPermissionController {

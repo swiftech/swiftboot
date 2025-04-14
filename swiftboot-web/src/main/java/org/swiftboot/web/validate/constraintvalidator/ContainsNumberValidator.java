@@ -1,10 +1,10 @@
 package org.swiftboot.web.validate.constraintvalidator;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.web.validate.constraint.ContainsNumber;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 /**
  * @author swiftech

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
@@ -18,20 +18,20 @@ import java.io.Serializable;
  * @param <T> 内容对象的类型
  * @author swiftech
  */
-@ApiModel
+@Schema(name="")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class HttpResponse<T> implements Serializable {
 
     /**
      * 业务错误代码，长度4个字节的数字
      */
-    @ApiModelProperty(value = "Error code", required = true, example = "1000")
+    @Schema(description = "Error code", required = true, example = "1000")
     protected String code = ErrorCodeSupport.CODE_OK;
 
     /**
      * 错误代码对应的错误信息
      */
-    @ApiModelProperty(value = "Error message", required = false, example = "OK")
+    @Schema(description = "Error message", required = false, example = "OK")
     protected String msg = null;
 
     /**
@@ -43,7 +43,7 @@ public class HttpResponse<T> implements Serializable {
     /**
      * 返回的对象
      */
-    @ApiModelProperty(value = "Result data object")
+    @Schema(description = "Result data object")
     protected T result;
 
     public HttpResponse() {

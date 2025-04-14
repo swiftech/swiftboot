@@ -1,8 +1,7 @@
 package org.swiftboot.web.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
@@ -14,13 +13,13 @@ import java.util.List;
  *
  * @author swiftech
  */
-@ApiModel
+@Schema(name="Id List Command")
 public class IdListCommand extends HttpCommand {
 
     /**
      * 业务对象ID列表
      */
-    @ApiModelProperty("List of business object ID")
+    @Schema(description="List of business object ID")
     @JsonProperty("ids")
     @NotEmpty
     private List<@NotBlank @Length(min = 32, max = 32) String> ids;

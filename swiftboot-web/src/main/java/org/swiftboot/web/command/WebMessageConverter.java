@@ -32,10 +32,10 @@ public class WebMessageConverter extends MappingJackson2HttpMessageConverter {
         Object converted = super.read(type, contextClass, inputMessage);
         if (converted instanceof HttpCommand) {
             HttpHeaders headers = inputMessage.getHeaders();
-            if (headers != null && !headers.isEmpty()) {
+            if (!headers.isEmpty()) {
                 for (String hname : headers.keySet()) {
                     List<String> hValues = headers.getValuesAsList(hname);
-                    if (hValues != null && !hValues.isEmpty()) {
+                    if (!hValues.isEmpty()) {
                         ((HttpCommand) converted).setHeader(hname, hValues.get(0));
                     }
                 }

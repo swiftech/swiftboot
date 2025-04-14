@@ -1,28 +1,28 @@
 package org.swiftboot.web.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 默认的修改状态返回对象
  *
  * @author swiftech
  **/
-@ApiModel("Default status changing result")
+@Schema(name="", description="Default status changing result")
 public class DefaultStatusChangeResult {
 
     /**
      * 新状态码
      */
-    @ApiModelProperty(value = "New status code")
+    @Schema(description = "New status code")
     @JsonProperty("new_status_code")
     private int newStatusCode;
 
     /**
      * 新状态名称
      */
-    @ApiModelProperty(value = "New status name")
+    @Schema(description = "New status name")
     @JsonProperty("new_status_name")
     private String newStatusName;
 

@@ -1,12 +1,15 @@
 package org.swiftboot.demo.result;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.result.Result;
 
 /**
  * @author swiftech
  */
+@Schema(name="Auth Result", description = "Result of authentication")
 public class AuthResult implements Result {
 
+    @Schema(description = "access token")
     private String accessToken;
 
     private String refreshToken;

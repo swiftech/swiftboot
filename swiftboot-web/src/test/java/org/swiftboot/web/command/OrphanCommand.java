@@ -1,12 +1,12 @@
 package org.swiftboot.web.command;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.data.model.entity.OrphanEntity;
 
 /**
  * @author swiftech
  **/
-@ApiModel
+@Schema(name="", description = "")
 public class OrphanCommand extends BasePopulateCommand<OrphanEntity> {
 
     private String name;

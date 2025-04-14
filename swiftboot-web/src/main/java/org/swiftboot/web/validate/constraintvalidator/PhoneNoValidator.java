@@ -1,13 +1,13 @@
 package org.swiftboot.web.validate.constraintvalidator;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.swiftboot.web.validate.constraint.PhoneNo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 /**
  * 验证手机号码是否为“1”开头的11位数字

@@ -1,7 +1,7 @@
 package org.swiftboot.demo.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * @author swiftech
  */
-@Api(tags = {"Authentication based on Spring Security"})
+@Tag(name = "Security Authentication", description = "Authentication based on Spring Security")
 @Controller
 @RequestMapping("/security/auth")
 @ResponseBody
@@ -50,7 +50,7 @@ public class SecurityAuthController {
     @Resource
     private RefreshTokenDao refreshTokenDao;
 
-    @ApiOperation("")
+    @Operation(description = "signin")
     @PostMapping(value = "signin")
     @ResponseBody
     public HttpResponse<AuthResult> adminUserSignin(
@@ -78,7 +78,7 @@ public class SecurityAuthController {
         return new HttpResponse<>(authResult);
     }
 
-    @ApiOperation("Refresh access token by refresh token")
+    @Operation(description = "Refresh access token by refresh token")
     @PostMapping("refresh")
     @ResponseBody
     public ResponseEntity<HttpResponse<RefreshTokenResult>> refresh(@RequestBody RefreshTokenCommand refreshTokenCommand) {
@@ -106,7 +106,7 @@ public class SecurityAuthController {
 //        return new HttpResponse<>(ret);
 //    }
 
-    @ApiOperation("")
+    @Operation(description = "")
     @GetMapping("logout_success")
     @ResponseBody
     public HttpResponse<String> logoutSuccess(@RequestHeader("Authorization") String authorizationHeader) {

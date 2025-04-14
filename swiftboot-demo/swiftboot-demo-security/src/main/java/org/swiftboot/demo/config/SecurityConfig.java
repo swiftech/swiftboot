@@ -65,6 +65,11 @@ public class SecurityConfig {
         // Set permissions on endpoints
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                 // let auth methods go.
+                .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/v3/api-docs.yaml").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/security/auth/logout").permitAll()
                 .requestMatchers("/security/auth/logout_success").permitAll()
                 .requestMatchers("/error/**").permitAll()

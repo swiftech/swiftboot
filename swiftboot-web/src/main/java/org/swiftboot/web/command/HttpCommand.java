@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -16,14 +15,14 @@ import java.util.Map;
  *
  * @author swiftech
  */
-@ApiModel
+@Schema(name="")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class HttpCommand implements Serializable {
 
     /**
      * HTTP(S) 请求头
      */
-    @ApiModelProperty("HTTP(S) headers")
+    @Schema(description="HTTP(S) headers")
     @JsonIgnore
     private Map<String, String> headers;
 

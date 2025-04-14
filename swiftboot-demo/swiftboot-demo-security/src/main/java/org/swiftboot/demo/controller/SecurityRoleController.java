@@ -1,6 +1,6 @@
 package org.swiftboot.demo.controller;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.swiftboot.web.result.HttpResponse;
  *
  * @author swiftech
  */
-@Api(tags = {"Security Realm APIs for Admin"})
+@Tag(name = "Security Role", description = "Security Realm APIs for Admin")
 @Controller
 @RequestMapping("/security/api")
 @ResponseBody

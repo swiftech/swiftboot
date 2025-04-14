@@ -1,20 +1,20 @@
 package org.swiftboot.web.result;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 默认的统计数量返回对象
  *
  * @author swiftech
  **/
-@ApiModel("Default counting result")
+@Schema(name="", description="Default counting result")
 public class DefaultCountResult implements Result{
 
     /**
      * 统计结果
      */
-    @ApiModelProperty(value = "Counting result")
+    @Schema(description = "Counting result")
     private long count;
 
     public DefaultCountResult() {
