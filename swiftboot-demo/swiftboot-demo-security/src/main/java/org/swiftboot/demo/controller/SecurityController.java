@@ -1,5 +1,6 @@
 package org.swiftboot.demo.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ public class SecurityController {
      *
      * @return
      */
+    @Operation(description = "Get user information after login")
     @GetMapping(value = "/user/info")
     @ResponseBody
     public HttpResponse<UserInfoResult> userInfo() {
@@ -32,6 +34,7 @@ public class SecurityController {
         return new HttpResponse<>(ui);
     }
 
+    @Operation(description = "Get user permissions")
     @GetMapping(value = "/user/permissions")
     @ResponseBody
     public HttpResponse<UserInfoResult> userPermissions() {

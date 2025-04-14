@@ -27,7 +27,7 @@
         <mysql.version>9.2.0</mysql.version>
         <postgres.version>42.7.5</postgres.version>
         <jwt.version>0.12.6</jwt.version>
-        <springdoc.version>2.8.6</springdoc.version>
+<!--        <springdoc.version>2.8.6</springdoc.version>-->
     </properties>
 
     <dependencies>
@@ -45,6 +45,11 @@
         <dependency>
             <groupId>com.github.swiftech</groupId>
             <artifactId>swiftboot-web</artifactId>
+            <version>${swiftboot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-apidoc</artifactId>
             <version>${swiftboot.version}</version>
         </dependency>
         <dependency>
@@ -66,18 +71,18 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springdoc</groupId>-->
+<!--            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->
+<!--            <version>${springdoc.version}</version>-->
+<!--        </dependency>-->
 
-        <!-- This dependency is WORKAROUND for swagger since somehow it relies on old version jaxb-api, replace if possible -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
+<!--        &lt;!&ndash; This dependency is WORKAROUND for swagger since somehow it relies on old version jaxb-api, replace if possible &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>javax.xml.bind</groupId>-->
+<!--            <artifactId>jaxb-api</artifactId>-->
+<!--            <version>2.3.1</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

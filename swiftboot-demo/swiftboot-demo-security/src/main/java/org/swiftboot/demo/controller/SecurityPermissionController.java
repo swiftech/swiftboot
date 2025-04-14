@@ -1,5 +1,6 @@
 package org.swiftboot.demo.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ public class SecurityPermissionController {
      *
      * @return
      */
+    @Operation(description = "This endpoint requires permission A")
     @GetMapping(value = "require/perm_a")
     @PreAuthorize("hasAuthority('PERM_A')")
     @ResponseBody
@@ -36,6 +38,7 @@ public class SecurityPermissionController {
      *
      * @return
      */
+    @Operation(description = "This endpoint requires permission B")
     @GetMapping(value = "require/perm_b")
     @PreAuthorize("hasAuthority('PERM_B')")
     @ResponseBody
@@ -50,6 +53,7 @@ public class SecurityPermissionController {
      *
      * @return
      */
+    @Operation(description = "This endpoint requires permissions A or B")
     @GetMapping(value = "require/permissions/or")
     @PreAuthorize("hasAuthority('PERM_A') or hasAuthority('PERM_B')")
     @ResponseBody
@@ -64,6 +68,7 @@ public class SecurityPermissionController {
      *
      * @return
      */
+    @Operation(description = "This endpoint requires permissions A and B")
     @GetMapping(value = "require/permissions/and")
     @PreAuthorize("hasAuthority('PERM_A') and hasAuthority('PERM_B')")
     @ResponseBody

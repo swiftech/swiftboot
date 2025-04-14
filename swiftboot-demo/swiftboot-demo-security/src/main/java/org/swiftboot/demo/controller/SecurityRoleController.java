@@ -1,5 +1,6 @@
 package org.swiftboot.demo.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class SecurityRoleController {
      *
      * @return
      */
+    @Operation(description = "This endpoint requires admin role")
     @GetMapping(value = "/require/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public HttpResponse<SomeResult> requireAdmin() {
@@ -38,6 +40,7 @@ public class SecurityRoleController {
      *
      * @return
      */
+    @Operation(description = "This endpoint requires manager role")
     @GetMapping(value = "/require/manager")
     @PreAuthorize("hasRole('MANAGER')")
     public HttpResponse<SomeResult> requireManager() {

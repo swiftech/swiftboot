@@ -50,7 +50,7 @@ public class SecurityAuthController {
     @Resource
     private RefreshTokenDao refreshTokenDao;
 
-    @Operation(description = "signin")
+    @Operation(description = "Signin with username and password")
     @PostMapping(value = "signin")
     @ResponseBody
     public HttpResponse<AuthResult> adminUserSignin(

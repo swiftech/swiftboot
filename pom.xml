@@ -29,6 +29,7 @@
 <!--        <module>swiftboot-shiro</module>-->
         <module>swiftboot-sheet</module>
         <module>swiftboot-common-auth</module>
+        <module>swiftboot-apidoc</module>
     </modules>
 
     <properties>
