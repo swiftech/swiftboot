@@ -5,7 +5,7 @@
 ### 特性
 * 非常少的代码即可实现完整的用户认证，只要实现校验用户凭证的代码逻辑和配置认证过滤有效的 URL 即可。
 
-* 你只需要实现 UserAuthService 接口实现用户身份校验，并在你的 Controller 方法中嗲用 `UserAuthService.userSignIn()` 方法，用户 Token 会被自动写入到 Cookie 
+* 你只需要实现 `UserAuthService` 接口实现用户身份校验，并在你的 Controller 方法中调用 `UserAuthService.userSignIn()` 方法，用户 Token 会被自动写入到 Cookie 
 或者 Header 中返回给客户端，由客户端保存并加入到请求的 Header 中。
 
 * 一旦引用了 SwiftBoot-Auth，其内建的过滤器就会检查请求 Header 或 Cookie 中是否存在令牌（Token）以及令牌对应的会话（session）是否有效，

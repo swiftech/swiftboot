@@ -34,14 +34,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
         GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
         GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);
-        if (username.equals("admin")) {
-            return new User("admin", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA, gaPermissionB}));
-        }
-        else if (username.equals("manager")) {
-            return new User("manager", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA}));
-        }
-        else {
-            return new User("staff", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionB}));
-        }
+        return switch (username) {
+            case "admin" ->
+                    new User("admin", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA, gaPermissionB}));
+            case "manager" ->
+                    new User("manager", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA}));
+            default ->
+                    new User("staff", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionB}));
+        };
     }
 }

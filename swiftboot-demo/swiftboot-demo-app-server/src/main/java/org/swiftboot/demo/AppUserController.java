@@ -1,7 +1,8 @@
 package org.swiftboot.demo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,14 +14,12 @@ import org.swiftboot.auth.controller.AuthenticatedResponse;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.web.result.HttpResponse;
 
-import jakarta.annotation.Resource;
-
 /**
  * App 用户认证接口
  *
  * @author swiftech 2020-02-05
  **/
-@Api(tags = {"AppUser"})
+@Tag(name = "AppUser")
 @Controller
 @RequestMapping("/app/user")
 @ResponseBody
@@ -31,7 +30,7 @@ public class AppUserController {
     @Resource
     private UserAuthService userAuthService;
 
-    @ApiOperation(notes = "App user sign in", value = "App user sign in")
+    @Operation(description = "App user sign in")
     @RequestMapping(value = "signin", method = RequestMethod.POST)
     public HttpResponse<AppUserSigninResult> appUserSign(
             @RequestBody AppUserSigninCommand command) {

@@ -1,8 +1,8 @@
 package org.swiftboot.demo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.AppUserEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
@@ -11,25 +11,25 @@ import org.swiftboot.web.result.BasePopulateResult;
  *
  * @author swiftech 2020-02-05
  **/
-@ApiModel
+@Schema
 public class AppUserSigninResult extends BasePopulateResult<AppUserEntity> {
 
-    @ApiModelProperty(value = "Login name of app user", example = "13866669999")
+    @Schema(description = "Login name of app user", example = "13866669999")
     @JsonProperty("login_name")
     private String loginName;
 
-    @ApiModelProperty(value = "Updating time", example = "1545355038524")
+    @Schema(description = "Updating time", example = "1545355038524")
     @JsonProperty("update_time")
     private Long updateTime;
 
-    @ApiModelProperty(value = "Entity ID", example = "basident20191119010450544siobnic")
+    @Schema(description = "Entity ID", example = "basident20191119010450544siobnic")
     @JsonProperty("id")
     private String id;
 
-    @ApiModelProperty(value = "Sign in success", example = "true")
+    @Schema(description = "Sign in success", example = "true")
     private boolean success = false;
 
-    @ApiModelProperty(value = "Access Token for app user, optional if using Cookie", example = "772eb2add9b64e40972468c779b3b952")
+    @Schema(description = "Access Token for app user, optional if using Cookie", example = "772eb2add9b64e40972468c779b3b952")
     @JsonProperty("access_token")
     private String accessToken;
 

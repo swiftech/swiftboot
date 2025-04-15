@@ -1,29 +1,28 @@
 package org.swiftboot.demo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.demo.model.entity.AppUserEntity;
 import org.swiftboot.web.command.BasePopulateCommand;
 
-import javax.validation.constraints.NotBlank;
 
 /**
  * App user signin command
  *
  * @author swiftech 2020-02-05
  **/
-@ApiModel
+@Schema
 public class AppUserSigninCommand extends BasePopulateCommand<AppUserEntity> {
 
-    @ApiModelProperty(value = "Login name of app user", required = true, example = "13866669999")
+    @Schema(description = "Login name of app user", required = true, example = "13866669999")
     @JsonProperty("login_name")
     @Length(max = 32)
     @NotBlank
     private String loginName;
 
-    @ApiModelProperty(value = "Login password to login name", required = true, example = "my_password")
+    @Schema(description = "Login password to login name", required = true, example = "my_password")
     @JsonProperty("login_pwd")
     @Length(max = 64)
     @NotBlank
