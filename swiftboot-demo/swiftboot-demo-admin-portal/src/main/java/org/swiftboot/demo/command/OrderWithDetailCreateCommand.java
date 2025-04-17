@@ -3,13 +3,12 @@ package org.swiftboot.demo.command;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.OrderDetailEntity;
 import org.swiftboot.demo.model.entity.OrderPaymentEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.web.command.BasePopulateCommand;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -18,14 +17,14 @@ import java.util.List;
  *
  * @author swiftech
  */
-@ApiModel
+@Schema
 public class OrderWithDetailCreateCommand extends OrderCreateCommand {
 
-    @ApiModelProperty(value = "订单明细")
+    @Schema(description = "订单明细")
     @JsonProperty("details")
     private List<OrderDetailCreate> orderDetails;
 
-    @ApiModelProperty(value = "订单支付")
+    @Schema(description = "订单支付")
     @JsonProperty("payment")
     private OrderPaymentCreate orderPayment;
 
@@ -56,10 +55,10 @@ public class OrderWithDetailCreateCommand extends OrderCreateCommand {
     /**
      * 订单明细子创建对象
      */
-    @ApiModel
+    @Schema
     public static class OrderDetailCreate extends BasePopulateCommand<OrderDetailEntity> {
 
-        @ApiModelProperty(value = "明细描述", required = true)
+        @Schema(description = "明细描述", required = true)
         @JsonProperty("description")
         @Length(max = 512)
         @NotBlank
@@ -89,7 +88,7 @@ public class OrderWithDetailCreateCommand extends OrderCreateCommand {
     /**
      * 订单支付子创建对象
      */
-    @ApiModel
+    @Schema
     public static class OrderPaymentCreate extends BasePopulateCommand<OrderPaymentEntity> {
 
         @NotNull

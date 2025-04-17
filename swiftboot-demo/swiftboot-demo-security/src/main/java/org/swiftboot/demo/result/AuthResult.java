@@ -9,10 +9,17 @@ import org.swiftboot.web.result.Result;
 @Schema(name="Auth Result", description = "Result of authentication")
 public class AuthResult implements Result {
 
-    @Schema(description = "access token")
+    @Schema(description = "Access Token")
     private String accessToken;
 
+    @Schema(description = "Refresh Token")
     private String refreshToken;
+
+    @Schema(description = "Access token expires at time in milliseconds")
+    private long expiresAt;
+
+    @Schema(description = "Refresh token expires at time in milliseconds")
+    private long refreshTokenExpiresAt;
 
     private String role;
 
@@ -44,6 +51,22 @@ public class AuthResult implements Result {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public long getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(long expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+    public long getRefreshTokenExpiresAt() {
+        return refreshTokenExpiresAt;
+    }
+
+    public void setRefreshTokenExpiresAt(long refreshTokenExpiresAt) {
+        this.refreshTokenExpiresAt = refreshTokenExpiresAt;
     }
 
     public String getRole() {

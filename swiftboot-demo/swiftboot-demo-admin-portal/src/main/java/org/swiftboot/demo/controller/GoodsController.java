@@ -14,9 +14,9 @@ import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.command.IdCommand;
 import org.swiftboot.web.command.IdListCommand;
 import org.swiftboot.web.validate.ConvertValidateResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ import jakarta.annotation.Resource;
  *
  * @author swiftech 2019-04-07
  **/
-@Api(tags = {"Goods商品"})
+@Tag(name = "Goods商品"})
 @Controller
 @RequestMapping("/goods")
 @ResponseBody
@@ -42,11 +42,11 @@ public class GoodsController {
     @Resource
     private GoodsService goodsService;
 
-    @ApiOperation(notes = "创建商品", value = "创建商品")
+    @Operation(description = "创建商品", value = "创建商品")
     @RequestMapping(value = "create", method = RequestMethod.POST)
     @RequiresPermissions("goods:create")
     public HttpResponse<GoodsCreateResult> goodsCreate(
-            @RequestBody @Validated @ApiParam("创建商品参数") GoodsCreateCommand command,
+            @RequestBody @Validated @Parameter(description = "创建商品参数") GoodsCreateCommand command,
             BindingResult bindingResult) {
         log.info("> /goods/create");
         log.debug(JsonUtils.object2PrettyJson(command));
@@ -54,18 +54,18 @@ public class GoodsController {
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "保存商品", value = "保存商品")
+    @Operation(description = "保存商品", value = "保存商品")
     @RequestMapping(value = "save", method = RequestMethod.POST)
     @RequiresPermissions("goods:save")
     public HttpResponse<GoodsSaveResult> goodsSave(
-            @RequestBody @Validated @ApiParam("保存商品参数") GoodsSaveCommand command) {
+            @RequestBody @Validated @Parameter(description = "保存商品参数") GoodsSaveCommand command) {
         log.info("> /goods/save");
         log.debug(JsonUtils.object2PrettyJson(command));
         GoodsSaveResult ret = goodsService.saveGoods(command);
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "查询商品", value = "查询商品")
+    @Operation(description = "查询商品", value = "查询商品")
     @RequestMapping(value = "query", method = RequestMethod.GET)
     @RequiresPermissions("goods:query")
     public HttpResponse<GoodsResult> goodsQuery(
@@ -76,7 +76,7 @@ public class GoodsController {
         return new HttpResponse<>(goodsResult);
     }
 
-    @ApiOperation(notes = "查询商品列表", value = "查询商品列表")
+    @Operation(description = "查询商品列表", value = "查询商品列表")
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @RequiresPermissions("goods:list")
     public HttpResponse<GoodsListResult> goodsList() {
@@ -85,22 +85,22 @@ public class GoodsController {
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "逻辑删除商品", value = "逻辑删除商品")
+    @Operation(description = "逻辑删除商品", value = "逻辑删除商品")
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     @RequiresPermissions("goods:delete")
     public HttpResponse<Void> goodsDelete(
-            @RequestBody @Validated @ApiParam("商品ID") IdCommand command) {
+            @RequestBody @Validated @Parameter(description = "商品ID") IdCommand command) {
         log.info("> /goods/delete");
         log.debug(JsonUtils.object2PrettyJson(command));
         goodsService.deleteGoods(command.getId());
         return new HttpResponse<>();
     }
 
-    @ApiOperation(notes = "逻辑删除多个商品", value = "逻辑删除多个商品")
+    @Operation(description = "逻辑删除多个商品", value = "逻辑删除多个商品")
     @RequestMapping(value = "delete/list", method = RequestMethod.DELETE)
     @RequiresPermissions("goods:delete")
     public HttpResponse<Void> goodsDeleteList(
-            @RequestBody @Validated @ApiParam("商品ID列表") IdListCommand command) {
+            @RequestBody @Validated @Parameter(description = "商品ID列表") IdListCommand command) {
         log.info("> /goods/delete/list");
         log.debug(JsonUtils.object2PrettyJson(command));
         goodsService.deleteGoodsList(command);
@@ -108,22 +108,22 @@ public class GoodsController {
     }
 
 
-    @ApiOperation(notes = "永久删除商品", value = "永久删除商品")
+    @Operation(description = "永久删除商品", value = "永久删除商品")
     @RequestMapping(value = "purge", method = RequestMethod.DELETE)
     @RequiresPermissions("goods:purge")
     public HttpResponse<Void> goodsPurge(
-            @RequestBody @Validated @ApiParam("商品ID") IdCommand command) {
+            @RequestBody @Validated @Parameter(description = "商品ID") IdCommand command) {
         log.info("> /goods/purge");
         log.debug(JsonUtils.object2PrettyJson(command));
         goodsService.purgeGoods(command.getId());
         return new HttpResponse<>();
     }
 
-    @ApiOperation(notes = "永久删除多个商品", value = "永久删除多个商品")
+    @Operation(description = "永久删除多个商品", value = "永久删除多个商品")
     @RequestMapping(value = "purge/list", method = RequestMethod.DELETE)
     @RequiresPermissions("goods:purge")
     public HttpResponse<Void> goodsPurgeList(
-            @RequestBody @Validated @ApiParam("商品ID列表") IdListCommand command) {
+            @RequestBody @Validated @Parameter(description = "商品ID列表") IdListCommand command) {
         log.info("> /goods/purge/list");
         log.debug(JsonUtils.object2PrettyJson(command));
         goodsService.purgeGoodsList(command);

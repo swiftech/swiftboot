@@ -3,8 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.result.BasePopulateListResult;
 
 import java.util.List;
@@ -14,14 +13,14 @@ import java.util.List;
  *
  * @author swiftech 2020-01-06
  **/
-@ApiModel
+@Schema
 public class AdminUserListResult extends BasePopulateListResult<AdminUserResult, AdminUserEntity> {
 
-    @ApiModelProperty("管理员总数（用于分页查询）")
+    @Schema(description = "管理员总数（用于分页查询）")
     @JsonProperty("total")
     private long total;
 
-    @ApiModelProperty("管理员列表")
+    @Schema(description = "管理员列表")
     @JsonProperty("items")
     private
     List<AdminUserResult> items;

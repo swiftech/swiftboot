@@ -2,29 +2,28 @@ package org.swiftboot.demo.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.OrderDetailEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.web.command.BasePopulateCommand;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 创建订单明细
  *
  * @author swiftech 2019-08-22
  **/
-@ApiModel
+@Schema
 public class OrderDetailCreateCommand extends BasePopulateCommand<OrderDetailEntity> {
 
-    @ApiModelProperty(value = "明细描述", required = true)
+    @Schema(description = "明细描述", required = true)
     @JsonProperty("description")
     @Length(max = 512)
     @NotBlank
     private String description;
 
-    @ApiModelProperty(value = "订单ID", required = true, example = "f80dc17d1b744a38a438e47c8d95cbd1")
+    @Schema(description = "订单ID", required = true, example = "f80dc17d1b744a38a438e47c8d95cbd1")
     @JsonProperty("order_id")
     @Length(max = 32)
     @NotNull

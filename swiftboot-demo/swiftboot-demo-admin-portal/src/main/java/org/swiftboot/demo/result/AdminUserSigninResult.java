@@ -1,8 +1,7 @@
 package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
@@ -11,25 +10,25 @@ import org.swiftboot.web.result.BasePopulateResult;
  *
  * @author swiftech 2019-11-28
  **/
-@ApiModel
+@Schema
 public class AdminUserSigninResult extends BasePopulateResult<AdminUserEntity> {
 
-    @ApiModelProperty(value = "Login name of administrator", example = "admin")
+    @Schema(description = "Login name of administrator", example = "admin")
     @JsonProperty("login_name")
     private String loginName;
 
-    @ApiModelProperty(value = "Updating time", example = "1545355038524")
+    @Schema(description = "Updating time", example = "1545355038524")
     @JsonProperty("update_time")
     private Long updateTime;
 
-    @ApiModelProperty(value = "Entity ID", example = "basident20191119010450544siobnic")
+    @Schema(description = "Entity ID", example = "basident20191119010450544siobnic")
     @JsonProperty("id")
     private String id;
 
-    @ApiModelProperty(value = "Sign in success", example = "true")
+    @Schema(description = "Sign in success", example = "true")
     private boolean success = false;
 
-    @ApiModelProperty(value = "Token for admin user", example = "772eb2add9b64e40972468c779b3b952")
+    @Schema(description = "Token for admin user", example = "772eb2add9b64e40972468c779b3b952")
     @JsonProperty("swiftboot_shiro_token")
     private String token;
 

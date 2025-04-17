@@ -1,8 +1,8 @@
 package org.swiftboot.demo.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * @author swiftech
  **/
-@Api("UploadFile上传文件")
+@Tag(name = "UploadFile上传文件")
 @Controller
 @RequestMapping("/file")
 public class UploadFileController {
@@ -27,12 +27,12 @@ public class UploadFileController {
     private static final Logger log = LoggerFactory.getLogger(UploadFileController.class);
 
 
-    @ApiOperation(notes = "单个文件上传", consumes = "multipart/form-data", value = "单个文件上传")
+    @Operation(description = "单个文件上传", consumes = "multipart/form-data", value = "单个文件上传")
     @RequestMapping(value = "upload/single", method = RequestMethod.POST, consumes = "multipart/form-data")
     public
     @ResponseBody
     HttpResponse<Void> fileUpload(
-            @ApiParam @RequestPart(value = "file") MultipartFile file,
+            @Parameter @RequestPart(value = "file") MultipartFile file,
             HttpServletResponse response,
             HttpServletRequest request) {
         log.info("> /file/upload/single");

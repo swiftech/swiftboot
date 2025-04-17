@@ -2,8 +2,7 @@ package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
@@ -15,48 +14,48 @@ import java.time.LocalDateTime;
  *
  * @author swiftech 2019-04-07
  **/
-@ApiModel
+@Schema
 public class GoodsResult extends BasePopulateResult<GoodsEntity> {
 
-    @ApiModelProperty(value = "商品名称", example = "闲趣清闲薄脆饼干")
+    @Schema(description = "商品名称", example = "闲趣清闲薄脆饼干")
     @JsonProperty("name")
     private String name;
 
-    @ApiModelProperty(value = "商品描述", example = "清闲不腻，松脆松化")
+    @Schema(description = "商品描述", example = "清闲不腻，松脆松化")
     @JsonProperty("description")
     private String description;
 
-    @ApiModelProperty(value = "商品价格", example = "12.5")
+    @Schema(description = "商品价格", example = "12.5")
     @JsonProperty("price")
     private Double price;
 
-    @ApiModelProperty(value = "修改时间", example = "1545355038524")
+    @Schema(description = "修改时间", example = "1545355038524")
     @JsonProperty("update_time")
     private Long updateTime;
 
-    @ApiModelProperty(value = "创建时间", example = "1545355038524")
+    @Schema(description = "创建时间", example = "1545355038524")
     @JsonProperty("create_time")
     private Long createTime;
 
-    @ApiModelProperty(value = "是否逻辑删除", example = "false")
+    @Schema(description = "是否逻辑删除", example = "false")
     @JsonProperty("is_delete")
     private Boolean isDelete;
 
-    @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
+    @Schema(description = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @JsonProperty("id")
     private String id;
 
-    @ApiModelProperty(value = "生产时间", example = "2020-01-16 00:00:00")
+    @Schema(description = "生产时间", example = "2020-01-16 00:00:00")
     @JsonProperty("production_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime productionTime;
 
-    @ApiModelProperty(value = "过期日期", example = "2021-01-16")
+    @Schema(description = "过期日期", example = "2021-01-16")
     @JsonProperty("expire_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expireDate;
 
-    @ApiModelProperty(value = "商品详情")
+    @Schema(description = "商品详情")
     @JsonProperty("goods_detail")
     private GoodsDetailResult goodsDetail;
 

@@ -1,8 +1,7 @@
 package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
@@ -11,34 +10,34 @@ import org.swiftboot.web.result.BasePopulateResult;
  *
  * @author swiftech 2020-01-06
  **/
-@ApiModel
+@Schema
 public class AdminUserResult extends BasePopulateResult<AdminUserEntity> {
 
-    @ApiModelProperty(value = "Login name of administrator", example = "admin")
+    @Schema(description = "Login name of administrator", example = "admin")
     @JsonProperty("login_name")
     private String loginName;
 
-    @ApiModelProperty(value = "Login password to login name", notes = "MD5 with salt", example = "a43b66902590c003c213a5ed1b6f92e3")
+    @Schema(description = "Login password to login name", notes = "MD5 with salt", example = "a43b66902590c003c213a5ed1b6f92e3")
     @JsonProperty("login_pwd")
     private String loginPwd;
 
-    @ApiModelProperty(value = "Name of the user", example = "James Bond")
+    @Schema(description = "Name of the user", example = "James Bond")
     @JsonProperty("user_name")
     private String userName;
 
-    @ApiModelProperty(value = "Updating time", example = "1545355038524")
+    @Schema(description = "Updating time", example = "1545355038524")
     @JsonProperty("update_time")
     private Long updateTime;
 
-    @ApiModelProperty(value = "Creation time", example = "1545355038524")
+    @Schema(description = "Creation time", example = "1545355038524")
     @JsonProperty("create_time")
     private Long createTime;
 
-    @ApiModelProperty(value = "Is deleted", example = "false")
+    @Schema(description = "Is deleted", example = "false")
     @JsonProperty("is_delete")
     private Boolean isDelete;
 
-    @ApiModelProperty(value = "Entity ID", example = "basident20191119010450544siobnic")
+    @Schema(description = "Entity ID", example = "basident20191119010450544siobnic")
     @JsonProperty("id")
     private String id;
 

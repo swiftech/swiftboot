@@ -11,16 +11,10 @@
 
     <artifactId>swiftboot-demo-admin-portal</artifactId>
 
-    <properties>
-<!--        <maven.compiler.source>17</maven.compiler.source>-->
-<!--        <maven.compiler.target>17</maven.compiler.target>-->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.github.swiftech</groupId>
-            <artifactId>swiftboot-shiro</artifactId>
+            <artifactId>swiftboot-security</artifactId>
             <version>${swiftboot.version}</version>
         </dependency>
         <dependency>

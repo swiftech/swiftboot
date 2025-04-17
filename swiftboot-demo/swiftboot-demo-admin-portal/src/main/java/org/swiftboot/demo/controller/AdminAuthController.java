@@ -2,8 +2,8 @@ package org.swiftboot.demo.controller;
 
 import org.swiftboot.demo.result.AdminUserSigninResult;
 import org.swiftboot.demo.result.AdminUserSignoutResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * @author swiftech
  */
-@Api(tags = {"AdminUserAuth管理员认证"})
+@Tag(name = "AdminUserAuth管理员认证"})
 @Controller
 @RequestMapping("/admin/auth")
 @ResponseBody
@@ -42,7 +42,7 @@ public class AdminAuthController {
     private SwiftbootShiroConfigBean shiroConfigBean;
 
 
-    @ApiOperation(notes = "Admin user signin", value = "Admin user signin")
+    @Operation(description = "Admin user signin", value = "Admin user signin")
     @RequestMapping(value = "signin", method = RequestMethod.POST)
     public HttpResponse<AdminUserSigninResult> adminUserSignin(
             @RequestBody AdminUserSigninCommand command,
@@ -57,7 +57,7 @@ public class AdminAuthController {
         return new HttpResponse<>(adminUserResult);
     }
 
-    @ApiOperation(notes = "Admin user signout", value = "Admin user signout")
+    @Operation(description = "Admin user signout", value = "Admin user signout")
     @RequestMapping(value = "signout", method = RequestMethod.POST)
     public HttpResponse<AdminUserSignoutResult> adminUserSignout(
             @RequestBody AdminUserSignoutCommand command,

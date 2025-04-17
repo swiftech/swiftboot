@@ -57,7 +57,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Check if the header starts with "Bearer "
             if (authHeader != null) {
 
-
                 token = JwtUtils.extractBearerToken(authHeader);
                 if (token != null) {
                     // NO need to handle 'refresh' type of revocation.

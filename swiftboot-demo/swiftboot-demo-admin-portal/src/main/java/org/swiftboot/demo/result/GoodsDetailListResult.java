@@ -1,8 +1,7 @@
 package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
 import org.swiftboot.web.result.BasePopulateListResult;
 
@@ -13,14 +12,14 @@ import java.util.List;
  *
  * @author swiftech 2019-04-07
  **/
-@ApiModel
+@Schema
 public class GoodsDetailListResult extends BasePopulateListResult<GoodsDetailResult, GoodsDetailEntity> {
 
-    @ApiModelProperty("商品详情总数（用于分页查询）")
+    @Schema(description = "商品详情总数（用于分页查询）")
     @JsonProperty("total")
     private long total;
 
-    @ApiModelProperty("商品详情列表")
+    @Schema(description = "商品详情列表")
     @JsonProperty("items")
     private
     List<GoodsDetailResult> items;

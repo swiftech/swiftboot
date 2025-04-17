@@ -2,8 +2,7 @@ package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.result.BasePopulateResult;
 
 /**
@@ -11,10 +10,10 @@ import org.swiftboot.web.result.BasePopulateResult;
  *
  * @author swiftech 2020-01-06
  **/
-@ApiModel
+@Schema
 public class AdminUserSaveResult extends BasePopulateResult<AdminUserEntity> {
 
-    @ApiModelProperty("管理员 ID")
+    @Schema(description = "管理员 ID")
     @JsonProperty("admin_user_id")
     private String adminUserId;
 

@@ -2,8 +2,8 @@ package org.swiftboot.demo.controller;
 
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderSaveResult;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -39,20 +39,20 @@ public class RelationController {
     @Resource
     private OrderDetailRelationService orderService;
 
-    @ApiOperation(notes = "创建订单（带详情）", value = "创建订单（带详情）")
+    @Operation(description = "创建订单（带详情）", value = "创建订单（带详情）")
     @RequestMapping(value = "/with_detail/create", method = RequestMethod.POST)
     public HttpResponse<OrderCreateResult> orderWithDetailCreate(
-            @RequestBody @Validated @ApiParam("创建订单（带详情）参数") OrderWithDetailCreateCommand command) {
+            @RequestBody @Validated @Parameter(description = "创建订单（带详情）参数") OrderWithDetailCreateCommand command) {
         log.info("> /order/with_detail/create");
         log.debug(JsonUtils.object2PrettyJson(command));
         OrderCreateResult ret = orderService.createOrderWithDetail(command);
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "编辑保存订单（带详情）", value = "编辑保存订单（带详情）")
+    @Operation(description = "编辑保存订单（带详情）", value = "编辑保存订单（带详情）")
     @RequestMapping(value = "/with_detail/save", method = RequestMethod.POST)
     public HttpResponse<OrderSaveResult> orderWithDetailSave(
-            @RequestBody @Validated @ApiParam("编辑保存订单参数（带详情）") OrderWithDetailSaveCommand command,
+            @RequestBody @Validated @Parameter(description = "编辑保存订单参数（带详情）") OrderWithDetailSaveCommand command,
             BindingResult bindingResult) {
         log.info("> /order/with_detail/save");
         if (bindingResult.hasErrors()) {

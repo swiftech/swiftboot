@@ -1,9 +1,9 @@
 package org.swiftboot.demo.controller;
 
 import org.swiftboot.demo.result.GoodsCreateResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ import jakarta.annotation.Resource;
  *
  * @author switech
  */
-@Api(tags = {"Transactional"})
+@Tag(name = "Transactional"})
 @Controller
 @RequestMapping("/trans/")
 @ResponseBody
@@ -38,20 +38,20 @@ public class TransactionalController {
     @Resource
     private GoodsService goodsService;
 
-    @ApiOperation(notes = "创建商品（带详情）", value = "创建商品（带详情）")
+    @Operation(description = "创建商品（带详情）", value = "创建商品（带详情）")
     @RequestMapping(value = "/goods_with_detail/create", method = RequestMethod.POST)
     public HttpResponse<GoodsCreateResult> goodsWithDetailCreate(
-            @RequestBody @Validated @ApiParam("创建商品（带详情）参数") GoodsWithDetailCreateCommand command) {
+            @RequestBody @Validated @Parameter(description = "创建商品（带详情）参数") GoodsWithDetailCreateCommand command) {
         log.info("> /trans/goods_with_detail/create");
         log.debug(JsonUtils.object2PrettyJson(command));
         GoodsCreateResult ret = goodsService.createGoodsWithDetail(command);
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "创建商品（异常）", value = "创建商品（异常）")
+    @Operation(description = "创建商品（异常）", value = "创建商品（异常）")
     @RequestMapping(value = "/goods/create2", method = RequestMethod.POST)
     public HttpResponse<GoodsCreateResult> goods2Create(
-            @RequestBody @Validated @ApiParam("创建2个商品") GoodsCreateCommand command) {
+            @RequestBody @Validated @Parameter(description = "创建2个商品") GoodsCreateCommand command) {
         log.info("> /trans/goods/create2");
         log.debug(JsonUtils.object2PrettyJson(command));
         GoodsCreateResult ret = goodsService.createWithException(command);

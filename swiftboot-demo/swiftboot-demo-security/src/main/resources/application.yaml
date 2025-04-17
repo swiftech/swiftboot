@@ -1,34 +1,83 @@
 debug:
-  false
+  ${SPRINGBOOT_DEBUG:false}
 server:
   port: 8081
 spring:
   application:
     name: swiftboot-demo-security
-  datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:file:./target/swiftboot-demo-security
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    properties:
+#  datasource:
+#    url: jdbc:postgresql://${DB_URL:127.0.0.1}:${DB_PORT:5432}/${DB_DATABASE:postgres}
+#    username: ${DB_USERNAME:postgres}
+#    password: ${DB_PASSWORD:123456}
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    show-sql: false
+#    open-in-view: false
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        hbm2ddl:
+#          auto: update
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        tmp:
+#          use_jdbc_metadata_defaults: false
+    datasource:
+      driverClassName: org.h2.Driver
+      url: jdbc:h2:file:./target/swiftboot-demo-security
+    jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
       hibernate:
-        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-    show-sql: false
-    open-in-view: false
+        ddl-auto: update
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      properties:
+        hibernate:
+          current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+      show-sql: false
+      open-in-view: false
   sql:
     init:
       mode: always
+  security:
+    oauth2:
+      client:
+        registration:
+          dingtalk:
+            provider: dingtalk
+            scope:
+              - openid
+            authorization-grant-type: authorization_code
+            redirect-uri: http://swiftboot.org:8081/login/oauth2/code/dingtalk
+            client-id: ${OAUTH2_CLIENT_ID_DINGTALK}
+            client-secret: ${OAUTH2_CLIENT_SECRET_DINGTALK}
+          feishu:
+            provider: feishu
+            scope:
+              - offline_access
+            authorization-grant-type: authorization_code
+            redirect-uri: http://swiftboot.org:8081/login/oauth2/code/feishu
+            client-id: ${OAUTH2_CLIENT_ID_FEISHU}
+            client-secret: ${OAUTH2_CLIENT_SECRET_FEISHU}
+        provider:
+          dingtalk:
+            authorization-uri: https://login.dingtalk.com/oauth2/auth?prompt=consent
+            token-uri: https://api.dingtalk.com/v1.0/oauth2/userAccessToken
+            user-info-uri: https://api.dingtalk.com/v1.0/contact/users/me
+            user-name-attribute: sub
+          feishu:
+            authorization-uri: https://accounts.feishu.cn/open-apis/authen/v1/authorize
+            token-uri: https://open.feishu.cn/open-apis/authen/v2/oauth/token
+            user-info-uri: https://open.feishu.cn/open-apis/authen/v1/user_info
+            user-name-attribute: data
 logging:
   level:
     root: INFO
-    org.springframework.security: TRACE
+    org.springframework.security: DEBUG
+    okhttp3: DEBUG
+    org.apache.hc.client5: DEBUG
     org.swiftboot: TRACE
   file:
-    name: /var/log/swiftboot-demo-security.log
+    name: ${user.dir}/logs/swiftboot-demo-security.log
 swiftboot:
   demo:
     security:

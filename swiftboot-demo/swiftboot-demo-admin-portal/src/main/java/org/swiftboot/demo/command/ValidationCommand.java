@@ -1,12 +1,12 @@
 package org.swiftboot.demo.command;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.validate.constraint.PhoneNo;
 
 /**
  * @author swiftech
  */
-@ApiModel
+@Schema
 public class ValidationCommand {
 
     @PhoneNo(prefix = "138")

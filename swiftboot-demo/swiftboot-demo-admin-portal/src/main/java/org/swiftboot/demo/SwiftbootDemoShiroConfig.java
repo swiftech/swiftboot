@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author swiftech
  * @since 1.2
+ * @deprecated
  */
 @Configuration
 @ConditionalOnProperty(value = "swiftboot.shiro.enabled", havingValue = "true")

@@ -1,8 +1,7 @@
 package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
@@ -11,30 +10,30 @@ import org.swiftboot.web.result.BasePopulateResult;
  *
  * @author swiftech 2019-04-07
  **/
-@ApiModel
+@Schema
 public class GoodsDetailResult extends BasePopulateResult<GoodsDetailEntity> {
 
-    @ApiModelProperty(value = "商品图片URI", example = "/image/goods/1029")
+    @Schema(description = "商品图片URI", example = "/image/goods/1029")
     @JsonProperty("image_uri")
     private String imageUri;
 
-    @ApiModelProperty(value = "折扣", example = "0.85")
+    @Schema(description = "折扣", example = "0.85")
     @JsonProperty("discount")
     private Double discount;
 
-    @ApiModelProperty(value = "修改时间", example = "1545355038524")
+    @Schema(description = "修改时间", example = "1545355038524")
     @JsonProperty("update_time")
     private Long updateTime;
 
-    @ApiModelProperty(value = "创建时间", example = "1545355038524")
+    @Schema(description = "创建时间", example = "1545355038524")
     @JsonProperty("create_time")
     private Long createTime;
 
-    @ApiModelProperty(value = "是否逻辑删除", example = "false")
+    @Schema(description = "是否逻辑删除", example = "false")
     @JsonProperty("is_delete")
     private Boolean isDelete;
 
-    @ApiModelProperty(value = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
+    @Schema(description = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
     @JsonProperty("id")
     private String id;
 

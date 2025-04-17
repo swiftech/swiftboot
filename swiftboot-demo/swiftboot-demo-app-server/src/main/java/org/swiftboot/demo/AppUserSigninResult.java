@@ -2,7 +2,6 @@ package org.swiftboot.demo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.AppUserEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 

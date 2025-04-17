@@ -4,9 +4,9 @@ import org.swiftboot.demo.result.AdminUserCreateResult;
 import org.swiftboot.demo.result.AdminUserListResult;
 import org.swiftboot.demo.result.AdminUserResult;
 import org.swiftboot.demo.result.AdminUserSaveResult;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ import java.util.Set;
  *
  * @author swiftech 2020-01-06
  **/
-@Api(tags = {"AdminUser管理员"})
+@Tag(name = "AdminUser管理员"})
 @Controller
 @RequestMapping("/admin/user")
 @ResponseBody
@@ -54,27 +54,27 @@ public class AdminUserController {
     private SwiftbootAuthConfigBean authConfigBean;
 
 
-    @ApiOperation(notes = "创建管理员", value = "创建管理员")
+    @Operation(description = "创建管理员", value = "创建管理员")
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public HttpResponse<AdminUserCreateResult> adminUserCreate(
-            @RequestBody @Validated @ApiParam("创建管理员参数") AdminUserCreateCommand command) {
+            @RequestBody @Validated @Parameter(description = "创建管理员参数") AdminUserCreateCommand command) {
         log.info("> /admin/user/create");
         log.debug(JsonUtils.object2PrettyJson(command));
         AdminUserCreateResult ret = adminUserService.createAdminUser(command);
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "保存管理员", value = "保存管理员")
+    @Operation(description = "保存管理员", value = "保存管理员")
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public HttpResponse<AdminUserSaveResult> adminUserSave(
-            @RequestBody @Validated @ApiParam("保存管理员参数") AdminUserSaveCommand command) {
+            @RequestBody @Validated @Parameter(description = "保存管理员参数") AdminUserSaveCommand command) {
         log.info("> /admin/user/save");
         log.debug(JsonUtils.object2PrettyJson(command));
         AdminUserSaveResult ret = adminUserService.saveAdminUser(command);
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "查询管理员", value = "查询管理员")
+    @Operation(description = "查询管理员", value = "查询管理员")
     @RequestMapping(value = "query", method = RequestMethod.GET)
     public HttpResponse<AdminUserResult> adminUserQuery(
             @RequestParam("admin_user_id") String adminUserId) {
@@ -84,7 +84,7 @@ public class AdminUserController {
         return new HttpResponse<>(adminUserResult);
     }
 
-    @ApiOperation(notes = "查询管理员列表", value = "查询管理员列表")
+    @Operation(description = "查询管理员列表", value = "查询管理员列表")
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public HttpResponse<AdminUserListResult> adminUserList() {
         log.info("> /admin/user/list");
@@ -92,7 +92,7 @@ public class AdminUserController {
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "查询管理员权限列表", value = "查询管理员权限列表")
+    @Operation(description = "查询管理员权限列表", value = "查询管理员权限列表")
     @RequestMapping(value = "permissions", method = RequestMethod.GET)
     public HttpResponse<Set<PermissionConfigBean>> adminUserPermissionList() {
         log.info("> /admin/user/permissions");
@@ -108,20 +108,20 @@ public class AdminUserController {
         return new HttpResponse<>(ret);
     }
 
-    @ApiOperation(notes = "逻辑删除管理员", value = "逻辑删除管理员")
+    @Operation(description = "逻辑删除管理员", value = "逻辑删除管理员")
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public HttpResponse<Void> adminUserDelete(
-            @RequestBody @Validated @ApiParam("管理员ID") IdCommand command) {
+            @RequestBody @Validated @Parameter(description = "管理员ID") IdCommand command) {
         log.info("> /admin/user/delete");
         log.debug(JsonUtils.object2PrettyJson(command));
         adminUserService.deleteAdminUser(command.getId());
         return new HttpResponse<>();
     }
 
-    @ApiOperation(notes = "逻辑删除多个管理员", value = "逻辑删除多个管理员")
+    @Operation(description = "逻辑删除多个管理员", value = "逻辑删除多个管理员")
     @RequestMapping(value = "delete/list", method = RequestMethod.DELETE)
     public HttpResponse<Void> adminUserDeleteList(
-            @RequestBody @Validated @ApiParam("管理员ID列表") IdListCommand command) {
+            @RequestBody @Validated @Parameter(description = "管理员ID列表") IdListCommand command) {
         log.info("> /admin/user/delete/list");
         log.debug(JsonUtils.object2PrettyJson(command));
         adminUserService.deleteAdminUserList(command);
@@ -129,20 +129,20 @@ public class AdminUserController {
     }
 
 
-    @ApiOperation(notes = "永久删除管理员", value = "永久删除管理员")
+    @Operation(description = "永久删除管理员", value = "永久删除管理员")
     @RequestMapping(value = "purge", method = RequestMethod.DELETE)
     public HttpResponse<Void> adminUserPurge(
-            @RequestBody @Validated @ApiParam("管理员ID") IdCommand command) {
+            @RequestBody @Validated @Parameter(description = "管理员ID") IdCommand command) {
         log.info("> /admin/user/purge");
         log.debug(JsonUtils.object2PrettyJson(command));
         adminUserService.purgeAdminUser(command.getId());
         return new HttpResponse<>();
     }
 
-    @ApiOperation(notes = "永久删除多个管理员", value = "永久删除多个管理员")
+    @Operation(description = "永久删除多个管理员", value = "永久删除多个管理员")
     @RequestMapping(value = "purge/list", method = RequestMethod.DELETE)
     public HttpResponse<Void> adminUserPurgeList(
-            @RequestBody @Validated @ApiParam("管理员ID列表") IdListCommand command) {
+            @RequestBody @Validated @Parameter(description = "管理员ID列表") IdListCommand command) {
         log.info("> /admin/user/purge/list");
         log.debug(JsonUtils.object2PrettyJson(command));
         adminUserService.purgeAdminUserList(command);

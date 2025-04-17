@@ -1,8 +1,7 @@
 package org.swiftboot.demo.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 import org.swiftboot.web.result.BasePopulateResult;
 
@@ -11,10 +10,10 @@ import org.swiftboot.web.result.BasePopulateResult;
  *
  * @author swiftech 2019-11-28
  **/
-@ApiModel
+@Schema
 public class AdminUserSignoutResult extends BasePopulateResult<AdminUserEntity> {
 
-    @ApiModelProperty(value = "Login name of administrator", example = "admin")
+    @Schema(description = "Login name of administrator", example = "admin")
     @JsonProperty("login_name")
     private String loginName;
 

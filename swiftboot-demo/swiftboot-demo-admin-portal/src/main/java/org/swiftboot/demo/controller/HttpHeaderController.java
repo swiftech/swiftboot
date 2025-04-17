@@ -1,8 +1,8 @@
 package org.swiftboot.demo.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,20 +16,20 @@ import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.result.HttpResponse;
 import org.swiftboot.web.validate.ConvertValidateResult;
 
-@Api(tags = {"Http header 处理演示"})
+@Tag(name = "Http header 处理演示"})
 @Controller
 @RequestMapping("/http/header")
 public class HttpHeaderController {
 
     private static final Logger log = LoggerFactory.getLogger(HttpHeaderController.class);
 
-    @ApiOperation(notes = "自动获取 http header 值", value = "自动获取 http header 值")
+    @Operation(description = "自动获取 http header 值", value = "自动获取 http header 值")
     @RequestMapping(value = "post", method = RequestMethod.POST)
     @ConvertValidateResult
     public
     @ResponseBody
     HttpResponse<Void> httpHeaderPost(
-            @RequestBody @Validated @ApiParam("会话") HttpHeaderCommand command) {
+            @RequestBody @Validated @Parameter(description = "会话") HttpHeaderCommand command) {
         log.info("> /http/header/post");
         log.debug(JsonUtils.object2PrettyJson(command));
         return new HttpResponse<>();

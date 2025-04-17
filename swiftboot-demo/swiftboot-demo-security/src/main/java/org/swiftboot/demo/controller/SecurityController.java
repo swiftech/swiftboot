@@ -12,6 +12,8 @@ import org.swiftboot.demo.result.UserInfoResult;
 import org.swiftboot.web.result.HttpResponse;
 
 /**
+ * Secure realm that needs user is authenticated to visit.
+ *
  * @author swiftech
  */
 @Tag(name = "Security", description = "Security Realm APIs")

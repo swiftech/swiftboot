@@ -3,8 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.result.BasePopulateResult;
 
 /**
@@ -12,10 +11,10 @@ import org.swiftboot.web.result.BasePopulateResult;
  *
  * @author swiftech 2019-04-07
  **/
-@ApiModel
+@Schema
 public class GoodsOrderRelCreateResult extends BasePopulateResult<GoodsOrderRelEntity> {
 
-    @ApiModelProperty(value = "商品订单关系 ID", example = "")
+    @Schema(description = "商品订单关系 ID", example = "")
     @JsonProperty("goods_order_rel_id")
     private String goodsOrderRelId;
 

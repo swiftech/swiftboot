@@ -2,22 +2,21 @@ package org.swiftboot.demo.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.command.BasePopulateCommand;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * 创建商品订单关系
  *
  * @author swiftech 2019-04-07
  **/
-@ApiModel
+@Schema
 public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRelEntity> {
 
-    @ApiModelProperty(value = "商品ID", required = true, example = "e8af5ea376fde35fb2c504633f55b128")
+    @Schema(description = "商品ID", required = true, example = "e8af5ea376fde35fb2c504633f55b128")
     @JsonProperty("goods_id")
     @Length(max = 32)
     @NotBlank
@@ -26,7 +25,7 @@ public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRe
     /**
      * TODO 此处类型和Entity不一致，参考 GoodsCreateCommand 修改
      */
-    @ApiModelProperty(value = "订单ID", required = true, example = "527d36e654f9eaea6a9b46380d253fc9")
+    @Schema(description = "订单ID", required = true, example = "527d36e654f9eaea6a9b46380d253fc9")
     @JsonProperty("order_id")
     @Length(max = 32)
     @NotBlank

@@ -8,11 +8,17 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.swiftboot.common.auth.JwtConfigBean;
+import org.swiftboot.demo.config.OAuth2LoginConfig.CustomOAuth2LoginSuccessHandler;
+import org.swiftboot.demo.config.oauth2.OAuth2AccessTokenResponseClientRouter;
 import org.swiftboot.security.JwtAuthenticationFilter;
 import org.swiftboot.security.RevokedTokenDao;
 
@@ -37,6 +43,12 @@ public class SecurityConfig {
     @Resource
     private RevokedTokenDao revokedTokenDao;
 
+    @Resource
+    private JwtConfigBean jwtConfigBean;
+
+    @Resource
+    private CustomOAuth2LoginSuccessHandler oAuth2AuthenticationSuccessHandler;
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // Enable CORS and disable CSRF
@@ -45,7 +57,7 @@ public class SecurityConfig {
 
         // Set session management to stateless
         httpSecurity.sessionManagement(cfg -> {
-//            cfg.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            cfg.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             cfg.disable();
         });
 
@@ -64,20 +76,38 @@ public class SecurityConfig {
 
         // Set permissions on endpoints
         httpSecurity.authorizeHttpRequests(authorize -> authorize
-                // let auth methods go.
-                .requestMatchers("/swagger-ui.html").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/v3/api-docs.yaml").permitAll()
-                .requestMatchers("/v3/api-docs/**").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/security/auth/logout").permitAll()
-                .requestMatchers("/security/auth/logout_success").permitAll()
-                .requestMatchers("/error/**").permitAll()
-                .requestMatchers("/security/auth/*").permitAll() // allow authentication endpoints.
-                // others need authenticated.
-                .anyRequest().authenticated()
+                        // allow authentication endpoints.
+                        .requestMatchers("/test/**").permitAll()
+                        // Swagger
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs.yaml").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        // OAuth2
+                        .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers("/login/oauth2/**").permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()
+                        //
+                        .requestMatchers("/security/auth/logout").permitAll()
+                        .requestMatchers("/security/auth/logout_success").permitAll()
+                        .requestMatchers("/error/**").permitAll()
+                        // others need authenticated.
+                        .anyRequest().authenticated()
         );
         httpSecurity.userDetailsService(userDetailService);
+        // customized oauth2 login
+        httpSecurity.oauth2Login(oauth2Login -> {
+            oauth2Login.successHandler(oAuth2AuthenticationSuccessHandler);
+            oauth2Login.tokenEndpoint(tokenEndpointConfig -> {
+                tokenEndpointConfig.accessTokenResponseClient(oAuth2AccessTokenResponseClientRouter());
+            });
+        });
+//        httpSecurity.oauth2ResourceServer(resourceServer -> {
+//            resourceServer.jwt(jwt -> {
+//                Customizer.withDefaults();
+//            });
+//        });
         return httpSecurity.build();
     }
 
@@ -85,6 +115,18 @@ public class SecurityConfig {
         SimpleUrlLogoutSuccessHandler logoutSuccessHandler = new SimpleUrlLogoutSuccessHandler();
         logoutSuccessHandler.setDefaultTargetUrl(baseUrl + "/security/auth/logout_success");
         return logoutSuccessHandler;
+    }
+
+//    @Bean
+//    public JwtDecoder jwtDecoder() {
+//        byte[] secretData = jwtConfigBean.getSecret().getBytes();
+//        SecretKey secretKey = new SecretKeySpec(secretData, "HmacSHA256");
+//        return NimbusJwtDecoder.withSecretKey(secretKey).build();
+//    }
+
+    @Bean
+    public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> oAuth2AccessTokenResponseClientRouter() {
+        return new OAuth2AccessTokenResponseClientRouter();
     }
 
 }

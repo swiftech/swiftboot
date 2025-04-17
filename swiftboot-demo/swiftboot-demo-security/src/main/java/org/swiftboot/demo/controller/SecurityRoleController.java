@@ -11,7 +11,8 @@ import org.swiftboot.demo.result.SomeResult;
 import org.swiftboot.web.result.HttpResponse;
 
 /**
- * Test with user role.
+ * Secure realm that needs user is authenticated and permitted to visit.
+ * Require permission by user role.
  *
  * @author swiftech
  */

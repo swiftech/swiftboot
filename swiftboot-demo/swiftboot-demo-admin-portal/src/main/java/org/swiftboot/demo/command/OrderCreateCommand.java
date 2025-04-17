@@ -2,37 +2,36 @@ package org.swiftboot.demo.command;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.OrderEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.auth.controller.BaseAuthenticatedCommand;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 创建订单
  *
  * @author swiftech 2019-08-22
  **/
-@ApiModel
+@Schema
 public class OrderCreateCommand extends BaseAuthenticatedCommand<OrderEntity> {
 
-    @ApiModelProperty(value = "订单编号", example = "2019032411081201")
+    @Schema(description = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")
     @Length(max = 16)
     private String orderCode;
 
-    @ApiModelProperty(value = "订单描述", example = "越快越好")
+    @Schema(description = "订单描述", example = "越快越好")
     @JsonProperty("description")
     @Length(max = 64)
     private String description;
 
-    @ApiModelProperty(value = "商品总数", example = "5")
+    @Schema(description = "商品总数", example = "5")
     @JsonProperty("total_count")
     @NotNull
     private Integer totalCount;
 
-    @ApiModelProperty(value = "发货地址", example = "极乐世界102号")
+    @Schema(description = "发货地址", example = "极乐世界102号")
     @JsonProperty("address")
     @Length(max = 64)
     private String address;

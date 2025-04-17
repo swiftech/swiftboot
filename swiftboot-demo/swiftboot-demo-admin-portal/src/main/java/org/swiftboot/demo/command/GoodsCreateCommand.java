@@ -3,13 +3,12 @@ package org.swiftboot.demo.command;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.GoodsEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.web.command.BasePopulateCommand;
 import org.swiftboot.web.validate.constraint.DecimalString;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -18,36 +17,36 @@ import java.time.LocalDateTime;
  *
  * @author swiftech 2019-08-22
  **/
-@ApiModel
+@Schema
 public class GoodsCreateCommand extends BasePopulateCommand<GoodsEntity> {
 
-    @ApiModelProperty(value = "商品名称", example = "闲趣清闲薄脆饼干")
+    @Schema(description = "商品名称", example = "闲趣清闲薄脆饼干")
     @JsonProperty("name")
     @Length(max = 16)
     private String name;
 
-    @ApiModelProperty(value = "商品描述", example = "清闲不腻，松脆松化")
+    @Schema(description = "商品描述", example = "清闲不腻，松脆松化")
     @JsonProperty("description")
     @Length(max = 64)
     private String description;
 
-    @ApiModelProperty(value = "商品价格", example = "12.5")
+    @Schema(description = "商品价格", example = "12.5")
     @JsonProperty("price")
     private Double price;
 
-    @ApiModelProperty(value = "商品重量", example = "35.7")
+    @Schema(description = "商品重量", example = "35.7")
     @JsonProperty("weight")
     @Length(max = 32)
     @NotNull
     @DecimalString
     private String weight;
 
-    @ApiModelProperty(value = "生产时间", example = "2020-01-16 00:00:00")
+    @Schema(description = "生产时间", example = "2020-01-16 00:00:00")
     @JsonProperty("production_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime productionTime;
 
-    @ApiModelProperty(value = "过期日期", example = "2021-01-16")
+    @Schema(description = "过期日期", example = "2021-01-16")
     @JsonProperty("expire_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expireDate;
