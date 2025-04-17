@@ -1,7 +1,6 @@
-package org.swiftboot.auth.controller;
+package org.swiftboot.auth.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.swiftboot.auth.service.Session;
 import org.swiftboot.web.result.HttpResponse;
 
 /**

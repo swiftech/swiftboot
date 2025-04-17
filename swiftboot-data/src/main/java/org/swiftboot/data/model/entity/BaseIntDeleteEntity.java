@@ -19,7 +19,7 @@ public abstract class BaseIntDeleteEntity extends BaseIdEntity implements Logica
      * 是否逻辑删除
      */
     @PropertyDescription(value = "Is logically deleted", example = "false")
-    @Column(name = "IS_DELETE", columnDefinition = "TINYINT DEFAULT 0 COMMENT 'Is logically deleted'")
+    @Column(name = "IS_DELETE")
     private Integer isDelete = 0;
 
     @Override

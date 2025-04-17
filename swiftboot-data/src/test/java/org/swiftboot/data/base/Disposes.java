@@ -4,6 +4,7 @@ package org.swiftboot.data.base;
  * Dispose test data
  *
  * @author swiftech
+ * @deprecated
  */
 @FunctionalInterface
 public interface Disposes<T> {

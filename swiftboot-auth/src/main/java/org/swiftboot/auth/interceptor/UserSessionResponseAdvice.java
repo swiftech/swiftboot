@@ -13,7 +13,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
-import org.swiftboot.auth.controller.AuthenticatedResponse;
+import org.swiftboot.auth.service.AuthenticatedResponse;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionService;
 
@@ -67,11 +67,11 @@ public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBod
             int expiresIn = authConfigBean.getSession().getExpiresIn();
             cookie.setMaxAge(expiresIn == 0 ? Integer.MAX_VALUE : expiresIn);
             servletResponse.getServletResponse().addCookie(cookie);
-            log.debug("Response with cookie %s".formatted(authConfigBean.getTokenKey()));
+            if (log.isDebugEnabled()) log.debug("Response with cookie %s".formatted(authConfigBean.getTokenKey()));
         }
         else {
             servletResponse.getServletResponse().setHeader(authConfigBean.getTokenKey(), userToken);
-            log.debug("Response with header %s".formatted(authConfigBean.getTokenKey()));
+            if (log.isDebugEnabled()) log.debug("Response with header %s".formatted(authConfigBean.getTokenKey()));
         }
     }
 }

@@ -4,7 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.auth.controller.AuthenticatedResponse;
+import org.swiftboot.auth.service.AuthenticatedResponse;
 import org.swiftboot.auth.service.Session;
 import org.swiftboot.auth.service.SessionBuilder;
 import org.swiftboot.auth.service.UserAuthService;
@@ -32,7 +32,7 @@ public class AppUserAuthServiceImpl implements UserAuthService {
     public void initData() {
         // create a new user for testing
         Optional<AppUserEntity> optUser = appUserDao.findByLoginName("13866669999");
-        if (optUser.isEmpty()){
+        if (optUser.isEmpty()) {
             AppUserEntity newEntity = new AppUserEntity();
             newEntity.setLoginName("13866669999");
             newEntity.setLoginPwd(PasswordUtils.createPassword("12345678"));

@@ -18,8 +18,20 @@ public abstract class BaseBoolDeleteEntity extends BaseIdEntity implements Logic
      * 是否逻辑删除
      */
     @PropertyDescription(value = "Is logically deleted", example = "false")
-    @Column(name = "IS_DELETE", columnDefinition = "BIT DEFAULT FALSE COMMENT 'Is logically deleted'")
+    @Column(name = "IS_DELETE", columnDefinition = "BIT")
     private Boolean isDelete = Boolean.FALSE;
+
+    public BaseBoolDeleteEntity() {
+    }
+
+    public BaseBoolDeleteEntity(String id) {
+        super(id);
+    }
+
+    public BaseBoolDeleteEntity(String id, Boolean isDelete) {
+        super(id);
+        this.isDelete = isDelete;
+    }
 
     @Override
     public Boolean getIsDelete() {

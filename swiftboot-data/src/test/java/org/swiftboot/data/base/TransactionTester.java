@@ -10,6 +10,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 简化一个 @Test 中需要多个事务的处理。
@@ -38,64 +41,64 @@ public class TransactionTester {
      * @param <R>
      * @return
      */
-    public <T, R> TransactionTester prepareData(PreparesWithResult<? super T, ? extends R> prepares, T param) {
+    public <T, R> TransactionTester prepareData(Function<? super T, ? extends R> prepares, T param) {
         log.trace("prepare data");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        Object prepared = tmpl.execute((TransactionCallback<Object>) status -> prepares.onPrepare(param));
+        Object prepared = tmpl.execute((TransactionCallback<Object>) status -> prepares.apply(param));
         context.put("prepared", prepared);
         return this;
     }
 
-    public <R> TransactionTester prepareData(Prepares<? extends R> prepares) {
+    public <R> TransactionTester prepareData(Supplier<? extends R> prepares) {
         log.trace("prepare data");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        Object prepared = tmpl.execute((TransactionCallback<Object>) status -> prepares.onPrepare());
+        Object prepared = tmpl.execute((TransactionCallback<Object>) status -> prepares.get());
         context.put("prepared", prepared);
         return this;
     }
 
-    public <T, R> TransactionTester doTest(Tests<? super T, ? extends R> tests) {
+    public <T, R> TransactionTester doTest(Function<? super T, ? extends R> tests) {
         log.trace("run tests");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        Object tested = tmpl.execute((TransactionCallback<Object>) status -> tests.onTest((T) context.get("prepared")));
+        Object tested = tmpl.execute((TransactionCallback<Object>) status -> tests.apply((T) context.get("prepared")));
         context.put("tested", tested);
         return this;
     }
 
-    public <R> TransactionTester doTest(TestsNoInput<? extends R> tests) {
+    public <R> TransactionTester doTest(Supplier<? extends R> tests) {
         log.trace("run tests");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        Object tested = tmpl.execute((TransactionCallback<Object>) status -> tests.onTest());
+        Object tested = tmpl.execute((TransactionCallback<Object>) status -> tests.get());
         context.put("tested", tested);
         return this;
     }
 
-    public <T, R> TransactionTester doAssert(AssertsWithResult<? super T, ? extends R> asserts) {
+    public <T, R> TransactionTester doAssert(Function<? super T, ? extends R> asserts) {
         log.trace("assert test result");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
-        tmpl.execute((TransactionCallback<Object>) status -> asserts.onAssert((T) context.get("tested")));
+        tmpl.execute((TransactionCallback<Object>) status -> asserts.apply((T) context.get("tested")));
         return this;
     }
 
-    public <T> TransactionTester doAssert(Asserts<? super T> asserts) {
+    public <T> TransactionTester doAssert(Consumer<? super T> asserts) {
         log.trace("assert test result");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                asserts.onAssert((T) context.get("tested"));
+                asserts.accept((T) context.get("tested"));
             }
         });
         return this;
     }
 
-    public <T> void disposeData(Disposes<? super T> disposes) {
+    public <T> void disposeData(Consumer<? super T> disposes) {
         log.trace("dispose test data");
         TransactionTemplate tmpl = new TransactionTemplate(txManager);
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                disposes.onDispose((T) context.get("prepared"));
+                disposes.accept((T) context.get("prepared"));
             }
         });
     }

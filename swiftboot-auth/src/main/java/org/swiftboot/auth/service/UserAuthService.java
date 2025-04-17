@@ -1,9 +1,8 @@
 package org.swiftboot.auth.service;
 
-import org.swiftboot.auth.controller.AuthenticatedResponse;
-
 /**
- * The authentication service for user weill implemented and invoked by you.
+ * The authentication service for user login with user id and password.
+ * This interface must be implemented and be invoked by you.
  *
  * @author swiftech
  * @see Session

@@ -22,7 +22,7 @@ public class EntityMocker {
         ChildEntity child2 = new ChildEntity();
         child1.setName(CHILD_NAMES[0]);
         child2.setName(CHILD_NAMES[1]);
-        ret.setItems(new ArrayList<ChildEntity>() {
+        ret.setItems(new ArrayList<>() {
             {
                 add(child1);
                 add(child2);

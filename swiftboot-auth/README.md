@@ -30,26 +30,26 @@
 * Service
 
 ```java
-import org.swiftboot.auth.controller.AuthenticatedResponse;
+import org.swiftboot.auth.service.AuthenticatedResponse;
 
 @Service
 public class MySigninServiceImpl implements UserAuthService {
 
-      public <T> AuthenticatedResponse<T> userSignIn(String loginId, String loginPwd) {
-            // 此处实现用户登录认证逻辑，如果失败抛出异常
-          
-            // 创建会话并返回给调用者
-            String userId = "<my user id>";
-            String token = IdUtils.makeID("usrtoken"); // 可以替换成你自己的 token 实现，例如 UUID
+    public <T> AuthenticatedResponse<T> userSignIn(String loginId, String loginPwd) {
+        // 此处实现用户登录认证逻辑，如果失败抛出异常
 
-            Session session = new SessionBuilder()
-                    .userToken(token)
-                    .userId(userId) // 必须 
-                    .userName(userName) // 可选
-                    .addition("some_addition", "some addition in session") // 可以存放额外的会话信息
-                    .createSession();
-            return new AuthenticatedResponse<>(session);
-      }
+        // 创建会话并返回给调用者
+        String userId = "<my user id>";
+        String token = IdUtils.makeID("usrtoken"); // 可以替换成你自己的 token 实现，例如 UUID
+
+        Session session = new SessionBuilder()
+                .userToken(token)
+                .userId(userId) // 必须 
+                .userName(userName) // 可选
+                .addition("some_addition", "some addition in session") // 可以存放额外的会话信息
+                .createSession();
+        return new AuthenticatedResponse<>(session);
+    }
 }
 ```
 

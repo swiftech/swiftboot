@@ -19,7 +19,7 @@ public class AEntity extends BaseEntity {
      * 名称
      */
     @PropertyDescription(value = "名称", example = "闲趣清闲薄脆饼干")
-    @Column(name = "NAME", length = 16, columnDefinition = "VARCHAR(16) COMMENT '名称'")
+    @Column(name = "NAME", length = 16, columnDefinition = "VARCHAR(16)")
     private String name;
 
     public String getName() {

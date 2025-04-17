@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 
 import jakarta.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 /**
