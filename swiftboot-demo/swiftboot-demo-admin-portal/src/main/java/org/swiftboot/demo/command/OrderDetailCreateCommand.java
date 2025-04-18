@@ -17,13 +17,13 @@ import jakarta.validation.constraints.NotNull;
 @Schema
 public class OrderDetailCreateCommand extends BasePopulateCommand<OrderDetailEntity> {
 
-    @Schema(description = "明细描述", required = true)
+    @Schema(description = "明细描述",  requiredMode = REQUIRED)
     @JsonProperty("description")
     @Length(max = 512)
     @NotBlank
     private String description;
 
-    @Schema(description = "订单ID", required = true, example = "f80dc17d1b744a38a438e47c8d95cbd1")
+    @Schema(description = "订单ID",  requiredMode = REQUIRED, example = "f80dc17d1b744a38a438e47c8d95cbd1")
     @JsonProperty("order_id")
     @Length(max = 32)
     @NotNull

@@ -58,7 +58,7 @@ public class OrderWithDetailCreateCommand extends OrderCreateCommand {
     @Schema
     public static class OrderDetailCreate extends BasePopulateCommand<OrderDetailEntity> {
 
-        @Schema(description = "明细描述", required = true)
+        @Schema(description = "明细描述",  requiredMode = REQUIRED)
         @JsonProperty("description")
         @Length(max = 512)
         @NotBlank

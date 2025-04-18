@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
 import java.io.IOException;
 import java.io.Serializable;
+
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 /**
  * 通用的 HTTP(S) 请求的返回对象
@@ -25,7 +26,7 @@ public class HttpResponse<T> implements Serializable {
     /**
      * 业务错误代码，长度4个字节的数字
      */
-    @Schema(description = "Error code", required = true, example = "1000")
+    @Schema(description = "Error code",  requiredMode = REQUIRED, example = "1000")
     protected String code = ErrorCodeSupport.CODE_OK;
 
     /**

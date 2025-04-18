@@ -16,13 +16,13 @@ import jakarta.validation.constraints.NotBlank;
 @Schema
 public class AdminUserCreateCommand extends BasePopulateCommand<AdminUserEntity> {
 
-    @Schema(description = "登录名", required = true, example = "admin")
+    @Schema(description = "登录名",  requiredMode = REQUIRED, example = "admin")
     @JsonProperty("login_name")
     @Length(max = 32)
     @NotBlank
     private String loginName;
 
-    @Schema(description = "登录密码", required = true, notes = "MD5加盐", example = "a43b66902590c003c213a5ed1b6f92e3")
+    @Schema(description = "登录密码",  requiredMode = REQUIRED, notes = "MD5加盐", example = "a43b66902590c003c213a5ed1b6f92e3")
     @JsonProperty("login_pwd")
     @Length(max = 64)
     @NotBlank

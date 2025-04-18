@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotBlank;
 @Schema
 public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRelEntity> {
 
-    @Schema(description = "商品ID", required = true, example = "e8af5ea376fde35fb2c504633f55b128")
+    @Schema(description = "商品ID",  requiredMode = REQUIRED, example = "e8af5ea376fde35fb2c504633f55b128")
     @JsonProperty("goods_id")
     @Length(max = 32)
     @NotBlank
@@ -25,7 +25,7 @@ public class GoodsOrderRelCreateCommand extends BasePopulateCommand<GoodsOrderRe
     /**
      * TODO 此处类型和Entity不一致，参考 GoodsCreateCommand 修改
      */
-    @Schema(description = "订单ID", required = true, example = "527d36e654f9eaea6a9b46380d253fc9")
+    @Schema(description = "订单ID",  requiredMode = REQUIRED, example = "527d36e654f9eaea6a9b46380d253fc9")
     @JsonProperty("order_id")
     @Length(max = 32)
     @NotBlank
