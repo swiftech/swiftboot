@@ -5,8 +5,10 @@ import org.hibernate.type.Type;
 import org.hibernate.type.descriptor.java.JdbcTimestampJavaType;
 import org.hibernate.type.descriptor.java.LocalDateTimeJavaType;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 /**
@@ -31,6 +33,9 @@ public class HibernateUtils {
             }
             else if (bt.getJavaType() == LocalDate.class) {
                 return LocalDate.now();
+            }
+            else if (bt.getJavaType() == Timestamp.class) {
+                return new Timestamp(System.currentTimeMillis());
             }
             else {
                 throw new RuntimeException("Unsupported basic type: %s with java type: %s".formatted(bt.getClass(), bt.getJavaType()));

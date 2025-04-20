@@ -1,0 +1,29 @@
+debug: false
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_URL:127.0.0.1}:${DB_PORT:5432}/${DB_DATABASE:postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#    properties:
+#      hibernate:
+#        current_session_context_class: org.springframework.orm.hibernate6.SpringSessionContext
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    open-in-view: false
+logging:
+  level:
+    root: INFO
+    org.swiftboot: TRACE
+swiftboot:
+  data:
+    model:
+      autoGenerateId: true
+      autoUpdateTimeStrategy: not-set
+

@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,11 +33,17 @@ public class JwtTokenProvider {
     }
 
     public String generateAccessToken(String userId, String userName) {
-        return this.generateAccessToken(userId, Collections.singletonMap(USERNAME_KEY, userName));
+        return this.generateAccessToken(userId, StringUtils.isBlank(userName) ? null: Collections.singletonMap(USERNAME_KEY, userName));
     }
 
     public String generateAccessToken(String userId, String additionKey, Object additionValue) {
         return this.generateAccessToken(userId, Collections.singletonMap(additionKey, additionValue));
+    }
+
+    public String generateAccessToken(String userId, String userName, Map<String, Object> additions) {
+        if (additions == null) additions = new HashMap<>();
+        if (StringUtils.isNotBlank(userName)) additions.put(USERNAME_KEY, userName);
+        return this.generateAccessToken(userId, additions);
     }
 
     public String generateAccessToken(String userId, Map<String, Object> additions) {
