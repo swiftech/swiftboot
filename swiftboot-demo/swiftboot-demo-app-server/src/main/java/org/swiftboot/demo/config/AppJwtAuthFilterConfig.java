@@ -13,6 +13,7 @@ import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.demo.service.AppUserJwtAuthServiceImpl;
 
 /**
+ * Enabled when swiftboot.auth.authType = jwt
  *
  * @author swiftech
  * @since 3.0.0
@@ -25,7 +26,7 @@ public class AppJwtAuthFilterConfig implements WebMvcConfigurer {
     JwtAuthFilter jwtAuthFilter;
 
     @Bean
-    public FilterRegistrationBean<JwtAuthFilter> regJwtAuthFilter() {
+    public FilterRegistrationBean<JwtAuthFilter> registerJwtAuthFilter() {
         FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(jwtAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");

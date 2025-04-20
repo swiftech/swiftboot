@@ -7,11 +7,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.swiftboot.auth.filter.AuthFilter;
+import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.demo.service.AppUserAuthServiceImpl;
 
 /**
+ * Enabled when swiftboot.auth.authType = session
  *
  * @author swiftech
  * @since 3.0.0
@@ -21,12 +22,12 @@ import org.swiftboot.demo.service.AppUserAuthServiceImpl;
 public class AppAuthFilterConfig implements WebMvcConfigurer {
 
     @Resource
-    AuthFilter authFilter;
+    SessionAuthFilter sessionAuthFilter;
 
     @Bean
-    public FilterRegistrationBean<AuthFilter> regAuthFilter() {
-        FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(authFilter);
+    public FilterRegistrationBean<SessionAuthFilter> regAuthFilter() {
+        FilterRegistrationBean<SessionAuthFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(sessionAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;

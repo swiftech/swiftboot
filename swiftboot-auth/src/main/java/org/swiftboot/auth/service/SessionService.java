@@ -1,5 +1,7 @@
 package org.swiftboot.auth.service;
 
+import org.swiftboot.auth.model.Session;
+
 /**
  * 自定义的简易 Session 服务, 可用于 App 会话控制, 也可以用户 Web 会话控制, 支持分布式
  * 如果会话控制比较复杂的情况可以考虑使用 Shiro 等其他框架

@@ -1,0 +1,8 @@
+swiftboot:
+  auth:
+    enabled: true
+    tokenKey: access_token
+    jwt:
+      secret: xxxxxx
+      accessTokenExpirationSeconds: 600
+      refreshTokenExpirationSeconds: 600

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
  * swiftboot.auth.session
  *
  * @author swiftech 2019-06-10
- * @see SwiftbootAuthConfigBean
+ * @see AuthConfigBean
  **/
 public class SessionConfigBean {
 

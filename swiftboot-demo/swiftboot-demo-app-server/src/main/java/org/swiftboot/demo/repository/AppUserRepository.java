@@ -1,8 +1,8 @@
-package org.swiftboot.demo.model.dao;
+package org.swiftboot.demo.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.swiftboot.demo.model.entity.AppUserEntity;
+import org.swiftboot.demo.model.AppUserEntity;
 
 import java.util.Optional;
 
@@ -11,8 +11,7 @@ import java.util.Optional;
  *
  * @author swiftech 2020-01-06
  **/
-public interface AppUserDao extends PagingAndSortingRepository<AppUserEntity, String>, CrudRepository<AppUserEntity, String>,
-        AppUserCustomizeDao {
+public interface AppUserRepository extends PagingAndSortingRepository<AppUserEntity, String>, CrudRepository<AppUserEntity, String> {
 
     /**
      * Query app user by Login name and password of app user

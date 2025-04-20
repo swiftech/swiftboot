@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.web.exception.ErrorCodeSupport;
@@ -32,16 +33,15 @@ public class JwtAuthFilter extends BaseAuthFilter {
         // Get JWT token from HTTP request
         String token = getTokenFromRequest(request);
         // Validate Token
-
         try {
             if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
                 // get username from token
-                String username = jwtTokenProvider.getUsername(token);
-                log.info("username = {}", username);
+                String userId = jwtTokenProvider.getUserId(token);
+                log.info("userId = {}", userId);
                 filterChain.doFilter(request, response);
             }
             else {
-                log.warn("User does not have a valid token");
+                if (log.isWarnEnabled()) log.warn("User does not have a valid token");
                 super.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
             }
         } catch (JwtException e) {
@@ -54,7 +54,7 @@ public class JwtAuthFilter extends BaseAuthFilter {
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

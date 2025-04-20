@@ -8,13 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.util.HttpServletCookieUtils;
 
 import jakarta.annotation.Resource;
+
 import java.io.IOException;
 import java.util.Enumeration;
 
@@ -28,15 +29,15 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * @author swiftech
  */
 @Order(Ordered.LOWEST_PRECEDENCE)
-public class AuthFilter extends BaseAuthFilter {
+public class SessionAuthFilter extends BaseAuthFilter {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(SessionAuthFilter.class);
 
     @Resource
     private SessionService sessionService;
 
     @Resource
-    private SwiftbootAuthConfigBean configBean;
+    private AuthConfigBean configBean;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -48,9 +49,7 @@ public class AuthFilter extends BaseAuthFilter {
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
                 String key = headerNames.nextElement();
-                if (log.isDebugEnabled()) {
-                    log.debug(String.format("  %s = %s", key, request.getHeader(key)));
-                }
+                if (log.isDebugEnabled()) log.debug(String.format("  %s = %s", key, request.getHeader(key)));
             }
         }
 
@@ -58,9 +57,7 @@ public class AuthFilter extends BaseAuthFilter {
         String token = HttpServletCookieUtils.getValueFromHeaderOrCookie(request, tokenKey);
 
         if (isBlank(token)) {
-            if (log.isWarnEnabled()) {
-                log.warn(String.format("No token '%s' in Headers or Cookies", tokenKey));
-            }
+            if (log.isWarnEnabled()) log.warn(String.format("No token '%s' in Headers or Cookies", tokenKey));
             super.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
         }
         else {

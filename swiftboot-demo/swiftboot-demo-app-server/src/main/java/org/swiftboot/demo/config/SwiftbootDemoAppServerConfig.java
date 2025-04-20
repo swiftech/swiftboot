@@ -26,18 +26,16 @@ import org.swiftboot.data.model.id.IdGenerator;
         "org.swiftboot.data",
         "org.swiftboot.service",
         "org.swiftboot.auth",
-//        "org.swiftboot.shiro",
         "org.swiftboot.common",
         "org.swiftboot.demo"
 })
 // 和org.swiftboot.demo在同一个包下面的可以不配置
 @EntityScan(basePackages = {
-        "org.swiftboot.demo.model.entity",
+        "org.swiftboot.demo.model",
         "org.swiftboot.service.model.entity",
 })
 @EnableJpaRepositories(basePackages = {
-        "org.swiftboot.demo.model.dao",
-//        "org.swiftboot.demo.shiro",
+        "org.swiftboot.demo.repository",
 })
 public class SwiftbootDemoAppServerConfig {
 

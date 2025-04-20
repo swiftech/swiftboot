@@ -3,6 +3,7 @@ package org.swiftboot.common.auth;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.swiftboot.util.IdUtils;
 
 /**
  *
@@ -13,21 +14,67 @@ public class JwtTokenProviderTest {
 
     private static JwtTokenProvider jwtTokenProvider;
 
+    private static JwtConfigBean jwtConfigBean;
+
     @BeforeAll
     static void beforeAll() {
-        JwtConfigBean jwtConfig = new JwtConfigBean();
-        jwtConfig.setSecret(SECRET);
-        jwtTokenProvider = new JwtTokenProvider(jwtConfig);
-
+        jwtConfigBean = new JwtConfigBean();
+        jwtConfigBean.setSecret(SECRET);
+        jwtTokenProvider = new JwtTokenProvider(jwtConfigBean);
     }
+
     @Test
     public void testValidateToken() {
-        String accessToken = jwtTokenProvider.generateAccessToken("swiftboot");
+        jwtConfigBean.setAccessTokenExpirationSeconds(2);
+        String accessToken = jwtTokenProvider.generateAccessToken( "swiftboot");
         Assertions.assertTrue(jwtTokenProvider.validateToken(accessToken));
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(accessToken));
     }
+
     @Test
     public void testGetUsername() {
-        String accessToken = jwtTokenProvider.generateAccessToken("swiftboot");
+        String uid = IdUtils.makeID("uid");
+        String accessToken = jwtTokenProvider.generateAccessToken(uid, "swiftboot");
+        System.out.println(accessToken);
+        Assertions.assertEquals(uid, jwtTokenProvider.getUserId(accessToken));
+        Assertions.assertEquals("swiftboot", jwtTokenProvider.getAddition(accessToken, JwtTokenProvider.USERNAME_KEY));
         Assertions.assertEquals("swiftboot", jwtTokenProvider.getUsername(accessToken));
+    }
+
+    @Test
+    public void testRefreshToken() {
+        jwtConfigBean.setRefreshTokenExpirationSeconds(2);
+        String refreshToken = jwtTokenProvider.generateRefreshToken("swiftboot");
+        Assertions.assertTrue(jwtTokenProvider.validateToken(refreshToken));
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(refreshToken));
+    }
+
+    @Test
+    public void testRefreshAccessToken() {
+        jwtConfigBean.setRefreshTokenExpirationSeconds(2);
+        String refreshToken = jwtTokenProvider.generateRefreshToken("swiftboot");
+        Assertions.assertTrue(jwtTokenProvider.validateToken(refreshToken));
+        // check if the refresh token is available
+        String newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);
+        Assertions.assertNotNull(newAccessToken);
+        Assertions.assertTrue(jwtTokenProvider.validateToken(newAccessToken));
+        // check if the refresh token is unavailable
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(refreshToken));
+
     }
 }

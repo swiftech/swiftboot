@@ -6,8 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
-import org.swiftboot.auth.service.Session;
+import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.service.service.RedisService;
 import org.swiftboot.web.exception.ErrMessageException;
@@ -37,7 +37,7 @@ public class SessionServiceRedisImpl implements SessionService {
     private RedisService redisService;
 
     @Resource
-    private SwiftbootAuthConfigBean config;
+    private AuthConfigBean config;
 
     @PostConstruct
     public void init() {

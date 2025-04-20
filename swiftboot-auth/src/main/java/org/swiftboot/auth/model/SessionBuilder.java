@@ -1,4 +1,4 @@
-package org.swiftboot.auth.service;
+package org.swiftboot.auth.model;
 
 import org.apache.commons.lang3.StringUtils;
 

@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.WebUtils;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
-import org.swiftboot.auth.service.Session;
+import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
@@ -19,12 +19,12 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * @author swiftech
  **/
-public class BaseAuthController {
+public class BaseAuthSessionController {
 
-    protected Logger log = LoggerFactory.getLogger(getClass());
+    protected static final Logger log = LoggerFactory.getLogger(BaseAuthSessionController.class);
 
     @Resource
-    protected SwiftbootAuthConfigBean authConfigBean;
+    protected AuthConfigBean authConfigBean;
 
     @Resource
     protected SessionService sessionService;

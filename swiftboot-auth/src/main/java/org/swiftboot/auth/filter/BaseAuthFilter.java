@@ -10,6 +10,9 @@ import java.io.IOException;
 
 import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYPE;
 
+/**
+ * @since 3.0
+ */
 public abstract class BaseAuthFilter extends OncePerRequestFilter {
 
     /**

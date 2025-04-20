@@ -1,12 +1,11 @@
-package org.swiftboot.demo.model.entity;
-
-import org.springframework.context.annotation.Description;
-import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseEntity;
+package org.swiftboot.demo.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.springframework.context.annotation.Description;
+import org.swiftboot.data.annotation.PropertyDescription;
+import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 
 /**
  * App用户
@@ -16,7 +15,7 @@ import jakarta.persistence.Table;
 @Description("App用户")
 @Entity
 @Table(name = "DEMO_APP_USER")
-public class AppUserEntity extends BaseEntity {
+public class AppUserEntity extends BaseLocalDateTimeEntity {
 
     /**
      * Login name of app user

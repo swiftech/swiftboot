@@ -3,6 +3,7 @@ package org.swiftboot.auth.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.swiftboot.auth.model.Session;
 
 import java.io.IOException;
 

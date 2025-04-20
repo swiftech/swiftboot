@@ -3,6 +3,7 @@ package org.swiftboot.auth.interceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -12,9 +13,9 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.service.AuthenticatedResponse;
-import org.swiftboot.auth.service.Session;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 
 import jakarta.annotation.Resource;
@@ -30,12 +31,13 @@ import jakarta.servlet.http.Cookie;
  * @since 2.2
  */
 @ControllerAdvice
+@ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
 public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBodyAdvice {
 
     private static final Logger log = LoggerFactory.getLogger(UserSessionResponseAdvice.class);
 
     @Resource
-    private SwiftbootAuthConfigBean authConfigBean;
+    private AuthConfigBean authConfigBean;
 
     @Resource
     private SessionService sessionService;
@@ -50,28 +52,31 @@ public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBod
     protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType,
                                            ServerHttpRequest request, ServerHttpResponse response) {
         if (log.isDebugEnabled()) log.debug("Handle user session and cookie after authenticated.");
-        AuthenticatedResponse<?> authenticatedResponse = (AuthenticatedResponse<?>) bodyContainer.getValue();
-        Session userSession = authenticatedResponse.getUserSession();
-        if (userSession == null) return;
-        String userToken = userSession.getUserToken();
-        if (StringUtils.isBlank(userToken)) return;
+        AuthenticatedResponse<?, ?> authenticatedResponse = (AuthenticatedResponse<?, ?>) bodyContainer.getValue();
+        Object session = authenticatedResponse.getAuthenticated();
+        if (session == null) return;
+        if (session instanceof Session userSession) {
+            String userToken = userSession.getUserToken();
+            if (StringUtils.isBlank(userToken)) return;
 
-        // cache the session
-        sessionService.addSession(userToken, userSession);
+            // cache the session
+            sessionService.addSession(userToken, userSession);
 
-        // return cookie to client
-        ServletServerHttpResponse servletResponse = (ServletServerHttpResponse) response;
-        if (authConfigBean.getSession().isUseCookie()) {
-            Cookie cookie = new Cookie(authConfigBean.getTokenKey(), userToken);
-            cookie.setPath(authConfigBean.getSession().getCookiePath());
-            int expiresIn = authConfigBean.getSession().getExpiresIn();
-            cookie.setMaxAge(expiresIn == 0 ? Integer.MAX_VALUE : expiresIn);
-            servletResponse.getServletResponse().addCookie(cookie);
-            if (log.isDebugEnabled()) log.debug("Response with cookie %s".formatted(authConfigBean.getTokenKey()));
+            // return cookie to client
+            ServletServerHttpResponse servletResponse = (ServletServerHttpResponse) response;
+            if (authConfigBean.getSession().isUseCookie()) {
+                Cookie cookie = new Cookie(authConfigBean.getTokenKey(), userToken);
+                cookie.setPath(authConfigBean.getSession().getCookiePath());
+                int expiresIn = authConfigBean.getSession().getExpiresIn();
+                cookie.setMaxAge(expiresIn == 0 ? Integer.MAX_VALUE : expiresIn);
+                servletResponse.getServletResponse().addCookie(cookie);
+                if (log.isDebugEnabled()) log.debug("Response with cookie %s".formatted(authConfigBean.getTokenKey()));
+            }
+            else {
+                servletResponse.getServletResponse().setHeader(authConfigBean.getTokenKey(), userToken);
+                if (log.isDebugEnabled()) log.debug("Response with header %s".formatted(authConfigBean.getTokenKey()));
+            }
         }
-        else {
-            servletResponse.getServletResponse().setHeader(authConfigBean.getTokenKey(), userToken);
-            if (log.isDebugEnabled()) log.debug("Response with header %s".formatted(authConfigBean.getTokenKey()));
-        }
+
     }
 }

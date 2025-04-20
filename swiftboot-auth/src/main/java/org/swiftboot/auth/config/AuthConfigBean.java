@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 @ConfigurationProperties("swiftboot.auth")
-public class SwiftbootAuthConfigBean {
+public class AuthConfigBean {
 
     /**
      * 开启用户认证功能，默认为不开启

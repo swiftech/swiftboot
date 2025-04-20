@@ -9,23 +9,26 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
+import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.annotation.Addition;
 import org.swiftboot.auth.annotation.ExpireTime;
 import org.swiftboot.auth.annotation.UserId;
 import org.swiftboot.auth.annotation.UserName;
-import org.swiftboot.auth.service.Session;
+import org.swiftboot.auth.filter.SessionAuthFilter;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 
 import jakarta.annotation.Resource;
+
 import java.util.Map;
 
 /**
  * Populate values from session to the annotated parameter of controller.
  * {@link UserId}, {@link UserName}, {@link ExpireTime}, {@link Addition}, {@link org.swiftboot.auth.annotation.Session}
+ * this argument resolver only works under Session mode.
  *
  * @author swiftech
- * @see org.swiftboot.auth.filter.AuthFilter
+ * @see SessionAuthFilter
  * @since 2.1
  */
 public class UserSessionArgumentResolver implements HandlerMethodArgumentResolver {
@@ -33,7 +36,7 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
     private static final Logger log = LoggerFactory.getLogger(UserSessionArgumentResolver.class);
 
     @Resource
-    private SwiftbootAuthConfigBean configBean;
+    private AuthConfigBean configBean;
 
     @Resource
     private SessionService sessionService;
@@ -56,16 +59,16 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
         // Try to get token from headers, if the token is in Cookie, it must have been extracted from Cookie in previous AuthFilter
         String token = servletWebRequest.getHeader(configBean.getTokenKey());
         if (StringUtils.isBlank(token)) {
-            log.trace("No token found in headers");
+            if (log.isTraceEnabled()) log.trace("No token found in headers");
             return null;
         }
         else {
             Session session = sessionService.getSession(token);
             if (session == null) {
-                log.trace("No session found in for token: " + token);
+                if (log.isTraceEnabled()) log.trace("No session found in for token: %s".formatted(token));
                 return null;
             }
-            log.info("Find and pre-set user id: %s".formatted(session.getUserId()));
+            if (log.isInfoEnabled()) log.info("Find and pre-set user id: %s".formatted(session.getUserId()));
             if (parameter.hasParameterAnnotation(UserId.class)) {
                 return session.getUserId();
             }

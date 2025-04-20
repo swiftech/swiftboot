@@ -1,6 +1,8 @@
 package org.swiftboot.auth.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.swiftboot.auth.model.Authenticated;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.web.result.HttpResponse;
 
 /**
@@ -10,26 +12,27 @@ import org.swiftboot.web.result.HttpResponse;
  * @author swiftech
  * @since 2.2
  * @see org.swiftboot.auth.interceptor.UserSessionResponseAdvice
+ * @see org.swiftboot.auth.interceptor.UserJwtResponseAdvice
  */
-public class AuthenticatedResponse<T> extends HttpResponse<T> {
+public class AuthenticatedResponse<R, S extends Authenticated> extends HttpResponse<R> {
 
     @JsonIgnore
-    private Session userSession;
+    private S authenticated;
 
-    public AuthenticatedResponse(Session userSession) {
-        this.userSession = userSession;
+    public AuthenticatedResponse(S authenticated) {
+        this.authenticated = authenticated;
     }
 
-    public AuthenticatedResponse(T result, Session userSession) {
+    public AuthenticatedResponse(R result, S authenticated) {
         super(result);
-        this.userSession = userSession;
+        this.authenticated = authenticated;
     }
 
-    public Session getUserSession() {
-        return userSession;
+    public S getAuthenticated() {
+        return authenticated;
     }
 
-    public void setUserSession(Session userSession) {
-        this.userSession = userSession;
+    public void setAuthenticated(S authenticated) {
+        this.authenticated = authenticated;
     }
 }

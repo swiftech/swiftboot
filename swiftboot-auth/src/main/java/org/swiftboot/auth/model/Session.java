@@ -1,8 +1,7 @@
-package org.swiftboot.auth.service;
+package org.swiftboot.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import java.util.Map;
  * @see SessionBuilder
  * @see org.swiftboot.auth.interceptor.UserSessionResponseAdvice
  */
-public class Session implements Serializable {
+public class Session implements Authenticated {
 
     /**
      * The user token here is used for {@link org.swiftboot.auth.interceptor.UserSessionResponseAdvice} to read.

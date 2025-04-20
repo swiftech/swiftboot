@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("swiftboot.auth.jwt")
 public class JwtConfigBean {
 
-
+    /**
+     * JWT secret
+     */
     private String secret;
 
     /**
