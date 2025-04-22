@@ -63,7 +63,7 @@
         <junit.version>5.12.1</junit.version>
         <postgres.version>42.7.5</postgres.version>
         <mysql.version>9.2.0</mysql.version>
-        <h2.version>2.1.214</h2.version>
+        <h2.version>2.2.220</h2.version>
         <poi.version>5.4.1</poi.version>
         <pdfbox.version>2.0.31</pdfbox.version>
         <pdf2dom.version>2.0.3</pdf2dom.version>
