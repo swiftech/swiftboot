@@ -10,7 +10,7 @@ import org.swiftboot.auth.filter.JwtAuthFilter;
 
 import jakarta.annotation.Resource;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.demo.service.AppUserJwtAuthServiceImpl;
+import org.swiftboot.demo.service.AppUserJwtAuthService;
 
 /**
  * Enabled when swiftboot.auth.authType = jwt
@@ -30,6 +30,7 @@ public class AppJwtAuthFilterConfig implements WebMvcConfigurer {
         FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(jwtAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");
+        registrationBean.addUrlPatterns("/app/logout");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;
     }
@@ -37,7 +38,7 @@ public class AppJwtAuthFilterConfig implements WebMvcConfigurer {
     @Bean
     @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "jwt")
     public UserAuthService userAuthService() {
-        return new AppUserJwtAuthServiceImpl();
+        return new AppUserJwtAuthService();
     }
 
 }

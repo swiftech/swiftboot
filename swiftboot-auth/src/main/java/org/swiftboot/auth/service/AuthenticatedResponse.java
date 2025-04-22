@@ -1,7 +1,7 @@
 package org.swiftboot.auth.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.swiftboot.auth.model.Authenticated;
+import org.swiftboot.common.auth.token.Authenticated;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.web.result.HttpResponse;
 

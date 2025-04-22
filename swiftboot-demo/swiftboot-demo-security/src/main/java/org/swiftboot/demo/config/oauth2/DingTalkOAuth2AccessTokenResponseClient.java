@@ -53,10 +53,10 @@ public class DingTalkOAuth2AccessTokenResponseClient implements OAuth2AccessToke
                 .body(new ParameterizedTypeReference<>() {
                 });
         log.debug("return: : %s".formatted(new Gson().toJson(response)));
-        return OAuth2AccessTokenResponse.withToken((String) response.get("accessToken"))
+        return OAuth2AccessTokenResponse.withToken((String) response.get("tokenValue"))
                 .tokenType(OAuth2AccessToken.TokenType.BEARER)
                 .expiresIn(((Number) response.get("expireIn")).longValue())
-                .refreshToken((String) response.get("refreshToken"))
+                .refreshToken((String) response.get("tokenValue"))
                 .build();
     }
 }

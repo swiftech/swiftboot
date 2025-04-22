@@ -3,6 +3,9 @@ package org.swiftboot.common.auth;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.swiftboot.common.auth.config.JwtConfigBean;
+import org.swiftboot.common.auth.token.AccessToken;
+import org.swiftboot.common.auth.token.RefreshToken;
 import org.swiftboot.util.IdUtils;
 
 /**
@@ -26,55 +29,55 @@ public class JwtTokenProviderTest {
     @Test
     public void testValidateToken() {
         jwtConfigBean.setAccessTokenExpirationSeconds(2);
-        String accessToken = jwtTokenProvider.generateAccessToken( "swiftboot");
-        Assertions.assertTrue(jwtTokenProvider.validateToken(accessToken));
+        AccessToken accessToken = jwtTokenProvider.generateAccessToken( "swiftboot");
+        Assertions.assertTrue(jwtTokenProvider.validateToken(accessToken.tokenValue()));
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(accessToken));
+        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(accessToken.tokenValue()));
     }
 
     @Test
     public void testGetUsername() {
         String uid = IdUtils.makeID("uid");
-        String accessToken = jwtTokenProvider.generateAccessToken(uid, "swiftboot");
+        AccessToken accessToken = jwtTokenProvider.generateAccessToken(uid, "swiftboot");
         System.out.println(accessToken);
-        Assertions.assertEquals(uid, jwtTokenProvider.getUserId(accessToken));
-        Assertions.assertEquals("swiftboot", jwtTokenProvider.getAddition(accessToken, JwtTokenProvider.USERNAME_KEY));
-        Assertions.assertEquals("swiftboot", jwtTokenProvider.getUsername(accessToken));
+        Assertions.assertEquals(uid, jwtTokenProvider.getUserId(accessToken.tokenValue()));
+        Assertions.assertEquals("swiftboot", jwtTokenProvider.getAddition(accessToken.tokenValue(), JwtTokenProvider.USERNAME_KEY));
+        Assertions.assertEquals("swiftboot", jwtTokenProvider.getUsername(accessToken.tokenValue()));
     }
 
     @Test
     public void testRefreshToken() {
         jwtConfigBean.setRefreshTokenExpirationSeconds(2);
-        String refreshToken = jwtTokenProvider.generateRefreshToken("swiftboot");
-        Assertions.assertTrue(jwtTokenProvider.validateToken(refreshToken));
+        RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken("swiftboot");
+        Assertions.assertTrue(jwtTokenProvider.validateToken(refreshToken.tokenValue()));
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(refreshToken));
+        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(refreshToken.tokenValue()));
     }
 
     @Test
     public void testRefreshAccessToken() {
         jwtConfigBean.setRefreshTokenExpirationSeconds(2);
-        String refreshToken = jwtTokenProvider.generateRefreshToken("swiftboot");
-        Assertions.assertTrue(jwtTokenProvider.validateToken(refreshToken));
+        RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken("swiftboot");
+        Assertions.assertTrue(jwtTokenProvider.validateToken(refreshToken.tokenValue()));
         // check if the refresh token is available
-        String newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken);
+        AccessToken newAccessToken = jwtTokenProvider.refreshAccessToken(refreshToken.tokenValue());
         Assertions.assertNotNull(newAccessToken);
-        Assertions.assertTrue(jwtTokenProvider.validateToken(newAccessToken));
+        Assertions.assertTrue(jwtTokenProvider.validateToken(newAccessToken.tokenValue()));
         // check if the refresh token is unavailable
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(refreshToken));
+        Assertions.assertThrows(Exception.class, () -> jwtTokenProvider.validateToken(refreshToken.tokenValue()));
 
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.demo.service.AppUserAuthServiceImpl;
+import org.swiftboot.demo.service.AppUserAuthService;
 
 /**
  * Enabled when swiftboot.auth.authType = session
@@ -29,6 +29,7 @@ public class AppAuthFilterConfig implements WebMvcConfigurer {
         FilterRegistrationBean<SessionAuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(sessionAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");
+        registrationBean.addUrlPatterns("/app/logout");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;
     }
@@ -36,7 +37,7 @@ public class AppAuthFilterConfig implements WebMvcConfigurer {
     @Bean
     @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
     public UserAuthService userAuthService() {
-        return new AppUserAuthServiceImpl();
+        return new AppUserAuthService();
     }
 
 }

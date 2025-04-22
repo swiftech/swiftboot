@@ -2,10 +2,10 @@ package org.swiftboot.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.swiftboot.demo.dao.MockRefreshTokenDaoImpl;
-import org.swiftboot.demo.dao.MockRevokedTokenDaoImpl;
-import org.swiftboot.security.RefreshTokenDao;
-import org.swiftboot.security.RevokedTokenDao;
+import org.swiftboot.demo.dao.MockRefreshTokenService;
+import org.swiftboot.demo.dao.MockRevokedTokenServiceImpl;
+import org.swiftboot.security.RefreshTokenService;
+import org.swiftboot.security.RevokedTokenService;
 
 /**
  * @since 3.0.0
@@ -14,13 +14,13 @@ import org.swiftboot.security.RevokedTokenDao;
 public class AuthenticationConfig {
 
     @Bean
-    public RevokedTokenDao revokedTokenDaoStub() {
-        return new MockRevokedTokenDaoImpl();
+    public RevokedTokenService revokedTokenDaoStub() {
+        return new MockRevokedTokenServiceImpl();
     }
 
     @Bean
-    public RefreshTokenDao refreshTokenDaoStub() {
-        return new MockRefreshTokenDaoImpl();
+    public RefreshTokenService refreshTokenDaoStub() {
+        return new MockRefreshTokenService();
     }
 
 }

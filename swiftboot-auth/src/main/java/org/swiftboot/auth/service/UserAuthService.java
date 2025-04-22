@@ -1,6 +1,6 @@
 package org.swiftboot.auth.service;
 
-import org.swiftboot.auth.model.Authenticated;
+import org.swiftboot.common.auth.token.Authenticated;
 
 /**
  * The authentication service for user login with user id and password.
@@ -27,4 +27,7 @@ public interface UserAuthService {
      * @param refreshToken
      */
     <R> AuthenticatedResponse<R, Authenticated> refreshAccessToken(String refreshToken);
+
+    void userLogout(String accessToken);
+
 }

@@ -16,11 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
-import org.swiftboot.common.auth.JwtConfigBean;
-import org.swiftboot.demo.config.OAuth2LoginConfig.CustomOAuth2LoginSuccessHandler;
+import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.demo.config.oauth2.OAuth2AccessTokenResponseClientRouter;
+import org.swiftboot.demo.handler.CustomOAuth2LoginSuccessHandler;
 import org.swiftboot.security.JwtAuthenticationFilter;
-import org.swiftboot.security.RevokedTokenDao;
 
 /**
  * @author swiftech
@@ -40,8 +39,8 @@ public class SecurityConfig {
     @Value("${swiftboot.demo.security.baseUrl}")
     private String baseUrl;
 
-    @Resource
-    private RevokedTokenDao revokedTokenDao;
+//    @Resource
+//    private RevokedTokenService revokedTokenService;
 
     @Resource
     private JwtConfigBean jwtConfigBean;
@@ -58,7 +57,6 @@ public class SecurityConfig {
         // Set session management to stateless
         httpSecurity.sessionManagement(cfg -> {
             cfg.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-            cfg.disable();
         });
 
         httpSecurity.addFilterAfter(jwtAuthenticationFilter, LogoutFilter.class);
@@ -84,11 +82,14 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs.yaml").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        // login with name and password
+                        .requestMatchers("/security/auth/signin").permitAll()
                         // OAuth2
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/login/oauth2/**").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
                         //
+                        .requestMatchers("/security/auth/refresh").permitAll()
                         .requestMatchers("/security/auth/logout").permitAll()
                         .requestMatchers("/security/auth/logout_success").permitAll()
                         .requestMatchers("/error/**").permitAll()
@@ -103,11 +104,6 @@ public class SecurityConfig {
                 tokenEndpointConfig.accessTokenResponseClient(oAuth2AccessTokenResponseClientRouter());
             });
         });
-//        httpSecurity.oauth2ResourceServer(resourceServer -> {
-//            resourceServer.jwt(jwt -> {
-//                Customizer.withDefaults();
-//            });
-//        });
         return httpSecurity.build();
     }
 

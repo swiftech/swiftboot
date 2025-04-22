@@ -6,6 +6,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.apache.commons.lang3.StringUtils;
+import org.swiftboot.common.auth.config.JwtConfigBean;
+import org.swiftboot.common.auth.token.AccessToken;
+import org.swiftboot.common.auth.token.RefreshToken;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -28,25 +31,25 @@ public class JwtTokenProvider {
     }
 
     // generate JWT token
-    public String generateAccessToken(String userId) {
+    public AccessToken generateAccessToken(String userId) {
         return this.generateAccessToken(userId, Collections.EMPTY_MAP);
     }
 
-    public String generateAccessToken(String userId, String userName) {
-        return this.generateAccessToken(userId, StringUtils.isBlank(userName) ? null: Collections.singletonMap(USERNAME_KEY, userName));
+    public AccessToken generateAccessToken(String userId, String userName) {
+        return this.generateAccessToken(userId, StringUtils.isBlank(userName) ? null : Collections.singletonMap(USERNAME_KEY, userName));
     }
 
-    public String generateAccessToken(String userId, String additionKey, Object additionValue) {
+    public AccessToken generateAccessToken(String userId, String additionKey, Object additionValue) {
         return this.generateAccessToken(userId, Collections.singletonMap(additionKey, additionValue));
     }
 
-    public String generateAccessToken(String userId, String userName, Map<String, Object> additions) {
+    public AccessToken generateAccessToken(String userId, String userName, Map<String, Object> additions) {
         if (additions == null) additions = new HashMap<>();
         if (StringUtils.isNotBlank(userName)) additions.put(USERNAME_KEY, userName);
         return this.generateAccessToken(userId, additions);
     }
 
-    public String generateAccessToken(String userId, Map<String, Object> additions) {
+    public AccessToken generateAccessToken(String userId, Map<String, Object> additions) {
         if (StringUtils.isBlank(userId)) {
             throw new RuntimeException("User ID is required to generate access token");
         }
@@ -60,14 +63,14 @@ public class JwtTokenProvider {
         if (additions != null && !additions.isEmpty()) {
             additions.keySet().forEach(k -> builder.claim(k, additions.get(k)));
         }
-        return builder.compact();
+        return new AccessToken(builder.compact(), expireDate.getTime());
     }
 
-    public String generateRefreshToken(String userId) {
+    public RefreshToken generateRefreshToken(String userId) {
         return this.generateRefreshToken(userId, null);
     }
 
-    public String generateRefreshToken(String userId, Map<String, Object> additions) {
+    public RefreshToken generateRefreshToken(String userId, Map<String, Object> additions) {
         if (StringUtils.isBlank(userId)) {
             throw new RuntimeException("User ID is required to generate access token");
         }
@@ -81,14 +84,25 @@ public class JwtTokenProvider {
         if (additions != null && !additions.isEmpty()) {
             additions.keySet().forEach(k -> builder.claim(k, additions.get(k)));
         }
-        return builder.compact();
+        return new RefreshToken(builder.compact(), expireDate.getTime());
     }
 
-    public String refreshAccessToken(String refreshToken) {
+    /**
+     * @deprecated
+     * @param refreshToken
+     * @return
+     */
+    public AccessToken refreshAccessToken(String refreshToken) {
         return refreshAccessToken(refreshToken, null);
     }
 
-    public String refreshAccessToken(String refreshToken, Map<String, Object> additions) {
+    /**
+     * @deprecated
+     * @param refreshToken
+     * @param additions
+     * @return
+     */
+    public AccessToken refreshAccessToken(String refreshToken, Map<String, Object> additions) {
         if (!validateToken(refreshToken)) {
             throw new IllegalStateException("Invalid refresh token");
         }

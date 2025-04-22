@@ -1,6 +1,5 @@
 package org.swiftboot.security;
 
-import io.jsonwebtoken.JwtException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,21 +8,23 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.swiftboot.common.auth.JwtConfigBean;
+import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.JwtUtils;
 
 import java.io.IOException;
 
 /**
- * @since 3.0.0
+ * @since 3.0
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -31,13 +32,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Resource
-    private JwtTokenProvider jwtService;
+    private JwtTokenProvider jwtProvider;
 
     @Resource
     private UserDetailsService userDetailsService;
 
     @Resource
-    private RevokedTokenDao revokedTokenDao;
+    private RevokedTokenService revokedTokenService;
 
     @Resource
     private JwtConfigBean jwtConfig;
@@ -49,52 +50,61 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.debug("JwtAuthenticationFilter doFilter");
         // Retrieve the Authorization header
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = null;
+        String userId = null;
         String username = null;
 
         try {
             // Check if the header starts with "Bearer "
-            if (authHeader != null) {
-
-                token = JwtUtils.extractBearerToken(authHeader);
-                if (token != null) {
-                    // NO need to handle 'refresh' type of revocation.
-                    if (!jwtConfig.isRefreshRevokeType()) {
-                        // deny access if token has been revoked.
-                        if (revokedTokenDao.isRevoked(token)) {
-                            log.warn("Revoked jwt token: %s".formatted(StringUtils.abbreviateMiddle(token, "...", 30)));
-                            SecurityContextHolder.getContext().setAuthentication(null);
-                            filterChain.doFilter(request, response);
-                            return;
-                        }
-                    }
-                    username = jwtService.getUsername(token); // Extract username from token
-                }
+            token = JwtUtils.extractBearerToken(authHeader);
+            if (StringUtils.isBlank(token)) {
+                throw new AuthorizationDeniedException("Invalid access token");
             }
+            else {
+                // NO need to handle 'refresh' type of revocation.
+                if (!jwtConfig.isRefreshRevokeType()) {
+                    // deny access if token has been revoked.
+                    if (revokedTokenService.isRevoked(token)) {
+                        log.warn("Revoked jwt token: %s".formatted(StringUtils.abbreviateMiddle(token, "...", 30)));
+                        SecurityContextHolder.getContext().setAuthentication(null);
+                        throw new AuthorizationDeniedException("Invalid access token");
+                    }
+                }
+                userId = jwtProvider.getUserId(token);
+                username = jwtProvider.getUsername(token);
+            }
+
+            log.debug("JwtAuthenticationFilter userId: [{}], username: [{}]", userId, username);
 
             // If the token is valid and no authentication is set in the context
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-
                 // Validate token and set authentication
-                if (jwtService.validateToken(token)) {
-
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (jwtProvider.validateToken(token)) {
+                    log.debug("Access token is valid, allowed to access");
+                    SecurityContext newContext = SecurityContextHolder.createEmptyContext();
+                    Authentication authenticationToken = new UserIdAuthenticationToken(userId, userDetails.getAuthorities());
+                    newContext.setAuthentication(authenticationToken);
+                    SecurityContextHolder.setContext(newContext);
                 }
-
+                else {
+                    log.warn("Access Token is invalid");
+                    throw new AuthorizationDeniedException("Invalid access token");
+                }
             }
-        } catch (JwtException e) {
-            log.error(e.getMessage(), e);
+        } catch (AuthorizationDeniedException e) {
+            throw e;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            throw new AuthorizationDeniedException(e.getLocalizedMessage());
         }
         // Continue the filter chain
         filterChain.doFilter(request, response);

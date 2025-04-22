@@ -14,16 +14,17 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 import org.swiftboot.auth.config.AuthConfigBean;
-import org.swiftboot.auth.model.JwtAuthentication;
+import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.auth.service.AuthenticatedResponse;
-import org.swiftboot.auth.service.JwtService;
+import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.token.AccessToken;
 
 /**
  * Automatically save access token and refresh token of current authenticated user from the
  * {@link AuthenticatedResponse} object.
  *
  * @author swiftech
- * @see org.swiftboot.auth.service.JwtService
+ * @see JwtService
  * @see AuthenticatedResponse
  * @since 3.0
  */
@@ -53,11 +54,11 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
         Object authenticated = authenticatedResponse.getAuthenticated();
         if (authenticated == null) return;
         if (authenticated instanceof JwtAuthentication ja) {
-            String accessToken = ja.getAccessToken();
-            if (StringUtils.isBlank(accessToken)) return;
+            AccessToken accessToken = ja.getAccessToken();
+            if (StringUtils.isBlank(accessToken.tokenValue())) return;
 
             // save authenticated dual token.
-            jwtService.saveJwtAuthentication(accessToken, ja.getAccessTokenExpiresAt(), ja.getRefreshToken(), ja.getRefreshTokenExpiresAt());
+            jwtService.saveJwtAuthentication(ja);
         }
     }
 }

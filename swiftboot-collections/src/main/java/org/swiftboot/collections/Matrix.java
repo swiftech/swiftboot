@@ -98,7 +98,7 @@ public class Matrix<E> {
     }
 
     public int colCount() {
-        return m.size() > 0 ? m.get(0).size() : 0;
+        return !m.isEmpty() ? m.get(0).size() : 0;
     }
 
     public void print() {

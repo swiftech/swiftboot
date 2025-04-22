@@ -1,0 +1,19 @@
+package org.swiftboot.demo.dto;
+
+import org.swiftboot.web.result.Result;
+
+/**
+ * @author swiftech
+ */
+public class SomeResult implements Result {
+
+    private String data;
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+}

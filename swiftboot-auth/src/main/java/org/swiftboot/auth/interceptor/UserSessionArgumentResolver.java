@@ -10,10 +10,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.swiftboot.auth.config.AuthConfigBean;
-import org.swiftboot.auth.annotation.Addition;
-import org.swiftboot.auth.annotation.ExpireTime;
-import org.swiftboot.auth.annotation.UserId;
-import org.swiftboot.auth.annotation.UserName;
+import org.swiftboot.common.auth.annotation.*;
 import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
@@ -43,7 +40,8 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(UserId.class)
+        return parameter.hasParameterAnnotation(Token.class)
+                || parameter.hasParameterAnnotation(UserId.class)
                 || parameter.hasParameterAnnotation(UserName.class)
                 || parameter.hasParameterAnnotation(ExpireTime.class)
                 || parameter.hasParameterAnnotation(Addition.class)
@@ -69,7 +67,10 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
                 return null;
             }
             if (log.isInfoEnabled()) log.info("Find and pre-set user id: %s".formatted(session.getUserId()));
-            if (parameter.hasParameterAnnotation(UserId.class)) {
+            if (parameter.hasParameterAnnotation(Token.class)) {
+                return token;
+            }
+            else if (parameter.hasParameterAnnotation(UserId.class)) {
                 return session.getUserId();
             }
             else if (parameter.hasParameterAnnotation(UserName.class)) {

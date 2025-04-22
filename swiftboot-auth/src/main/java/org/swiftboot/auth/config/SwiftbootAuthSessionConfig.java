@@ -12,8 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.interceptor.UserSessionArgumentResolver;
 import org.swiftboot.auth.service.SessionService;
-import org.swiftboot.auth.service.impl.MockSessionServiceImpl;
-import org.swiftboot.auth.service.impl.SessionServiceRedisImpl;
+import org.swiftboot.auth.service.impl.MockSessionService;
+import org.swiftboot.auth.service.impl.RedisSessionService;
 import org.swiftboot.service.service.RedisService;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class SwiftbootAuthSessionConfig implements WebMvcConfigurer {
     @ConditionalOnBean(RedisService.class)
     @ConditionalOnProperty(value = "swiftboot.auth.session.type", havingValue = "redis")
     public SessionService redisSessionService() {
-        return new SessionServiceRedisImpl();
+        return new RedisSessionService();
     }
 
     /**
@@ -52,7 +52,7 @@ public class SwiftbootAuthSessionConfig implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean(SessionService.class)
     public SessionService mockSessionService() {
-        return new MockSessionServiceImpl();
+        return new MockSessionService();
     }
 
     @Bean

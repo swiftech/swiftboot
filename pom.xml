@@ -39,9 +39,9 @@
         <commons.lang.version>3.17.0</commons.lang.version>
         <commons.codec.version>1.18.0</commons.codec.version>
         <commons.collections.version>4.4</commons.collections.version>
-        <commons.beanutils.version>1.9.4</commons.beanutils.version>
-        <commons.text.version>1.13.0</commons.text.version>
-        <commons.io.version>2.18.0</commons.io.version>
+        <commons.beanutils.version>1.10.1</commons.beanutils.version>
+        <commons.text.version>1.13.1</commons.text.version>
+        <commons.io.version>2.19.0</commons.io.version>
         <spring.version>6.2.2</spring.version>
         <spring.boot.version>3.4.4</spring.boot.version>
         <spring.data.version>3.4.4</spring.data.version>
@@ -58,14 +58,13 @@
         <jakarta.annotations.version>3.0.0</jakarta.annotations.version>
         <jakarta.validation.version>3.1.1</jakarta.validation.version>
         <jwt.version>0.12.6</jwt.version>
-        <shiro.version>1.13.0</shiro.version>
-        <jedis.version>5.1.5</jedis.version>
+        <jedis.version>5.2.0</jedis.version>
         <json.version>20250107</json.version>
         <junit.version>5.12.1</junit.version>
         <postgres.version>42.7.5</postgres.version>
         <mysql.version>9.2.0</mysql.version>
         <h2.version>2.1.214</h2.version>
-        <poi.version>5.3.0</poi.version>
+        <poi.version>5.4.1</poi.version>
         <pdfbox.version>2.0.31</pdfbox.version>
         <pdf2dom.version>2.0.3</pdf2dom.version>
         <itext.version>5.5.13.3</itext.version>
@@ -87,35 +86,34 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${commons.lang.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.databind.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jackson.databind.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons.codec.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -333,6 +331,11 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
+                <version>${jackson.databind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>${jackson.databind.version}</version>
             </dependency>
             <dependency>

@@ -1,6 +1,7 @@
 package org.swiftboot.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.swiftboot.common.auth.token.Authenticated;
 
 import java.util.HashMap;
 import java.util.Map;
