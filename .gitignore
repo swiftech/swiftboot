@@ -85,3 +85,6 @@ fabric.properties
 /swiftboot.iml
 /swiftboot-auth/swiftboot-auth.iml
 /swiftboot-collections/swiftboot-collections.iml
+
+logs/
+logs/**
