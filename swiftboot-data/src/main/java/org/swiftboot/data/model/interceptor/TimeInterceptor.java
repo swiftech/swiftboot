@@ -11,6 +11,7 @@ import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.data.util.HibernateUtils;
 
 import jakarta.annotation.Resource;
+
 import java.io.Serializable;
 import java.util.Objects;
 

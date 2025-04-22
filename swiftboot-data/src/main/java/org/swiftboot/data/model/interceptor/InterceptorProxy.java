@@ -124,7 +124,7 @@ public class InterceptorProxy implements Interceptor, Serializable {
         log.trace(String.format("Proxy findDirty() %s[%s]", entity, id));
         List<int[]> collect = interceptors.stream()
                 .map(interceptor -> interceptor.findDirty(entity, id, currentState, previousState, propertyNames, types))
-                .collect(Collectors.toList());
+                .toList();
         int[] ret = null;
         for (int[] ints : collect) {
             ret = ArrayUtils.merge(ret, ints);

@@ -1,6 +1,7 @@
 v3.0.0
 * `swiftboot-shiro` module is removed, which means Shiro is no longer supported.
 * `swiftboot-security` is introduced with Spring Security support.
+* new `swiftboot-common-auth` module to share similar classes between `swiftboot-auth` and `swiftboot-security`.
 
 v2.4.7
 * `[utils]` add getPreferenceAlias() methods to PreferenceManager for migrating preferences.

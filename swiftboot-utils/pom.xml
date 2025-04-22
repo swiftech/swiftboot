@@ -12,14 +12,6 @@
     <artifactId>swiftboot-utils</artifactId>
     <description>Utils library for enterprise applications</description>
 
-    <properties>
-    </properties>
-
     <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>
