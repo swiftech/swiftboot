@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.annotation.Token;
+import org.swiftboot.web.result.HttpResponse;
 
 /**
  * @since 3.0
@@ -30,10 +30,11 @@ public class AppLogoutController {
 
     @Operation(description = "App user logout")
     @PostMapping(value = "logout")
-    public HttpResponse<Void> appUserLogout(@Token String accessToken) {
+    public HttpResponse<String> appUserLogout(@Token String accessToken) {
         log.info("> /app/logout");
-        userAuthService.userLogout(accessToken);
-        return new HttpResponse<>(ErrorCodeSupport.CODE_OK, "Logout success");
+        LogoutResponse<String> objectLogoutResponse = userAuthService.userLogout(accessToken);
+        objectLogoutResponse.setMsg("Logout success");
+        return objectLogoutResponse;
     }
 
 }

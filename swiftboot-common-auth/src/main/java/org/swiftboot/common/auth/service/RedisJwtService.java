@@ -1,6 +1,7 @@
-package org.swiftboot.common.auth;
+package org.swiftboot.common.auth.service;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.RefreshToken;

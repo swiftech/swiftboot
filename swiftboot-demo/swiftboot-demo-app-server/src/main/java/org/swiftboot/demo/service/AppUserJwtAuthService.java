@@ -4,10 +4,11 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.auth.service.AuthenticatedResponse;
+import org.swiftboot.common.auth.response.AuthenticatedResponse;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
@@ -87,14 +88,13 @@ public class AppUserJwtAuthService implements UserAuthService {
     }
 
     @Override
-    public void userLogout(String accessToken) {
+    public LogoutResponse<String> userLogout(String accessToken) {
         if (StringUtils.isBlank(accessToken)) {
             throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, "Unable to logout");
         }
         String userId = jwtTokenProvider.getUserId(accessToken);
         // revoke the refresh token
-        jwtService.revokeAuthenticationByAccessToken(accessToken);
-
+//        jwtService.revokeAuthenticationByAccessToken(accessToken);
 
         //
         Optional<AppUserEntity> byId = appUserRepository.findById(userId);
@@ -102,6 +102,8 @@ public class AppUserJwtAuthService implements UserAuthService {
             AppUserEntity appUserEntity = byId.get();
         }
 
+        LogoutResponse<String> response = new LogoutResponse(accessToken);
+        return response;
     }
 
     private JwtAuthentication generateTokens(AppUserEntity appUserEntity) {

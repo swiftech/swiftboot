@@ -29,6 +29,7 @@ public class AppAuthFilterConfig implements WebMvcConfigurer {
         FilterRegistrationBean<SessionAuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(sessionAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");
+        registrationBean.addUrlPatterns("/app/data");
         registrationBean.addUrlPatterns("/app/logout");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;

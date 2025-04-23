@@ -14,7 +14,7 @@ public abstract class BaseAuthDto {
 
     @Schema(description = "Access token expires at time in milliseconds")
     @JsonProperty(value = "expires_at")
-    private long expiresAt;
+    private Long expiresAt;
 
     public BaseAuthDto() {
     }
@@ -32,11 +32,11 @@ public abstract class BaseAuthDto {
         this.accessToken = accessToken;
     }
 
-    public long getExpiresAt() {
+    public Long getExpiresAt() {
         return expiresAt;
     }
 
-    public void setExpiresAt(long expiresAt) {
+    public void setExpiresAt(Long expiresAt) {
         this.expiresAt = expiresAt;
     }
 }

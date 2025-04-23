@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  *
  * @since 3.0
  */
-public abstract class BaseRefreshTokenDto extends BaseAuthDto{
+public abstract class BaseRefreshTokenDto extends BaseAuthDto {
 
     @Schema(description = "Refresh Token, only for JWT mode")
     @JsonProperty(value = "refresh_token")
@@ -16,7 +16,7 @@ public abstract class BaseRefreshTokenDto extends BaseAuthDto{
 
     @Schema(description = "Refresh token expires at time in milliseconds, only for JWT mode")
     @JsonProperty(value = "refresh_token_expires_at")
-    private long refreshTokenExpiresAt;
+    private Long refreshTokenExpiresAt;
 
     public BaseRefreshTokenDto() {
     }
@@ -35,11 +35,11 @@ public abstract class BaseRefreshTokenDto extends BaseAuthDto{
         this.refreshToken = refreshToken;
     }
 
-    public long getRefreshTokenExpiresAt() {
+    public Long getRefreshTokenExpiresAt() {
         return refreshTokenExpiresAt;
     }
 
-    public void setRefreshTokenExpiresAt(long refreshTokenExpiresAt) {
+    public void setRefreshTokenExpiresAt(Long refreshTokenExpiresAt) {
         this.refreshTokenExpiresAt = refreshTokenExpiresAt;
     }
 }

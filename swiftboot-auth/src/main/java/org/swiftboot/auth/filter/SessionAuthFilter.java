@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
@@ -62,7 +63,10 @@ public class SessionAuthFilter extends BaseAuthFilter {
         }
         else {
             try {
-                sessionService.verifySession(token);
+                Session session = sessionService.verifySession(token);
+                if (session == null) {
+                    throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, "User does not have a valid session");
+                }
                 log.debug("User verified as valid");
                 filterChain.doFilter(new TokenRequestWrapper(request, tokenKey), response);
             } catch (ErrMessageException e) {

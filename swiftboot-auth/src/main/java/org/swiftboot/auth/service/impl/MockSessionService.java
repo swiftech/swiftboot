@@ -13,6 +13,7 @@ import org.swiftboot.util.IoUtils;
 import org.swiftboot.util.JsonUtils;
 
 import jakarta.annotation.PostConstruct;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -89,9 +90,11 @@ public class MockSessionService implements SessionService, ApplicationContextAwa
     @Override
     public Session verifySession(String token) {
         log.warn("Mock verifySession()");
-        if (mockSession != null
-                && mockSession.getExpireTime() != null
-                && mockSession.getExpireTime() > System.currentTimeMillis()) {
+        if (mockSession != null) {
+            if (mockSession.getExpireTime() == null || mockSession.getExpireTime() == 0
+                    || mockSession.getExpireTime() > System.currentTimeMillis()) {
+                return mockSession;
+            }
             return mockSession;
         }
         return null;
@@ -100,9 +103,11 @@ public class MockSessionService implements SessionService, ApplicationContextAwa
     @Override
     public Session verifySession(String group, String token) {
         log.warn("Mock verifySession()");
-        if (mockSession != null
-                && mockSession.getExpireTime() != null
-                && mockSession.getExpireTime() > System.currentTimeMillis()) {
+        if (mockSession != null) {
+            if (mockSession.getExpireTime() == null || mockSession.getExpireTime() == 0
+                    || mockSession.getExpireTime() > System.currentTimeMillis()) {
+                return mockSession;
+            }
             return mockSession;
         }
         return null;

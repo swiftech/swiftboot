@@ -1,4 +1,4 @@
-package org.swiftboot.common.auth;
+package org.swiftboot.common.auth.service;
 
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +11,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.JwtUtils;
 import org.swiftboot.common.auth.annotation.*;
 
 /**

@@ -30,6 +30,7 @@ public class AppJwtAuthFilterConfig implements WebMvcConfigurer {
         FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(jwtAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");
+        registrationBean.addUrlPatterns("/app/data");
         registrationBean.addUrlPatterns("/app/logout");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;

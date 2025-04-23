@@ -14,7 +14,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 import org.swiftboot.auth.config.AuthConfigBean;
-import org.swiftboot.auth.service.AuthenticatedResponse;
+import org.swiftboot.common.auth.response.AuthenticatedResponse;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 
@@ -23,7 +23,7 @@ import jakarta.servlet.http.Cookie;
 
 /**
  * Automatically save session of current authenticated user from the
- * {@link AuthenticatedResponse} object and write the user token to Cookie (if enabled).
+ * {@link AuthenticatedResponse} object and write the user token to Cookie (if enabled) or the header of HTTP response.
  *
  * @author swiftech
  * @see org.swiftboot.auth.service.UserAuthService

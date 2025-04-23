@@ -1,4 +1,4 @@
-package org.swiftboot.auth.interceptor;
+package org.swiftboot.common.auth.aop;
 
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -13,29 +13,23 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
-import org.swiftboot.auth.config.AuthConfigBean;
-import org.swiftboot.common.auth.token.JwtAuthentication;
-import org.swiftboot.auth.service.AuthenticatedResponse;
 import org.swiftboot.common.auth.JwtService;
-import org.swiftboot.common.auth.token.AccessToken;
+import org.swiftboot.common.auth.response.LogoutResponse;
 
 /**
- * Automatically save access token and refresh token of current authenticated user from the
- * {@link AuthenticatedResponse} object.
+ * Automatically revoke access token and refresh token of current authenticated user from the
+ * {@link LogoutResponse} object.
  *
  * @author swiftech
  * @see JwtService
- * @see AuthenticatedResponse
+ * @see LogoutResponse
  * @since 3.0
  */
 @ControllerAdvice
 @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "jwt")
-public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdvice {
+public class JwtLogoutResponseAdvice extends AbstractMappingJacksonResponseBodyAdvice {
 
-    private static final Logger log = LoggerFactory.getLogger(UserJwtResponseAdvice.class);
-
-    @Resource
-    private AuthConfigBean authConfigBean;
+    private static final Logger log = LoggerFactory.getLogger(JwtLogoutResponseAdvice.class);
 
     @Resource
     private JwtService jwtService;
@@ -43,22 +37,17 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return super.supports(returnType, converterType)
-                && AuthenticatedResponse.class.isAssignableFrom(returnType.getParameterType());
+                && LogoutResponse.class.isAssignableFrom(returnType.getParameterType());
     }
 
     @Override
     protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType,
                                            ServerHttpRequest request, ServerHttpResponse response) {
-        if (log.isDebugEnabled()) log.debug("Handle user tokens after authenticated.");
-        AuthenticatedResponse<?, ?> authenticatedResponse = (AuthenticatedResponse<?, ?>) bodyContainer.getValue();
-        Object authenticated = authenticatedResponse.getAuthenticated();
-        if (authenticated == null) return;
-        if (authenticated instanceof JwtAuthentication ja) {
-            AccessToken accessToken = ja.getAccessToken();
-            if (StringUtils.isBlank(accessToken.tokenValue())) return;
-
-            // save authenticated dual token.
-            jwtService.saveJwtAuthentication(ja);
-        }
+        if (log.isDebugEnabled()) log.debug("Handle user tokens after logout.");
+        LogoutResponse<?> logoutResponse = (LogoutResponse<?>) bodyContainer.getValue();
+        String accessToken = logoutResponse.getAccessToken();
+        if (StringUtils.isBlank(accessToken)) return;
+        // revoke authenticate by access token.
+        jwtService.revokeAuthenticationByAccessToken(accessToken);
     }
 }

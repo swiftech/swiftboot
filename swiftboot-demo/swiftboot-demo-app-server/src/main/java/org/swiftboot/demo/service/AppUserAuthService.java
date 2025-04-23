@@ -4,8 +4,9 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.Authenticated;
-import org.swiftboot.auth.service.AuthenticatedResponse;
+import org.swiftboot.common.auth.response.AuthenticatedResponse;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.model.SessionBuilder;
 import org.swiftboot.auth.service.UserAuthService;
@@ -73,11 +74,12 @@ public class AppUserAuthService implements UserAuthService {
 
     @Override
     public AuthenticatedResponse<AppUserSignInDto, Authenticated> refreshAccessToken(String refreshToken) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
-    public void userLogout(String accessToken) {
-        // TODO
+    public LogoutResponse<String> userLogout(String accessToken) {
+        LogoutResponse<String> logoutResponse = new LogoutResponse<>(accessToken);
+        return logoutResponse;
     }
 }

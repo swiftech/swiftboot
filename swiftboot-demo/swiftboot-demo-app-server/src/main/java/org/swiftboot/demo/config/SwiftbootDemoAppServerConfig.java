@@ -26,7 +26,7 @@ import org.swiftboot.data.model.id.IdGenerator;
         "org.swiftboot.data",
         "org.swiftboot.service",
         "org.swiftboot.auth",
-        "org.swiftboot.common",
+        "org.swiftboot.common.auth",
         "org.swiftboot.demo"
 })
 // 和org.swiftboot.demo在同一个包下面的可以不配置

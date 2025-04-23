@@ -1,9 +1,11 @@
 package org.swiftboot.auth.service;
 
+import org.swiftboot.common.auth.response.AuthenticatedResponse;
+import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.Authenticated;
 
 /**
- * The authentication service for user login with user id and password.
+ * The authentication service for user login with user login id and password.
  * This interface must be implemented and be invoked by you.
  *
  * @author swiftech
@@ -28,6 +30,11 @@ public interface UserAuthService {
      */
     <R> AuthenticatedResponse<R, Authenticated> refreshAccessToken(String refreshToken);
 
-    void userLogout(String accessToken);
+    /**
+     * User logout
+     *
+     * @param accessToken
+     */
+    <R> LogoutResponse<R> userLogout(String accessToken);
 
 }

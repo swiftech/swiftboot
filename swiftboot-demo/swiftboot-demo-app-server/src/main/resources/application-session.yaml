@@ -1,0 +1,11 @@
+swiftboot:
+  auth:
+    enabled: true
+    authType: session
+    session:
+      type: redis
+      group: user_session
+      expiresIn: 1800
+      updateExpireTime: true
+      useCookie: true
+      cookiePath: /
