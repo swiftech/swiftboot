@@ -1,4 +1,4 @@
-package org.swiftboot.data.model.dao;
+package org.swiftboot.data.repository;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,14 +8,14 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 /**
- * 基于 {@code Integer} 类型的逻辑删除扩展接口
+ * 基于 {@code Boolean} 类型的逻辑删除扩展接口
  *
  * @author swiftech
  * @since 2.1.0
  */
-public interface IntegerLogicalDeleteExtend<E extends LogicalDeletePersistable<Integer>> {
+public interface BooleanLogicalDeleteExtend<E extends LogicalDeletePersistable<Boolean>> {
 
-    @Query("update #{#entityName} e set e.isDelete = 1 where e.id = ?1")
+    @Query("update #{#entityName} e set e.isDelete = true where e.id = ?1")
     @Transactional
     @Modifying
     void deleteLogically(String id);
@@ -25,7 +25,7 @@ public interface IntegerLogicalDeleteExtend<E extends LogicalDeletePersistable<I
         deleteLogically(entity.getId());
     }
 
-    @Query("update #{#entityName} e set e.isDelete = 1 where e.id in ?1")
+    @Query("update #{#entityName} e set e.isDelete = true where e.id in ?1")
     @Transactional
     @Modifying
     void deleteLogically(String... ids);
@@ -45,7 +45,7 @@ public interface IntegerLogicalDeleteExtend<E extends LogicalDeletePersistable<I
     }
 
 
-    @Query("update #{#entityName} e set e.isDelete = 0 where e.id = ?1")
+    @Query("update #{#entityName} e set e.isDelete = false where e.id = ?1")
     @Transactional
     @Modifying
     void undeleteLogically(String id);
@@ -55,7 +55,7 @@ public interface IntegerLogicalDeleteExtend<E extends LogicalDeletePersistable<I
         undeleteLogically(entity.getId());
     }
 
-    @Query("update #{#entityName} e set e.isDelete = 0 where e.id in ?1")
+    @Query("update #{#entityName} e set e.isDelete = false where e.id in ?1")
     @Transactional
     @Modifying
     void undeleteLogically(String... ids);

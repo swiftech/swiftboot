@@ -1,7 +1,7 @@
-package org.swiftboot.data.model.dao.impl;
+package org.swiftboot.data.repository.impl;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.swiftboot.data.model.dao.GenericCustomizeDao;
+import org.swiftboot.data.repository.GenericCustomizeDao;
 import org.swiftboot.data.model.entity.BaseIdEntity;
 
 /**

@@ -1,4 +1,4 @@
-package org.swiftboot.web.interceptor;
+package org.swiftboot.web.aop;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;

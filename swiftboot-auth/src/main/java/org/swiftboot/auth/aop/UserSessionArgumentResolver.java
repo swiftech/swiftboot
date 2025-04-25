@@ -1,4 +1,4 @@
-package org.swiftboot.auth.interceptor;
+package org.swiftboot.auth.aop;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

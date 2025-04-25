@@ -1,7 +1,8 @@
 package org.swiftboot.data.model.interceptor;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.EmptyInterceptor;
+import org.hibernate.Interceptor;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
@@ -9,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.data.util.HibernateUtils;
-
-import jakarta.annotation.Resource;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -26,7 +25,7 @@ import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.*;
  * @see org.swiftboot.data.model.aspect.UpdateTimeAspect
  * @since 2.0.0
  */
-public class TimeInterceptor extends EmptyInterceptor {
+public class TimeInterceptor implements Interceptor {
 
     public static final String CREATE_TIME = "createTime";
     public static final String UPDATE_TIME = "updateTime";

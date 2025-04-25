@@ -1,4 +1,4 @@
-package org.swiftboot.data.model.dao.impl;
+package org.swiftboot.data.repository.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.data.model.entity.IdPersistable;

@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.SessionAuthFilter;
-import org.swiftboot.auth.interceptor.UserSessionArgumentResolver;
+import org.swiftboot.auth.aop.UserSessionArgumentResolver;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.auth.service.impl.MockSessionService;
 import org.swiftboot.auth.service.impl.RedisSessionService;

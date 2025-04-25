@@ -89,19 +89,6 @@ public class AppUserJwtAuthService implements UserAuthService {
 
     @Override
     public LogoutResponse<String> userLogout(String accessToken) {
-        if (StringUtils.isBlank(accessToken)) {
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, "Unable to logout");
-        }
-        String userId = jwtTokenProvider.getUserId(accessToken);
-        // revoke the refresh token
-//        jwtService.revokeAuthenticationByAccessToken(accessToken);
-
-        //
-        Optional<AppUserEntity> byId = appUserRepository.findById(userId);
-        if (byId.isPresent()) {
-            AppUserEntity appUserEntity = byId.get();
-        }
-
         LogoutResponse<String> response = new LogoutResponse(accessToken);
         return response;
     }
@@ -125,22 +112,4 @@ public class AppUserJwtAuthService implements UserAuthService {
         dto.setRefreshTokenExpiresAt(refreshToken.expiresAt());
         return new AuthenticatedResponse<>(dto, jwtAuthentication);
     }
-
-
-//    private AuthenticatedResponse<AppUserSignInDto, JwtAuthentication> generateTokensAndFillResponse(AppUserEntity appUserEntity) {
-//        AccessToken accessToken = jwtTokenProvider.generateAccessToken(appUserEntity.getId(), appUserEntity.getLoginName());
-//        RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(appUserEntity.getId());
-//
-//        AppUserSignInDto dto = new AppUserSignInDto();
-//        dto.setId(appUserEntity.getId());
-//        dto.setLoginName(appUserEntity.getLoginName());
-//        dto.setUpdateTime(LocalDateTimeUtils.toMillisecond(appUserEntity.getUpdateTime()));
-//        dto.setAccessToken(accessToken.tokenValue());
-//        dto.setExpiresAt(accessToken.expiresAt());
-//        dto.setRefreshToken(refreshToken.tokenValue());
-//        dto.setRefreshTokenExpiresAt(refreshToken.expiresAt());
-//        JwtAuthentication jwtAuthentication = new JwtAuthentication(accessToken, refreshToken);
-//        return new AuthenticatedResponse<>(dto, jwtAuthentication);
-//    }
-
 }

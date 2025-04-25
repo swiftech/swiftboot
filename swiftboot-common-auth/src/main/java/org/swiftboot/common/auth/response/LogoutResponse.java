@@ -6,6 +6,7 @@ import org.swiftboot.common.auth.aop.JwtLogoutResponseAdvice;
 import org.swiftboot.web.result.HttpResponse;
 
 /**
+ * Return the response to controller method .
  *
  * @param <R> Type of DTO object returns to client.
  * @see JwtLogoutResponseAdvice

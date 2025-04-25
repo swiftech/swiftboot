@@ -14,7 +14,7 @@ import java.util.Map;
 public class SessionBuilder {
 
     /**
-     * The user token here is used for {@link org.swiftboot.auth.interceptor.UserSessionResponseAdvice} to read.
+     * The user token here is used for {@link org.swiftboot.auth.aop.UserSessionResponseAdvice} to read.
      *
      */
     private String userToken;

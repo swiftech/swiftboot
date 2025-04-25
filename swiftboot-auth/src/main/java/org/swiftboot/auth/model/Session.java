@@ -12,12 +12,12 @@ import java.util.Map;
  *
  * @author swiftech
  * @see SessionBuilder
- * @see org.swiftboot.auth.interceptor.UserSessionResponseAdvice
+ * @see org.swiftboot.auth.aop.UserSessionResponseAdvice
  */
 public class Session implements Authenticated {
 
     /**
-     * The user token here is used for {@link org.swiftboot.auth.interceptor.UserSessionResponseAdvice} to read.
+     * The user token here is used for {@link org.swiftboot.auth.aop.UserSessionResponseAdvice} to read.
      */
     @JsonIgnore
     private String userToken;

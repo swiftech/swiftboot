@@ -1,9 +1,8 @@
 package org.swiftboot.data.model.dao;
 
 import org.springframework.data.repository.CrudRepository;
-import org.swiftboot.data.model.entity.BoolLogicalDeleteEntity;
 import org.swiftboot.data.model.entity.IntLogicalDeleteEntity;
-import org.swiftboot.data.model.entity.LogicalDeletePersistable;
+import org.swiftboot.data.repository.IntegerLogicalDeleteExtend;
 
 /**
  * Dao for testing logical deletion.

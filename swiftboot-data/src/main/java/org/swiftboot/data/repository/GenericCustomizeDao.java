@@ -1,4 +1,4 @@
-package org.swiftboot.data.model.dao;
+package org.swiftboot.data.repository;
 
 import org.swiftboot.data.model.entity.BaseIdEntity;
 

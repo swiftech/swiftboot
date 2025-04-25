@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author swiftech
  * @see HttpCommand
- * @deprecated use {@link org.swiftboot.web.interceptor.WebMessageAdvice} instead.
+ * @deprecated use {@link org.swiftboot.web.aop.WebMessageAdvice} instead.
  **/
 public class WebMessageConverter extends MappingJackson2HttpMessageConverter {
 
