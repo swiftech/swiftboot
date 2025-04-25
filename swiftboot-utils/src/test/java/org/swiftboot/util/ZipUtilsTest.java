@@ -17,9 +17,7 @@ public class ZipUtilsTest {
 
     @Test
     public void testSearchInZip() {
-
-        try {
-            InputStream inputStream = StringUtils.class.getProtectionDomain().getCodeSource().getLocation().openStream();
+        try (InputStream inputStream = StringUtils.class.getProtectionDomain().getCodeSource().getLocation().openStream()) {
             List<ZipEntry> zipEntries = ZipUtils.searchInZip(inputStream, ".properties", true);
             for (ZipEntry ze : zipEntries) {
                 System.out.println(System.out.format("File: %s Size: %d Last Modified %s %n",

@@ -10,6 +10,7 @@ import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.*;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -71,9 +72,9 @@ public class HttpServletIOUtils {
                                                  HttpServletResponse response,
                                                  String contentType,
                                                  Map<String, String> headers) {
-        try {
-            writeStreamToResponseStream(new FileInputStream(file), response, contentType, headers);
-        } catch (FileNotFoundException e) {
+        try (FileInputStream fins = new FileInputStream(file)) {
+            writeStreamToResponseStream(fins, response, contentType, headers);
+        } catch (IOException e) {
             e.printStackTrace();
             throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
         }
@@ -132,9 +133,9 @@ public class HttpServletIOUtils {
      * @param headers
      */
     public static void writeInputStreamToResponseStream(InputStream inputStream,
-                                                   HttpServletResponse response,
-                                                   String contentType,
-                                                   Map<String, String> headers) {
+                                                        HttpServletResponse response,
+                                                        String contentType,
+                                                        Map<String, String> headers) {
         OutputStream out = null;
         try {
             response.setCharacterEncoding(CharEncoding.UTF_8);

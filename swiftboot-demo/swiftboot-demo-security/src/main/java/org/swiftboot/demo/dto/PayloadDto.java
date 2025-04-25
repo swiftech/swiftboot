@@ -5,7 +5,7 @@ import org.swiftboot.web.result.Result;
 /**
  * @author swiftech
  */
-public class SomeResult implements Result {
+public class PayloadDto implements Result {
 
     private String data;
 

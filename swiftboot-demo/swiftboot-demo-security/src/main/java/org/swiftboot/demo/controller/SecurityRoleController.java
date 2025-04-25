@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.demo.dto.SomeResult;
+import org.swiftboot.demo.dto.PayloadDto;
 import org.swiftboot.web.result.HttpResponse;
 
 /**
@@ -30,8 +30,8 @@ public class SecurityRoleController {
     @Operation(description = "This endpoint requires admin role")
     @GetMapping(value = "/require/admin")
     @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<SomeResult> requireAdmin() {
-        SomeResult result = new SomeResult();
+    public HttpResponse<PayloadDto> requireAdmin() {
+        PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to admin");
         return new HttpResponse<>(result);
     }
@@ -44,8 +44,8 @@ public class SecurityRoleController {
     @Operation(description = "This endpoint requires manager role")
     @GetMapping(value = "/require/manager")
     @PreAuthorize("hasRole('MANAGER')")
-    public HttpResponse<SomeResult> requireManager() {
-        SomeResult result = new SomeResult();
+    public HttpResponse<PayloadDto> requireManager() {
+        PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to manager");
         return new HttpResponse<>(result);
     }

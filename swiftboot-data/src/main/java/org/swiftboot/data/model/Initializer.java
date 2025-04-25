@@ -28,6 +28,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -133,10 +134,10 @@ public class Initializer implements ApplicationContextAware {
                 return;
             }
             for (File file : files) {
-                log.info("Pre-assign ID to file: " + file.getName());
-                try {
+                log.info("Pre-assign ID to file: %s".formatted(file.getName()));
+                try (FileInputStream fins = new FileInputStream(file)) {
                     TextStringBuilder outBuffer = new TextStringBuilder();
-                    new CsvReader().readCsv(new FileInputStream(file), new CsvReaderHandler() {
+                    new CsvReader().readCsv(fins, new CsvReaderHandler() {
                         String code = null;
                         int columnCount = 0;
 
@@ -204,9 +205,8 @@ public class Initializer implements ApplicationContextAware {
             return;
         }
         for (Class<? extends IdPersistable> entityClass : entityAndFileMapping.keySet()) {
-            InputStream fileIns = entityAndFileMapping.get(entityClass);
-            log.info("Init data for entity: " + entityClass);
-            try {
+            log.info("Init data for entity: %s".formatted(entityClass));
+            try (InputStream fileIns = entityAndFileMapping.get(entityClass)) {
                 initOne(fileIns, entityClass);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -238,7 +238,7 @@ public class Initializer implements ApplicationContextAware {
     private InputStream loadCsvDataFileAsStream(String profile, String fileName) throws IOException {
         String dataFileUri = String.format("%s%s/%s.csv", swiftBootDataConfigBean.getModel().getInitData().getBaseDir(),
                 profile, fileName);
-        log.info("Try to load CSV data file: " + dataFileUri);
+        log.info("Try to load CSV data file: %s".formatted(dataFileUri));
         InputStream inputStream = ClasspathResourceUtils.openResourceStream(dataFileUri);
         if (inputStream != null) {
             return inputStream;

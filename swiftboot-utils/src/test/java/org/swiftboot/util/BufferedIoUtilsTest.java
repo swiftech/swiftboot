@@ -18,8 +18,7 @@ public class BufferedIoUtilsTest {
 
     @Test
     public void testReadFileWriteFile() {
-        try {
-            InputStream ins = ClasspathResourceUtils.openResourceStream("IoUtilsTest.txt");
+        try (InputStream ins = ClasspathResourceUtils.openResourceStream("IoUtilsTest.txt")) {
             Assertions.assertNotNull(ins);
             BufferedIoUtils.writeInputStreamToFile(ins, 1024,
                     createOutputFile("IoUtilsTests.txt"));
