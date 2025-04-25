@@ -8,7 +8,7 @@ import java.io.*;
 /**
  * 序列化和反序列化工具类
  *
- * @author  swiftech
+ * @author swiftech
  */
 public class SerializeUtils {
 
@@ -25,10 +25,8 @@ public class SerializeUtils {
         if (isEmpty(bytes)) {
             return null;
         }
-        try {
-            ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
-            try {
-                ObjectInputStream objectInputStream = new ObjectInputStream(byteStream);
+        try (ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes)) {
+            try (ObjectInputStream objectInputStream = new ObjectInputStream(byteStream)) {
                 try {
                     result = objectInputStream.readObject();
                 } catch (ClassNotFoundException ex) {
@@ -58,15 +56,13 @@ public class SerializeUtils {
         if (object == null) {
             return new byte[0];
         }
-        try {
-            ByteArrayOutputStream byteStream = new ByteArrayOutputStream(256);
-            try {
-                if (!(object instanceof Serializable)) {
-                    throw new IllegalArgumentException(
-                            String.format("%s requires a Serializable payload but received an object of type [%s]",
-                                    SerializeUtils.class.getSimpleName(), object.getClass().getName()));
-                }
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteStream);
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream(256)) {
+            if (!(object instanceof Serializable)) {
+                throw new IllegalArgumentException(
+                        String.format("%s requires a Serializable payload but received an object of type [%s]",
+                                SerializeUtils.class.getSimpleName(), object.getClass().getName()));
+            }
+            try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteStream)) {
                 objectOutputStream.writeObject(object);
                 objectOutputStream.flush();
                 result = byteStream.toByteArray();
