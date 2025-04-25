@@ -16,6 +16,7 @@ import java.util.Set;
  * redis service implementation for cluster server.
  *
  * @author swiftech 2019-06-11
+ * @deprecated
  **/
 public class RedisClusterServiceImpl implements RedisService {
 

@@ -1,5 +1,6 @@
 package org.swiftboot.service.service.impl;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.swiftboot.service.config.SwiftbootServiceConfigBean;
@@ -8,8 +9,6 @@ import org.swiftboot.service.service.CaptchaService;
 import org.swiftboot.service.service.RedisService;
 import org.swiftboot.service.util.CaptchaUtils;
 import org.swiftboot.util.IdUtils;
-
-import jakarta.annotation.Resource;
 
 /**
  *

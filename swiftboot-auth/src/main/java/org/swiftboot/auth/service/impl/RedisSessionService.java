@@ -2,21 +2,18 @@ package org.swiftboot.auth.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
-import org.swiftboot.service.service.RedisService;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
-import redis.clients.jedis.Jedis;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Resource;
 import java.io.IOException;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -34,23 +31,10 @@ public class RedisSessionService implements SessionService {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Resource
-    private RedisService redisService;
+    private StringRedisTemplate strRedisTemplate;
 
     @Resource
     private AuthConfigBean config;
-
-    @PostConstruct
-    public void init() {
-    }
-
-    @PreDestroy
-    public void destroy() {
-        try (Jedis jedis = redisService.getJedis()) {
-            if (jedis != null && jedis.isConnected()) {
-                jedis.disconnect();
-            }
-        }
-    }
 
     @Override
     public void addSession(String token, Session session) throws RuntimeException {
@@ -79,25 +63,23 @@ public class RedisSessionService implements SessionService {
 
     private void saveSession(String token, Session session) throws JsonProcessingException {
         byte[] bytes = mapper.writeValueAsBytes(session);
-        long ret;
-        try (Jedis jedis = redisService.getJedis()) {
-            if (isBlank(session.getGroup())) {
-                if (StringUtils.isNotBlank(config.getSession().getGroup())) {
-                    ret = jedis.hset(config.getSession().getGroup(), token, new String(bytes));// group -> token ->  会话
-                    log.debug(String.format("Session %s %s, expired at %s", token,
-                            ret == 0 ? "updated" : "created",
-                            session.getExpireTime() == null ? "never" : DateFormatUtils.format(session.getExpireTime(), "yyyy-MM-dd HH:mm:ss")));
-                }
-                else {
-                    jedis.set(token.getBytes(), bytes); // token ->  会话
-                }
-            }
-            else {
-                ret = jedis.hset(session.getGroup(), token, new String(bytes));// group -> token ->  会话
-                log.debug(String.format("Session %s %s, expired at %s", token,
-                        ret == 0 ? "updated" : "created",
+        if (isBlank(session.getGroup())) {
+            if (StringUtils.isNotBlank(config.getSession().getGroup())) {
+                strRedisTemplate.opsForHash().put(config.getSession().getGroup(), token, new String(bytes));
+//                    ret = redisTemplate.hset(config.getSession().getGroup(), token, new String(bytes));// group -> token ->  会话
+                log.debug(String.format("Session %s saved, expired at %s", token,
                         session.getExpireTime() == null ? "never" : DateFormatUtils.format(session.getExpireTime(), "yyyy-MM-dd HH:mm:ss")));
             }
+            else {
+                strRedisTemplate.opsForValue().set(token, new String(bytes)); // token ->  会话
+//                    jedis.set(token.getBytes(), bytes); // token ->  会话
+            }
+        }
+        else {
+            strRedisTemplate.opsForHash().put(session.getGroup(), token, new String(bytes));// group -> token ->  会话
+//            ret = jedis.hset(session.getGroup(), token, new String(bytes));// group -> token ->  会话
+            log.debug(String.format("Session %s saved, expired at %s", token,
+                    session.getExpireTime() == null ? "never" : DateFormatUtils.format(session.getExpireTime(), "yyyy-MM-dd HH:mm:ss")));
         }
     }
 
@@ -112,42 +94,40 @@ public class RedisSessionService implements SessionService {
             return null;
         }
 
-        if (StringUtils.isBlank(group)) {
+        if (isBlank(group)) {
             group = config.getSession().getGroup();
         }
         log.debug(String.format("token: %s", token));
-
-        byte[] bytes;
-        try (Jedis jedis = redisService.getJedis()) {
-            String jsonSession;
-            if (StringUtils.isNotBlank(group)) {
-                jsonSession = jedis.hget(group, token);
-                if (isBlank(jsonSession)) {
+        byte[] bytes = null;
+        if (StringUtils.isNotBlank(group)) {
+            Object o = strRedisTemplate.opsForHash().get(group, token);
+            if (o != null) {
+                if (isBlank(o.toString())) {
                     return null;
                 }
                 else {
-                    bytes = jsonSession.getBytes();
+                    bytes = o.toString().getBytes();
                 }
             }
-            else {
-                bytes = jedis.get(token.getBytes());
-                if (bytes == null || bytes.length == 0) {
-                    return null;
-                }
+        }
+        else {
+            Object value = strRedisTemplate.opsForValue().get(token);
+            if (value == null) {
+                return null;
             }
-            log.debug(new String(bytes));
-            try {
-                return mapper.readValue(bytes, Session.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Session is invalid");
+            bytes = value.toString().getBytes();
+            if (bytes.length == 0) {
+                return null;
             }
-        } catch (Exception e) {
-            log.error("Get session error, token=%s".formatted(token), e);
-            return null;
+        }
+        log.debug(new String(bytes));
+        try {
+            return mapper.readValue(bytes, Session.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Session is invalid");
         }
     }
-
 
     @Override
     public void removeSession(String token) {
@@ -157,19 +137,21 @@ public class RedisSessionService implements SessionService {
     @Override
     public void removeSession(String group, String token) {
         Long result;
-        try (Jedis jedis = redisService.getJedis()) {
-            if (StringUtils.isNotBlank(group)) {
-                result = jedis.hdel(group, token);
+        if (StringUtils.isNotBlank(group)) {
+            result = strRedisTemplate.opsForHash().delete(group, token);
+//            result = redisTemplate.hdel(group, token);
+        }
+        else {
+            if (StringUtils.isNotBlank(config.getSession().getGroup())) {
+                result = strRedisTemplate.opsForHash().delete(config.getSession().getGroup(), token);
+//                result = jedis.hdel(config.getSession().getGroup(), token);
             }
             else {
-                if (StringUtils.isNotBlank(config.getSession().getGroup())) {
-                    result = jedis.hdel(config.getSession().getGroup(), token);
-                }
-                else {
-                    result = jedis.del(token);
-                }
+                strRedisTemplate.opsForValue().getAndDelete(token);
+                result = 1L; // workaround
             }
         }
+
         if (result <= 0) {
             throw new RuntimeException("Remove session failed, token: %s".formatted(token));
         }
@@ -221,7 +203,7 @@ public class RedisSessionService implements SessionService {
     @Override
     public void clearAllSessions() {
         if (StringUtils.isNoneBlank(config.getSession().getGroup())) {
-            redisService.del(config.getSession().getGroup());
+            strRedisTemplate.delete(config.getSession().getGroup());
         }
     }
 }

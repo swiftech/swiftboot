@@ -1,17 +1,18 @@
 
 package org.swiftboot.service.service.impl;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.service.config.RedisConfigBean;
 import org.swiftboot.service.config.SwiftbootServiceConfigBean;
 import org.swiftboot.service.service.RedisService;
 import org.swiftboot.service.util.SerializeUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import java.util.Set;
  * redis service implementation for standalone server.
  *
  * @author swiftech
+ * @deprecated
  */
 public class RedisServiceImpl implements RedisService {
 
@@ -34,11 +36,13 @@ public class RedisServiceImpl implements RedisService {
     @Resource
     SwiftbootServiceConfigBean swiftbootServiceConfigBean;
 
+    @Resource
+    RedisConfigBean redisConfig;
 
     @PostConstruct
     public void init() {
-        redisHost = swiftbootServiceConfigBean.getRedis().getHost();
-        redisPort = swiftbootServiceConfigBean.getRedis().getPort();
+        redisHost = redisConfig.getHost();
+        redisPort = redisConfig.getPort();
         jedisPool = new JedisPool(redisHost, redisPort == 0 ? 6379 : redisPort);
         log.info(String.format("Connected to Redis Server -> %s:%d", redisHost, redisPort));
     }

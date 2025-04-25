@@ -1,8 +1,13 @@
 debug: true
 server:
   port: 8088
+spring:
   application:
     name: swiftboot-demo-app-server
+  data:
+    redis:
+      host: localhost
+      port: 6379
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:file:./target/swiftboot

@@ -11,19 +11,19 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("swiftboot.service")
 public class SwiftbootServiceConfigBean {
 
-    @NestedConfigurationProperty
-    private RedisConfigBean redis = new RedisConfigBean();
+//    @NestedConfigurationProperty
+//    private RedisConfigBean redis = new RedisConfigBean();
 
     @NestedConfigurationProperty
     private CaptchaConfigBean captcha = new CaptchaConfigBean();
 
-    public RedisConfigBean getRedis() {
-        return redis;
-    }
-
-    public void setRedis(RedisConfigBean redis) {
-        this.redis = redis;
-    }
+//    public RedisConfigBean getRedis() {
+//        return redis;
+//    }
+//
+//    public void setRedis(RedisConfigBean redis) {
+//        this.redis = redis;
+//    }
 
     public CaptchaConfigBean getCaptcha() {
         return captcha;

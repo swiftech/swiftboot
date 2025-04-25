@@ -32,7 +32,7 @@ import org.swiftboot.data.model.id.IdGenerator;
 // 和org.swiftboot.demo在同一个包下面的可以不配置
 @EntityScan(basePackages = {
         "org.swiftboot.demo.model",
-        "org.swiftboot.service.model.entity",
+        "org.swiftboot.service.model",
 })
 @EnableJpaRepositories(basePackages = {
         "org.swiftboot.demo.repository",

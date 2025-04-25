@@ -10,6 +10,7 @@ import java.util.Set;
  * Redis 连接服务，所有服务需要用到 Redis 存储的都通过 getJedis() 方法进行操作
  *
  * @author swiftech
+ * @deprecated
  */
 public interface RedisService {
 

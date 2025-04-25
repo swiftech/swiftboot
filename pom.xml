@@ -43,7 +43,7 @@
         <commons.text.version>1.13.1</commons.text.version>
         <commons.io.version>2.19.0</commons.io.version>
         <spring.version>6.2.2</spring.version>
-        <spring.boot.version>3.4.4</spring.boot.version>
+        <spring.boot.version>3.4.5</spring.boot.version>
         <spring.data.version>3.4.4</spring.data.version>
         <spring.data.jpa.version>3.4.4</spring.data.jpa.version>
         <spring.security.version>6.4.4</spring.security.version>
@@ -63,22 +63,23 @@
         <junit.version>5.12.1</junit.version>
         <postgres.version>42.7.5</postgres.version>
         <mysql.version>9.2.0</mysql.version>
-        <h2.version>2.2.220</h2.version>
+        <h2.version>2.3.232</h2.version>
         <poi.version>5.4.1</poi.version>
         <pdfbox.version>2.0.31</pdfbox.version>
         <pdf2dom.version>2.0.3</pdf2dom.version>
         <itext.version>5.5.13.3</itext.version>
         <!--        plugin-->
+        <plugin.maven.clean>3.4.1</plugin.maven.clean>
         <plugin.maven.compile>3.14.0</plugin.maven.compile>
         <plugin.maven.source>3.3.1</plugin.maven.source>
-        <plugin.maven.clean>3.4.1</plugin.maven.clean>
         <plugin.maven.resource>3.3.0</plugin.maven.resource>
+        <plugin.maven.jar>3.4.2</plugin.maven.jar>
+        <plguin.maven.javadoc>3.11.2</plguin.maven.javadoc>
         <plugin.maven.surefire>3.5.3</plugin.maven.surefire>
         <plugin.maven.deploy>3.1.4</plugin.maven.deploy>
         <plugin.maven.install>3.1.4</plugin.maven.install>
         <plugin.maven.gpg>3.2.7</plugin.maven.gpg>
-        <plugin.maven.jar>3.4.2</plugin.maven.jar>
-        <plguin.maven.javadoc>3.11.2</plguin.maven.javadoc>
+
     </properties>
 
 

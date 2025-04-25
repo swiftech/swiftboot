@@ -2,6 +2,7 @@ package org.swiftboot.demo.service;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.common.auth.response.LogoutResponse;
@@ -56,7 +57,7 @@ public class AppUserAuthService implements UserAuthService {
                     .userToken(token)
                     .userId(optUser.get().getId())
                     .userName(optUser.get().getLoginName())
-                    .addition("some_addition", "some addition in session")
+                    .addition("login_time", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
                     .createSession();
             // DTO to client user
             AppUserSignInDto signInDto = new AppUserSignInDto();
