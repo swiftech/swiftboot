@@ -25,7 +25,7 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
      */
     protected void responseWithError(HttpServletResponse response, String errorCode) throws IOException {
         Response<?> resp = new Response<>(errorCode);
-        resp.setMsg(ResponseCode.getErrorMessage(errorCode));
+        resp.setMessage(ResponseCode.getErrorMessage(errorCode));
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(resp));

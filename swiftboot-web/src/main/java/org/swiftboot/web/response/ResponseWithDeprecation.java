@@ -12,16 +12,16 @@ import org.swiftboot.web.exception.ErrMessageException;
 public class ResponseWithDeprecation<T extends Object> extends Response<T> {
 
     public ResponseWithDeprecation() {
-        super.msg = "This API works for now, but will be deprecated in the future.";
+        super.message = "This API works for now, but will be deprecated in the future.";
     }
 
     public ResponseWithDeprecation(T result) {
         super(result);
-        super.msg = "This API works for now, but will be deprecated in the future.";
+        super.message = "This API works for now, but will be deprecated in the future.";
     }
 
     public ResponseWithDeprecation(ErrMessageException errMsgException) {
         super(errMsgException);
-        super.msg = "This API works for now, but will be deprecated in the future.";
+        super.message = "This API works for now, but will be deprecated in the future.";
     }
 }

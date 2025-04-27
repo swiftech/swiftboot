@@ -52,7 +52,7 @@ public class ResponseBuilder<T> {
         Response<T> response = new Response<>();
         response.setCode(code);
         if (StringUtils.isNotBlank(msg)) {
-            response.setMsg(msg);
+            response.setMessage(msg);
         }
         response.setMsgParams(msgParams);
         response.setData(result);

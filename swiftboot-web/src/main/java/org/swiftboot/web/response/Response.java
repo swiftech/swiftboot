@@ -33,7 +33,7 @@ public class Response<T> implements Serializable {
      * 响应代码对应的响应信息
      */
     @Schema(description = "Response message, default is OK", requiredMode = NOT_REQUIRED, example = "OK")
-    protected String msg = "OK";
+    protected String message = "OK";
 
     /**
      * 响应资源中的参数值
@@ -58,9 +58,9 @@ public class Response<T> implements Serializable {
         this.code = code;
     }
 
-    public Response(String code, String msg) {
+    public Response(String code, String message) {
         this.code = code;
-        this.msg = msg;
+        this.message = message;
     }
 
     public Response(String code, T data) {
@@ -68,15 +68,15 @@ public class Response<T> implements Serializable {
         this.data = data;
     }
 
-    public Response(String code, String msg, T data) {
+    public Response(String code, String message, T data) {
         this.code = code;
-        this.msg = msg;
+        this.message = message;
         this.data = data;
     }
 
     public Response(ErrMessageException errMsgException) {
         this.code = errMsgException.getErrorCode();
-        this.msg = errMsgException.getMessage();
+        this.message = errMsgException.getMessage();
     }
 
     public String getCode() {
@@ -95,12 +95,12 @@ public class Response<T> implements Serializable {
         this.msgParams = msgParams;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public T getData() {

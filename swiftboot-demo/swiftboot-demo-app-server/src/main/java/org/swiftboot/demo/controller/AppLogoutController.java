@@ -33,7 +33,7 @@ public class AppLogoutController {
     public Response<String> appUserLogout(@Token String accessToken) {
         log.info("> /app/logout");
         LogoutResponse<String> objectLogoutResponse = userAuthService.userLogout(accessToken);
-        objectLogoutResponse.setMsg("Logout success");
+        objectLogoutResponse.setMessage("Logout success");
         return objectLogoutResponse;
     }
 

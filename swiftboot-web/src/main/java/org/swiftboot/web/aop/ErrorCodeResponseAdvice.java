@@ -49,7 +49,7 @@ public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyA
         Response<?> responseBody = (Response<?>) bodyContainer.getValue();
         String errorCode = responseBody.getCode();
         String[] msgParams = responseBody.getMsgParams();
-        String msg = responseBody.getMsg();
+        String msg = responseBody.getMessage();
 
         if (StringUtils.isBlank(msg)) {
             // not user-defined message.
@@ -61,7 +61,7 @@ public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyA
                 else {
                     errorMessage = responseCode.getMessage(errorCode, msgParams);
                 }
-                responseBody.setMsg(errorMessage);
+                responseBody.setMessage(errorMessage);
             }
         }
         else {
@@ -70,7 +70,7 @@ public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyA
             if (!ArrayUtils.isEmpty(msgParams)) {
                 errorMessage = MessageUtils.instantiateMessage(msg, msgParams);
             }
-            responseBody.setMsg(errorMessage);
+            responseBody.setMessage(errorMessage);
         }
     }
 }
