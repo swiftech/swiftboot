@@ -65,9 +65,9 @@
         <mysql.version>9.2.0</mysql.version>
         <h2.version>2.3.232</h2.version>
         <poi.version>5.4.1</poi.version>
-        <pdfbox.version>2.0.31</pdfbox.version>
-        <pdf2dom.version>2.0.3</pdf2dom.version>
-        <itext.version>5.5.13.3</itext.version>
+<!--        <pdfbox.version>2.0.31</pdfbox.version>-->
+<!--        <pdf2dom.version>2.0.3</pdf2dom.version>-->
+<!--        <itext.version>5.5.13.3</itext.version>-->
         <!--        plugin-->
         <plugin.maven.clean>3.4.1</plugin.maven.clean>
         <plugin.maven.compile>3.14.0</plugin.maven.compile>
