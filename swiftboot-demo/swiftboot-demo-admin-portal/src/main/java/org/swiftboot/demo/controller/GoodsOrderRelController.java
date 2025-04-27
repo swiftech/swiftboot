@@ -9,7 +9,7 @@ import org.swiftboot.demo.command.GoodsOrderRelDelPurgeCommand;
 import org.swiftboot.demo.command.GoodsOrderRelSaveCommand;
 import org.swiftboot.demo.service.GoodsOrderRelService;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 import org.swiftboot.web.command.IdCommand;
 import org.swiftboot.web.command.IdListCommand;
 import io.swagger.v3.oas.annotations.tags.Tag;

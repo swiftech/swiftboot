@@ -8,7 +8,7 @@ import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
@@ -38,20 +38,20 @@ public class BaseAuthSessionController {
      */
     public String fetchUserIdFromSession(String token) {
         if (StringUtils.isBlank(token)) {
-            throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, "Token is not provided for this request");
+            throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, "Token is not provided for this request");
         }
         Session session = sessionService.getSession(token);
         if (session != null) {
             String userId = session.getUserId();
             if (StringUtils.isBlank(userId)) {
-                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User ID not exist in session: %s", token));
+                throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, String.format("User ID not exist in session: %s", token));
             }
             else {
                 return userId;
             }
         }
         else {
-            throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User session not exist: %s", token));
+            throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, String.format("User session not exist: %s", token));
         }
     }
 
@@ -70,12 +70,12 @@ public class BaseAuthSessionController {
             if (cookie != null) {
                 token = cookie.getValue();
                 if (StringUtils.isBlank(token)) {
-                    throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN,
+                    throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN,
                             String.format("Token '%s' is not provided neither in header nor in cookie for this request", tokenKey));
                 }
             }
             else {
-                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN,
+                throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN,
                         String.format("Token '%s' is not provided neither in header nor in cookie for this request", tokenKey));
             }
         }
@@ -84,14 +84,14 @@ public class BaseAuthSessionController {
         if (session != null) {
             String userId = session.getUserId();
             if (StringUtils.isBlank(userId)) {
-                throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User ID not exist in session: %s", token));
+                throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, String.format("User ID not exist in session: %s", token));
             }
             else {
                 return userId;
             }
         }
         else {
-            throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, String.format("User session not exist: %s", token));
+            throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, String.format("User session not exist: %s", token));
         }
     }
 

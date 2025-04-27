@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
-import org.swiftboot.web.result.ResponseBuilder;
+import org.swiftboot.web.dto.HttpResponse;
+import org.swiftboot.web.dto.ResponseBuilder;
 
 /**
  * @author swiftech

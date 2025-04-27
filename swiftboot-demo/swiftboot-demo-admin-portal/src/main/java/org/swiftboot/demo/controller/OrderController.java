@@ -13,7 +13,7 @@ import org.swiftboot.demo.command.OrderSaveCommand;
 import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 import org.swiftboot.web.command.IdCommand;
 import org.swiftboot.web.command.IdListCommand;
 import org.swiftboot.web.validate.ConvertValidateResult;

@@ -1,4 +1,4 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.dto;
 
 import org.swiftboot.data.model.entity.IdPersistable;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @param <E> 元素对应的实体类类型
  * @author swiftech
  */
-public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E extends IdPersistable> extends BaseListableResult<T> {
+public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extends IdPersistable> extends BaseListableDto<T> {
 
     /**
      * 从实体类集合创建相对应的返回对象集合
@@ -22,7 +22,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E 
      * @param entities
      * @return
      */
-    public BasePopulateListResult<T, E> populateByEntities(Iterable<E> entities) {
+    public BasePopulateListDto<T, E> populateByEntities(Iterable<E> entities) {
         // TODO call populateByEntities(Iterable<E> entities, PopulateHandler<T, E> populateHandler) instead
         Type genericSuperclass = getClass().getGenericSuperclass();
         if (genericSuperclass == null) {
@@ -35,7 +35,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E 
 
         List<T> list = new ArrayList<>();
         for (E entity : entities) {
-            T item = BasePopulateResult.createResult(itemClass, entity);
+            T item = BasePopulateDto.createResult(itemClass, entity);
             list.add(item);
         }
         this.setItems(list);
@@ -50,7 +50,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E 
      * @return
      * @since 1.1
      */
-    public BasePopulateListResult<T, E> populateByEntities(Iterable<E> entities, PopulateHandler<T, E> populateHandler) {
+    public BasePopulateListDto<T, E> populateByEntities(Iterable<E> entities, PopulateHandler<T, E> populateHandler) {
         Type genericSuperclass = getClass().getGenericSuperclass();
         if (genericSuperclass == null) {
             throw new RuntimeException("反射错误");
@@ -62,7 +62,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E 
 
         List<T> list = new ArrayList<>();
         for (E entity : entities) {
-            T item = BasePopulateResult.createResult(itemClass, entity);
+            T item = BasePopulateDto.createResult(itemClass, entity);
             if (populateHandler != null) {
                 populateHandler.onPopulated(item, entity);
             }
@@ -79,7 +79,7 @@ public abstract class BasePopulateListResult<T extends BasePopulateResult<E>, E 
      * @param <E>
      */
     @FunctionalInterface
-    public interface PopulateHandler<T extends BasePopulateResult<E>, E extends IdPersistable> {
+    public interface PopulateHandler<T extends BasePopulateDto<E>, E extends IdPersistable> {
 
         /**
          * 一个继承自 BasePopulateResult 的类被填充完成之后执行

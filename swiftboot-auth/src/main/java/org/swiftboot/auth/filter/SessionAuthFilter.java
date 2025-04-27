@@ -15,7 +15,7 @@ import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.common.auth.filter.BaseAuthFilter;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 import org.swiftboot.web.util.HttpServletCookieUtils;
 
 import java.io.IOException;
@@ -60,13 +60,13 @@ public class SessionAuthFilter extends BaseAuthFilter {
 
         if (isBlank(token)) {
             if (log.isWarnEnabled()) log.warn(String.format("No token '%s' in Headers or Cookies", tokenKey));
-            super.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
+            super.responseWithError(response, ResponseCode.CODE_NO_SIGNIN);
         }
         else {
             try {
                 Session session = sessionService.verifySession(token);
                 if (session == null) {
-                    throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, "User does not have a valid session");
+                    throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, "User does not have a valid session");
                 }
                 log.debug("User verified as valid");
                 filterChain.doFilter(new TokenRequestWrapper(request, tokenKey), response);

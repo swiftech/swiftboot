@@ -1,4 +1,4 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import java.util.*;
  *
  * @author swiftech
  **/
-public abstract class BasePopulateResult<E extends IdPersistable> implements Result {
+public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
 
     /**
      * 按照返回值类型创建返回值对象，并从实体类填充返回值
@@ -37,11 +37,11 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
      * @param <T>
      * @return
      */
-    public static <T extends BasePopulateResult> T createResult(
+    public static <T extends BasePopulateDto> T createResult(
             Class<T> resultClass,
             IdPersistable entity) {
         if (resultClass == null || entity == null) {
-            throw new IllegalArgumentException(Info.get(BasePopulateResult.class, R.REQUIRE_PARAMS));
+            throw new IllegalArgumentException(Info.get(BasePopulateDto.class, R.REQUIRE_PARAMS));
         }
 
         T ret;
@@ -50,13 +50,13 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
             constructor = resultClass.getConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException(Info.get(BasePopulateResult.class, R.REQUIRE_NO_PARAM_CONSTRUCTOR1, resultClass.getName()));
+            throw new RuntimeException(Info.get(BasePopulateDto.class, R.REQUIRE_NO_PARAM_CONSTRUCTOR1, resultClass.getName()));
         }
         try {
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(Info.get(BasePopulateResult.class, R.CONSTRUCT_FAIL2, resultClass.getName(), BasePopulateResult.class));
+            throw new RuntimeException(Info.get(BasePopulateDto.class, R.CONSTRUCT_FAIL2, resultClass.getName(), BasePopulateDto.class));
         }
         ret.populateByEntity(entity);
         return ret;
@@ -68,8 +68,8 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
      * @param entity
      * @return
      */
-    public BasePopulateResult<E> populateByEntity(E entity) {
-        return BasePopulateResult.populateByEntity(entity, this);
+    public BasePopulateDto<E> populateByEntity(E entity) {
+        return BasePopulateDto.populateByEntity(entity, this);
     }
 
     /**
@@ -79,12 +79,12 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
      * @param result
      * @return
      */
-    public static <E extends IdPersistable> BasePopulateResult<E> populateByEntity(E entity, BasePopulateResult<E> result) {
+    public static <E extends IdPersistable> BasePopulateDto<E> populateByEntity(E entity, BasePopulateDto<E> result) {
         if (entity == null) {
-            throw new RuntimeException(Info.get(BasePopulateResult.class, R.REQUIRE_ENTITY));
+            throw new RuntimeException(Info.get(BasePopulateDto.class, R.REQUIRE_ENTITY));
         }
-        Logger log = LoggerFactory.getLogger(BasePopulateResult.class);
-        log.trace(Info.get(BasePopulateResult.class, R.POPULATE_FROM_ENTITY1, entity));
+        Logger log = LoggerFactory.getLogger(BasePopulateDto.class);
+        log.trace(Info.get(BasePopulateDto.class, R.POPULATE_FROM_ENTITY1, entity));
 
         /*
          * 先处理一对多关联（保证ID属性先被处理，后续处理时略过这些字段）
@@ -113,7 +113,7 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
         /*
          * 处理（一对一）关联的 Result 对象
          */
-        List<Field> fieldsOne2One = BeanUtils.getDeclaredFieldsByTypeIgnore(result, BasePopulateResult.class, JsonIgnore.class, PopulateIgnore.class);
+        List<Field> fieldsOne2One = BeanUtils.getDeclaredFieldsByTypeIgnore(result, BasePopulateDto.class, JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : fieldsOne2One) {
             ignoredFieldNameList.add(targetField.getName());
             Field srcField;
@@ -138,7 +138,7 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
             if (subEntity instanceof IdPersistable) {
                 Class subResultClass = (Class) targetField.getGenericType();
                 if (subResultClass != null) {
-                    BasePopulateResult<E> subResult = createResult(subResultClass, (IdPersistable) subEntity);
+                    BasePopulateDto<E> subResult = createResult(subResultClass, (IdPersistable) subEntity);
                     BeanUtils.forceSetProperty(result, targetField, subResult);
                 }
             }
@@ -191,7 +191,7 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
 
                             for (Object subEntity : srcCollection) {
                                 if (subEntity instanceof IdPersistable) {
-                                    BasePopulateResult<E> subResult = createResult(elementClass, (IdPersistable) subEntity);
+                                    BasePopulateDto<E> subResult = createResult(elementClass, (IdPersistable) subEntity);
                                     targetCollection.add(subResult);
                                 }
                             }
@@ -199,7 +199,7 @@ public abstract class BasePopulateResult<E extends IdPersistable> implements Res
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new RuntimeException(Info.get(BasePopulateResult.class, R.POPULATE_COLLECTION_FAIL1, srcField.getName()));
+                    throw new RuntimeException(Info.get(BasePopulateDto.class, R.POPULATE_COLLECTION_FAIL1, srcField.getName()));
                 }
             }
             else {

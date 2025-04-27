@@ -16,7 +16,7 @@ import org.swiftboot.demo.command.AdminUserSignoutCommand;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
 import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;

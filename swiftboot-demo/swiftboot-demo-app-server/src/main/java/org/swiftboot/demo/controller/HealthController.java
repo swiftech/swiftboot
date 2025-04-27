@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
 
 @Tag(name = "Health")
 @Controller
@@ -16,7 +16,7 @@ public class HealthController {
 
     @Operation(description = "App user sign in")
     @GetMapping(value = "")
-    public HttpResponse<String> appUserSign() {
-        return new HttpResponse<>("OK");
+    public Response<String> appUserSign() {
+        return new Response<>("OK");
     }
 }

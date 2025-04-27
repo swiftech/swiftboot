@@ -3,7 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.OrderEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.swiftboot.web.result.BasePopulateResult;
+import org.swiftboot.web.dto.BasePopulateResult;
 
 /**
  * 保存订单结果

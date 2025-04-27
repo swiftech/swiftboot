@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.GoodsEntity;
-import org.swiftboot.web.result.BasePopulateResult;
+import org.swiftboot.web.dto.BasePopulateResult;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

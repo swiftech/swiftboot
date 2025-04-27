@@ -3,7 +3,7 @@ package org.swiftboot.common.auth.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.swiftboot.common.auth.aop.JwtLogoutResponseAdvice;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
 
 /**
  * Return the response to controller method .
@@ -12,7 +12,7 @@ import org.swiftboot.web.result.HttpResponse;
  * @see JwtLogoutResponseAdvice
  * @since 3.0
  */
-public class LogoutResponse<R> extends HttpResponse<R> {
+public class LogoutResponse<R> extends Response<R> {
 
     @JsonIgnore
     private String accessToken;

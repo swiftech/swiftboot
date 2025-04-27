@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.swiftboot.web.result.BasePopulateListResult;
+import org.swiftboot.web.dto.BasePopulateListResult;
 
 import java.util.List;
 

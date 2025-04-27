@@ -7,7 +7,7 @@ import org.swiftboot.web.Info;
 import org.swiftboot.util.IoUtils;
 import org.swiftboot.web.R;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -76,7 +76,7 @@ public class HttpServletIOUtils {
             writeStreamToResponseStream(fins, response, contentType, headers);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
+            throw new ErrMessageException(ResponseCode.CODE_SYS_ERR, e.getMessage());
         }
     }
 
@@ -111,7 +111,7 @@ public class HttpServletIOUtils {
             out.write(bytes);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
+            throw new ErrMessageException(ResponseCode.CODE_SYS_ERR, e.getMessage());
         } finally {
             try {
                 if (out != null) {
@@ -157,7 +157,7 @@ public class HttpServletIOUtils {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, e.getMessage());
+            throw new ErrMessageException(ResponseCode.CODE_SYS_ERR, e.getMessage());
         } finally {
             try {
                 if (out != null) {

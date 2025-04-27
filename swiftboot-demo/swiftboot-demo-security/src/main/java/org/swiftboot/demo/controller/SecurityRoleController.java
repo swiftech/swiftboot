@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.demo.dto.PayloadDto;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
 
 /**
  * Secure realm that needs user is authenticated and permitted to visit.
@@ -30,10 +30,10 @@ public class SecurityRoleController {
     @Operation(description = "This endpoint requires admin role")
     @GetMapping(value = "/require/admin")
     @PreAuthorize("hasRole('ADMIN')")
-    public HttpResponse<PayloadDto> requireAdmin() {
+    public Response<PayloadDto> requireAdmin() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to admin");
-        return new HttpResponse<>(result);
+        return new Response<>(result);
     }
 
     /**
@@ -44,9 +44,9 @@ public class SecurityRoleController {
     @Operation(description = "This endpoint requires manager role")
     @GetMapping(value = "/require/manager")
     @PreAuthorize("hasRole('MANAGER')")
-    public HttpResponse<PayloadDto> requireManager() {
+    public Response<PayloadDto> requireManager() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to manager");
-        return new HttpResponse<>(result);
+        return new Response<>(result);
     }
 }

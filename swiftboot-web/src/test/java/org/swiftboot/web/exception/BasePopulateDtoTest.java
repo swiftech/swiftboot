@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.swiftboot.data.model.entity.ChildEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
-import org.swiftboot.web.result.BasePopulateResult;
+import org.swiftboot.web.dto.BasePopulateDto;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,12 +13,12 @@ import java.util.Set;
 /**
  * @author swiftech 2019-03-18
  **/
-public class BasePopulateResultTest {
+public class BasePopulateDtoTest {
 
     @Test
     public void test() {
 
-        BasePopulateResult<ParentEntity> result = new TestResult();
+        BasePopulateDto<ParentEntity> result = new TestDto();
 
         ParentEntity entity = new ParentEntity();
         entity.setName("测试实体类");
@@ -29,20 +29,20 @@ public class BasePopulateResultTest {
         entity.getItems().add(entityItem1);
         entity.getItems().add(entityItem2);
         // populate
-        ((TestResult) result).setItems(new HashSet<>());// 初始化空的集合
+        ((TestDto) result).setItems(new HashSet<>());// 初始化空的集合
         result.populateByEntity(entity);
         System.out.println(entity.getName());
         Assertions.assertFalse(StringUtils.isBlank(entity.getName()));
-        for (TestItemResult item : ((TestResult) result).getItems()) {
+        for (TestItemDto item : ((TestDto) result).getItems()) {
             System.out.println(item.getName());
             Assertions.assertFalse(StringUtils.isBlank(item.getName()));
         }
     }
 
-    public static class TestResult extends BasePopulateResult<ParentEntity> {
+    public static class TestDto extends BasePopulateDto<ParentEntity> {
         String name;
 
-        Set<TestItemResult> items;
+        Set<TestItemDto> items;
 
         public String getName() {
             return name;
@@ -52,16 +52,16 @@ public class BasePopulateResultTest {
             this.name = name;
         }
 
-        public Set<TestItemResult> getItems() {
+        public Set<TestItemDto> getItems() {
             return items;
         }
 
-        public void setItems(Set<TestItemResult> items) {
+        public void setItems(Set<TestItemDto> items) {
             this.items = items;
         }
     }
 
-    public static class TestItemResult extends BasePopulateResult<ChildEntity> {
+    public static class TestItemDto extends BasePopulateDto<ChildEntity> {
         String name;
 
         public String getName() {

@@ -1,4 +1,4 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -6,11 +6,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
 
 import java.io.IOException;
 import java.io.Serializable;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 /**
@@ -19,24 +19,24 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
  * @param <T> 内容对象的类型
  * @author swiftech
  */
-@Schema(name="")
+@Schema(name = "Response Body")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class HttpResponse<T> implements Serializable {
+public class Response<T> implements Serializable {
 
     /**
-     * 业务错误代码，长度4个字节的数字
+     * 业务响应代码，长度4个字节的数字
      */
-    @Schema(description = "Error code",  requiredMode = REQUIRED, example = "1000")
-    protected String code = ErrorCodeSupport.CODE_OK;
+    @Schema(description = "Response code", requiredMode = REQUIRED, example = "1000")
+    protected String code = ResponseCode.CODE_OK;
 
     /**
-     * 错误代码对应的错误信息
+     * 响应代码对应的响应信息
      */
-    @Schema(description = "Error message", required = false, example = "OK")
-    protected String msg = null;
+    @Schema(description = "Response message, default is OK", requiredMode = NOT_REQUIRED, example = "OK")
+    protected String msg = "OK";
 
     /**
-     * 错误资源中的参数值
+     * 响应资源中的参数值
      */
     @JsonIgnore
     protected String[] msgParams;
@@ -45,36 +45,36 @@ public class HttpResponse<T> implements Serializable {
      * 返回的对象
      */
     @Schema(description = "Result data object")
-    protected T result;
+    protected T data;
 
-    public HttpResponse() {
+    public Response() {
     }
 
-    public HttpResponse(T result) {
-        this.result = result;
+    public Response(T data) {
+        this.data = data;
     }
 
-    public HttpResponse(String code) {
+    public Response(String code) {
         this.code = code;
     }
 
-    public HttpResponse(String code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
-
-    public HttpResponse(String code, T result) {
-        this.code = code;
-        this.result = result;
-    }
-
-    public HttpResponse(String code, String msg, T result) {
+    public Response(String code, String msg) {
         this.code = code;
         this.msg = msg;
-        this.result = result;
     }
 
-    public HttpResponse(ErrMessageException errMsgException) {
+    public Response(String code, T data) {
+        this.code = code;
+        this.data = data;
+    }
+
+    public Response(String code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public Response(ErrMessageException errMsgException) {
         this.code = errMsgException.getErrorCode();
         this.msg = errMsgException.getMessage();
     }
@@ -103,12 +103,12 @@ public class HttpResponse<T> implements Serializable {
         this.msg = msg;
     }
 
-    public T getResult() {
-        return result;
+    public T getData() {
+        return data;
     }
 
-    public void setResult(T result) {
-        this.result = result;
+    public void setData(T data) {
+        this.data = data;
     }
 
     public String toJson() throws IOException {

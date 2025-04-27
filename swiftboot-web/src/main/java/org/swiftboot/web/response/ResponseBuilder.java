@@ -1,7 +1,6 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.swiftboot.web.exception.ErrorCodeSupport;
 
 /**
  * @author swiftech
@@ -12,7 +11,7 @@ public class ResponseBuilder<T> {
     /**
      * 业务错误代码，长度4个字节的数字
      */
-    protected String code = ErrorCodeSupport.CODE_OK;
+    protected String code = ResponseCode.CODE_OK;
 
     /**
      * 错误代码对应的错误信息
@@ -49,14 +48,14 @@ public class ResponseBuilder<T> {
         return this;
     }
 
-    public HttpResponse<T> build() {
-        HttpResponse<T> response = new HttpResponse<>();
+    public Response<T> build() {
+        Response<T> response = new Response<>();
         response.setCode(code);
         if (StringUtils.isNotBlank(msg)) {
             response.setMsg(msg);
         }
         response.setMsgParams(msgParams);
-        response.setResult(result);
+        response.setData(result);
         return response;
     }
 }

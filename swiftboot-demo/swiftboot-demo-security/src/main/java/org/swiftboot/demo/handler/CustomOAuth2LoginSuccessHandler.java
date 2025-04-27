@@ -24,8 +24,8 @@ import org.swiftboot.common.auth.token.RefreshToken;
 import org.swiftboot.demo.dto.AuthenticatedDto;
 import org.swiftboot.demo.dto.UserInfoDto;
 import org.swiftboot.demo.service.UserService;
-import org.swiftboot.web.result.HttpResponse;
-import org.swiftboot.web.result.ResponseBuilder;
+import org.swiftboot.web.response.Response;
+import org.swiftboot.web.response.ResponseBuilder;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -95,7 +95,7 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
             AuthenticatedDto authenticatedDto = new AuthenticatedDto(userAccessToken.tokenValue(), userAccessToken.expiresAt(),
                     userRefreshToken.tokenValue(), userRefreshToken.expiresAt());
 
-            HttpResponse<Object> responseResult = new ResponseBuilder<>().result(authenticatedDto).build();
+            Response<Object> responseResult = new ResponseBuilder<>().result(authenticatedDto).build();
             String data = new Gson().toJson(responseResult);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             try (PrintWriter out = response.getWriter()) {

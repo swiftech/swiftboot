@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 
 import java.io.Serializable;
 

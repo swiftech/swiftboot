@@ -3,7 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
-import org.swiftboot.web.result.BasePopulateResult;
+import org.swiftboot.web.dto.BasePopulateResult;
 
 /**
  * 商品详情

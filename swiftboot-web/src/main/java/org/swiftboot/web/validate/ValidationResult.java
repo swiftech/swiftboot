@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.swiftboot.util.AnnotationUtils;
 import org.swiftboot.util.BeanUtils;
+import org.swiftboot.web.response.Response;
 import org.swiftboot.web.util.JacksonUtils;
 import org.swiftboot.web.util.MessageUtils;
 
@@ -16,11 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 表单提交输入验证返回值，出现表单验证错误时创建并填充　{@link org.swiftboot.web.result.HttpResponse}　对象。
+ * 表单提交输入验证返回值，出现表单验证错误时创建并填充　{@link Response}　对象。
  * 可以设置多个输入框对应错误消息（或者错误消息资源代码）
  *
  * @author swiftech
- * @see org.swiftboot.web.result.HttpResponse
+ * @see Response
  */
 public class ValidationResult extends ArrayList<ValidationResult.InputError> {
 

@@ -12,7 +12,7 @@ import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 
 import java.io.IOException;
 
@@ -173,18 +173,18 @@ public class RedisSessionService implements SessionService {
         } catch (Exception e) {
             e.printStackTrace();
             log.warn(String.format("Retrieve session failed: %s", token));
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR);
+            throw new ErrMessageException(ResponseCode.CODE_SYS_ERR);
         }
 
         if (session == null) {
-            throw new ErrMessageException(ErrorCodeSupport.CODE_USER_SESSION_NOT_EXIST);
+            throw new ErrMessageException(ResponseCode.CODE_USER_SESSION_NOT_EXIST);
         }
 
         if (session.getExpireTime() != null) {
             if (session.getExpireTime() < System.currentTimeMillis()) {
                 // Delete session if it is already timeout
                 this.removeSession(group, token);
-                throw new ErrMessageException(ErrorCodeSupport.CODE_SESSION_TIMEOUT);
+                throw new ErrMessageException(ResponseCode.CODE_SESSION_TIMEOUT);
             }
             else {
                 if (config.getSession().isUpdateExpireTime()) {

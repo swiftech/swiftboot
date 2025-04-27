@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
+import org.swiftboot.web.response.ResponseCode;
 
 /**
  * 项目中需添加：
@@ -44,10 +45,10 @@ public class ExceptionProcessor {
      */
     @ExceptionHandler(ErrMessageException.class)
     @ResponseBody
-    public HttpResponse<?> onErrMessageException(NativeWebRequest request, ErrMessageException e) {
+    public Response<?> onErrMessageException(NativeWebRequest request, ErrMessageException e) {
         log.debug("onErrMessageException...");
         log.error(e.getMessage(), e);
-        return new HttpResponse<>(e);
+        return new Response<>(e);
     }
 
     /**
@@ -59,10 +60,10 @@ public class ExceptionProcessor {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public HttpResponse<?> onException(NativeWebRequest request, Exception e) {
+    public Response<?> onException(NativeWebRequest request, Exception e) {
         log.debug("onException...");
         log.error(e.getMessage(), e);
-        return new HttpResponse<>(ErrorCodeSupport.CODE_SYS_ERR, e.getLocalizedMessage());
+        return new Response<>(ResponseCode.CODE_SYS_ERR, e.getLocalizedMessage());
     }
 
 }

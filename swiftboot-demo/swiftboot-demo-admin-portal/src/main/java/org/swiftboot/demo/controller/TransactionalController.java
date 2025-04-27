@@ -16,7 +16,7 @@ import org.swiftboot.demo.command.GoodsCreateCommand;
 import org.swiftboot.demo.command.GoodsWithDetailCreateCommand;
 import org.swiftboot.demo.service.GoodsService;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 import org.swiftboot.web.validate.ConvertValidateResult;
 
 import jakarta.annotation.Resource;

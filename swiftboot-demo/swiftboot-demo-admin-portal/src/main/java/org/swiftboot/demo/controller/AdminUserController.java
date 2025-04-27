@@ -26,7 +26,7 @@ import org.swiftboot.web.command.IdCommand;
 import org.swiftboot.web.command.IdListCommand;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 
 import jakarta.annotation.Resource;
 import java.util.Set;

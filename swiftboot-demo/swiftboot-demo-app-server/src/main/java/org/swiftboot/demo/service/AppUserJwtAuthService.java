@@ -18,7 +18,7 @@ import org.swiftboot.demo.repository.AppUserRepository;
 import org.swiftboot.util.CryptoUtils;
 import org.swiftboot.util.time.LocalDateTimeUtils;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 
 import java.util.Optional;
 
@@ -50,7 +50,7 @@ public class AppUserJwtAuthService implements UserAuthService {
         }
         else {
             log.debug("Sign in failed for user: %s".formatted(loginId));
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SIGNIN_FAIL);
+            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
         }
     }
 
@@ -83,7 +83,7 @@ public class AppUserJwtAuthService implements UserAuthService {
         }
         else {
             log.debug("Refresh token failed for user: %s".formatted(userId));
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SIGNIN_FAIL);
+            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
         }
     }
 

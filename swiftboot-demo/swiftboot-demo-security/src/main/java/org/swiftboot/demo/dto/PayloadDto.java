@@ -1,11 +1,11 @@
 package org.swiftboot.demo.dto;
 
-import org.swiftboot.web.result.Result;
+import org.swiftboot.web.dto.Dto;
 
 /**
  * @author swiftech
  */
-public class PayloadDto implements Result {
+public class PayloadDto implements Dto {
 
     private String data;
 

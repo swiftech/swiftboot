@@ -18,7 +18,7 @@ import org.swiftboot.demo.command.OrderWithDetailSaveCommand;
 import org.swiftboot.demo.service.OrderDetailRelationService;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 import org.swiftboot.web.validate.ConvertValidateResult;
 
 import jakarta.annotation.Resource;

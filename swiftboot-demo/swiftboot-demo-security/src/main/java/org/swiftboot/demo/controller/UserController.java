@@ -13,8 +13,8 @@ import org.swiftboot.demo.constants.PermissionConstants;
 import org.swiftboot.demo.dto.UserInfoDto;
 import org.swiftboot.demo.service.UserService;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.ResponseCode;
+import org.swiftboot.web.response.Response;
 
 /**
  * Secure realm that needs user is authenticated to visit.
@@ -38,22 +38,22 @@ public class UserController {
     @Operation(description = "Get user information after login")
     @GetMapping(value = "/user/info")
     @ResponseBody
-    public HttpResponse<UserInfoDto> userInfo(@UserId String userId) {
+    public Response<UserInfoDto> userInfo(@UserId String userId) {
         if (StringUtils.isBlank(userId)) {
-            throw new ErrMessageException(ErrorCodeSupport.CODE_NO_SIGNIN, "User does not login");
+            throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, "User does not login");
         }
         UserInfoDto user = userService.findById(userId);
-        return new HttpResponse<>(user);
+        return new Response<>(user);
     }
 
     @Operation(description = "Get user permissions")
     @GetMapping(value = "/user/permissions")
     @ResponseBody
-    public HttpResponse<UserInfoDto> userPermissions() {
+    public Response<UserInfoDto> userPermissions() {
         String permissions = StringUtils.join(new String[]{PermissionConstants.PERM_A, PermissionConstants.PERM_B, PermissionConstants.PERM_C}, ",");
         UserInfoDto ui = new UserInfoDto();
         ui.setPermissions(permissions);
         ui.setNickName("dummy");
-        return new HttpResponse<>(ui);
+        return new Response<>(ui);
     }
 }

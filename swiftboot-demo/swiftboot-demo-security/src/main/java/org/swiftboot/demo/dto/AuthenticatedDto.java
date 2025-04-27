@@ -4,13 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.common.auth.dto.BaseRefreshTokenDto;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.RefreshToken;
-import org.swiftboot.web.result.Result;
+import org.swiftboot.web.dto.Dto;
 
 /**
  * @author swiftech
  */
 @Schema(name="Auth Result", description = "Result of authentication")
-public class AuthenticatedDto extends BaseRefreshTokenDto implements Result {
+public class AuthenticatedDto extends BaseRefreshTokenDto implements Dto {
 
     private String role;
 

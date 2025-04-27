@@ -1,15 +1,14 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 默认的统计数量返回对象
  *
  * @author swiftech
  **/
-@Schema(name="", description="Default counting result")
-public class DefaultCountResult implements Result{
+@Schema(name = "Default counting result DTO", description = "Default counting result DTO")
+public class DefaultCountDto implements Dto {
 
     /**
      * 统计结果
@@ -17,10 +16,10 @@ public class DefaultCountResult implements Result{
     @Schema(description = "Counting result")
     private long count;
 
-    public DefaultCountResult() {
+    public DefaultCountDto() {
     }
 
-    public DefaultCountResult(long count) {
+    public DefaultCountDto(long count) {
         this.count = count;
     }
 

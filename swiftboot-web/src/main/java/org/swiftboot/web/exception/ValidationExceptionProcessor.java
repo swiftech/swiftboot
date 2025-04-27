@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.swiftboot.web.config.SwiftBootWebConfigBean;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
+import org.swiftboot.web.response.ResponseCode;
 import org.swiftboot.web.validate.ValidationResult;
 
 import jakarta.annotation.Resource;
@@ -36,7 +37,7 @@ public class ValidationExceptionProcessor {
     private SwiftBootWebConfigBean swiftBootConfigBean;
 
     @Resource
-    private ErrorCodeSupport errorCodeSupport;
+    private ResponseCode responseCode;
 
     /**
      * 处理 Validation 框架抛出的验证异常，在 {@link org.swiftboot.web.validate.ValidateResultAspect}
@@ -48,7 +49,7 @@ public class ValidationExceptionProcessor {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public HttpResponse<Serializable> onMethodArgumentNotValidException(
+    public Response<Serializable> onMethodArgumentNotValidException(
             NativeWebRequest request, MethodArgumentNotValidException e) {
         log.debug("onMethodArgumentNotValidException...");
         log.error(e.getMessage(), e);
@@ -56,14 +57,14 @@ public class ValidationExceptionProcessor {
         if (bindingResult.hasErrors()) {
             ValidationResult validationResult = ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
             if (swiftBootConfigBean.getValidation().isResultInJson()) {
-                return new HttpResponse<>(ErrorCodeSupport.CODE_ARGUMENTS_ERROR, validationResult);
+                return new Response<>(ResponseCode.CODE_ARGUMENTS_ERROR, validationResult);
             }
             else {
                 String msgs = this.joinInputErrorMessages(validationResult);
-                return new HttpResponse<>(ErrorCodeSupport.CODE_ARGUMENTS_ERROR, msgs);
+                return new Response<>(ResponseCode.CODE_ARGUMENTS_ERROR, msgs);
             }
         }
-        return new HttpResponse<>(ErrorCodeSupport.CODE_ARGUMENTS_ERROR);
+        return new Response<>(ResponseCode.CODE_ARGUMENTS_ERROR);
     }
 
 
@@ -76,15 +77,15 @@ public class ValidationExceptionProcessor {
      */
     @ExceptionHandler(ValidationException.class)
     @ResponseBody
-    public HttpResponse<ValidationResult> onValidationException(NativeWebRequest request, ValidationException e) {
+    public Response<ValidationResult> onValidationException(NativeWebRequest request, ValidationException e) {
         log.debug("onValidationException...");
         log.error(e.getMessage(), e);
         if (swiftBootConfigBean.getValidation().isResultInJson()) {
-            return new HttpResponse<>(ErrorCodeSupport.CODE_ARGUMENTS_ERROR, e.getValidationResult());
+            return new Response<>(ResponseCode.CODE_ARGUMENTS_ERROR, e.getValidationResult());
         }
         else {
             String msgs = this.joinInputErrorMessages(e.getValidationResult());
-            return new HttpResponse<>(ErrorCodeSupport.CODE_ARGUMENTS_ERROR, msgs);
+            return new Response<>(ResponseCode.CODE_ARGUMENTS_ERROR, msgs);
         }
     }
 

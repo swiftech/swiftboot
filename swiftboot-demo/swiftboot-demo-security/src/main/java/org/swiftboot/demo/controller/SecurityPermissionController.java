@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.demo.dto.PayloadDto;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
 
 /**
  * Secure realm that needs user is authenticated and permitted to visit.
@@ -28,10 +28,10 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/perm_a")
     @PreAuthorize("hasAuthority('PERM_A')")
     @ResponseBody
-    public HttpResponse<PayloadDto> onePermissionA() {
+    public Response<PayloadDto> onePermissionA() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has PERM_A permission");
-        return new HttpResponse<>(result);
+        return new Response<>(result);
     }
 
     /**
@@ -43,10 +43,10 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/perm_b")
     @PreAuthorize("hasAuthority('PERM_B')")
     @ResponseBody
-    public HttpResponse<PayloadDto> onePermissionB() {
+    public Response<PayloadDto> onePermissionB() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has PERM_B permission");
-        return new HttpResponse<>(result);
+        return new Response<>(result);
     }
 
     /**
@@ -58,10 +58,10 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/permissions/or")
     @PreAuthorize("hasAuthority('PERM_A') or hasAuthority('PERM_B')")
     @ResponseBody
-    public HttpResponse<PayloadDto> permissionsOr() {
+    public Response<PayloadDto> permissionsOr() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has either permissions");
-        return new HttpResponse<>(result);
+        return new Response<>(result);
     }
 
     /**
@@ -73,10 +73,10 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/permissions/and")
     @PreAuthorize("hasAuthority('PERM_A') and hasAuthority('PERM_B')")
     @ResponseBody
-    public HttpResponse<PayloadDto> permissionsAnd() {
+    public Response<PayloadDto> permissionsAnd() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has both permissions");
-        return new HttpResponse<>(result);
+        return new Response<>(result);
     }
 
 }

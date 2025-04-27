@@ -1,4 +1,4 @@
-package org.swiftboot.web.exception;
+package org.swiftboot.web.response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * 错误代码定义，所有错误代码的变量名必须以 "CODE_" 开头
+ * 响应代码定义，所有代码的变量名必须以 "CODE_" 开头
  * 成功代码以"2"开头，例如"2000"
  * 标准错误代码以"3"开头，例如"3005"
  * 自定义错误代码从"4"开始，例如"4001"
@@ -30,9 +30,9 @@ import java.util.Map;
  * @author swiftech
  **/
 @Component
-public class ErrorCodeSupport {
+public class ResponseCode {
 
-    private static final Logger log = LoggerFactory.getLogger(ErrorCodeSupport.class);
+    private static final Logger log = LoggerFactory.getLogger(ResponseCode.class);
 
     public static final String CODE_OK = "2000";
     public static final String CODE_OK_WITH_CONTENT = "2002";
@@ -102,7 +102,7 @@ public class ErrorCodeSupport {
     }
 
     public String getMessage(String code, String... args) {
-        return ErrorCodeSupport.getErrorMessage(code, args);
+        return ResponseCode.getErrorMessage(code, args);
     }
 
     /**
@@ -121,7 +121,7 @@ public class ErrorCodeSupport {
     }
 
     public String getMessage(String code) {
-        return ErrorCodeSupport.getErrorMessage(code);
+        return ResponseCode.getErrorMessage(code);
     }
 
     /**
@@ -138,7 +138,7 @@ public class ErrorCodeSupport {
                 System.out.printf("WARN: message not found for code '%s'%n", code);
             }
         } catch (Exception e) {
-            System.out.println(Info.get(ErrorCodeSupport.class, R.NO_MSG_FOR_CODE1, code));
+            System.out.println(Info.get(ResponseCode.class, R.NO_MSG_FOR_CODE1, code));
             msg = code; // 没有则直接返回 CODE
         }
         return msg;
@@ -151,13 +151,13 @@ public class ErrorCodeSupport {
         Map<String, Object> cache = new HashMap<>();
         Field[] fields = errCodeClass.getDeclaredFields();
         if (fields.length == 0) {
-            throw new RuntimeException(Info.get(ErrorCodeSupport.class, R.NO_PRE_DEFINED_MSG));
+            throw new RuntimeException(Info.get(ResponseCode.class, R.NO_PRE_DEFINED_MSG));
         }
         try {
             for (Field field : fields) {
                 if (Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(String.class)) {
                     if (cache.containsKey(field.get(null))) {
-                        throw new RuntimeException(Info.get(ErrorCodeSupport.class, R.REPEAT_MSG1, field.get(null)));
+                        throw new RuntimeException(Info.get(ResponseCode.class, R.REPEAT_MSG1, field.get(null)));
                     }
                     cache.put(String.valueOf(field.get(null)), field);
                 }
@@ -175,23 +175,23 @@ public class ErrorCodeSupport {
         log.info(Info.get(this.getClass(), R.I18N_INIT_START));
         try {
             this.validate(this.getClass());
-            log.info(Info.get(ErrorCodeSupport.class, R.INIT_PRE_DEFINED_MSG1, this.getClass()));
-            this.loadFromClass(ErrorCodeSupport.class);
+            log.info(Info.get(ResponseCode.class, R.INIT_PRE_DEFINED_MSG1, this.getClass()));
+            this.loadFromClass(ResponseCode.class);
 //            log.info(Info.get(ErrorCodeSupport.class, R.INIT_USER_DEFINED_MSG1, this.getClass()));
             if (errorCodeMap.isEmpty()) {
-                log.warn(Info.get(ErrorCodeSupport.class, R.INIT_FAIL));
+                log.warn(Info.get(ResponseCode.class, R.INIT_FAIL));
                 return;
             }
             else {
-                log.info(Info.get(ErrorCodeSupport.class, R.INIT_COUNT1, errorCodeMap.size()));
+                log.info(Info.get(ResponseCode.class, R.INIT_COUNT1, errorCodeMap.size()));
             }
             String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "this is a param of message");
-            log.debug(Info.get(ErrorCodeSupport.class, R.VALIDATE_INI1T, argumentedMsg));
+            log.debug(Info.get(ResponseCode.class, R.VALIDATE_INI1T, argumentedMsg));
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
-        log.info(Info.get(ErrorCodeSupport.class, R.I18N_INIT_DONE));
+        log.info(Info.get(ResponseCode.class, R.I18N_INIT_DONE));
     }
 
     /**
@@ -207,18 +207,18 @@ public class ErrorCodeSupport {
                 log.debug(String.format("  %s(%s)", field.getName(), codeNum));
                 if (StringUtils.isNotBlank(errorCodeMap.get(codeNum))) {
                     // ignore if already loaded
-                    log.warn(Info.get(ErrorCodeSupport.class, R.CODE_EXIST2, field.getName(), codeNum));
+                    log.warn(Info.get(ResponseCode.class, R.CODE_EXIST2, field.getName(), codeNum));
                     continue;
                 }
                 String message;
                 try {
                     message = messageSource.getMessage(field.getName(), null, Locale.getDefault());
                 } catch (NoSuchMessageException e) {
-                    log.info(Info.get(ErrorCodeSupport.class, R.IGNORE_MSG1, field.getName()));
+                    log.info(Info.get(ResponseCode.class, R.IGNORE_MSG1, field.getName()));
                     continue;
                 }
                 if (StringUtils.isBlank(message)) {
-                    log.info(Info.get(ErrorCodeSupport.class, R.NOT_FOUND_MSG1, field.getName()));
+                    log.info(Info.get(ResponseCode.class, R.NOT_FOUND_MSG1, field.getName()));
                 }
                 else {
                     putErrorCodeAndMessage(codeNum, message);

@@ -2,13 +2,13 @@ package org.swiftboot.demo.dto;
 
 import org.swiftboot.demo.model.UserEntity;
 import org.swiftboot.web.annotation.PopulateIgnore;
-import org.swiftboot.web.result.BasePopulateResult;
-import org.swiftboot.web.result.Result;
+import org.swiftboot.web.dto.BasePopulateDto;
+import org.swiftboot.web.dto.Dto;
 
 /**
  * @author swiftech
  */
-public class UserInfoDto extends BasePopulateResult<UserEntity> implements Result {
+public class UserInfoDto extends BasePopulateDto<UserEntity> implements Dto {
 
     private String id;
 

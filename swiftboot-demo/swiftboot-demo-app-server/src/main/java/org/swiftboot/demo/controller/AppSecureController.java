@@ -14,8 +14,8 @@ import org.swiftboot.common.auth.annotation.UserId;
 import org.swiftboot.common.auth.annotation.UserName;
 import org.swiftboot.demo.dto.AppUserDto;
 import org.swiftboot.demo.service.AppUserService;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.ResponseCode;
+import org.swiftboot.web.response.Response;
 
 /**
  * since 3.0.0
@@ -33,34 +33,34 @@ public class AppSecureController {
 
     @Operation(description = "Secure domain that needs authentication")
     @GetMapping(value = "secure")
-    public HttpResponse<String> secure() {
+    public Response<String> secure() {
         log.info("> /app/secure");
-        return new HttpResponse<>("Authenticated");
+        return new Response<>("Authenticated");
     }
 
     @Operation(description = "Test data retrieval with user id in session or token")
     @GetMapping(value = "data")
-    public HttpResponse<AppUserDto> dataRetrieval(@UserId String userId, @UserName String userName) {
+    public Response<AppUserDto> dataRetrieval(@UserId String userId, @UserName String userName) {
         log.info("> /app/data");
         log.debug("userId: " + userId);
         log.debug("userName: " + userName);
         AppUserDto userInfo = appUserService.getUserInfo(userId);
         if (userInfo != null) {
             log.debug(userInfo.getLoginName());
-            return new HttpResponse<>(userInfo);
+            return new Response<>(userInfo);
         }
-        return new HttpResponse<>(ErrorCodeSupport.CODE_SYS_ERR, "No user found");
+        return new Response<>(ResponseCode.CODE_SYS_ERR, "No user found");
     }
 
     @Operation(description = "Test unauthorized")
     @GetMapping(value = "unauthorized")
-    public HttpResponse<String> appUserSign() {
+    public Response<String> appUserSign() {
         log.info("> /app/unauthorized");
         String userRole = "GUEST";
         if (!"admin".equals(userRole)) {
             throw new AuthenticationException("Unauthorized");
         }
-        return new HttpResponse<>("Authorized");
+        return new Response<>("Authorized");
     }
 
 }

@@ -18,7 +18,7 @@ import org.swiftboot.util.CryptoUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 
 import java.util.Optional;
 
@@ -69,7 +69,7 @@ public class AppUserAuthService implements UserAuthService {
         }
         else {
             log.debug("Sign in failed for user: " + loginId);
-            throw new ErrMessageException(ErrorCodeSupport.CODE_SIGNIN_FAIL);
+            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
         }
     }
 

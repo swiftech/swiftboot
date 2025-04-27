@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.ResponseCode;
+import org.swiftboot.web.response.Response;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,8 +24,8 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
      * @throws IOException
      */
     protected void responseWithError(HttpServletResponse response, String errorCode) throws IOException {
-        HttpResponse<?> resp = new HttpResponse<>(errorCode);
-        resp.setMsg(ErrorCodeSupport.getErrorMessage(errorCode));
+        Response<?> resp = new Response<>(errorCode);
+        resp.setMsg(ResponseCode.getErrorMessage(errorCode));
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
@@ -45,7 +45,7 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
         try (PrintWriter writer = response.getWriter()) {
-            HttpResponse<String> resp = new HttpResponse<>(String.valueOf(statusCode), msg);
+            Response<String> resp = new Response<>(String.valueOf(statusCode), msg);
             String body = JsonUtils.object2Json(resp);
             writer.write(body);
             writer.flush();

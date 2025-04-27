@@ -11,7 +11,7 @@ import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.demo.command.AppUserSigninCommand;
 import org.swiftboot.demo.command.RefreshTokenCommand;
 import org.swiftboot.demo.dto.AppUserSignInDto;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
 
 /**
  * App 用户认证接口
@@ -31,7 +31,7 @@ public class AppLoginController {
 
     @Operation(description = "App user sign in")
     @PostMapping(value = "signin")
-    public HttpResponse<AppUserSignInDto> appUserSign(
+    public Response<AppUserSignInDto> appUserSign(
             @RequestBody AppUserSigninCommand command) {
         log.info("> /app/signin");
         return userAuthService.userSignIn(command.getLoginName(), command.getLoginPwd());
@@ -39,7 +39,7 @@ public class AppLoginController {
 
     @Operation(description = "Refresh Access Token, used only for JWT mode")
     @PostMapping(value = "refresh_token")
-    public HttpResponse<AppUserSignInDto> refreshToken(
+    public Response<AppUserSignInDto> refreshToken(
             @RequestBody RefreshTokenCommand command) {
         log.info("> /app/refresh_token");
         return userAuthService.refreshAccessToken(command.getRefreshToken());

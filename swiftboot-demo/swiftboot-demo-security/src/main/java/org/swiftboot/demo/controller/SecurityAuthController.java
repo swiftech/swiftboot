@@ -29,7 +29,7 @@ import org.swiftboot.demo.dto.AuthenticatedDto;
 import org.swiftboot.demo.dto.CustomUserDetails;
 import org.swiftboot.demo.model.UserEntity;
 import org.swiftboot.demo.repository.UserRepository;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.response.Response;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public class SecurityAuthController {
     @Operation(description = "Signin with username and password")
     @PostMapping(value = "signin")
     @ResponseBody
-    public HttpResponse<AuthenticatedDto> adminUserSignin(
+    public Response<AuthenticatedDto> adminUserSignin(
             @RequestBody AuthCommand command, HttpServletResponse response) {
         log.info("> /security/auth/signin");
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -82,7 +82,7 @@ public class SecurityAuthController {
             AuthenticatedDto authenticatedDto = new AuthenticatedDto(accessToken.tokenValue(), accessToken.expiresAt(),
                     refreshToken.tokenValue(), refreshToken.expiresAt());
             authenticatedDto.setRole(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
-            return new HttpResponse<>(authenticatedDto);
+            return new Response<>(authenticatedDto);
         }
         else {
             throw new RuntimeException("No user id");
@@ -92,7 +92,7 @@ public class SecurityAuthController {
     @Operation(description = "Refresh access token by refresh token")
     @PostMapping("refresh")
     @ResponseBody
-    public ResponseEntity<HttpResponse<AuthenticatedDto>> refresh(@RequestBody RefreshTokenCommand refreshTokenCommand) {
+    public ResponseEntity<Response<AuthenticatedDto>> refresh(@RequestBody RefreshTokenCommand refreshTokenCommand) {
         try {
             String refreshToken = refreshTokenCommand.getRefreshToken();
             if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
@@ -120,7 +120,7 @@ public class SecurityAuthController {
                     // TODO use AuthenticatedDto instead
 //                    RefreshTokenDto result = new RefreshTokenDto(jwtAuthentication.getRefreshToken());
 
-                    return new ResponseEntity<>(new HttpResponse<>(authenticatedDto), HttpStatus.OK);
+                    return new ResponseEntity<>(new Response<>(authenticatedDto), HttpStatus.OK);
                 }
             }
         } catch (Exception e) {
@@ -139,24 +139,24 @@ public class SecurityAuthController {
     @Operation(description = "for testing access token revocation only")
     @GetMapping("revoke_token")
     @ResponseBody
-    public HttpResponse<String> revokeToken(@Token String accessToken) {
+    public Response<String> revokeToken(@Token String accessToken) {
         if (jwtService.revokeAuthenticationByAccessToken(accessToken)) {
-            return new HttpResponse<>("OK");
+            return new Response<>("OK");
         }
         else {
-            return new HttpResponse<>("Fail");
+            return new Response<>("Fail");
         }
     }
 
     @Operation(description = "")
     @GetMapping("logout_success")
     @ResponseBody
-    public HttpResponse<String> logoutSuccess(@Token String accessToken) {
+    public Response<String> logoutSuccess(@Token String accessToken) {
         String ret = jwtService.revokeAuthenticationByAccessToken(accessToken) ? "success" : "fail";
 //        String userId = jwtTokenProvider.getUserId(accessToken);
 //        if (!refreshTokenService.revokeRefreshToken(userId)) {
 //            return new HttpResponse<>("failed to logout");
 //        }
-        return new HttpResponse<>("logout " + ret);
+        return new Response<>("logout " + ret);
     }
 }

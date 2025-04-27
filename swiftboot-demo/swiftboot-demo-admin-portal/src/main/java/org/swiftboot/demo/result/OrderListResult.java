@@ -3,7 +3,7 @@ package org.swiftboot.demo.result;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.demo.model.entity.OrderEntity;
-import org.swiftboot.web.result.BasePopulateListResult;
+import org.swiftboot.web.dto.BasePopulateListResult;
 
 import java.util.List;
 

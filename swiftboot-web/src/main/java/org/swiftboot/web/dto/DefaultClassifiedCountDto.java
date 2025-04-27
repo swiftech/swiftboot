@@ -1,8 +1,7 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +11,8 @@ import java.util.Map;
  *
  * @author swiftech
  **/
-@Schema(name="", description="Default classified counting result")
-public class DefaultClassifiedCountResult<K, V> implements Result{
+@Schema(name="", description="Default classified counting DTO")
+public class DefaultClassifiedCountDto<K, V> implements Dto {
 
     /**
      * 统计结果，按照分类的标识存储

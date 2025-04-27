@@ -1,4 +1,4 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.dto;
 
 import org.swiftboot.data.model.entity.ParentEntity;
 
@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * @author swiftech
  **/
-public class ParentResult extends BasePopulateResult<ParentEntity> {
+public class ParentDto extends BasePopulateDto<ParentEntity> {
 
     private String name;
 
-    private List<ChildResult> items;
+    private List<ChildDto> items;
 
     public String getName() {
         return name;
@@ -21,11 +21,11 @@ public class ParentResult extends BasePopulateResult<ParentEntity> {
         this.name = name;
     }
 
-    public List<ChildResult> getItems() {
+    public List<ChildDto> getItems() {
         return items;
     }
 
-    public void setItems(List<ChildResult> items) {
+    public void setItems(List<ChildDto> items) {
         this.items = items;
     }
 }

@@ -1,16 +1,15 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * 默认的修改状态返回对象
  *
  * @author swiftech
  **/
-@Schema(name="", description="Default status changing result")
-public class DefaultStatusChangeResult {
+@Schema(name="Default status changing result DTO", description="Default status changing result DTO")
+public class DefaultStatusChangeDto {
 
     /**
      * 新状态码
@@ -26,11 +25,11 @@ public class DefaultStatusChangeResult {
     @JsonProperty("new_status_name")
     private String newStatusName;
 
-    public DefaultStatusChangeResult(int newStatusCode) {
+    public DefaultStatusChangeDto(int newStatusCode) {
         this.newStatusCode = newStatusCode;
     }
 
-    public DefaultStatusChangeResult(int newStatusCode, String newStatusName) {
+    public DefaultStatusChangeDto(int newStatusCode, String newStatusName) {
         this.newStatusCode = newStatusCode;
         this.newStatusName = newStatusName;
     }

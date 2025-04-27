@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.demo.command.HttpHeaderCommand;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.result.HttpResponse;
+import org.swiftboot.web.dto.HttpResponse;
 import org.swiftboot.web.validate.ConvertValidateResult;
 
 @Tag(name = "Http header 处理演示"})

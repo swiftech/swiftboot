@@ -1,11 +1,11 @@
-package org.swiftboot.web.result;
+package org.swiftboot.web.dto;
 
 import org.swiftboot.data.model.entity.ParentEntity;
 
 /**
  * @author swiftech
  **/
-public class ChildResult extends BasePopulateResult<ParentEntity> {
+public class ChildDto extends BasePopulateDto<ParentEntity> {
 
     private String name;
 
