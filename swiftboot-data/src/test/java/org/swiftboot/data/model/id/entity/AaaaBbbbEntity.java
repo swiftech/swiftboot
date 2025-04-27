@@ -7,6 +7,7 @@ import org.swiftboot.data.model.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.swiftboot.data.model.entity.BaseIdEntity;
 
 /**
  * @author swiftech 2019-04-08
@@ -14,12 +15,12 @@ import jakarta.persistence.Table;
 @Description("测试实体类")
 @Entity
 @Table(name = "TEST_TABLE")
-public class AaaaBbbbEntity extends BaseEntity {
+public class AaaaBbbbEntity extends BaseIdEntity {
     /**
      * 名称
      */
     @PropertyDescription(value = "名称", example = "闲趣清闲薄脆饼干")
-    @Column(name = "NAME", length = 16, columnDefinition = "VARCHAR(16)")
+    @Column(name = "NAME", length = 16)
     private String name;
 
     public String getName() {

@@ -18,7 +18,7 @@ public abstract class BaseIdEntity implements IdPersistable {
      */
     @PropertyDescription(value = "Entity ID", example = "basident20191119010450544siobnic")
     @Id()
-    @Column(name = "ID", columnDefinition = "char(32)")
+    @Column(name = "ID")
     private String id;
 
     public BaseIdEntity() {

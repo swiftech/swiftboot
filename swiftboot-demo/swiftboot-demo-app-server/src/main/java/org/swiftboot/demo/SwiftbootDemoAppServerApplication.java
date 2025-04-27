@@ -15,16 +15,18 @@ import java.util.Locale;
 public class SwiftbootDemoAppServerApplication implements ApplicationListener<ApplicationEvent> {
 
     public static void main(String[] args) {
-//        RedisServer redisServer;
-//        try {
-//            redisServer = RedisServer.newRedisServer()
-//                    .port(6379)
-//                    .build();
-//            redisServer.start();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
+        String withEmbeddedRedis = System.getenv("WITH_EMBEDDED_REDIS");
+        if (Boolean.parseBoolean(withEmbeddedRedis)) {
+            RedisServer redisServer;
+            try {
+                redisServer = RedisServer.newRedisServer()
+                        .port(6379)
+                        .build();
+                redisServer.start();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
         SpringApplication myapp = new SpringApplication(SwiftbootDemoAppServerApplication.class);
         myapp.addListeners(new SpringBootEnv());
@@ -34,7 +36,7 @@ public class SwiftbootDemoAppServerApplication implements ApplicationListener<Ap
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ApplicationStartingEvent) {
-
+            //
         }
     }
 }

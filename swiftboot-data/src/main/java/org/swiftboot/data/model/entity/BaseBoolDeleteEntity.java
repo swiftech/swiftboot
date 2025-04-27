@@ -18,7 +18,7 @@ public abstract class BaseBoolDeleteEntity extends BaseIdEntity implements Logic
      * 是否逻辑删除
      */
     @PropertyDescription(value = "Is logically deleted", example = "false")
-    @Column(name = "IS_DELETE", columnDefinition = "BIT")
+    @Column(name = "IS_DELETE")
     private Boolean isDelete = Boolean.FALSE;
 
     public BaseBoolDeleteEntity() {

@@ -39,7 +39,12 @@ public class RedisJwtService implements JwtService {
 
     @Override
     public boolean isRevokedRefreshToken(String refreshToken) {
-        return false;
+        throw new NotImplementedException("Not implemented");
+    }
+
+    @Override
+    public boolean isRevokedAccessToken(String accessToken) {
+        throw new NotImplementedException("Not implemented");
     }
 
     @Override

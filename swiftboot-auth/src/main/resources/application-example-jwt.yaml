@@ -6,3 +6,4 @@ swiftboot:
       secret: xxxxxx
       accessTokenExpirationSeconds: 600
       refreshTokenExpirationSeconds: 600
+      revokeType: direct

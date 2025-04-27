@@ -17,13 +17,13 @@ public abstract class BaseLongTimeEntity extends BaseIdEntity implements TimePer
      * 创建时间
      */
     @PropertyDescription(value = "Creation time", example = "1545355038524")
-    @Column(name = "CREATE_TIME", columnDefinition = "BIGINT")
+    @Column(name = "CREATE_TIME")
     private Long createTime;
     /**
      * 修改时间
      */
     @PropertyDescription(value = "Updating time", example = "1545355038524")
-    @Column(name = "UPDATE_TIME", columnDefinition = "BIGINT")
+    @Column(name = "UPDATE_TIME")
     private Long updateTime;
 
     public BaseLongTimeEntity() {

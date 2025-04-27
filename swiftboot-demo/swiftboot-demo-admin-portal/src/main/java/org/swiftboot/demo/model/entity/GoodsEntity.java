@@ -23,14 +23,14 @@ public class GoodsEntity extends BaseEntity {
      * 商品名称
      */
     @PropertyDescription(value = "商品名称", example = "闲趣清闲薄脆饼干")
-    @Column(name = "NAME", length = 16, columnDefinition = "VARCHAR(16) COMMENT '商品名称'")
+    @Column(name = "NAME", length = 16)
     private String name;
 
     /**
      * 商品描述
      */
     @PropertyDescription(value = "商品描述", example = "清闲不腻，松脆松化")
-    @Column(name = "DESCRIPTION", length = 64, columnDefinition = "VARCHAR(64) COMMENT '商品描述'")
+    @Column(name = "DESCRIPTION", length = 64)
     private String description;
 
     /**
@@ -45,11 +45,11 @@ public class GoodsEntity extends BaseEntity {
     private String weight;
 
     @PropertyDescription(value = "生产时间", example = "2020-01-16 00:00:00")
-    @Column(name = "PRODUCTION_TIME", columnDefinition = "TIMESTAMP COMMENT '生产时间'")
+    @Column(name = "PRODUCTION_TIME")
     private LocalDateTime productionTime;
 
     @PropertyDescription(value = "过期日期", example = "2021-01-16")
-    @Column(name = "EXPIRE_DATE", columnDefinition = "DATE COMMENT '过期日期'")
+    @Column(name = "EXPIRE_DATE")
     private LocalDate expireDate;
 
     /**

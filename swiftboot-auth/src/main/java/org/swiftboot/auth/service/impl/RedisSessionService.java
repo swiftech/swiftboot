@@ -120,6 +120,9 @@ public class RedisSessionService implements SessionService {
                 return null;
             }
         }
+        if (bytes == null) {
+            return null;
+        }
         log.debug(new String(bytes));
         try {
             return mapper.readValue(bytes, Session.class);

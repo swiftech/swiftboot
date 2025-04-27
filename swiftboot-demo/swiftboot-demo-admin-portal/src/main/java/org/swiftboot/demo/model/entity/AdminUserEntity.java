@@ -23,21 +23,21 @@ public class AdminUserEntity extends BaseEntity implements UserEntityStub {
      * 登录名
      */
     @PropertyDescription(value = "Login name of administrator", example = "admin")
-    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false, columnDefinition = "VARCHAR(32) NOT NULL COMMENT 'Login name of administrator'")
+    @Column(name = "LOGIN_NAME", length = 32, unique = true, nullable = false)
     private String loginName;
 
     /**
      * 登录密码 (MD5加盐)
      */
     @PropertyDescription(value = "Login password to login name", notes = "MD5 with salt", example = "a865a7e0ddbf35fa6f6a232e0893bea4")
-    @Column(name = "LOGIN_PWD", length = 64, nullable = false, columnDefinition = "VARCHAR(64) NOT NULL COMMENT 'Login password to login name(MD5 with salt)'")
+    @Column(name = "LOGIN_PWD", length = 64, nullable = false)
     private String loginPwd;
 
     /**
      * 用户姓名
      */
     @PropertyDescription(value = "Name of the user", example = "James Bond")
-    @Column(name = "USER_NAME", length = 64, columnDefinition = "VARCHAR(64) COMMENT 'Name of the user'")
+    @Column(name = "USER_NAME", length = 64)
     private String userName;
 
 

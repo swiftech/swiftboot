@@ -22,21 +22,21 @@ public class AdminPermissionEntity extends BaseEntity {
      * 管理员用户权限代码
      */
     @PropertyDescription(value = "管理员用户权限代码", example = "ORDER_DEL")
-    @Column(name = "PERM_CODE", length = 256, unique = true, nullable = false, columnDefinition = "VARCHAR(256) NOT NULL COMMENT '管理员用户权限代码'")
+    @Column(name = "PERM_CODE", length = 256, unique = true, nullable = false)
     private String permCode;
 
     /**
      * 管理员用户权限描述
      */
     @PropertyDescription(value = "管理员用户权限描述")
-    @Column(name = "PERM_DESC", length = 256, nullable = false, columnDefinition = "VARCHAR(256) NOT NULL COMMENT '管理员用户权限描述'")
+    @Column(name = "PERM_DESC", length = 256, nullable = false)
     private String permDesc;
 
     /**
      * 是否废弃
      */
     @PropertyDescription(value = "是否废弃", example = "false")
-    @Column(name = "IS_OBSOLETE", nullable = false, columnDefinition = "BOOL NOT NULL DEFAULT false COMMENT '是否废弃'")
+    @Column(name = "IS_OBSOLETE", nullable = false)
     private Boolean isObsolete = Boolean.FALSE;
 
     /**

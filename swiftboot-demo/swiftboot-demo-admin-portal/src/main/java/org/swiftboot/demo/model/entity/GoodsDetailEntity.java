@@ -22,7 +22,7 @@ public class GoodsDetailEntity extends BaseEntity {
      * 商品图片URI
      */
     @PropertyDescription(value = "商品图片URI", example = "/image/goods/1029")
-    @Column(name = "IMAGE_URI", length = 256, columnDefinition = "VARCHAR(256) COMMENT '商品图片URI'")
+    @Column(name = "IMAGE_URI", length = 256)
     private String imageUri;
 
     /**

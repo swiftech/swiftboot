@@ -22,14 +22,14 @@ public class AdminRoleEntity extends BaseEntity {
      * 管理员用户角色名称
      */
     @PropertyDescription(value = "管理员用户角色名称", example = "经理")
-    @Column(name = "ROLE_NAME", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '管理员用户角色名称'")
+    @Column(name = "ROLE_NAME", length = 32, nullable = false)
     private String roleName;
 
     /**
      * 管理员用户角色描述
      */
     @PropertyDescription(value = "管理员用户角色描述", example = "至高无上")
-    @Column(name = "ROLE_DESC", length = 256, nullable = false, columnDefinition = "VARCHAR(256) NOT NULL COMMENT '管理员用户角色描述'")
+    @Column(name = "ROLE_DESC", length = 256, nullable = false)
     private String roleDesc;
 
     /**

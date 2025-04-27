@@ -17,7 +17,7 @@ public abstract class BaseEntity extends BaseLongTimeEntity implements LogicalDe
      * 是否逻辑删除
      */
     @PropertyDescription(value = "Is deleted", example = "false")
-    @Column(name = "IS_DELETE", columnDefinition = "BOOL DEFAULT FALSE")
+    @Column(name = "IS_DELETE")
     private Boolean isDelete = Boolean.FALSE;
 
     public BaseEntity() {

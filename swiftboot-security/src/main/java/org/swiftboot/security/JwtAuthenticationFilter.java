@@ -16,10 +16,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-import org.swiftboot.common.auth.config.JwtConfigBean;
+import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.JwtUtils;
+import org.swiftboot.common.auth.config.JwtConfigBean;
+import org.swiftboot.common.auth.filter.BaseAuthFilter;
 
 import java.io.IOException;
 
@@ -27,7 +28,7 @@ import java.io.IOException;
  * @since 3.0
  */
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends BaseAuthFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
@@ -38,13 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     @Resource
-    private RevokedTokenService revokedTokenService;
-
-    @Resource
     private JwtConfigBean jwtConfig;
 
-//    @Value("{swiftboot.auth.jwt.revokeType}")
-//    private boolean directRevoke;
+    @Resource
+    private JwtService jwtService;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -71,9 +70,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // NO need to handle 'refresh' type of revocation.
                 if (!jwtConfig.isRefreshRevokeType()) {
                     // deny access if token has been revoked.
-                    if (revokedTokenService.isRevoked(token)) {
+                    if (jwtService.isRevokedAccessToken(token)) {
                         log.warn("Revoked jwt token: %s".formatted(StringUtils.abbreviateMiddle(token, "...", 30)));
                         SecurityContextHolder.getContext().setAuthentication(null);
+                        // TODO this returns 500 ERROR to client instead of 401
                         throw new AuthorizationDeniedException("Invalid access token");
                     }
                 }

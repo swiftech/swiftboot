@@ -1,5 +1,6 @@
 package org.swiftboot.auth.filter;
 
+import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
@@ -8,14 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
+import org.swiftboot.common.auth.filter.BaseAuthFilter;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.util.HttpServletCookieUtils;
-
-import jakarta.annotation.Resource;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -71,10 +72,10 @@ public class SessionAuthFilter extends BaseAuthFilter {
                 filterChain.doFilter(new TokenRequestWrapper(request, tokenKey), response);
             } catch (ErrMessageException e) {
                 e.printStackTrace();
-                super.responseWithError(response, e.getErrorCode());
+                super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
             } catch (Exception e) {
                 e.printStackTrace();
-                super.responseWithError(response, ErrorCodeSupport.CODE_SYS_ERR);
+                super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
             }
         }
     }

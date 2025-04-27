@@ -1,12 +1,15 @@
-package org.swiftboot.auth.filter;
+package org.swiftboot.common.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 import org.swiftboot.web.result.HttpResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYPE;
 
@@ -16,7 +19,6 @@ import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYP
 public abstract class BaseAuthFilter extends OncePerRequestFilter {
 
     /**
-     *
      * @param response
      * @param errorCode
      * @throws IOException
@@ -24,16 +26,32 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
     protected void responseWithError(HttpServletResponse response, String errorCode) throws IOException {
         HttpResponse<?> resp = new HttpResponse<>(errorCode);
         resp.setMsg(ErrorCodeSupport.getErrorMessage(errorCode));
-        response.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
         response.flushBuffer();
         response.getWriter().close();
     }
 
-//    private void responseWithHttpStatus(HttpServletResponse response) throws IOException {
-//        response.setStatus(HttpStatus.FORBIDDEN.value());
-//        response.flushBuffer();
-//        response.getWriter().close();
-//    }
+    /**
+     *
+     * @param response
+     * @param statusCode
+     * @param msg
+     * @throws IOException
+     */
+    protected void responseWithHttpStatus(HttpServletResponse response, int statusCode, String msg) throws IOException {
+        response.setStatus(statusCode);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
+        try (PrintWriter writer = response.getWriter()) {
+            HttpResponse<String> resp = new HttpResponse<>(String.valueOf(statusCode), msg);
+            String body = JsonUtils.object2Json(resp);
+            writer.write(body);
+            writer.flush();
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+
 }

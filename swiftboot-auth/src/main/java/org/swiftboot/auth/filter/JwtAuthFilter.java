@@ -1,5 +1,6 @@
 package org.swiftboot.auth.filter;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,10 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.swiftboot.common.auth.JwtTokenProvider;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import io.jsonwebtoken.JwtException;
+import org.swiftboot.common.auth.filter.BaseAuthFilter;
 
 import java.io.IOException;
 
@@ -42,14 +43,14 @@ public class JwtAuthFilter extends BaseAuthFilter {
             }
             else {
                 if (log.isWarnEnabled()) log.warn("User does not have a valid token");
-                super.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
+                super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
             }
         } catch (JwtException e) {
             log.error(e.getMessage(), e);
-            super.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
+            super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            super.responseWithError(response, ErrorCodeSupport.CODE_NO_SIGNIN);
+            super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
         }
     }
 

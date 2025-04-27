@@ -20,7 +20,7 @@ public class OrderDetailEntity extends BaseEntity {
      * 明细描述
      */
     @PropertyDescription(value = "明细描述")
-    @Column(name = "DESCRIPTION", length = 512, nullable = false, columnDefinition = "VARCHAR(512) NOT NULL COMMENT '明细描述'")
+    @Column(name = "DESCRIPTION", length = 512, nullable = false)
     private String description;
 
     /**

@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
-import org.swiftboot.common.auth.JwtUtils;
+import org.swiftboot.common.auth.annotation.Token;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
@@ -28,7 +27,6 @@ import org.swiftboot.demo.command.AuthCommand;
 import org.swiftboot.demo.command.RefreshTokenCommand;
 import org.swiftboot.demo.dto.AuthenticatedDto;
 import org.swiftboot.demo.dto.CustomUserDetails;
-import org.swiftboot.demo.dto.RefreshTokenDto;
 import org.swiftboot.demo.model.UserEntity;
 import org.swiftboot.demo.repository.UserRepository;
 import org.swiftboot.web.result.HttpResponse;
@@ -54,14 +52,9 @@ public class SecurityAuthController {
 
     @Resource
     private JwtTokenProvider jwtTokenProvider;
-    @Autowired
-    private UserRepository userRepository;
 
-//    @Resource
-//    private RevokedTokenService revokedTokenService;
-//
-//    @Resource
-//    private RefreshTokenService refreshTokenService;
+    @Resource
+    private UserRepository userRepository;
 
     @Operation(description = "Signin with username and password")
     @PostMapping(value = "signin")
@@ -99,7 +92,7 @@ public class SecurityAuthController {
     @Operation(description = "Refresh access token by refresh token")
     @PostMapping("refresh")
     @ResponseBody
-    public ResponseEntity<HttpResponse<RefreshTokenDto>> refresh(@RequestBody RefreshTokenCommand refreshTokenCommand) {
+    public ResponseEntity<HttpResponse<AuthenticatedDto>> refresh(@RequestBody RefreshTokenCommand refreshTokenCommand) {
         try {
             String refreshToken = refreshTokenCommand.getRefreshToken();
             if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
@@ -122,10 +115,12 @@ public class SecurityAuthController {
                     // revoke used refresh token
                     jwtService.revokeAuthenticationByRefreshToken(refreshToken);
 
-                    // TODO use AuthenticatedDto instead
-                    RefreshTokenDto result = new RefreshTokenDto(jwtAuthentication.getRefreshToken());
+                    AuthenticatedDto authenticatedDto = new AuthenticatedDto(jwtAuthentication.getAccessToken(), jwtAuthentication.getRefreshToken());
 
-                    return new ResponseEntity<>(new HttpResponse<>(result), HttpStatus.OK);
+                    // TODO use AuthenticatedDto instead
+//                    RefreshTokenDto result = new RefreshTokenDto(jwtAuthentication.getRefreshToken());
+
+                    return new ResponseEntity<>(new HttpResponse<>(authenticatedDto), HttpStatus.OK);
                 }
             }
         } catch (Exception e) {
@@ -141,20 +136,22 @@ public class SecurityAuthController {
     }
 
 
-//    @ApiOperation("for testing access token revocation")
-//    @GetMapping("revoke_token")
-//    @ResponseBody
-//    public HttpResponse<String> revokeToken(@RequestHeader("Authorization") String authorizationHeader) {
-//        String tokenValue = JwtUtils.extractBearerToken(authorizationHeader);
-//        String ret = revokedTokenDaoStub.revokeToken(tokenValue) ? "success" : "fail";
-//        return new HttpResponse<>(ret);
-//    }
+    @Operation(description = "for testing access token revocation only")
+    @GetMapping("revoke_token")
+    @ResponseBody
+    public HttpResponse<String> revokeToken(@Token String accessToken) {
+        if (jwtService.revokeAuthenticationByAccessToken(accessToken)) {
+            return new HttpResponse<>("OK");
+        }
+        else {
+            return new HttpResponse<>("Fail");
+        }
+    }
 
     @Operation(description = "")
     @GetMapping("logout_success")
     @ResponseBody
-    public HttpResponse<String> logoutSuccess(@RequestHeader("Authorization") String authorizationHeader) {
-        String accessToken = JwtUtils.extractBearerToken(authorizationHeader);
+    public HttpResponse<String> logoutSuccess(@Token String accessToken) {
         String ret = jwtService.revokeAuthenticationByAccessToken(accessToken) ? "success" : "fail";
 //        String userId = jwtTokenProvider.getUserId(accessToken);
 //        if (!refreshTokenService.revokeRefreshToken(userId)) {

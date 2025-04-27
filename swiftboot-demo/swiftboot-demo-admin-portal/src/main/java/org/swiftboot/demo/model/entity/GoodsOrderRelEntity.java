@@ -20,7 +20,7 @@ public class GoodsOrderRelEntity extends BaseEntity {
      * 订单 ID
      */
     @PropertyDescription(value = "订单ID", example = "527d36e654f9eaea6a9b46380d253fc9")
-    @Column(name = "ORDER_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT '订单ID'")
+    @Column(name = "ORDER_ID", length = 32, nullable = false)
     private String orderId;
 
     /**

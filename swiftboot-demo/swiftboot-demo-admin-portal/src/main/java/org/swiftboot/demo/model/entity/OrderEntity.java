@@ -23,35 +23,35 @@ public class OrderEntity extends BaseEntity {
      * 订单编号
      */
     @PropertyDescription(value = "订单编号", example = "2019032411081201")
-    @Column(name = "ORDER_CODE", length = 16, columnDefinition = "VARCHAR(16) COMMENT '订单编号'")
+    @Column(name = "ORDER_CODE", length = 16)
     private String orderCode;
 
     /**
      * 订单描述
      */
     @PropertyDescription(value = "订单描述", example = "越快越好")
-    @Column(name = "DESCRIPTION", length = 64, columnDefinition = "VARCHAR(64) COMMENT '订单描述'")
+    @Column(name = "DESCRIPTION", length = 64)
     private String description;
 
     /**
      * 商品总数
      */
     @PropertyDescription(value = "商品总数", example = "5")
-    @Column(name = "TOTAL_COUNT", columnDefinition = "INT DEFAULT 0 COMMENT '商品总数'")
+    @Column(name = "TOTAL_COUNT")
     private Integer totalCount = 0;
 
     /**
      * 发货地址
      */
     @PropertyDescription(value = "发货地址", example = "极乐世界102号")
-    @Column(name = "ADDRESS", length = 64, columnDefinition = "VARCHAR(64) COMMENT '发货地址'")
+    @Column(name = "ADDRESS", length = 64)
     private String address;
 
     /**
      * APP_USER ID
      */
     @PropertyDescription(value = "APP_USER ID", example = "appuser201912030118069998d7e8179")
-    @Column(name = "USER_ID", length = 32, nullable = false, columnDefinition = "CHAR(32) NOT NULL COMMENT 'APP_USER ID'")
+    @Column(name = "USER_ID", length = 32, nullable = false)
     private String userId;
 
     /**

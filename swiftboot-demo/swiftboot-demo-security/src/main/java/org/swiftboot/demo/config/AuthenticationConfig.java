@@ -13,14 +13,14 @@ import org.swiftboot.security.RevokedTokenService;
 @Configuration
 public class AuthenticationConfig {
 
-    @Bean
-    public RevokedTokenService revokedTokenDaoStub() {
-        return new MockRevokedTokenServiceImpl();
-    }
-
-    @Bean
-    public RefreshTokenService refreshTokenDaoStub() {
-        return new MockRefreshTokenService();
-    }
+//    @Bean
+//    public RevokedTokenService revokedTokenDaoStub() {
+//        return new MockRevokedTokenServiceImpl();
+//    }
+//
+//    @Bean
+//    public RefreshTokenService refreshTokenDaoStub() {
+//        return new MockRefreshTokenService();
+//    }
 
 }

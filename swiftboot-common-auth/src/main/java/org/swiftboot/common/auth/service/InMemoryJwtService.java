@@ -1,9 +1,11 @@
 package org.swiftboot.common.auth.service;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.RefreshToken;
@@ -17,6 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 3.0
  */
 public class InMemoryJwtService implements JwtService {
+
+    @Resource
+    private JwtConfigBean jwtConfig;
 
     private static final Logger log = LoggerFactory.getLogger(InMemoryJwtService.class);
 
@@ -52,7 +57,9 @@ public class InMemoryJwtService implements JwtService {
             log.debug("Revoke JWT access token: " + StringUtils.abbreviateMiddle(accessToken, ".", 64));
         JwtAuthentication jwtAuthentication = accessTokenMap.get(accessToken);
         if (jwtAuthentication != null) {
-            refreshTokenMap.remove(jwtAuthentication.getRefreshToken().tokenValue());
+            if (jwtConfig.isRefreshRevokeType()) {
+                refreshTokenMap.remove(jwtAuthentication.getRefreshToken().tokenValue());
+            }
             accessTokenMap.remove(accessToken);
             return true;
         }
@@ -75,6 +82,11 @@ public class InMemoryJwtService implements JwtService {
     @Override
     public boolean isRevokedRefreshToken(String refreshToken) {
         return !refreshTokenMap.containsKey(refreshToken);
+    }
+
+    @Override
+    public boolean isRevokedAccessToken(String accessToken) {
+        return !accessTokenMap.containsKey(accessToken);
     }
 
     @Override

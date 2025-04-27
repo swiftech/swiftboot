@@ -30,6 +30,8 @@ public class JwtConfigBean {
 
     /**
      * `direct` | `refresh` , default is `direct`
+     * `direct`: stores revoked access token and checks user's token everytime in filter.
+     * `refresh`: do not check user's token but force client to refresh access token by refresh token.
      */
     private String revokeType = "direct";
 
