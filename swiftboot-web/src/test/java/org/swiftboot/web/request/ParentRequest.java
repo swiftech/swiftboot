@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import org.swiftboot.data.model.entity.ParentEntity;
 
@@ -7,11 +7,11 @@ import java.util.Set;
 /**
  * @author swiftech
  **/
-public class ParentCommand extends BasePopulateCommand<ParentEntity> {
+public class ParentRequest extends BasePopulateRequest<ParentEntity> {
 
     private String name;
 
-    private Set<ChildCommand> items;
+    private Set<ChildRequest> items;
 
     public String getName() {
         return name;
@@ -21,11 +21,11 @@ public class ParentCommand extends BasePopulateCommand<ParentEntity> {
         this.name = name;
     }
 
-    public Set<ChildCommand> getItems() {
+    public Set<ChildRequest> getItems() {
         return items;
     }
 
-    public void setItems(Set<ChildCommand> items) {
+    public void setItems(Set<ChildRequest> items) {
         this.items = items;
     }
 }

@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import java.util.HashSet;
 /**
  * @author swiftech 2019-04-22
  **/
-public class PopulateCommandTest {
+public class PopulateRequestTest {
 
     public static final String ORPHAN = "orphan";
 
@@ -27,7 +27,7 @@ public class PopulateCommandTest {
 
     @Test
     public void testSinglePopulate() {
-        OrphanCommand cmd = new OrphanCommand();
+        OrphanRequest cmd = new OrphanRequest();
         cmd.setName(ORPHAN);
         OrphanEntity entity = cmd.createEntity();
         Assertions.assertEquals(ORPHAN, entity.getName());
@@ -36,10 +36,10 @@ public class PopulateCommandTest {
 
     @Test
     public void testFamilyPopulate() {
-        ParentCommand cmd = new ParentCommand();
+        ParentRequest cmd = new ParentRequest();
         cmd.setName(PARENT);
         cmd.setItems(new HashSet<>());
-        ChildCommand subCmd = new ChildCommand();
+        ChildRequest subCmd = new ChildRequest();
         subCmd.setName(CHILD);
         cmd.getItems().add(subCmd);
         ParentEntity entity = cmd.createEntity();
@@ -55,9 +55,9 @@ public class PopulateCommandTest {
 
     @Test
     public void testCouplePopulate() {
-        HusbandCommand cmd = new HusbandCommand();
+        HusbandRequest cmd = new HusbandRequest();
         cmd.setName(HUSBAND);
-        WifeCommand wifeCmd = new WifeCommand();
+        WifeRequest wifeCmd = new WifeRequest();
         wifeCmd.setName(WIFE);
         cmd.setWife(wifeCmd);
         HusbandEntity entity = cmd.createEntity();

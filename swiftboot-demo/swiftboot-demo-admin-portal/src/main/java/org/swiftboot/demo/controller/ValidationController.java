@@ -1,7 +1,7 @@
 package org.swiftboot.demo.controller;
 
 import jakarta.validation.Valid;
-import org.swiftboot.demo.command.ValidationCommand;
+import org.swiftboot.demo.request.ValidationCommand;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

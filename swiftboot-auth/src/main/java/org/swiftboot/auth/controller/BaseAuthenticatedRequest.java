@@ -2,7 +2,7 @@ package org.swiftboot.auth.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.swiftboot.data.model.entity.IdPersistable;
-import org.swiftboot.web.command.BasePopulateCommand;
+import org.swiftboot.web.request.BasePopulateRequest;
 
 /**
  * If user authenticated, user id can be automatically set.
@@ -11,7 +11,7 @@ import org.swiftboot.web.command.BasePopulateCommand;
  * @since 2.1
  * @see org.swiftboot.auth.aop.UserSessionAdvice
  */
-public class BaseAuthenticatedCommand<E extends IdPersistable> extends BasePopulateCommand<E> {
+public class BaseAuthenticatedRequest<E extends IdPersistable> extends BasePopulateRequest<E> {
 
     @JsonIgnore
     private String userId;

@@ -1,11 +1,11 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.web.annotation.PopulateIgnore;
-import org.swiftboot.web.command.BasePopulateCommand;
+import org.swiftboot.web.request.BasePopulateCommand;
 
 import jakarta.validation.constraints.NotNull;
 

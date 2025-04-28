@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 所有 HTTP(S) 请求命令都继承自 HttpCommand
+ * 所有 HTTP(S) 请求都继承自 HttpRequest
  *
  * @author swiftech
  */
-@Schema(name="")
+@Schema(name="REST request")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class HttpCommand implements Serializable {
+public class HttpRequest implements Serializable {
 
     /**
      * HTTP(S) 请求头
@@ -26,7 +26,7 @@ public class HttpCommand implements Serializable {
     @JsonIgnore
     private Map<String, String> headers;
 
-    public HttpCommand() {
+    public HttpRequest() {
     }
 
     public Map<String, String> getHeaders() {

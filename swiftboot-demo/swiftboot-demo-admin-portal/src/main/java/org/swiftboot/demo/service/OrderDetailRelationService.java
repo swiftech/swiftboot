@@ -1,7 +1,7 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.command.OrderWithDetailCreateCommand;
-import org.swiftboot.demo.command.OrderWithDetailSaveCommand;
+import org.swiftboot.demo.request.OrderWithDetailCreateCommand;
+import org.swiftboot.demo.request.OrderWithDetailSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderSaveResult;
 import org.springframework.transaction.annotation.Transactional;

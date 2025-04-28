@@ -1,11 +1,11 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.command.AdminUserCreateCommand;
-import org.swiftboot.demo.command.AdminUserSaveCommand;
-import org.swiftboot.demo.command.AdminUserSigninCommand;
-import org.swiftboot.demo.command.AdminUserSignoutCommand;
+import org.swiftboot.demo.request.AdminUserCreateCommand;
+import org.swiftboot.demo.request.AdminUserSaveCommand;
+import org.swiftboot.demo.request.AdminUserSigninCommand;
+import org.swiftboot.demo.request.AdminUserSignoutCommand;
 import org.swiftboot.demo.result.*;
-import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.request.IdListCommand;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

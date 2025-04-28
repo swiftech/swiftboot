@@ -17,6 +17,7 @@ import org.swiftboot.web.response.Response;
 @Tag(name = "Security Permission", description = "Security endpoints for testing permissions.")
 @Controller
 @RequestMapping("/security/api")
+@ResponseBody
 public class SecurityPermissionController {
 
     /**
@@ -27,7 +28,6 @@ public class SecurityPermissionController {
     @Operation(description = "This endpoint requires permission A")
     @GetMapping(value = "require/perm_a")
     @PreAuthorize("hasAuthority('PERM_A')")
-    @ResponseBody
     public Response<PayloadDto> onePermissionA() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has PERM_A permission");
@@ -42,7 +42,6 @@ public class SecurityPermissionController {
     @Operation(description = "This endpoint requires permission B")
     @GetMapping(value = "require/perm_b")
     @PreAuthorize("hasAuthority('PERM_B')")
-    @ResponseBody
     public Response<PayloadDto> onePermissionB() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has PERM_B permission");
@@ -57,7 +56,6 @@ public class SecurityPermissionController {
     @Operation(description = "This endpoint requires permissions A or B")
     @GetMapping(value = "require/permissions/or")
     @PreAuthorize("hasAuthority('PERM_A') or hasAuthority('PERM_B')")
-    @ResponseBody
     public Response<PayloadDto> permissionsOr() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has either permissions");
@@ -72,7 +70,6 @@ public class SecurityPermissionController {
     @Operation(description = "This endpoint requires permissions A and B")
     @GetMapping(value = "require/permissions/and")
     @PreAuthorize("hasAuthority('PERM_A') and hasAuthority('PERM_B')")
-    @ResponseBody
     public Response<PayloadDto> permissionsAnd() {
         PayloadDto result = new PayloadDto();
         result.setData("this endpoint is only authorized to whom has both permissions");

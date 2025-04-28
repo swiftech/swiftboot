@@ -1,8 +1,8 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
 import org.swiftboot.demo.model.entity.AdminUserEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.swiftboot.web.command.BasePopulateCommand;
+import org.swiftboot.web.request.BasePopulateCommand;
 
 /**
  * Admin user Signout command

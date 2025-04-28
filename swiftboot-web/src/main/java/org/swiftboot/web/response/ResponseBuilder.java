@@ -16,46 +16,52 @@ public class ResponseBuilder<T> {
     /**
      * 错误代码对应的错误信息
      */
-    protected String msg = null;
+    protected String message = null;
 
     /**
      * 错误资源中的参数值
      */
-    protected String[] msgParams;
+    protected String[] messageArgs;
 
     /**
      * 返回的对象
      */
-    protected T result;
+    protected T data;
+
+    public ResponseBuilder<T> ok() {
+        this.code = ResponseCode.CODE_OK;
+        this.message = "OK";
+        return this;
+    }
 
     public ResponseBuilder<T> code(String errCode) {
         this.code = errCode;
         return this;
     }
 
-    public ResponseBuilder<T> msg(String msg) {
-        this.msg = msg;
+    public ResponseBuilder<T> message(String msg) {
+        this.message = msg;
         return this;
     }
 
-    public ResponseBuilder<T> msgParams(String... msgParams) {
-        this.msgParams = msgParams;
+    public ResponseBuilder<T> messageArgs(String... messageArgs) {
+        this.messageArgs = messageArgs;
         return this;
     }
 
-    public ResponseBuilder<T> result(T result) {
-        this.result = result;
+    public ResponseBuilder<T> data(T data) {
+        this.data = data;
         return this;
     }
 
     public Response<T> build() {
         Response<T> response = new Response<>();
         response.setCode(code);
-        if (StringUtils.isNotBlank(msg)) {
-            response.setMessage(msg);
+        if (StringUtils.isNotBlank(message)) {
+            response.setMessage(message);
         }
-        response.setMsgParams(msgParams);
-        response.setData(result);
+        response.setMessageArgs(messageArgs);
+        response.setData(data);
         return response;
     }
 }

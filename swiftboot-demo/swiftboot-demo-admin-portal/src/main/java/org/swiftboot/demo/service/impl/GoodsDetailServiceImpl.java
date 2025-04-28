@@ -1,8 +1,8 @@
 package org.swiftboot.demo.service.impl;
 
 import org.swiftboot.demo.model.dao.GoodsDao;
-import org.swiftboot.demo.command.GoodsDetailCreateCommand;
-import org.swiftboot.demo.command.GoodsDetailSaveCommand;
+import org.swiftboot.demo.request.GoodsDetailCreateCommand;
+import org.swiftboot.demo.request.GoodsDetailSaveCommand;
 import org.swiftboot.demo.model.dao.GoodsDetailDao;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
 import org.swiftboot.demo.model.entity.GoodsEntity;
@@ -11,7 +11,7 @@ import org.swiftboot.demo.result.GoodsDetailListResult;
 import org.swiftboot.demo.result.GoodsDetailResult;
 import org.swiftboot.demo.result.GoodsDetailSaveResult;
 import org.swiftboot.demo.service.GoodsDetailService;
-import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.request.IdListCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.web.validate.constraint.PhoneNo;

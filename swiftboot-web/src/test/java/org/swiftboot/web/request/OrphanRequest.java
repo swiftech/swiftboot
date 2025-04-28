@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.data.model.entity.OrphanEntity;
@@ -7,7 +7,7 @@ import org.swiftboot.data.model.entity.OrphanEntity;
  * @author swiftech
  **/
 @Schema(name="", description = "")
-public class OrphanCommand extends BasePopulateCommand<OrphanEntity> {
+public class OrphanRequest extends BasePopulateRequest<OrphanEntity> {
 
     private String name;
 

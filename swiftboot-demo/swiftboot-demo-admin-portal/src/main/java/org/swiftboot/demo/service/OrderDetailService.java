@@ -1,12 +1,12 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.command.OrderDetailCreateCommand;
-import org.swiftboot.demo.command.OrderDetailSaveCommand;
+import org.swiftboot.demo.request.OrderDetailCreateCommand;
+import org.swiftboot.demo.request.OrderDetailSaveCommand;
 import org.swiftboot.demo.result.OrderDetailCreateResult;
 import org.swiftboot.demo.result.OrderDetailListResult;
 import org.swiftboot.demo.result.OrderDetailResult;
 import org.swiftboot.demo.result.OrderDetailSaveResult;
-import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.request.IdListCommand;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

@@ -48,7 +48,7 @@ public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyA
         if (log.isDebugEnabled()) log.debug("Handle message for HttpResponse.");
         Response<?> responseBody = (Response<?>) bodyContainer.getValue();
         String errorCode = responseBody.getCode();
-        String[] msgParams = responseBody.getMsgParams();
+        String[] msgParams = responseBody.getMessageArgs();
         String msg = responseBody.getMessage();
 
         if (StringUtils.isBlank(msg)) {

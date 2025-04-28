@@ -1,8 +1,9 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
 /**
  * @since 3.0.0
  * @author swiftech
+ * @deprecated
  */
 public class RefreshTokenCommand {
 

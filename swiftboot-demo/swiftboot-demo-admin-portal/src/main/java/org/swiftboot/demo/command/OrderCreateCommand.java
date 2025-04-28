@@ -1,4 +1,4 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.swiftboot.demo.model.entity.OrderEntity;

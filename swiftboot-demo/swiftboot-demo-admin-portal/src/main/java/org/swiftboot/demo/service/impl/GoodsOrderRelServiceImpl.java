@@ -1,8 +1,8 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.command.GoodsOrderRelCreateCommand;
-import org.swiftboot.demo.command.GoodsOrderRelDelPurgeCommand;
-import org.swiftboot.demo.command.GoodsOrderRelSaveCommand;
+import org.swiftboot.demo.request.GoodsOrderRelCreateCommand;
+import org.swiftboot.demo.request.GoodsOrderRelDelPurgeCommand;
+import org.swiftboot.demo.request.GoodsOrderRelSaveCommand;
 import org.swiftboot.demo.model.dao.GoodsOrderRelDao;
 import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
 import org.swiftboot.demo.result.GoodsOrderRelCreateResult;
@@ -10,7 +10,7 @@ import org.swiftboot.demo.result.GoodsOrderRelListResult;
 import org.swiftboot.demo.result.GoodsOrderRelResult;
 import org.swiftboot.demo.result.GoodsOrderRelSaveResult;
 import org.swiftboot.demo.service.GoodsOrderRelService;
-import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.request.IdListCommand;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

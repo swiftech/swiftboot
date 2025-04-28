@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,8 +13,8 @@ import java.util.List;
  *
  * @author swiftech
  */
-@Schema(name="Id List Command")
-public class IdListCommand extends HttpCommand {
+@Schema(name="Request with ID List")
+public class IdListRequest extends HttpRequest {
 
     /**
      * 业务对象ID列表

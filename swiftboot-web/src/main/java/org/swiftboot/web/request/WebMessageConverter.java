@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +15,7 @@ import java.util.List;
  * 包括：将 HTTP 头写入 HttpCommand 对象
  *
  * @author swiftech
- * @see HttpCommand
+ * @see HttpRequest
  * @deprecated use {@link org.swiftboot.web.aop.WebMessageAdvice} instead.
  **/
 public class WebMessageConverter extends MappingJackson2HttpMessageConverter {
@@ -30,13 +30,13 @@ public class WebMessageConverter extends MappingJackson2HttpMessageConverter {
     @Override
     public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         Object converted = super.read(type, contextClass, inputMessage);
-        if (converted instanceof HttpCommand) {
+        if (converted instanceof HttpRequest) {
             HttpHeaders headers = inputMessage.getHeaders();
             if (!headers.isEmpty()) {
                 for (String hname : headers.keySet()) {
                     List<String> hValues = headers.getValuesAsList(hname);
                     if (!hValues.isEmpty()) {
-                        ((HttpCommand) converted).setHeader(hname, hValues.get(0));
+                        ((HttpRequest) converted).setHeader(hname, hValues.get(0));
                     }
                 }
             }

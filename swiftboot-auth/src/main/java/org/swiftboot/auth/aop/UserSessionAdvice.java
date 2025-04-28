@@ -10,7 +10,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
 import org.swiftboot.auth.config.AuthConfigBean;
-import org.swiftboot.auth.controller.BaseAuthenticatedCommand;
+import org.swiftboot.auth.controller.BaseAuthenticatedRequest;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.util.JsonUtils;
@@ -21,10 +21,10 @@ import java.lang.reflect.Type;
 
 /**
  * Automatically populate the id and name of current authenticated user from session to the request
- * {@link org.swiftboot.auth.controller.BaseAuthenticatedCommand} object.
+ * {@link BaseAuthenticatedRequest} object.
  *
  * @author swiftech
- * @see org.swiftboot.auth.controller.BaseAuthenticatedCommand
+ * @see BaseAuthenticatedRequest
  * @since 2.1
  */
 @ControllerAdvice
@@ -41,14 +41,14 @@ public class UserSessionAdvice extends RequestBodyAdviceAdapter {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return targetType == BaseAuthenticatedCommand.class || BaseAuthenticatedCommand.class.isAssignableFrom((Class<?>) targetType);
+        return targetType == BaseAuthenticatedRequest.class || BaseAuthenticatedRequest.class.isAssignableFrom((Class<?>) targetType);
     }
 
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         if (log.isTraceEnabled()) log.trace("SessionAdvice.afterBodyRead()");
         if (log.isTraceEnabled()) log.trace("Handle command: %s".formatted(body.getClass()));
-        BaseAuthenticatedCommand<?> command = (BaseAuthenticatedCommand<?>) body;
+        BaseAuthenticatedRequest<?> command = (BaseAuthenticatedRequest<?>) body;
         System.out.println(JsonUtils.object2PrettyJson(command));
 
         String tokenKey = configBean.getTokenKey();

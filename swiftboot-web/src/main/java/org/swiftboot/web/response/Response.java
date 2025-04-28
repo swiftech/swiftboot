@@ -24,6 +24,17 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 public class Response<T> implements Serializable {
 
     /**
+     * Create response builder with inner data type.
+     *
+     * @param clazz
+     * @return
+     * @param <T>
+     */
+    public static <T> ResponseBuilder<T> builder(Class<T> clazz) {
+        return new ResponseBuilder<T>();
+    }
+
+    /**
      * 业务响应代码，长度4个字节的数字
      */
     @Schema(description = "Response code", requiredMode = REQUIRED, example = "1000")
@@ -39,7 +50,7 @@ public class Response<T> implements Serializable {
      * 响应资源中的参数值
      */
     @JsonIgnore
-    protected String[] msgParams;
+    protected String[] messageArgs;
 
     /**
      * 返回的对象
@@ -87,12 +98,12 @@ public class Response<T> implements Serializable {
         this.code = code;
     }
 
-    public String[] getMsgParams() {
-        return msgParams;
+    public String[] getMessageArgs() {
+        return messageArgs;
     }
 
-    public void setMsgParams(String[] msgParams) {
-        this.msgParams = msgParams;
+    public void setMessageArgs(String[] messageArgs) {
+        this.messageArgs = messageArgs;
     }
 
     public String getMessage() {

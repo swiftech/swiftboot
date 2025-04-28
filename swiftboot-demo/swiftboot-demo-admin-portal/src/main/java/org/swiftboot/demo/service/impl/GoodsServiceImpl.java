@@ -1,8 +1,8 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.command.GoodsCreateCommand;
-import org.swiftboot.demo.command.GoodsSaveCommand;
-import org.swiftboot.demo.command.GoodsWithDetailCreateCommand;
+import org.swiftboot.demo.request.GoodsCreateCommand;
+import org.swiftboot.demo.request.GoodsSaveCommand;
+import org.swiftboot.demo.request.GoodsWithDetailCreateCommand;
 import org.swiftboot.demo.model.dao.GoodsDao;
 import org.swiftboot.demo.model.entity.GoodsEntity;
 import org.swiftboot.demo.result.GoodsCreateResult;
@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.request.IdListCommand;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.exception.ErrorCodeSupport;
 

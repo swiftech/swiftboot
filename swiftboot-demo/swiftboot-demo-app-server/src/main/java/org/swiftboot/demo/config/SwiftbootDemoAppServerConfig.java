@@ -1,5 +1,8 @@
 package org.swiftboot.demo.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.MessageSource;
@@ -58,6 +61,16 @@ public class SwiftbootDemoAppServerConfig {
 //        initializer.forEntities(GoodsEntity.class, GoodsDetailEntity.class);
         return initializer;
     }
+
+    @Bean
+    public OpenAPI swiftBootDemoAppServerOpenAPI() {
+        return new OpenAPI()
+                .info(new Info().title("SwiftBoot Demo App Server API")
+                        .description("SwiftBoot Demo App Server API with simple authentication")
+                        .version("v3.0.0")
+                        .license(new License().name("Apache 2.0").url("https://github.com/swiftech/swiftboot")));
+    }
+
 
 //    @Bean
 //    DeleteInterceptor deleteInterceptor(){

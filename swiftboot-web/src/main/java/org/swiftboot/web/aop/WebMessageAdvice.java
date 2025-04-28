@@ -6,7 +6,7 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
-import org.swiftboot.web.command.HttpCommand;
+import org.swiftboot.web.request.HttpRequest;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * 包括：将 HTTP 头写入 HttpCommand 对象
  *
  * @author swiftech
- * @see HttpCommand
+ * @see HttpRequest
  * @since 2.1
  */
 @ControllerAdvice
@@ -24,7 +24,7 @@ public class WebMessageAdvice extends RequestBodyAdviceAdapter {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return targetType == HttpCommand.class || HttpCommand.class.isAssignableFrom((Class<?>) targetType);
+        return targetType == HttpRequest.class || HttpRequest.class.isAssignableFrom((Class<?>) targetType);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class WebMessageAdvice extends RequestBodyAdviceAdapter {
             for (String hname : headers.keySet()) {
                 List<String> hValues = headers.getValuesAsList(hname);
                 if (!hValues.isEmpty()) {
-                    ((HttpCommand) body).setHeader(hname, hValues.get(0));
+                    ((HttpRequest) body).setHeader(hname, hValues.get(0));
                 }
             }
         }

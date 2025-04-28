@@ -1,35 +1,36 @@
-package org.swiftboot.demo.request;
+package org.swiftboot.common.auth.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.swiftboot.demo.model.entity.AdminUserEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.validator.constraints.Length;
-import org.swiftboot.web.request.BasePopulateCommand;
-
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
+
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 
 /**
- * Admin user signin command
+ * Request for user login with name and password.
  *
- * @author swiftech
+ * @author
+ * @since 3.0
  **/
-@Schema
-public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity> {
+@Schema(name = "Login by Name and Password")
+public class NamePasswordLoginRequest {
 
-    @Schema(description = "Login name of administrator",  requiredMode = REQUIRED, example = "admin")
+    @Schema(description = "Login name of user", requiredMode = REQUIRED, example = "13066669999")
     @JsonProperty("login_name")
     @Length(max = 32)
     @NotBlank
     private String loginName;
 
-    @Schema(description = "Login password to login name",  requiredMode = REQUIRED, example = "my_password")
+    @Schema(description = "Password for login name", requiredMode = REQUIRED, example = "my_password")
     @JsonProperty("login_pwd")
     @Length(max = 64)
     @NotBlank
     private String loginPwd;
 
     /**
-     * Get Login name of administrator
+     * Get Login name of app user
      *
      * @return
      */
@@ -38,7 +39,7 @@ public class AdminUserSigninCommand extends BasePopulateCommand<AdminUserEntity>
     }
 
     /**
-     * Set Login name of administrator
+     * Set Login name of app user
      *
      * @param loginName
      */

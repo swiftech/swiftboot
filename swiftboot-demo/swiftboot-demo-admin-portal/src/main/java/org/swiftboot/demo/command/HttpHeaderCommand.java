@@ -1,6 +1,6 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
-import org.swiftboot.web.command.HttpCommand;
+import org.swiftboot.web.request.HttpCommand;
 
 public class HttpHeaderCommand extends HttpCommand {
 }

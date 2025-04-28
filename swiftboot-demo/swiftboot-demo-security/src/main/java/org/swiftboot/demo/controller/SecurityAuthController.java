@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.*;
 import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.annotation.Token;
+import org.swiftboot.common.auth.request.NamePasswordLoginRequest;
+import org.swiftboot.common.auth.request.RefreshTokenRequest;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
-import org.swiftboot.demo.command.AuthCommand;
-import org.swiftboot.demo.command.RefreshTokenCommand;
 import org.swiftboot.demo.dto.AuthenticatedDto;
 import org.swiftboot.demo.dto.CustomUserDetails;
 import org.swiftboot.demo.model.UserEntity;
@@ -58,13 +58,14 @@ public class SecurityAuthController {
 
     @Operation(description = "Signin with username and password")
     @PostMapping(value = "signin")
-    @ResponseBody
     public Response<AuthenticatedDto> adminUserSignin(
-            @RequestBody AuthCommand command, HttpServletResponse response) {
+            @RequestBody NamePasswordLoginRequest authRequest, HttpServletResponse response) {
         log.info("> /security/auth/signin");
+        String loginName = authRequest.getLoginName();
+        String loginPwd = authRequest.getLoginPwd();
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(command.getUserName(), command.getPassword());
-        log.info("user %s login...".formatted(command.getUserName()));
+                new UsernamePasswordAuthenticationToken(loginName, loginPwd);
+        log.info("user %s login...".formatted(loginName));
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authentication);
@@ -72,27 +73,26 @@ public class SecurityAuthController {
         if (authentication.getPrincipal() instanceof CustomUserDetails ud) {
             log.debug(ud.getId());
             log.debug(ud.getUsername());
-            AccessToken accessToken = jwtTokenProvider.generateAccessToken(ud.getId(), command.getUserName());
+            AccessToken accessToken = jwtTokenProvider.generateAccessToken(ud.getId(), loginName);
             RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(ud.getId());
 
             jwtService.saveJwtAuthentication(accessToken, refreshToken);
-//            refreshTokenService.saveRefreshToken(ud.getId(), refreshToken.tokenValue(), refreshToken.expiresAt());
 
-            log.info("User login in: %s".formatted(command.getUserName()));
+            log.info("User login in: %s".formatted(loginName));
             AuthenticatedDto authenticatedDto = new AuthenticatedDto(accessToken.tokenValue(), accessToken.expiresAt(),
                     refreshToken.tokenValue(), refreshToken.expiresAt());
+            // TODO
             authenticatedDto.setRole(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
             return new Response<>(authenticatedDto);
         }
         else {
-            throw new RuntimeException("No user id");
+            throw new RuntimeException("No user detail found");
         }
     }
 
     @Operation(description = "Refresh access token by refresh token")
     @PostMapping("refresh")
-    @ResponseBody
-    public ResponseEntity<Response<AuthenticatedDto>> refresh(@RequestBody RefreshTokenCommand refreshTokenCommand) {
+    public ResponseEntity<Response<AuthenticatedDto>> refresh(@RequestBody RefreshTokenRequest refreshTokenCommand) {
         try {
             String refreshToken = refreshTokenCommand.getRefreshToken();
             if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
@@ -117,9 +117,6 @@ public class SecurityAuthController {
 
                     AuthenticatedDto authenticatedDto = new AuthenticatedDto(jwtAuthentication.getAccessToken(), jwtAuthentication.getRefreshToken());
 
-                    // TODO use AuthenticatedDto instead
-//                    RefreshTokenDto result = new RefreshTokenDto(jwtAuthentication.getRefreshToken());
-
                     return new ResponseEntity<>(new Response<>(authenticatedDto), HttpStatus.OK);
                 }
             }
@@ -138,7 +135,6 @@ public class SecurityAuthController {
 
     @Operation(description = "for testing access token revocation only")
     @GetMapping("revoke_token")
-    @ResponseBody
     public Response<String> revokeToken(@Token String accessToken) {
         if (jwtService.revokeAuthenticationByAccessToken(accessToken)) {
             return new Response<>("OK");
@@ -150,7 +146,6 @@ public class SecurityAuthController {
 
     @Operation(description = "")
     @GetMapping("logout_success")
-    @ResponseBody
     public Response<String> logoutSuccess(@Token String accessToken) {
         String ret = jwtService.revokeAuthenticationByAccessToken(accessToken) ? "success" : "fail";
 //        String userId = jwtTokenProvider.getUserId(accessToken);

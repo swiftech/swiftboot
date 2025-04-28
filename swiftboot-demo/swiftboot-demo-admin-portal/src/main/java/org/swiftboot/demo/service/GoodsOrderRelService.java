@@ -1,13 +1,13 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.command.GoodsOrderRelCreateCommand;
-import org.swiftboot.demo.command.GoodsOrderRelDelPurgeCommand;
-import org.swiftboot.demo.command.GoodsOrderRelSaveCommand;
+import org.swiftboot.demo.request.GoodsOrderRelCreateCommand;
+import org.swiftboot.demo.request.GoodsOrderRelDelPurgeCommand;
+import org.swiftboot.demo.request.GoodsOrderRelSaveCommand;
 import org.swiftboot.demo.result.GoodsOrderRelCreateResult;
 import org.swiftboot.demo.result.GoodsOrderRelListResult;
 import org.swiftboot.demo.result.GoodsOrderRelResult;
 import org.swiftboot.demo.result.GoodsOrderRelSaveResult;
-import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.request.IdListCommand;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

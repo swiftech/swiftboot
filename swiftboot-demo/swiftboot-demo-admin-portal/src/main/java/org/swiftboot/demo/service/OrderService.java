@@ -1,13 +1,13 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.command.OrderCreateCommand;
-import org.swiftboot.demo.command.OrderSaveCommand;
+import org.swiftboot.demo.request.OrderCreateCommand;
+import org.swiftboot.demo.request.OrderSaveCommand;
 import org.swiftboot.demo.result.OrderCreateResult;
 import org.swiftboot.demo.result.OrderListResult;
 import org.swiftboot.demo.result.OrderResult;
 import org.swiftboot.demo.result.OrderSaveResult;
 import org.springframework.transaction.annotation.Transactional;
-import org.swiftboot.web.command.IdListCommand;
+import org.swiftboot.web.request.IdListCommand;
 
 /**
  * 订单服务接口

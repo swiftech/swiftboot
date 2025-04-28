@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,8 +11,8 @@ import org.hibernate.validator.constraints.Length;
  *
  * @author swiftech
  */
-@Schema(name="D")
-public class IdCommand extends HttpCommand {
+@Schema(name="业务ID请求 Request with only ID")
+public class IdRequest extends HttpRequest {
 
     /**
      * 业务对象ID

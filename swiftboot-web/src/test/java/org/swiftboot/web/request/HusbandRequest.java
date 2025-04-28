@@ -1,15 +1,15 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import org.swiftboot.data.model.entity.HusbandEntity;
 
 /**
  * @author swiftech
  **/
-public class HusbandCommand extends BasePopulateCommand<HusbandEntity> {
+public class HusbandRequest extends BasePopulateRequest<HusbandEntity> {
 
     private String name;
 
-    private WifeCommand wife;
+    private WifeRequest wife;
 
     public String getName() {
         return name;
@@ -19,11 +19,11 @@ public class HusbandCommand extends BasePopulateCommand<HusbandEntity> {
         this.name = name;
     }
 
-    public WifeCommand getWife() {
+    public WifeRequest getWife() {
         return wife;
     }
 
-    public void setWife(WifeCommand wife) {
+    public void setWife(WifeRequest wife) {
         this.wife = wife;
     }
 }

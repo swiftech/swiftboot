@@ -1,4 +1,4 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
@@ -26,9 +26,9 @@ import java.util.function.Predicate;
  * @author swiftech
  */
 //@Schema(name="")
-public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpCommand {
+public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpRequest {
 
-    private static final Logger log = LoggerFactory.getLogger(BasePopulateCommand.class);
+    private static final Logger log = LoggerFactory.getLogger(BasePopulateRequest.class);
 
     /**
      * 创建对应的实体类 P 的实例并且用属性值填充实例，
@@ -42,7 +42,7 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
         Class<P> entityClass = (Class<P>) GenericUtils.ancestorGenericClass(getClass());
 
         if (entityClass == null) {
-            throw new RuntimeException(Info.get(BasePopulateCommand.class, R.REFLECT_TYPE_OF_ENTITY_FAIL));
+            throw new RuntimeException(Info.get(BasePopulateRequest.class, R.REFLECT_TYPE_OF_ENTITY_FAIL));
         }
 
         try {
@@ -50,7 +50,7 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(Info.get(BasePopulateCommand.class, R.CONSTRUCT_ENTITY_FAIL1, entityClass));
+            throw new RuntimeException(Info.get(BasePopulateRequest.class, R.CONSTRUCT_ENTITY_FAIL1, entityClass));
         }
         this.doPopulate(entityClass, ret, true);
         return ret;
@@ -104,8 +104,8 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
                     log.warn(e.getLocalizedMessage());
                     continue;
                 }
-                if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())) {
-                    BasePopulateCommand<IdPersistable> sub = (BasePopulateCommand<IdPersistable>) BeanUtils.forceGetProperty(this, srcField);
+                if (BasePopulateRequest.class.isAssignableFrom(srcField.getType())) {
+                    BasePopulateRequest<IdPersistable> sub = (BasePopulateRequest<IdPersistable>) BeanUtils.forceGetProperty(this, srcField);
                     if (sub == null) {
                         // System.out.printf("Ignore populate field: %s%n", srcField);
                         continue;
@@ -134,8 +134,8 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
                             // Populate collections for new created entity.
                             Collection<Object> newEntities = CollectionUtils.constructCollectionByType((Class<Collection<Object>>) targetField.getType());
                             items.forEach(item -> {
-                                if (!(item instanceof BasePopulateCommand)) return;// exclude non populatable elements;
-                                newEntities.add(((BasePopulateCommand) item).createEntity());
+                                if (!(item instanceof BasePopulateRequest)) return;// exclude non populatable elements;
+                                newEntities.add(((BasePopulateRequest) item).createEntity());
                             });
                             BeanUtils.forceSetProperty(entity, targetField, newEntities);
                         }
@@ -143,9 +143,9 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
                             if (target instanceof Collection) { // populate collections for existed entities.
                                 Collection subEntities = (Collection) target;
                                 items.forEach(item -> {
-                                    if (!(item instanceof BasePopulateCommand))
+                                    if (!(item instanceof BasePopulateRequest))
                                         return; // exclude non populate-able elements;
-                                    BasePopulateCommand<?> populateableItem = (BasePopulateCommand<?>) item;
+                                    BasePopulateRequest<?> populateableItem = (BasePopulateRequest<?>) item;
                                     IdPersistable subEntity = populateableItem.createEntity();
                                     if (subEntities.contains(subEntity)) { // populate to existed entity to merge (for updating sub entities)
                                         Optional<IdPersistable> optMatched = subEntities.stream().filter(
@@ -154,7 +154,7 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
                                                 .findFirst();
                                         if (optMatched.isPresent()) {
                                             IdPersistable oldEntity = optMatched.get();
-                                            ((BasePopulateCommand) item).populateEntity(oldEntity);
+                                            ((BasePopulateRequest) item).populateEntity(oldEntity);
                                         }
                                     }
                                     else { // New sub entity
@@ -174,7 +174,7 @@ public abstract class BasePopulateCommand<P extends IdPersistable> extends HttpC
                 }
             }
             else { // no recursive
-                if (BasePopulateCommand.class.isAssignableFrom(srcField.getType())
+                if (BasePopulateRequest.class.isAssignableFrom(srcField.getType())
                         || Collection.class.isAssignableFrom(srcField.getType())) {
                     continue; // Ignore nested commands if no recursive.
                 }

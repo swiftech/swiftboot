@@ -16,7 +16,6 @@ public class AuthorizedController {
 
     @Operation(description = "authorized endpoint")
     @GetMapping("authorized")
-    @ResponseBody
     public Response<String> authorized() {
         return new Response<>("authorized");
     }

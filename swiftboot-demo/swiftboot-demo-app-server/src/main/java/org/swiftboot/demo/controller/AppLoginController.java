@@ -6,10 +6,13 @@ import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.demo.command.AppUserSigninCommand;
-import org.swiftboot.demo.command.RefreshTokenCommand;
+import org.swiftboot.common.auth.request.NamePasswordLoginRequest;
+import org.swiftboot.common.auth.request.RefreshTokenRequest;
 import org.swiftboot.demo.dto.AppUserSignInDto;
 import org.swiftboot.web.response.Response;
 
@@ -32,7 +35,7 @@ public class AppLoginController {
     @Operation(description = "App user sign in")
     @PostMapping(value = "signin")
     public Response<AppUserSignInDto> appUserSign(
-            @RequestBody AppUserSigninCommand command) {
+            @RequestBody NamePasswordLoginRequest command) {
         log.info("> /app/signin");
         return userAuthService.userSignIn(command.getLoginName(), command.getLoginPwd());
     }
@@ -40,7 +43,7 @@ public class AppLoginController {
     @Operation(description = "Refresh Access Token, used only for JWT mode")
     @PostMapping(value = "refresh_token")
     public Response<AppUserSignInDto> refreshToken(
-            @RequestBody RefreshTokenCommand command) {
+            @RequestBody RefreshTokenRequest command) {
         log.info("> /app/refresh_token");
         return userAuthService.refreshAccessToken(command.getRefreshToken());
     }

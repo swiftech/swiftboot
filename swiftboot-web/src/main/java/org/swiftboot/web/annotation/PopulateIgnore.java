@@ -1,5 +1,6 @@
 package org.swiftboot.web.annotation;
 
+import org.swiftboot.web.request.BasePopulateRequest;
 import org.swiftboot.web.dto.BasePopulateDto;
 
 import java.lang.annotation.ElementType;
@@ -12,7 +13,7 @@ import java.lang.annotation.Target;
  *
  * @author swiftech
  * @see BasePopulateDto
- * @see org.swiftboot.web.command.BasePopulateCommand
+ * @see BasePopulateRequest
  **/
 @Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

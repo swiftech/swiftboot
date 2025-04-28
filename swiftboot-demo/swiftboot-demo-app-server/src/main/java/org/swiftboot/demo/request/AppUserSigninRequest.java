@@ -1,11 +1,11 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.demo.model.AppUserEntity;
-import org.swiftboot.web.command.BasePopulateCommand;
+import org.swiftboot.web.request.BasePopulateRequest;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -14,9 +14,10 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
  * App user signin command
  *
  * @author swiftech 2020-02-05
+ * @deprecated {@link org.swiftboot.common.auth.request.NamePasswordLoginRequest}
  **/
 @Schema
-public class AppUserSigninCommand extends BasePopulateCommand<AppUserEntity> {
+public class AppUserSigninRequest extends BasePopulateRequest<AppUserEntity> {
 
     @Schema(description = "Login name of app user",  requiredMode = REQUIRED, example = "13866669999")
     @JsonProperty("login_name")

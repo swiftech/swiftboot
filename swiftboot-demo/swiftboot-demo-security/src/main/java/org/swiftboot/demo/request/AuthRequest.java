@@ -1,9 +1,9 @@
-package org.swiftboot.demo.command;
+package org.swiftboot.demo.request;
 
 /**
  * @author swiftech
  */
-public class AuthCommand {
+public class AuthRequest {
     String userName;
     String password;
 
@@ -11,7 +11,7 @@ public class AuthCommand {
         return userName;
     }
 
-    public AuthCommand setUserName(String userName) {
+    public AuthRequest setUserName(String userName) {
         this.userName = userName;
         return this;
     }
@@ -20,7 +20,7 @@ public class AuthCommand {
         return password;
     }
 
-    public AuthCommand setPassword(String password) {
+    public AuthRequest setPassword(String password) {
         this.password = password;
         return this;
     }

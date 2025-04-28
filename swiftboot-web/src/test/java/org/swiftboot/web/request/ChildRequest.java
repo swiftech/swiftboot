@@ -1,11 +1,11 @@
-package org.swiftboot.web.command;
+package org.swiftboot.web.request;
 
 import org.swiftboot.data.model.entity.ChildEntity;
 
 /**
  * @author swiftech
  **/
-public class ChildCommand extends BasePopulateCommand<ChildEntity> {
+public class ChildRequest extends BasePopulateRequest<ChildEntity> {
 
     private String name;
 

@@ -37,7 +37,6 @@ public class UserController {
      */
     @Operation(description = "Get user information after login")
     @GetMapping(value = "/user/info")
-    @ResponseBody
     public Response<UserInfoDto> userInfo(@UserId String userId) {
         if (StringUtils.isBlank(userId)) {
             throw new ErrMessageException(ResponseCode.CODE_NO_SIGNIN, "User does not login");
@@ -48,7 +47,6 @@ public class UserController {
 
     @Operation(description = "Get user permissions")
     @GetMapping(value = "/user/permissions")
-    @ResponseBody
     public Response<UserInfoDto> userPermissions() {
         String permissions = StringUtils.join(new String[]{PermissionConstants.PERM_A, PermissionConstants.PERM_B, PermissionConstants.PERM_C}, ",");
         UserInfoDto ui = new UserInfoDto();
