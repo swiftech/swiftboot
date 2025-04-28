@@ -15,9 +15,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.swiftboot.data.model.dao.ChildDao;
-import org.swiftboot.data.model.dao.CustomizedDao;
-import org.swiftboot.data.model.dao.ParentDao;
+import org.swiftboot.data.repository.ChildRepository;
+import org.swiftboot.data.repository.CustomizedRepository;
+import org.swiftboot.data.repository.ParentRepository;
 import org.swiftboot.data.model.entity.ChildEntity;
 import org.swiftboot.data.model.entity.CustomizedEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
@@ -41,13 +41,13 @@ public class EntityIdAspectTest {
     private static final Logger log = LoggerFactory.getLogger(EntityIdAspectTest.class);
 
     @Resource
-    private ParentDao parentDao;
+    private ParentRepository parentRepository;
 
     @Resource
-    private ChildDao childDao;
+    private ChildRepository childRepository;
 
     @Resource
-    private CustomizedDao customizedDao;
+    private CustomizedRepository customizedRepository;
 
     @Resource
     private EntityManager entityManager;
@@ -62,10 +62,10 @@ public class EntityIdAspectTest {
     public void testIdPersistable() {
         CustomizedEntity ce = new CustomizedEntity();
         ce.setName("异类");
-        Optional<CustomizedEntity> opt = customizedDao.findByName("同类");
-        customizedDao.save(ce);
+        Optional<CustomizedEntity> opt = customizedRepository.findByName("同类");
+        customizedRepository.save(ce);
 
-        Optional<CustomizedEntity> optCE = customizedDao.findById(ce.getId());
+        Optional<CustomizedEntity> optCE = customizedRepository.findById(ce.getId());
         if (optCE.isPresent()) {
             CustomizedEntity found = optCE.get();
             Assertions.assertTrue(StringUtils.isNotBlank(found.getId()));
@@ -80,17 +80,17 @@ public class EntityIdAspectTest {
     @Test
     @Transactional
     public void testCreateParentWithChildren() {
-        System.out.println(parentDao);
+        System.out.println(parentRepository);
         ParentEntity parent = new ParentEntity();
         parent.setName("君父");
         ChildEntity childEntity = new ChildEntity();
         childEntity.setName("臣子");
         parent.setItems(new ArrayList<>());
         parent.getItems().add(childEntity);
-        parentDao.save(parent);
+        parentRepository.save(parent);
         System.out.println(parent);
         // Assertions
-        Optional<ParentEntity> optParent = parentDao.findById(parent.getId());
+        Optional<ParentEntity> optParent = parentRepository.findById(parent.getId());
         Assertions.assertNotNull(optParent);
         Assertions.assertTrue(optParent.isPresent());
         ParentEntity parentEntity = optParent.get();
@@ -118,7 +118,7 @@ public class EntityIdAspectTest {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
                 ParentEntity entity = new ParentEntity(parentId, "Saved Parent");
-                parentDao.save(entity);
+                parentRepository.save(entity);
             }
         });
 
@@ -126,7 +126,7 @@ public class EntityIdAspectTest {
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                Optional<ParentEntity> optParent = parentDao.findById(parentId);
+                Optional<ParentEntity> optParent = parentRepository.findById(parentId);
                 if (optParent.isPresent()) {
                     ParentEntity parentEntity = optParent.get();
 //                    entityManager.detach(parentEntity);
@@ -141,7 +141,7 @@ public class EntityIdAspectTest {
                     ChildEntity childEntity2 = new ChildEntity(modifyChildId, "New Child 2");
                     childEntity2.setParent(parentEntity);
                     parentEntity.getItems().add(childEntity2);
-                    parentDao.save(parentEntity);
+                    parentRepository.save(parentEntity);
                 }
             }
         });
@@ -150,24 +150,24 @@ public class EntityIdAspectTest {
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                Optional<ParentEntity> optParent = parentDao.findById(parentId);
+                Optional<ParentEntity> optParent = parentRepository.findById(parentId);
                 if (optParent.isPresent()) {
                     ParentEntity parentEntity = optParent.get();
                     log.trace("Clear existed children " + parentEntity.getItems().size());
                     parentEntity.getItems().clear();
 //                    log.trace("query before adding entity 3");
-                    Optional<ParentEntity> hello1 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                    Optional<ParentEntity> hello1 = parentRepository.findByName("hello");// add this to test weired auto flush before save()
                     ChildEntity childEntity3 = new ChildEntity("New Child 3");
                     parentEntity.getItems().add(childEntity3);
                     log.trace("query before adding Detached entity 2");
-                    Optional<ParentEntity> hello2 = parentDao.findByName("hello");// add this to test weired auto flush before save()
+                    Optional<ParentEntity> hello2 = parentRepository.findByName("hello");// add this to test weired auto flush before save()
                     ChildEntity modifiedChild2 = new ChildEntity(modifyChildId, "Modified Child 2");
                     parentEntity.getItems().add(modifiedChild2);
                     for (ChildEntity item : parentEntity.getItems()) {
                         System.out.println(item);
                         System.out.println(item.getParent());
                     }
-                    parentDao.save(parentEntity);
+                    parentRepository.save(parentEntity);
                 }
             }
         });
@@ -178,7 +178,7 @@ public class EntityIdAspectTest {
         tmpl.execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus status) {
-                Optional<ParentEntity> optParent = parentDao.findById(parentId);
+                Optional<ParentEntity> optParent = parentRepository.findById(parentId);
                 if (optParent.isPresent()) {
                     ParentEntity parentEntity = optParent.get();
                     System.out.println(JsonUtils.object2PrettyJson(parentEntity));

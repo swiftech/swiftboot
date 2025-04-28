@@ -1,5 +1,9 @@
 package org.swiftboot.data.model;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.TextStringBuilder;
 import org.slf4j.Logger;
@@ -23,11 +27,6 @@ import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.ClasspathResourceUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 
 import java.io.*;
 import java.util.*;
@@ -181,12 +180,13 @@ public class Initializer implements ApplicationContextAware {
                         }
                     });
                     System.out.println(outBuffer);
-                    FileOutputStream writer = new FileOutputStream(file);
-                    writer.write(outBuffer.toString().getBytes());
-                    writer.close();
+                    try (FileOutputStream writer = new FileOutputStream(file)) {
+                        writer.write(outBuffer.toString().getBytes());
+                    } catch (FileNotFoundException e) {
+                        throw e;
+                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println(e.getLocalizedMessage());
+                    log.error("", e);
                 }
             }
             log.info(String.format("Initialize data from %d files is completed", files.length));
@@ -200,8 +200,7 @@ public class Initializer implements ApplicationContextAware {
             entityAndFileMapping = this.loadCsvDataFilesAsStreams();
             if (entityAndFileMapping.isEmpty()) return;
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error("Load CSV data files to init failed.");
+            log.error("Load CSV data files to init failed.", e);
             return;
         }
         for (Class<? extends IdPersistable> entityClass : entityAndFileMapping.keySet()) {
@@ -209,8 +208,7 @@ public class Initializer implements ApplicationContextAware {
             try (InputStream fileIns = entityAndFileMapping.get(entityClass)) {
                 initOne(fileIns, entityClass);
             } catch (Exception e) {
-                e.printStackTrace();
-                log.warn(String.format("Init one record failed, make sure the entity class %s does have a non-arg constructor.", entityClass.getName()));
+                log.warn(String.format("Init one record failed, make sure the entity class %s does have a non-arg constructor.", entityClass.getName()), e);
                 break;
             }
         }

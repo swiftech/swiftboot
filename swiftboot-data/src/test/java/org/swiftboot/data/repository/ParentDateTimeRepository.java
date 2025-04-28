@@ -1,4 +1,4 @@
-package org.swiftboot.data.model.dao;
+package org.swiftboot.data.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -9,6 +9,6 @@ import org.swiftboot.data.model.entity.ParentDateTimeEntity;
  * @author swiftech
  **/
 @Repository
-public interface ParentDateTimeDao extends PagingAndSortingRepository<ParentDateTimeEntity, String>, CrudRepository<ParentDateTimeEntity, String> {
+public interface ParentDateTimeRepository extends PagingAndSortingRepository<ParentDateTimeEntity, String>, CrudRepository<ParentDateTimeEntity, String> {
 
 }

@@ -61,14 +61,13 @@ public class UpdateTimeAspect {
         }
 
         for (Object arg : args) {
-            if (arg instanceof TimePersistable) {
-                TimePersistable<?> entity = (TimePersistable<?>) arg;
-                this.tryToSetUpdateTime(entity);
+            if (arg instanceof TimePersistable timePersistable) {
+                this.tryToSetUpdateTime(timePersistable);
             }
-            else if (arg instanceof Iterable) {
-                for (Object entity : ((Iterable) arg)) {
-                    if (entity instanceof TimePersistable) {
-                        this.tryToSetUpdateTime((TimePersistable<?>) entity);
+            else if (arg instanceof Iterable iterable) {
+                for (Object entity : iterable) {
+                    if (entity instanceof TimePersistable subTimePersistable) {
+                        this.tryToSetUpdateTime(subTimePersistable);
                     }
                 }
             }

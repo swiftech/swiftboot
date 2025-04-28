@@ -1,8 +1,7 @@
-package org.swiftboot.data.model.dao;
+package org.swiftboot.data.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.swiftboot.data.model.entity.BoolLogicalDeleteEntity;
-import org.swiftboot.data.repository.BooleanLogicalDeleteExtend;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  *
  * @author swiftech
  */
-public interface BoolLogicalDeleteDao extends CrudRepository<BoolLogicalDeleteEntity, String>,
+public interface BoolLogicalDeleteRepository extends CrudRepository<BoolLogicalDeleteEntity, String>,
         BooleanLogicalDeleteExtend<BoolLogicalDeleteEntity> {
 
     List<BoolLogicalDeleteEntity> findByIdIn(List<String> ids);

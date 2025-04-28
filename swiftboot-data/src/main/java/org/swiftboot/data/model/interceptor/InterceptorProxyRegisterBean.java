@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 
 import jakarta.annotation.Resource;
+
 import java.util.Map;
 
 /**
@@ -19,14 +20,14 @@ import java.util.Map;
  */
 public class InterceptorProxyRegisterBean implements HibernatePropertiesCustomizer {
 
-    Logger log = LoggerFactory.getLogger(InterceptorProxyRegisterBean.class);
+    private static final Logger log = LoggerFactory.getLogger(InterceptorProxyRegisterBean.class);
 
     @Resource
     private InterceptorProxy interceptorProxy;
 
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
-        log.trace("HibernatePropertiesCustomizer goes");
+        if (log.isTraceEnabled()) log.trace("HibernatePropertiesCustomizer goes");
         hibernateProperties.put("hibernate.session_factory.interceptor", interceptorProxy);
         hibernateProperties.put("hibernate.ejb.interceptor", interceptorProxy);
     }

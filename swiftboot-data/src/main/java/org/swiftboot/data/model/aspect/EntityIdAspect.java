@@ -48,20 +48,19 @@ public class EntityIdAspect {
             return null;
         }
         Object[] args = joinPoint.getArgs();
-        if (args == null || args.length == 0) {
+        if (args == null) {
             return null;
         }
 
         for (Object arg : args) {
             log.trace("saving " + arg);
-            if (arg instanceof IdPersistable) { // for saving single entity
-                IdPersistable idEntity = (IdPersistable) arg;
-                idPopulater.populate(idEntity, true);
+            if (arg instanceof IdPersistable idPersistable) { // for saving single entity
+                idPopulater.populate(idPersistable, true);
             }
-            else if (arg instanceof Iterable) { // for saving entities
-                for (Object idEntity : ((Iterable) arg)) {
-                    if (idEntity instanceof IdPersistable) {
-                        idPopulater.populate((IdPersistable) idEntity, true);
+            else if (arg instanceof Iterable it) { // for saving entities
+                for (Object o : it) {
+                    if (o instanceof IdPersistable subIdPersistable) {
+                        idPopulater.populate(subIdPersistable, true);
                     }
                 }
             }

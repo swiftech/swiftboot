@@ -11,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.swiftboot.data.aspect.EntityIdAspectTestConfig;
 import org.swiftboot.data.base.TransactionTester;
-import org.swiftboot.data.model.dao.BoolLogicalDeleteDao;
+import org.swiftboot.data.repository.BoolLogicalDeleteRepository;
 import org.swiftboot.data.model.entity.BoolLogicalDeleteEntity;
 import org.swiftboot.data.model.entity.ParentEntity;
 
@@ -37,7 +37,7 @@ class BooleanLogicalDeleteExtendTest {
     protected PlatformTransactionManager txManager;
 
     @Resource
-    private BoolLogicalDeleteDao logicalDeleteDao;
+    private BoolLogicalDeleteRepository logicalDeleteDao;
 
     @Test
     void testNonDeleteLogicallyEntity() {
