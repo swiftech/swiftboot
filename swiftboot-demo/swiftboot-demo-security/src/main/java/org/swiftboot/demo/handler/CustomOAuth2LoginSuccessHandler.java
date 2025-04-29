@@ -1,6 +1,5 @@
 package org.swiftboot.demo.handler;
 
-import com.google.gson.Gson;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,12 +17,13 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken.TokenType;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.RefreshToken;
 import org.swiftboot.demo.dto.AuthenticatedDto;
 import org.swiftboot.demo.dto.UserInfoDto;
 import org.swiftboot.demo.service.UserService;
+import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.response.Response;
 import org.swiftboot.web.response.ResponseBuilder;
 
@@ -96,7 +96,7 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
                     userRefreshToken.tokenValue(), userRefreshToken.expiresAt());
 
             Response<Object> responseResult = new ResponseBuilder<>().data(authenticatedDto).build();
-            String data = new Gson().toJson(responseResult);
+            String data = JsonUtils.object2Json(responseResult);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             try (PrintWriter out = response.getWriter()) {
                 out.write(data);
