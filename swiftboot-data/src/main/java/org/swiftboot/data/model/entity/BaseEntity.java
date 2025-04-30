@@ -11,7 +11,7 @@ import jakarta.persistence.MappedSuperclass;
  * @deprecated
  **/
 @MappedSuperclass
-public abstract class BaseEntity extends BaseLongTimeEntity implements LogicalDeletePersistable<Boolean>{
+public abstract class BaseEntity extends BaseLongTimeEntity implements LogicalDeletePersistable<Boolean> {
 
     /**
      * 是否逻辑删除

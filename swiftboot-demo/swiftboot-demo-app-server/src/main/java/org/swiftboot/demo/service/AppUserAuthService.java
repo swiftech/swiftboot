@@ -24,63 +24,66 @@ import java.util.Optional;
 
 /**
  * @author swiftech
+ * @deprecated
  */
-public class AppUserAuthService implements UserAuthService {
+//public class AppUserAuthService implements UserAuthService {
+public class AppUserAuthService {
 
     private static final Logger log = LoggerFactory.getLogger(AppUserAuthService.class);
 
-    @Resource
-    private AppUserRepository appUserRepository;
-
-    @PostConstruct
-    public void initData() {
-        // create a new user for testing
-        Optional<AppUserEntity> optUser = appUserRepository.findByLoginName("13866669999");
-        if (optUser.isEmpty()) {
-            AppUserEntity newEntity = new AppUserEntity();
-            newEntity.setLoginName("13866669999");
-            newEntity.setLoginPwd(PasswordUtils.createPassword("12345678"));
-            appUserRepository.save(newEntity);
-        }
-    }
-
-    @Override
-    public AuthenticatedResponse<AppUserSignInDto, Authenticated> userSignIn(String loginId, String loginPwd) {
-        String encryptedPwd = CryptoUtils.md5(loginPwd);
-        Optional<AppUserEntity> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
-        if (optUser.isPresent()) {
-            AppUserEntity appUserEntity = optUser.get();
-            log.debug(optUser.get().getId());
-            // session
-            String token = IdUtils.makeID("usrtoken");
-            Session session = new SessionBuilder()
-                    .userToken(token)
-                    .userId(optUser.get().getId())
-                    .userName(optUser.get().getLoginName())
-                    .addition("login_time", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
-                    .createSession();
-            // DTO to client user
-            AppUserSignInDto signInDto = new AppUserSignInDto();
-            signInDto.setId(appUserEntity.getId());
-            signInDto.setLoginName(appUserEntity.getLoginName());
-            signInDto.setAccessToken(token);
-            signInDto.setExpiresAt(session.getExpireTime());
-            return new AuthenticatedResponse(signInDto, session);
-        }
-        else {
-            log.debug("Sign in failed for user: " + loginId);
-            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
-        }
-    }
-
-    @Override
-    public AuthenticatedResponse<AppUserSignInDto, Authenticated> refreshAccessToken(String refreshToken) {
-        throw new UnsupportedOperationException("Not supported.");
-    }
-
-    @Override
-    public LogoutResponse<String> userLogout(String accessToken) {
-        LogoutResponse<String> logoutResponse = new LogoutResponse<>(accessToken);
-        return logoutResponse;
-    }
+//    @Resource
+//    private AppUserRepository appUserRepository;
+//
+//    @PostConstruct
+//    public void initData() {
+//        // create a new user for testing
+//        Optional<AppUserEntity> optUser = appUserRepository.findByLoginName("13866669999");
+//        if (optUser.isEmpty()) {
+//            AppUserEntity newEntity = new AppUserEntity();
+//            newEntity.setLoginName("13866669999");
+//            newEntity.setLoginPwd(PasswordUtils.createPassword("12345678"));
+//            appUserRepository.save(newEntity);
+//        }
+//    }
+//
+//    @Override
+//    public AuthenticatedResponse<AppUserSignInDto, Authenticated> userSignIn(String loginId, String loginPwd) {
+//        String encryptedPwd = CryptoUtils.md5(loginPwd);
+//        Optional<AppUserEntity> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
+//        if (optUser.isPresent()) {
+//            AppUserEntity appUserEntity = optUser.get();
+//            log.debug(optUser.get().getId());
+//            // session
+//            String token = IdUtils.makeID("usrtoken");
+//            Session session = new SessionBuilder()
+//                    .userToken(token)
+//                    .userId(optUser.get().getId())
+//                    .userName(optUser.get().getLoginName())
+//                    .addition("login_time", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
+//                    .createSession();
+//            // DTO to client user
+//            AppUserSignInDto signInDto = new AppUserSignInDto();
+//            signInDto.setAuthType("session");
+//            signInDto.setId(appUserEntity.getId());
+//            signInDto.setLoginName(appUserEntity.getLoginName());
+//            signInDto.setAccessToken(token);
+//            signInDto.setExpiresAt(session.getExpireTime());
+//            return new AuthenticatedResponse(signInDto, session);
+//        }
+//        else {
+//            log.debug("Sign in failed for user: " + loginId);
+//            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
+//        }
+//    }
+//
+//    @Override
+//    public AuthenticatedResponse<AppUserSignInDto, Authenticated> refreshAccessToken(String refreshToken) {
+//        throw new UnsupportedOperationException("Not supported.");
+//    }
+//
+//    @Override
+//    public LogoutResponse<String> userLogout(String accessToken) {
+//        LogoutResponse<String> logoutResponse = new LogoutResponse<>(accessToken);
+//        return logoutResponse;
+//    }
 }

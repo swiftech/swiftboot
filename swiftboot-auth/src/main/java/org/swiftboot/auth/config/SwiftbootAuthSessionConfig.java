@@ -9,9 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.aop.UserSessionArgumentResolver;
+import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.service.SessionService;
+import org.swiftboot.auth.service.UserAuthService;
+import org.swiftboot.auth.service.impl.DefaultUserSessionAuthService;
 import org.swiftboot.auth.service.impl.MockSessionService;
 import org.swiftboot.auth.service.impl.RedisSessionService;
 import org.swiftboot.service.service.RedisService;
@@ -30,6 +32,16 @@ public class SwiftbootAuthSessionConfig implements WebMvcConfigurer {
     @Bean
     public SessionAuthFilter authFilter() {
         return new SessionAuthFilter();
+    }
+
+    /**
+     * Default UserAuthService if no customized one provided.
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean(UserAuthService.class)
+    public UserAuthService userAuthService() {
+        return new DefaultUserSessionAuthService<>();
     }
 
     /**

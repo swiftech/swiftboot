@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.springframework.context.annotation.Description;
+import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 
@@ -15,7 +16,7 @@ import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 @Description("App用户")
 @Entity
 @Table(name = "DEMO_APP_USER")
-public class AppUserEntity extends BaseLocalDateTimeEntity {
+public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersistable {
 
     /**
      * Login name of app user
@@ -42,6 +43,7 @@ public class AppUserEntity extends BaseLocalDateTimeEntity {
     /**
      * 获取Login name of app user
      */
+    @Override
     public String getLoginName() {
         return loginName;
     }
@@ -56,6 +58,7 @@ public class AppUserEntity extends BaseLocalDateTimeEntity {
     /**
      * 获取Login password to login name (MD5 with salt)
      */
+    @Override
     public String getLoginPwd() {
         return loginPwd;
     }

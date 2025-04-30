@@ -1,7 +1,7 @@
 package org.swiftboot.demo.repository;
 
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.demo.model.AppUserEntity;
 
 import java.util.Optional;
@@ -11,16 +11,8 @@ import java.util.Optional;
  *
  * @author swiftech 2020-01-06
  **/
-public interface AppUserRepository extends PagingAndSortingRepository<AppUserEntity, String>, CrudRepository<AppUserEntity, String> {
-
-    /**
-     * Query app user by Login name and password of app user
-     *
-     * @param loginName Login name of administrator
-     * @param loginPwd  Login pwd
-     * @return
-     */
-    Optional<AppUserEntity> findByLoginNameAndLoginPwd(String loginName, String loginPwd);
+public interface AppUserRepository extends PagingAndSortingRepository<AppUserEntity, String>
+        , UserAuthRepository<AppUserEntity> {
 
     /**
      * 按照Login name of app user查询App用户

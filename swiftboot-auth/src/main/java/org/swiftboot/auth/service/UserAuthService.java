@@ -1,6 +1,5 @@
 package org.swiftboot.auth.service;
 
-import org.swiftboot.common.auth.response.AuthenticatedResponse;
 import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.Authenticated;
 
@@ -21,18 +20,18 @@ public interface UserAuthService {
      * @param loginPwd
      * @return
      */
-    <R> AuthenticatedResponse<R, Authenticated> userSignIn(String loginId, String loginPwd);
+    Authenticated userSignIn(String loginId, String loginPwd);
 
     /**
      * Refresh the user's Access Token, Used only for JWT mode.
      *
      * @param refreshToken
      */
-    <R> AuthenticatedResponse<R, Authenticated> refreshAccessToken(String refreshToken);
+    Authenticated refreshAccessToken(String refreshToken);
 
     /**
      * User logout
-     *
+     * TODO
      * @param accessToken
      */
     <R> LogoutResponse<R> userLogout(String accessToken);

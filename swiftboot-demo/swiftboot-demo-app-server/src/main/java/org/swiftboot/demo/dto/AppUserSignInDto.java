@@ -27,6 +27,8 @@ public class AppUserSignInDto extends BaseRefreshTokenDto {
     @Schema(description = "Sign in success", example = "true")
     private boolean success = true;
 
+    @Schema(description = "Authentication type")
+    private String authType;
 
     /**
      * Get Login name of app user
@@ -90,4 +92,11 @@ public class AppUserSignInDto extends BaseRefreshTokenDto {
         this.success = success;
     }
 
+    public String getAuthType() {
+        return authType;
+    }
+
+    public void setAuthType(String authType) {
+        this.authType = authType;
+    }
 }

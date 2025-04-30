@@ -38,6 +38,7 @@ import org.swiftboot.data.model.id.IdGenerator;
         "org.swiftboot.service.model",
 })
 @EnableJpaRepositories(basePackages = {
+        "org.swiftboot.auth.repository",
         "org.swiftboot.demo.repository",
 })
 public class SwiftbootDemoAppServerConfig {

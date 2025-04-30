@@ -1,44 +1,39 @@
 package org.swiftboot.demo.config;
 
-import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.swiftboot.auth.filter.SessionAuthFilter;
+import org.swiftboot.auth.filter.JwtAuthFilter;
+
+import jakarta.annotation.Resource;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.demo.service.AppUserAuthService;
+import org.swiftboot.demo.service.AppUserJwtAuthService;
 
 /**
- * Enabled when swiftboot.auth.authType = session
+ * Enabled when swiftboot.auth.authType = jwt
  *
  * @author swiftech
  * @since 3.0.0
  */
 @Configuration
-@ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
-public class AppAuthFilterConfig implements WebMvcConfigurer {
+@ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "jwt")
+public class AppUserAuthJwtConfig implements WebMvcConfigurer {
 
     @Resource
-    SessionAuthFilter sessionAuthFilter;
+    JwtAuthFilter jwtAuthFilter;
 
     @Bean
-    public FilterRegistrationBean<SessionAuthFilter> regAuthFilter() {
-        FilterRegistrationBean<SessionAuthFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(sessionAuthFilter);
+    public FilterRegistrationBean<JwtAuthFilter> registerJwtAuthFilter() {
+        FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(jwtAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");
         registrationBean.addUrlPatterns("/app/data");
         registrationBean.addUrlPatterns("/app/logout");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
-    public UserAuthService userAuthService() {
-        return new AppUserAuthService();
     }
 
 }
