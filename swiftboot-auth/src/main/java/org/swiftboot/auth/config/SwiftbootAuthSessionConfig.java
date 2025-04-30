@@ -11,6 +11,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.aop.UserSessionArgumentResolver;
 import org.swiftboot.auth.filter.SessionAuthFilter;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.auth.service.impl.DefaultUserSessionAuthService;
@@ -40,7 +41,7 @@ public class SwiftbootAuthSessionConfig implements WebMvcConfigurer {
      */
     @Bean
     @ConditionalOnMissingBean(UserAuthService.class)
-    public UserAuthService userAuthService() {
+    public UserAuthService<Session> userAuthService() {
         return new DefaultUserSessionAuthService<>();
     }
 

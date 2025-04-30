@@ -23,7 +23,7 @@ import java.util.Optional;
  * @param <T> Type of user entity.
  * @since 3.0
  */
-public class DefaultUserJwtAuthService<T extends UserPersistable> implements UserAuthService {
+public class DefaultUserJwtAuthService<T extends UserPersistable> implements UserAuthService<JwtAuthentication> {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultUserJwtAuthService.class);
 
@@ -63,26 +63,25 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
         }
 
         String userId = jwtTokenProvider.getUserId(refreshToken);
-//        Optional<T> byId = appUserRepository.find(userId);
-//        if (byId.isPresent()) {
-//            T appUserEntity = byId.get();
-//
-//            // generate new access token and refresh token
-//            JwtAuthentication jwtAuthentication = this.generateTokens(appUserEntity);
-//
-//            // save new refresh token
-//            jwtService.saveJwtAuthentication(jwtAuthentication);
-//
-//            // revoke used refresh token
-//            jwtService.revokeAuthenticationByRefreshToken(refreshToken);
-//
-//            return jwtAuthentication;
-//        }
-//        else {
-//            log.debug("Refresh token failed for user: %s".formatted(userId));
-//            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
-//        }
-        return null;
+        Optional<T> byId = appUserRepository.findById(userId);
+        if (byId.isPresent()) {
+            T appUserEntity = byId.get();
+
+            // generate new access token and refresh token
+            JwtAuthentication jwtAuthentication = this.generateTokens(appUserEntity);
+
+            // save new refresh token
+            jwtService.saveJwtAuthentication(jwtAuthentication);
+
+            // revoke used refresh token
+            jwtService.revokeAuthenticationByRefreshToken(refreshToken);
+
+            return jwtAuthentication;
+        }
+        else {
+            log.debug("Refresh token failed for user: %s".formatted(userId));
+            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
+        }
     }
 
     @Override

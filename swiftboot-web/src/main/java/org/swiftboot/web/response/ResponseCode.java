@@ -61,6 +61,7 @@ public class ResponseCode {
     public static final String CODE_NO_SIGNIN = "3101";// 用户未登录
     public static final String CODE_SIGNIN_FAIL = "3102";// 账号或密码错误
     public static final String CODE_SIGNIN_WRONG_PWD = "3103";// 密码错误
+    public static final String CODE_USER_DOEST_NOT_EXIST = "3104";// 用户不存在
     public static final String CODE_USER_FROZEN = "3105";// 用户已被冻结
     public static final String CODE_USER_ACCOUNT_EMPTY = "3106";// 请输入账号
     public static final String CODE_USER_PASSWORD_EMPTY = "3107";// 请输入密码

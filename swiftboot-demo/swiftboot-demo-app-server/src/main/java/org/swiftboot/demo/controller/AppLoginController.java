@@ -43,12 +43,12 @@ public class AppLoginController {
     private static final Logger log = LoggerFactory.getLogger(AppLoginController.class);
 
     @Resource
-    private UserAuthService userAuthService;
+    private UserAuthService<?> userAuthService;
 
     @Resource
     private AppUserRepository appUserRepository;
 
-    @Operation(description = "App user sign in, return access token and refresh token if in JWT mode; return in HTTP header or set cookie(if enabled) if in Session mode ")
+    @Operation(description = "App user sign in, return access token and refresh token if in JWT mode; return in HTTP header or set cookie(if enabled) if in Session mode")
     @PostMapping(value = "signin")
     public Response<AppUserSignInDto> appUserSign(
             @RequestBody NamePasswordLoginRequest command) {

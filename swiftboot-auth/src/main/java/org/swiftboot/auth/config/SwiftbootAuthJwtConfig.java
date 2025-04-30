@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.swiftboot.auth.filter.JwtAuthFilter;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.auth.service.impl.DefaultUserJwtAuthService;
+import org.swiftboot.common.auth.token.JwtAuthentication;
 
 /**
  * @author swiftech
@@ -31,7 +32,7 @@ public class SwiftbootAuthJwtConfig {
      */
     @Bean
     @ConditionalOnMissingBean(UserAuthService.class)
-    public UserAuthService userAuthService() {
+    public UserAuthService<JwtAuthentication> userAuthService() {
         return new DefaultUserJwtAuthService<>();
     }
 

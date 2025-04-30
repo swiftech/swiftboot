@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * @author swiftech
  */
-public class DefaultUserSessionAuthService<T extends UserPersistable> implements UserAuthService {
+public class DefaultUserSessionAuthService<T extends UserPersistable> implements UserAuthService<Session> {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultUserSessionAuthService.class);
 
@@ -29,7 +29,7 @@ public class DefaultUserSessionAuthService<T extends UserPersistable> implements
     private UserAuthRepository<T> appUserRepository;
 
     @Override
-    public Authenticated userSignIn(String loginId, String loginPwd) {
+    public Session userSignIn(String loginId, String loginPwd) {
         String encryptedPwd = CryptoUtils.md5(loginPwd);
         Optional<T> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
@@ -52,7 +52,7 @@ public class DefaultUserSessionAuthService<T extends UserPersistable> implements
     }
 
     @Override
-    public Authenticated refreshAccessToken(String refreshToken) {
+    public Session refreshAccessToken(String refreshToken) {
         throw new UnsupportedOperationException("Not supported.");
     }
 
