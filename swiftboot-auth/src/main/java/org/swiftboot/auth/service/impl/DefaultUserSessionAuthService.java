@@ -10,7 +10,6 @@ import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.response.LogoutResponse;
-import org.swiftboot.common.auth.token.Authenticated;
 import org.swiftboot.util.CryptoUtils;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.web.exception.ErrMessageException;
@@ -34,13 +33,13 @@ public class DefaultUserSessionAuthService<T extends UserPersistable> implements
         Optional<T> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
             T appUserEntity = optUser.get();
-            log.debug(optUser.get().getId());
+            log.debug(appUserEntity.getId());
             // session
             String token = IdUtils.makeID("usrtoken");
             Session session = new SessionBuilder()
                     .userToken(token)
-                    .userId(optUser.get().getId())
-                    .userName(optUser.get().getLoginName())
+                    .userId(appUserEntity.getId())
+                    .userName(appUserEntity.getLoginName())
                     .addition("login_time", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
                     .createSession();
             return session;

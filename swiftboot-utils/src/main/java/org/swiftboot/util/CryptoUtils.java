@@ -18,6 +18,9 @@ public class CryptoUtils {
      * @return
      */
     public static String md5salt(String src, String salt) {
+        if (StringUtils.isBlank(salt)) {
+            return md5(src);
+        }
         return md5(src + salt);
     }
 

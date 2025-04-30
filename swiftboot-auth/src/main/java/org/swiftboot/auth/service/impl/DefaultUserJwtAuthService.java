@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.auth.service.UserAuthService;
@@ -13,7 +14,7 @@ import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
-import org.swiftboot.util.CryptoUtils;
+import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.ResponseCode;
 
@@ -36,9 +37,12 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
     @Resource
     private JwtService jwtService;
 
+    @Resource
+    private AuthConfigBean authConfig;
+
     @Override
     public JwtAuthentication userSignIn(String loginId, String loginPwd) {
-        String encryptedPwd = CryptoUtils.md5(loginPwd);
+        String encryptedPwd = PasswordUtils.createPassword(loginPwd, authConfig.getPasswordSalt());
         Optional<T> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
             T appUserEntity = optUser.get();
@@ -46,7 +50,7 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
             return this.generateTokens(appUserEntity);
         }
         else {
-            log.debug("Sign in failed for user: %s".formatted(loginId));
+            log.warn("Sign in failed for user: %s".formatted(loginId));
             throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
         }
     }
@@ -79,7 +83,7 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
             return jwtAuthentication;
         }
         else {
-            log.debug("Refresh token failed for user: %s".formatted(userId));
+            log.warn("Refresh token failed for user: %s".formatted(userId));
             throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
         }
     }
@@ -96,18 +100,4 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
         return new JwtAuthentication(accessToken, refreshToken);
     }
 
-//    private AuthenticatedResponse<AppUserSignInDto, JwtAuthentication> createResponse(T appUserEntity, JwtAuthentication jwtAuthentication) {
-//        AccessToken accessToken = jwtAuthentication.getAccessToken();
-//        RefreshToken refreshToken = jwtAuthentication.getRefreshToken();
-//        AppUserSignInDto dto = new AppUserSignInDto();
-//        dto.setAuthType("jwt");
-//        dto.setId(appUserEntity.getId());
-//        dto.setLoginName(appUserEntity.getLoginName());
-//        dto.setUpdateTime(LocalDateTimeUtils.toMillisecond(appUserEntity.getUpdateTime()));
-//        dto.setAccessToken(accessToken.tokenValue());
-//        dto.setExpiresAt(accessToken.expiresAt());
-//        dto.setRefreshToken(refreshToken.tokenValue());
-//        dto.setRefreshTokenExpiresAt(refreshToken.expiresAt());
-//        return new AuthenticatedResponse<>(dto, jwtAuthentication);
-//    }
 }

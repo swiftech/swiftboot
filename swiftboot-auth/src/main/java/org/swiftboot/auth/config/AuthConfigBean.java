@@ -28,6 +28,11 @@ public class AuthConfigBean {
     private String tokenKey = "access_token";
 
     /**
+     * 密码加盐配置，不设置的话则不加盐
+     */
+    private String passwordSalt;
+
+    /**
      * 会话配置
      */
     @NestedConfigurationProperty
@@ -58,6 +63,14 @@ public class AuthConfigBean {
 
     public void setTokenKey(String tokenKey) {
         this.tokenKey = tokenKey;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
     }
 
     public SessionConfigBean getSession() {
