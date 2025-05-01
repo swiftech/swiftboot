@@ -12,6 +12,13 @@ public abstract class BaseListableDto<T extends Dto> implements Dto {
 
     protected List<T> items;
 
+    public BaseListableDto() {
+    }
+
+    public BaseListableDto(List<T> items) {
+        this.items = items;
+    }
+
     public List<T> getItems() {
         return items;
     }
