@@ -1,6 +1,5 @@
 package org.swiftboot.web.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.data.model.entity.IdPersistable;
 
 import java.lang.reflect.ParameterizedType;
@@ -17,14 +16,11 @@ import java.util.List;
  */
 public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extends IdPersistable> extends BaseListableDto<T> {
 
-    @Schema(name = "data list")
-    private List<T> items;
-
     public BasePopulateListDto() {
     }
 
     public BasePopulateListDto(List<T> items) {
-        this.items = items;
+        super.items = items;
     }
 
     /**
@@ -81,16 +77,6 @@ public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extend
         }
         this.setItems(list);
         return this;
-    }
-
-    @Override
-    public List<T> getItems() {
-        return items;
-    }
-
-    @Override
-    public void setItems(List<T> items) {
-        this.items = items;
     }
 
     /**

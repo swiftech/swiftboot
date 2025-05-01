@@ -1,5 +1,6 @@
 package org.swiftboot.web;
 
+import jakarta.annotation.Resource;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Configuration;
@@ -8,10 +9,8 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import jakarta.annotation.Resource;
-
 /**
- * SwiftBoot 配置类
+ * SwiftBoot-Web 配置类
  *
  * @author swiftech
  **/
@@ -29,4 +28,5 @@ public class SwiftBootWebConfig implements WebMvcConfigurer {
         validator.setValidationMessageSource(messageSource);
         return validator;
     }
+
 }

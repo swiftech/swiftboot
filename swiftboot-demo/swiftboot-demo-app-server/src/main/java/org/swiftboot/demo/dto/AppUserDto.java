@@ -2,6 +2,8 @@ package org.swiftboot.demo.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
+
 /**
  * @since 3.0
  */
@@ -13,6 +15,12 @@ public class AppUserDto {
 
     @Schema(description = "Login Name")
     private String loginName;
+
+    @Schema(description = "Last login time")
+    private LocalDateTime lastLoginTime;
+
+    @Schema(description = "Create time")
+    private LocalDateTime createTime;
 
     public String getId() {
         return id;
@@ -28,5 +36,21 @@ public class AppUserDto {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public LocalDateTime getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(LocalDateTime lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }

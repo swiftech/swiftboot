@@ -10,8 +10,14 @@ import java.util.List;
  */
 public abstract class BaseListableDto<T extends Dto> implements Dto {
 
-    public abstract List<T> getItems();
+    protected List<T> items;
 
-    public abstract void setItems(List<T> items);
+    public List<T> getItems() {
+        return items;
+    }
+
+    public void setItems(List<T> items) {
+        this.items = items;
+    }
 
 }

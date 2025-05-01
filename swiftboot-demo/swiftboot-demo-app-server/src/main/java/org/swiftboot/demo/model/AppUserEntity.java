@@ -8,6 +8,8 @@ import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 
+import java.time.LocalDateTime;
+
 /**
  * App用户
  *
@@ -31,6 +33,9 @@ public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersis
     @PropertyDescription(value = "Login password to login name", notes = "MD5 with salt", example = "a43b66902590c003c213a5ed1b6f92e3")
     @Column(name = "LOGIN_PWD", length = 64, nullable = false)
     private String loginPwd;
+
+    @Column(name = "LAST_LOGIN_TIME")
+    private LocalDateTime lastLoginTime;
 
 
     public AppUserEntity() {
@@ -70,4 +75,11 @@ public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersis
         this.loginPwd = loginPwd;
     }
 
+    public LocalDateTime getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(LocalDateTime lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
 }

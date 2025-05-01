@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.swiftboot.auth.AuthenticationException;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.annotation.UserId;
@@ -27,6 +28,7 @@ import org.swiftboot.util.time.LocalDateTimeUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.Response;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -55,11 +57,17 @@ public class AppLoginController {
         log.info("> /app/signin");
         Authenticated authenticated = userAuthService.userSignIn(request.getLoginName(), request.getLoginPwd());
         Optional<AppUserEntity> opt = appUserRepository.findByLoginName(request.getLoginName());
+        if (opt.isEmpty()) {
+            throw new AuthenticationException("User not found");
+        }
+        AppUserEntity appUserEntity = opt.get();
+        appUserEntity.setLastLoginTime(LocalDateTime.now());
+        appUserRepository.save(appUserEntity);
         if (authenticated instanceof JwtAuthentication jwta) {
-            return this.createResponse(opt.get(), jwta);
+            return this.createJwtResponse(appUserEntity, jwta);
         }
         else if (authenticated instanceof Session session) {
-            return this.createSessionResponse(opt.get(), session);
+            return this.createSessionResponse(appUserEntity, session);
         }
         else {
             throw new ErrMessageException("No user found");
@@ -73,11 +81,15 @@ public class AppLoginController {
         log.info("> /app/refresh_token");
         Authenticated authenticated = userAuthService.refreshAccessToken(command.getRefreshToken());
         Optional<AppUserEntity> opt = appUserRepository.findById(userId);
+        if (opt.isEmpty()) {
+            throw new AuthenticationException("User not found");
+        }
+        AppUserEntity appUserEntity = opt.get();
         if (authenticated instanceof JwtAuthentication jwta) {
-            return this.createResponse(opt.get(), jwta);
+            return this.createJwtResponse(appUserEntity, jwta);
         }
         else if (authenticated instanceof Session session) {
-            return this.createSessionResponse(opt.get(), session);
+            return this.createSessionResponse(appUserEntity, session);
         }
         else {
             throw new ErrMessageException("No user found");
@@ -94,7 +106,7 @@ public class AppLoginController {
         return new AuthenticatedResponse(signInDto, session);
     }
 
-    private AuthenticatedResponse<AppUserSignInDto, JwtAuthentication> createResponse(AppUserEntity appUserEntity, JwtAuthentication jwtAuthentication) {
+    private AuthenticatedResponse<AppUserSignInDto, JwtAuthentication> createJwtResponse(AppUserEntity appUserEntity, JwtAuthentication jwtAuthentication) {
         AccessToken accessToken = jwtAuthentication.getAccessToken();
         RefreshToken refreshToken = jwtAuthentication.getRefreshToken();
         AppUserSignInDto dto = new AppUserSignInDto();

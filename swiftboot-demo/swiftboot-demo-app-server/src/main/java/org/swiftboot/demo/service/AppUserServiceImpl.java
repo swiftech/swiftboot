@@ -47,6 +47,8 @@ public class AppUserServiceImpl implements AppUserService {
             AppUserDto appUserDto = new AppUserDto();
             appUserDto.setId(appUserEntity.getId());
             appUserDto.setLoginName(appUserEntity.getLoginName());
+            appUserDto.setLastLoginTime(appUserEntity.getLastLoginTime());
+            appUserDto.setCreateTime(appUserEntity.getCreateTime());
             return appUserDto;
         }
         return null;

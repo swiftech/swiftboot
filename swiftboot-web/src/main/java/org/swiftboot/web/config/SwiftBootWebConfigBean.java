@@ -11,6 +11,12 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("swiftboot.web")
 public class SwiftBootWebConfigBean {
 
+    private String formatPatternLocalDateTime = "yyyy-MM-dd HH:mm:ss";
+
+    private String formatPatternLocalDate = "yyyy-MM-dd";
+
+    private String formatPatternLocalTime = "HH:mm:ss";
+
     /**
      * 验证配置
      */
@@ -23,6 +29,29 @@ public class SwiftBootWebConfigBean {
     @NestedConfigurationProperty
     private FilterConfigBean filter = new FilterConfigBean();
 
+    public String getFormatPatternLocalDateTime() {
+        return formatPatternLocalDateTime;
+    }
+
+    public void setFormatPatternLocalDateTime(String formatPatternLocalDateTime) {
+        this.formatPatternLocalDateTime = formatPatternLocalDateTime;
+    }
+
+    public String getFormatPatternLocalDate() {
+        return formatPatternLocalDate;
+    }
+
+    public void setFormatPatternLocalDate(String formatPatternLocalDate) {
+        this.formatPatternLocalDate = formatPatternLocalDate;
+    }
+
+    public String getFormatPatternLocalTime() {
+        return formatPatternLocalTime;
+    }
+
+    public void setFormatPatternLocalTime(String formatPatternLocalTime) {
+        this.formatPatternLocalTime = formatPatternLocalTime;
+    }
 
     public ValidationResultConfigBean getValidation() {
         return validation;
