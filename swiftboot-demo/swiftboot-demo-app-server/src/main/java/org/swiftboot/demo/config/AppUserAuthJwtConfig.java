@@ -1,5 +1,6 @@
 package org.swiftboot.demo.config;
 
+import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -7,10 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.JwtAuthFilter;
-
-import jakarta.annotation.Resource;
-import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.demo.service.AppUserJwtAuthService;
 
 /**
  * Enabled when swiftboot.auth.authType = jwt

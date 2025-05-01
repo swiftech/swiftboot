@@ -51,10 +51,10 @@ public class AppLoginController {
     @Operation(description = "App user sign in, return access token and refresh token if in JWT mode; return in HTTP header or set cookie(if enabled) if in Session mode")
     @PostMapping(value = "signin")
     public Response<AppUserSignInDto> appUserSign(
-            @RequestBody NamePasswordLoginRequest command) {
+            @RequestBody NamePasswordLoginRequest request) {
         log.info("> /app/signin");
-        Authenticated authenticated = userAuthService.userSignIn(command.getLoginName(), command.getLoginPwd());
-        Optional<AppUserEntity> opt = appUserRepository.findByLoginName(command.getLoginName());
+        Authenticated authenticated = userAuthService.userSignIn(request.getLoginName(), request.getLoginPwd());
+        Optional<AppUserEntity> opt = appUserRepository.findByLoginName(request.getLoginName());
         if (authenticated instanceof JwtAuthentication jwta) {
             return this.createResponse(opt.get(), jwta);
         }

@@ -31,11 +31,10 @@ public class AppLogoutController {
 
     @Operation(description = "App user logout")
     @PostMapping(value = "logout")
-    public Response<String> appUserLogout(@Token String accessToken) {
+    public Response<Void> appUserLogout(@Token String accessToken) {
         log.info("> /app/logout");
         LogoutResponse<String> objectLogoutResponse = userAuthService.userLogout(accessToken);
-        objectLogoutResponse.setMessage("Logout success");
-        return objectLogoutResponse;
+        return Response.builder().message("Logout success").build();
     }
 
 }

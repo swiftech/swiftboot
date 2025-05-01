@@ -54,13 +54,13 @@ public class AppSecureController {
 
     @Operation(description = "Test unauthorized")
     @GetMapping(value = "unauthorized")
-    public Response<String> appUserSign() {
+    public Response<Void> appUserSign() {
         log.info("> /app/unauthorized");
         String userRole = "GUEST";
         if (!"admin".equals(userRole)) {
             throw new AuthenticationException("Unauthorized");
         }
-        return new Response<>("Authorized");
+        return Response.builder().message("Unauthorized").build();
     }
 
 }

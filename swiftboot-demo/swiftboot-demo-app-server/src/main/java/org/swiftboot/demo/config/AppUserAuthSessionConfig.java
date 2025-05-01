@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.SessionAuthFilter;
-import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.demo.service.AppUserAuthService;
 
 /**
  * Enabled when swiftboot.auth.authType = session

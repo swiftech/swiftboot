@@ -35,6 +35,15 @@ public class Response<T> implements Serializable {
     }
 
     /**
+     * Create response builder with Void data type.
+     *
+     * @return
+     */
+    public static ResponseBuilder<Void> builder() {
+        return new ResponseBuilder<>();
+    }
+
+    /**
      * 业务响应代码，长度4个字节的数字
      */
     @Schema(description = "Response code", requiredMode = REQUIRED, example = "1000")
