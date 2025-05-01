@@ -1,5 +1,6 @@
 package org.swiftboot.web.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.swiftboot.data.model.entity.IdPersistable;
 
 import java.lang.reflect.ParameterizedType;
@@ -15,6 +16,16 @@ import java.util.List;
  * @author swiftech
  */
 public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extends IdPersistable> extends BaseListableDto<T> {
+
+    @Schema(name = "data list")
+    private List<T> items;
+
+    public BasePopulateListDto() {
+    }
+
+    public BasePopulateListDto(List<T> items) {
+        this.items = items;
+    }
 
     /**
      * 从实体类集合创建相对应的返回对象集合
@@ -35,7 +46,7 @@ public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extend
 
         List<T> list = new ArrayList<>();
         for (E entity : entities) {
-            T item = BasePopulateDto.createResult(itemClass, entity);
+            T item = BasePopulateDto.createDto(itemClass, entity);
             list.add(item);
         }
         this.setItems(list);
@@ -62,7 +73,7 @@ public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extend
 
         List<T> list = new ArrayList<>();
         for (E entity : entities) {
-            T item = BasePopulateDto.createResult(itemClass, entity);
+            T item = BasePopulateDto.createDto(itemClass, entity);
             if (populateHandler != null) {
                 populateHandler.onPopulated(item, entity);
             }
@@ -70,6 +81,16 @@ public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extend
         }
         this.setItems(list);
         return this;
+    }
+
+    @Override
+    public List<T> getItems() {
+        return items;
+    }
+
+    @Override
+    public void setItems(List<T> items) {
+        this.items = items;
     }
 
     /**

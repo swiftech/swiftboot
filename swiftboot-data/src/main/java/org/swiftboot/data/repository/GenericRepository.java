@@ -6,6 +6,6 @@ import org.swiftboot.data.model.entity.BaseIdEntity;
 /**
  * @author swiftech
  */
-public interface GenericRepository<T extends BaseIdEntity> extends BaseRepository, CrudRepository<T, String>, GenericCustomizeDao<T> {
+public interface GenericRepository<T extends BaseIdEntity> extends BaseRepository, CrudRepository<T, String>, GenericCustomizeRepository<T> {
 
 }

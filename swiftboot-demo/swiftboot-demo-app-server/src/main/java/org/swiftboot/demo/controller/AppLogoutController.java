@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.annotation.Token;
+import org.swiftboot.common.auth.response.LogoutResponse;
+import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.web.response.Response;
 
 /**
@@ -26,7 +27,7 @@ public class AppLogoutController {
     private static final Logger log = LoggerFactory.getLogger(AppLogoutController.class);
 
     @Resource
-    private UserAuthService userAuthService;
+    private UserAuthService<JwtAuthentication> userAuthService;
 
     @Operation(description = "App user logout")
     @PostMapping(value = "logout")

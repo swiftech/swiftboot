@@ -5,7 +5,9 @@ import org.swiftboot.common.auth.token.Authenticated;
 
 /**
  * The authentication service for user login with user login id and password.
- * This interface must be implemented and be invoked by you.
+ * SwiftBoot provides 2 default implementation {@link org.swiftboot.auth.service.impl.DefaultUserJwtAuthService}
+ * and {@link org.swiftboot.auth.service.impl.DefaultUserSessionAuthService} to do simple authentication.
+ * You can implement your own authentication service if you want to.
  *
  * @param <T>
  * @author swiftech

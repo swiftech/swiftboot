@@ -55,11 +55,12 @@ logging:
     org.swiftboot: TRACE
   file:
     name: /var/log/swiftboot-demo-app-server.log
-springdoc:
-  packagesToScan:
-    - org.swiftboot.demo.controller
-  pathsToExclude:
-    - /health
+#springdoc:
+#  packagesToScan:
+#    - org.swiftboot.demo.controller
+#    - org.swiftboot.demo.dto
+#  pathsToExclude:
+#    - /foobar
 swiftboot:
   web:
     filter:

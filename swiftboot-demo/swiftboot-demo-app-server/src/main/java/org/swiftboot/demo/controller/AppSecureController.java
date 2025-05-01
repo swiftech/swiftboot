@@ -14,8 +14,8 @@ import org.swiftboot.common.auth.annotation.UserId;
 import org.swiftboot.common.auth.annotation.UserName;
 import org.swiftboot.demo.dto.AppUserDto;
 import org.swiftboot.demo.service.AppUserService;
-import org.swiftboot.web.response.ResponseCode;
 import org.swiftboot.web.response.Response;
+import org.swiftboot.web.response.ResponseCode;
 
 /**
  * since 3.0.0

@@ -37,7 +37,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
      * @param <T>
      * @return
      */
-    public static <T extends BasePopulateDto> T createResult(
+    public static <T extends BasePopulateDto> T createDto(
             Class<T> resultClass,
             IdPersistable entity) {
         if (resultClass == null || entity == null) {
@@ -138,7 +138,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
             if (subEntity instanceof IdPersistable) {
                 Class subResultClass = (Class) targetField.getGenericType();
                 if (subResultClass != null) {
-                    BasePopulateDto<E> subResult = createResult(subResultClass, (IdPersistable) subEntity);
+                    BasePopulateDto<E> subResult = createDto(subResultClass, (IdPersistable) subEntity);
                     BeanUtils.forceSetProperty(result, targetField, subResult);
                 }
             }
@@ -191,7 +191,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
 
                             for (Object subEntity : srcCollection) {
                                 if (subEntity instanceof IdPersistable) {
-                                    BasePopulateDto<E> subResult = createResult(elementClass, (IdPersistable) subEntity);
+                                    BasePopulateDto<E> subResult = createDto(elementClass, (IdPersistable) subEntity);
                                     targetCollection.add(subResult);
                                 }
                             }

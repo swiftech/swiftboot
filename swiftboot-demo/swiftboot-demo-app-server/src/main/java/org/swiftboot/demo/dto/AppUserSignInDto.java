@@ -9,7 +9,7 @@ import org.swiftboot.common.auth.dto.BaseRefreshTokenDto;
  *
  * @author swiftech 2020-02-05
  **/
-@Schema
+@Schema(description = "User Signin DTO")
 public class AppUserSignInDto extends BaseRefreshTokenDto {
 
     @Schema(description = "User ID", example = "basident20191119010450544siobnic")

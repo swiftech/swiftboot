@@ -10,11 +10,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
 /**
- * 自定义 Jpa Dao 接口的基类
+ * 自定义 Jpa Repository 接口的基类
  *
  * @author swiftech
  **/
-public abstract class BaseCustomizeDaoImpl<T extends IdPersistable> {
+public abstract class BaseCustomizeRepositoryImpl<T extends IdPersistable> {
 
     @PersistenceContext
     protected EntityManager entityManager;

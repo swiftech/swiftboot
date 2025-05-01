@@ -19,7 +19,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
  * @param <T> 内容对象的类型
  * @author swiftech
  */
-@Schema(name = "Response Body")
+@Schema(description = "Response Body")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Response<T> implements Serializable {
 

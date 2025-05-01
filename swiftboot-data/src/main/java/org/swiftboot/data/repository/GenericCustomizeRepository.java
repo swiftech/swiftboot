@@ -5,7 +5,7 @@ import org.swiftboot.data.model.entity.BaseIdEntity;
 /**
  * @author swiftech
  */
-public interface GenericCustomizeDao<T extends BaseIdEntity> {
+public interface GenericCustomizeRepository<T extends BaseIdEntity> {
 
     void saveEntity(T t);
 }

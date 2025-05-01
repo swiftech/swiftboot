@@ -3,6 +3,7 @@ package org.swiftboot.demo.config;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.MessageSource;
@@ -70,6 +71,17 @@ public class SwiftbootDemoAppServerConfig {
                         .description("SwiftBoot Demo App Server API with simple authentication")
                         .version("v3.0.0")
                         .license(new License().name("Apache 2.0").url("https://github.com/swiftech/swiftboot")));
+    }
+
+    @Bean
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("API")
+                .pathsToMatch(
+                        "/app/**",
+                        "/health/**"
+                )
+                .build();
     }
 
 
