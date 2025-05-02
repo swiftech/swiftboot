@@ -47,9 +47,9 @@ public class UserSessionAdvice extends RequestBodyAdviceAdapter {
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         if (log.isTraceEnabled()) log.trace("SessionAdvice.afterBodyRead()");
-        if (log.isTraceEnabled()) log.trace("Handle command: %s".formatted(body.getClass()));
-        BaseAuthenticatedRequest<?> command = (BaseAuthenticatedRequest<?>) body;
-        System.out.println(JsonUtils.object2PrettyJson(command));
+        if (log.isTraceEnabled()) log.trace("Handle Request: %s".formatted(body.getClass()));
+        BaseAuthenticatedRequest<?> request = (BaseAuthenticatedRequest<?>) body;
+        System.out.println(JsonUtils.object2PrettyJson(request));
 
         String tokenKey = configBean.getTokenKey();
 
@@ -60,17 +60,17 @@ public class UserSessionAdvice extends RequestBodyAdviceAdapter {
 
         if (StringUtils.isBlank(token)) {
             if (log.isTraceEnabled()) log.trace("No token found in headers or cookie");
-            return command;
+            return request;
         }
         else {
             Session session = sessionService.getSession(token);
             if (session == null) {
                 if (log.isTraceEnabled()) log.trace("No session found for token: %s".formatted(token));
-                return command;
+                return request;
             }
             if (log.isDebugEnabled()) log.debug("Find and pre-set user id: %s".formatted(session.getUserId()));
-            command.setUserId(session.getUserId());
-            command.setUserName(session.getUserName());
+            request.setUserId(session.getUserId());
+            request.setUserName(session.getUserName());
         }
         return body;
     }

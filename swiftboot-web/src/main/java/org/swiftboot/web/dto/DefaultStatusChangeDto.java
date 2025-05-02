@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  *
  * @author swiftech
  **/
-@Schema(name="Default status changing result DTO", description="Default status changing result DTO")
+@Schema(description="Default status changing result DTO")
 public class DefaultStatusChangeDto {
 
     /**

@@ -18,9 +18,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * 提供将参数填入实体类的方法 populateEntity() 和创建 Command 类所对应的实体类的方法 createEntity()
+ * 提供将参数填入实体对象的方法 populateEntity() 和创建 Request 类所对应的实体类实例的方法 createEntity()
  * 要求实体类 E 必须有无参数的构造函数，除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
- * Command 中存在的属性实体类也必须存在（名称和类型一一对应），否则抛出异常。
+ * Request 中存在的属性实体类也必须存在（名称和类型一一对应），否则抛出异常。
  *
  * @param <P> 对应的实体类
  * @author swiftech
@@ -33,7 +33,7 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
     /**
      * 创建对应的实体类 P 的实例并且用属性值填充实例，
      * 除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
-     * Command 中存在的属性实体类也必须存在（名称和类型一一对应），否则抛出异常。
+     * Request 中存在的属性实体类也必须存在（名称和类型一一对应），否则抛出异常。
      *
      * @return
      */
@@ -57,9 +57,9 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
     }
 
     /**
-     * 将 Command 中的属性值填充至实体类中，包括继承自 BasePopulateCommand 的类实例和集合。
+     * 将 Request 中的属性值填充至实体类中，包括继承自 BasePopulateRequest 的类实例和集合。
      * 除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
-     * Command 中存在的属性实体类也必须存在，否则抛出异常。
+     * Request 中存在的属性实体类也必须存在，否则抛出异常。
      *
      * @param entity
      * @return
@@ -70,9 +70,9 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
     }
 
     /**
-     * 将 Command 中的属性值填充至实体类中。
+     * 将 Request 中的属性值填充至实体类中。
      * 除了用注解 {@link JsonIgnore} 或 {@link PopulateIgnore} 标注的属性之外，
-     * Command 中存在的属性实体类也必须存在，否则抛出异常。
+     * Request 中存在的属性实体类也必须存在，否则抛出异常。
      *
      * @param entity
      * @return
@@ -176,7 +176,7 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
             else { // no recursive
                 if (BasePopulateRequest.class.isAssignableFrom(srcField.getType())
                         || Collection.class.isAssignableFrom(srcField.getType())) {
-                    continue; // Ignore nested commands if no recursive.
+                    continue; // Ignore nested requests if no recursive.
                 }
             }
 

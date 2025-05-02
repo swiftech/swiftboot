@@ -17,53 +17,53 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 /**
- * 提供将入实体类的属性值填入返回值的方法。如果 Result 存在的属性名称在实体类中不存在的话，则抛出异常。
- * <code>populateByEntity(E entity)</code> 方法将实体类的属性填充到当前对象实例中。
- * 静态方法<code>populateByEntity(E entity, BasePopulateResult<E> result)</code>将指定实体类属性值填充至指定的 Result 实例中。
- * 填充方法支持将实体类的 <code>@OneToOne</code> 和 </code>@OneToMany</code> 的属性填充到 Result 实例中，前提是 Result 实例中对应的属性类型必须也是继承自 BasePopulateResult 的类。
+ * 提供将入实体对象的属性值填入返回值（DTO）对象的方法。如果 DTO 对象存在的属性名称在实体中对象不存在的话，则抛出异常。
+ * <code>populateByEntity(E entity)</code> 方法将实体对象的属性填充到当前对象实例中。
+ * 静态方法<code>populateByEntity(E entity, BasePopulateDto<E> dto)</code>将指定实体对象属性值填充至指定的 DTO 实例中。
+ * 填充方法支持将实体对象的 <code>@OneToOne</code> 和 </code>@OneToMany</code> 的属性值填充到 DTO 实例中，前提是 DTO 类中对应的属性类型必须也是继承自 BasePopulateDto 的类。
  * 注意：一对一关系如果需要填充，则必须使用 fetch = FetchType.LAZY 来标注，否则将无法通过反射获取到带有属性值的子类。
- * 标记 {@link JsonIgnore} 注解的 Result 类属性不会被处理。
- * 如果希望某个实体类中不存在的属性也能出现在 Result 类中，那么可以用 {@link PopulateIgnore} 来标注这个属性。
+ * 标记 {@link JsonIgnore} 注解的 DTO 类属性不会被处理。
+ * 如果希望某个实体类中不存在的属性也能出现在 DTO 类中，那么可以用 {@link PopulateIgnore} 来标注这个属性。
  *
  * @author swiftech
  **/
 public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
 
     /**
-     * 按照返回值类型创建返回值对象，并从实体类填充返回值
+     * 按照返回值类型创建返回值对象，并从实体对象填充返回值
      *
-     * @param resultClass 返回对象类型
-     * @param entity      实体类
+     * @param dtoClass 返回对象类型
+     * @param entity      实体对象
      * @param <T>
      * @return
      */
     public static <T extends BasePopulateDto> T createDto(
-            Class<T> resultClass,
+            Class<T> dtoClass,
             IdPersistable entity) {
-        if (resultClass == null || entity == null) {
+        if (dtoClass == null || entity == null) {
             throw new IllegalArgumentException(Info.get(BasePopulateDto.class, R.REQUIRE_PARAMS));
         }
 
         T ret;
         Constructor<T> constructor;
         try {
-            constructor = resultClass.getConstructor();
+            constructor = dtoClass.getConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-            throw new RuntimeException(Info.get(BasePopulateDto.class, R.REQUIRE_NO_PARAM_CONSTRUCTOR1, resultClass.getName()));
+            throw new RuntimeException(Info.get(BasePopulateDto.class, R.REQUIRE_NO_PARAM_CONSTRUCTOR1, dtoClass.getName()));
         }
         try {
             ret = constructor.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(Info.get(BasePopulateDto.class, R.CONSTRUCT_FAIL2, resultClass.getName(), BasePopulateDto.class));
+            throw new RuntimeException(Info.get(BasePopulateDto.class, R.CONSTRUCT_FAIL2, dtoClass.getName(), BasePopulateDto.class));
         }
         ret.populateByEntity(entity);
         return ret;
     }
 
     /**
-     * 从实体类填充当前返回值对象，如果属性值是其他对象的集合，那么也会自动从实体类中获取对应名字的集合来填充返回值的集合
+     * 从实体对象填充当前返回值对象，如果属性值是其他对象的集合，那么也会自动从实体对象中获取对应名字的集合来填充返回值的集合
      *
      * @param entity
      * @return
@@ -73,13 +73,13 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
     }
 
     /**
-     * 从实体类填充属性至返回值对象，如果属性值是其他对象的集合，那么也会自动从实体类中获取对应名字的集合来填充返回值的集合
+     * 从实体对象填充属性至返回值对象，如果属性值是其他对象的集合，那么也会自动从实体对象中获取对应名字的集合来填充返回值的集合
      *
      * @param entity
-     * @param result
+     * @param dto
      * @return
      */
-    public static <E extends IdPersistable> BasePopulateDto<E> populateByEntity(E entity, BasePopulateDto<E> result) {
+    public static <E extends IdPersistable> BasePopulateDto<E> populateByEntity(E entity, BasePopulateDto<E> dto) {
         if (entity == null) {
             throw new RuntimeException(Info.get(BasePopulateDto.class, R.REQUIRE_ENTITY));
         }
@@ -92,9 +92,9 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
         List<String> ignoredFieldNameList = new LinkedList<>();// 需要忽略的目标属性名称
         List<Field> fieldsByType = BeanUtils.getDeclaredFieldsByType(entity, BaseEntity.class);
         for (Field srcField : fieldsByType) {
-            String relationFiledNameInResultClass = srcField.getName() + "Id";
+            String relationFiledNameInDtoClass = srcField.getName() + "Id";
             try {
-                Field targetField = result.getClass().getDeclaredField(relationFiledNameInResultClass);
+                Field targetField = dto.getClass().getDeclaredField(relationFiledNameInDtoClass);
                 if (targetField.getAnnotation(JsonIgnore.class) != null
                         || targetField.getAnnotation(PopulateIgnore.class) != null) {
                     continue;
@@ -102,8 +102,8 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
 
                 BaseEntity parentEntity = (BaseEntity) BeanUtils.forceGetProperty(entity, srcField);
                 if (parentEntity != null) {
-                    BeanUtils.forceSetProperty(result, relationFiledNameInResultClass, parentEntity.getId());
-                    ignoredFieldNameList.add(relationFiledNameInResultClass); // 记录目标属性名称
+                    BeanUtils.forceSetProperty(dto, relationFiledNameInDtoClass, parentEntity.getId());
+                    ignoredFieldNameList.add(relationFiledNameInDtoClass); // 记录目标属性名称
                 }
             } catch (Exception e) {
                 // 忽略处理
@@ -111,9 +111,9 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
             }
         }
         /*
-         * 处理（一对一）关联的 Result 对象
+         * 处理（一对一）关联的 DTO 对象
          */
-        List<Field> fieldsOne2One = BeanUtils.getDeclaredFieldsByTypeIgnore(result, BasePopulateDto.class, JsonIgnore.class, PopulateIgnore.class);
+        List<Field> fieldsOne2One = BeanUtils.getDeclaredFieldsByTypeIgnore(dto, BasePopulateDto.class, JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : fieldsOne2One) {
             ignoredFieldNameList.add(targetField.getName());
             Field srcField;
@@ -131,15 +131,15 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
 //                subEntity = BeanUtils.forceInvokeMethod(entity, getterNameInEntity);
 //            } catch (NoSuchMethodException e) {
 //                e.printStackTrace();
-//                throw new RuntimeException(String.format("实体类 %s 缺少参数必要的属性的 Getter: %s", entity.getClass(), targetField.getName()));
+//                throw new RuntimeException(String.format("实体对象 %s 缺少参数必要的属性的 Getter: %s", entity.getClass(), targetField.getName()));
 //            }
 
             Object subEntity = BeanUtils.forceGetProperty(entity, srcField);
             if (subEntity instanceof IdPersistable) {
-                Class subResultClass = (Class) targetField.getGenericType();
-                if (subResultClass != null) {
-                    BasePopulateDto<E> subResult = createDto(subResultClass, (IdPersistable) subEntity);
-                    BeanUtils.forceSetProperty(result, targetField, subResult);
+                Class subDtoClass = (Class) targetField.getGenericType();
+                if (subDtoClass != null) {
+                    BasePopulateDto<E> subDto = createDto(subDtoClass, (IdPersistable) subEntity);
+                    BeanUtils.forceSetProperty(dto, targetField, subDto);
                 }
             }
         }
@@ -147,7 +147,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
         /*
          * 接着处理所有除外键属性之外的所有可用属性
          */
-        Collection<Field> targetFields = BeanUtils.getFieldsIgnore(result.getClass(), JsonIgnore.class, PopulateIgnore.class);
+        Collection<Field> targetFields = BeanUtils.getFieldsIgnore(dto.getClass(), JsonIgnore.class, PopulateIgnore.class);
         for (Field targetField : targetFields) {
             if (ignoredFieldNameList.contains(targetField.getName())) {
                 continue;
@@ -170,7 +170,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                     if (actualTypeArguments.length > 0) {
                         Collection srcCollection = (Collection) BeanUtils.forceGetProperty(entity, srcField.getName());
                         if (srcCollection != null && !srcCollection.isEmpty()) {
-                            Collection targetCollection = (Collection) BeanUtils.forceGetProperty(result, targetField.getName());
+                            Collection targetCollection = (Collection) BeanUtils.forceGetProperty(dto, targetField.getName());
                             Class elementClass = (Class) actualTypeArguments[0];
                             if (targetCollection == null) {
                                 if (Set.class.isAssignableFrom(targetField.getType())) {
@@ -186,13 +186,13 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                                 else if (List.class.isAssignableFrom(targetField.getType())) {
                                     targetCollection = new LinkedList<>();
                                 }
-                                targetField.set(result, targetCollection);
+                                targetField.set(dto, targetCollection);
                             }
 
                             for (Object subEntity : srcCollection) {
                                 if (subEntity instanceof IdPersistable) {
-                                    BasePopulateDto<E> subResult = createDto(elementClass, (IdPersistable) subEntity);
-                                    targetCollection.add(subResult);
+                                    BasePopulateDto<E> subDto = createDto(elementClass, (IdPersistable) subEntity);
+                                    targetCollection.add(subDto);
                                 }
                             }
                         }
@@ -205,7 +205,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
             else {
                 try {
                     Object value = BeanUtils.forceGetProperty(entity, srcField.getName());
-                    targetField.set(result, value);
+                    targetField.set(dto, value);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
@@ -213,6 +213,6 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
             }
             targetField.setAccessible(accessible);
         }
-        return result;
+        return dto;
     }
 }

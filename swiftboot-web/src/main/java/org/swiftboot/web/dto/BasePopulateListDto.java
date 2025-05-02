@@ -89,11 +89,11 @@ public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extend
     public interface PopulateHandler<T extends BasePopulateDto<E>, E extends IdPersistable> {
 
         /**
-         * 一个继承自 BasePopulateResult 的类被填充完成之后执行
+         * 一个继承自 {@link BasePopulateDto} 的类被填充完成之后执行
          *
-         * @param result
+         * @param dto
          * @param entity
          */
-        void onPopulated(T result, E entity);
+        void onPopulated(T dto, E entity);
     }
 }

@@ -13,14 +13,14 @@ public class PopulateDtoTest {
     @Test
     public void testPopulate() {
         ParentEntity entity = EntityMocker.mockParentEntity();
-        ParentDto result = new ParentDto();
-        result.populateByEntity(entity);
+        ParentDto dto = new ParentDto();
+        dto.populateByEntity(entity);
 
-        System.out.println(result.getName());
-        Assertions.assertEquals(EntityMocker.PARENT_NAME, result.getName());
+        System.out.println(dto.getName());
+        Assertions.assertEquals(EntityMocker.PARENT_NAME, dto.getName());
 
         int i = 0;
-        for (ChildDto item : result.getItems()) {
+        for (ChildDto item : dto.getItems()) {
             System.out.println(item.getName());
             Assertions.assertEquals(EntityMocker.CHILD_NAMES[i], item.getName());
             i++;

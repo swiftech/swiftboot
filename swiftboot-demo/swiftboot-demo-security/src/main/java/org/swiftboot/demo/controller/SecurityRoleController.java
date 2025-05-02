@@ -31,9 +31,9 @@ public class SecurityRoleController {
     @GetMapping(value = "/require/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public Response<PayloadDto> requireAdmin() {
-        PayloadDto result = new PayloadDto();
-        result.setData("this endpoint is only authorized to admin");
-        return new Response<>(result);
+        PayloadDto dto = new PayloadDto();
+        dto.setData("this endpoint is only authorized to admin");
+        return new Response<>(dto);
     }
 
     /**
@@ -45,8 +45,8 @@ public class SecurityRoleController {
     @GetMapping(value = "/require/manager")
     @PreAuthorize("hasRole('MANAGER')")
     public Response<PayloadDto> requireManager() {
-        PayloadDto result = new PayloadDto();
-        result.setData("this endpoint is only authorized to manager");
-        return new Response<>(result);
+        PayloadDto dto = new PayloadDto();
+        dto.setData("this endpoint is only authorized to manager");
+        return new Response<>(dto);
     }
 }

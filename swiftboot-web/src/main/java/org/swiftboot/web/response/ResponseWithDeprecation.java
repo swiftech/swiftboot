@@ -8,15 +8,15 @@ import org.swiftboot.web.exception.ErrMessageException;
  *
  * @author swiftech
  **/
-@Schema(name = "HTTP response with deprecation", description = "接口废弃的返回值，标识接口已废弃")
-public class ResponseWithDeprecation<T extends Object> extends Response<T> {
+@Schema(description = "HTTP response with deprecation")
+public class ResponseWithDeprecation<T> extends Response<T> {
 
     public ResponseWithDeprecation() {
         super.message = "This API works for now, but will be deprecated in the future.";
     }
 
-    public ResponseWithDeprecation(T result) {
-        super(result);
+    public ResponseWithDeprecation(T dto) {
+        super(dto);
         super.message = "This API works for now, but will be deprecated in the future.";
     }
 

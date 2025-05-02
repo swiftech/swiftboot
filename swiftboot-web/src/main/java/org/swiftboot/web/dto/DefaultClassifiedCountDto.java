@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author swiftech
  **/
-@Schema(name="", description="Default classified counting DTO")
+@Schema(description="Default classified counting DTO")
 public class DefaultClassifiedCountDto<K, V> implements Dto {
 
     /**

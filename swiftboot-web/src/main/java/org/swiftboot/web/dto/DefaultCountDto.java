@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  *
  * @author swiftech
  **/
-@Schema(name = "Default counting result DTO", description = "Default counting result DTO")
+@Schema(description = "Default counting result DTO")
 public class DefaultCountDto implements Dto {
 
     /**

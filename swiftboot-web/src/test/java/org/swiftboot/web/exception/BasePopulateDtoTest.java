@@ -18,7 +18,7 @@ public class BasePopulateDtoTest {
     @Test
     public void test() {
 
-        BasePopulateDto<ParentEntity> result = new TestDto();
+        TestDto dto = new TestDto();
 
         ParentEntity entity = new ParentEntity();
         entity.setName("测试实体类");
@@ -29,11 +29,11 @@ public class BasePopulateDtoTest {
         entity.getItems().add(entityItem1);
         entity.getItems().add(entityItem2);
         // populate
-        ((TestDto) result).setItems(new HashSet<>());// 初始化空的集合
-        result.populateByEntity(entity);
+        dto.setItems(new HashSet<>());// 初始化空的集合
+        dto.populateByEntity(entity);
         System.out.println(entity.getName());
         Assertions.assertFalse(StringUtils.isBlank(entity.getName()));
-        for (TestItemDto item : ((TestDto) result).getItems()) {
+        for (TestItemDto item : dto.getItems()) {
             System.out.println(item.getName());
             Assertions.assertFalse(StringUtils.isBlank(item.getName()));
         }

@@ -95,8 +95,8 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
             AuthenticatedDto authenticatedDto = new AuthenticatedDto(userAccessToken.tokenValue(), userAccessToken.expiresAt(),
                     userRefreshToken.tokenValue(), userRefreshToken.expiresAt());
 
-            Response<Object> responseResult = new ResponseBuilder<>().data(authenticatedDto).build();
-            String data = JsonUtils.object2Json(responseResult);
+            Response<Object> responseDto = new ResponseBuilder<>().data(authenticatedDto).build();
+            String data = JsonUtils.object2Json(responseDto);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             try (PrintWriter out = response.getWriter()) {
                 out.write(data);

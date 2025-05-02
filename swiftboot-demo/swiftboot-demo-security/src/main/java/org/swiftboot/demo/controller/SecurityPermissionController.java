@@ -29,9 +29,9 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/perm_a")
     @PreAuthorize("hasAuthority('PERM_A')")
     public Response<PayloadDto> onePermissionA() {
-        PayloadDto result = new PayloadDto();
-        result.setData("this endpoint is only authorized to whom has PERM_A permission");
-        return new Response<>(result);
+        PayloadDto dto = new PayloadDto();
+        dto.setData("this endpoint is only authorized to whom has PERM_A permission");
+        return new Response<>(dto);
     }
 
     /**
@@ -43,9 +43,9 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/perm_b")
     @PreAuthorize("hasAuthority('PERM_B')")
     public Response<PayloadDto> onePermissionB() {
-        PayloadDto result = new PayloadDto();
-        result.setData("this endpoint is only authorized to whom has PERM_B permission");
-        return new Response<>(result);
+        PayloadDto dto = new PayloadDto();
+        dto.setData("this endpoint is only authorized to whom has PERM_B permission");
+        return new Response<>(dto);
     }
 
     /**
@@ -57,9 +57,9 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/permissions/or")
     @PreAuthorize("hasAuthority('PERM_A') or hasAuthority('PERM_B')")
     public Response<PayloadDto> permissionsOr() {
-        PayloadDto result = new PayloadDto();
-        result.setData("this endpoint is only authorized to whom has either permissions");
-        return new Response<>(result);
+        PayloadDto dto = new PayloadDto();
+        dto.setData("this endpoint is only authorized to whom has either permissions");
+        return new Response<>(dto);
     }
 
     /**
@@ -71,9 +71,9 @@ public class SecurityPermissionController {
     @GetMapping(value = "require/permissions/and")
     @PreAuthorize("hasAuthority('PERM_A') and hasAuthority('PERM_B')")
     public Response<PayloadDto> permissionsAnd() {
-        PayloadDto result = new PayloadDto();
-        result.setData("this endpoint is only authorized to whom has both permissions");
-        return new Response<>(result);
+        PayloadDto dto = new PayloadDto();
+        dto.setData("this endpoint is only authorized to whom has both permissions");
+        return new Response<>(dto);
     }
 
 }

@@ -9,7 +9,7 @@ import org.swiftboot.web.dto.Dto;
 /**
  * @author swiftech
  */
-@Schema(name="Authentication Result", description = "Result of authentication")
+@Schema(description = "DTO of authentication")
 public class AuthenticatedDto extends BaseRefreshTokenDto implements Dto {
 
     private String role;
