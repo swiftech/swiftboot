@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -53,6 +54,8 @@ public class SwiftBootWebConvertConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(0, mappingJackson2HttpMessageConverter());
+        // Swagger V3 requires ByteArrayHttpMessageConverter before MappingJackson2HttpMessageConverter
+        converters.add(0, new ByteArrayHttpMessageConverter());
+        converters.add(1, mappingJackson2HttpMessageConverter());
     }
 }

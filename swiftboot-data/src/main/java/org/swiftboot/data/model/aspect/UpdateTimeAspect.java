@@ -53,10 +53,10 @@ public class UpdateTimeAspect {
                 || AUTO_UPDATE_TIME_ON_CHANGE.equals(strategy)) {
             return null;
         }
-        log.debug(this.getClass().getSimpleName() + " executed before save()");
+        if (log.isDebugEnabled()) log.debug("%s executed before save()".formatted(this.getClass().getSimpleName()));
         // 检测前置条件
         Object[] args = joinPoint.getArgs();
-        if (args == null || args.length == 0) {
+        if (args == null) {
             return null;
         }
 
@@ -72,7 +72,8 @@ public class UpdateTimeAspect {
                 }
             }
             else {
-                log.debug(Info.get(UpdateTimeAspect.class, R.PARAM_NOT_EXTEND_CLASS2, TimePersistable.class.getName(), arg));
+                if (log.isDebugEnabled())
+                    log.debug(Info.get(UpdateTimeAspect.class, R.PARAM_NOT_EXTEND_CLASS2, TimePersistable.class.getName(), arg));
             }
         }
         return null;
@@ -92,7 +93,7 @@ public class UpdateTimeAspect {
             return null;
         }
         Type type = parameterizedType.getActualTypeArguments()[0];
-        log.trace(String.valueOf(type));
+        if (log.isTraceEnabled()) log.trace(String.valueOf(type));
         if (type == Long.class) {
             return Long.valueOf(System.currentTimeMillis());
         }

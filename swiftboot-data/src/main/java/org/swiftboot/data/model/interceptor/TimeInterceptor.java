@@ -37,7 +37,7 @@ public class TimeInterceptor implements Interceptor {
 
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        log.trace("onSave()");
+        if (log.isTraceEnabled()) log.trace("onSave()");
         boolean changed = false;
         if (entity instanceof TimePersistable) {
             if (log.isDebugEnabled())
@@ -55,7 +55,7 @@ public class TimeInterceptor implements Interceptor {
 
     @Override
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-        log.trace("onFlushDirty()");
+        if (log.isTraceEnabled()) log.trace("onFlushDirty()");
         boolean changed = false;
         String updateTimeStrategy = configBean.getModel().getAutoUpdateTimeStrategy();
         if (AUTO_UPDATE_TIME_NOT_SET.equals(updateTimeStrategy)) {

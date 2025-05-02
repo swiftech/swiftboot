@@ -39,7 +39,7 @@ public class EntityIdAspect {
 
     @Before(value = "pointcut()")
     public Object before(JoinPoint joinPoint) {
-        log.debug(this.getClass().getSimpleName() + " executed before save()");
+        if (log.isDebugEnabled()) log.debug("%s executed before save()".formatted(this.getClass().getSimpleName()));
         // 检测前置条件
         if (!dataConfigBean.getModel().isAutoGenerateId()) {
             return null;
@@ -53,7 +53,7 @@ public class EntityIdAspect {
         }
 
         for (Object arg : args) {
-            log.trace("saving " + arg);
+            if (log.isTraceEnabled()) log.trace("saving %s".formatted(arg));
             if (arg instanceof IdPersistable idPersistable) { // for saving single entity
                 idPopulater.populate(idPersistable, true);
             }
@@ -65,7 +65,8 @@ public class EntityIdAspect {
                 }
             }
             else {
-                log.debug(Info.get(EntityIdAspect.class, R.PARAM_NOT_IMPLEMENT_INTERFACE2, arg, IdPersistable.class.getName()));
+                if (log.isDebugEnabled())
+                    log.debug(Info.get(EntityIdAspect.class, R.PARAM_NOT_IMPLEMENT_INTERFACE2, arg, IdPersistable.class.getName()));
             }
         }
         return null;

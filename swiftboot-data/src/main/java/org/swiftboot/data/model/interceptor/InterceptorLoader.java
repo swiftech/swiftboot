@@ -33,7 +33,7 @@ public class InterceptorLoader implements ApplicationContextAware {
 
     @PostConstruct
     public void init() {
-        log.trace("InterceptorLoader init user's Hibernate interceptor");
+        if (log.isTraceEnabled()) log.trace("InterceptorLoader init user's Hibernate interceptor");
         Map<String, InterceptorRegisterBean> beans = this.applicationContext.getBeansOfType(InterceptorRegisterBean.class);
 
         // find all registered interceptors.
@@ -49,7 +49,7 @@ public class InterceptorLoader implements ApplicationContextAware {
         // append interceptors to proxy by order.
         list.sort(Comparator.comparingInt(InterceptorRegisterBean::getOrder));
         for (InterceptorRegisterBean<?> regBean : list) {
-            log.debug(String.format("Register interceptor: %s(%d) - %s",
+            if (log.isDebugEnabled()) log.debug(String.format("Register interceptor: %s(%d) - %s",
                     regBean.getInterceptorName(), regBean.getOrder(), regBean));
             interceptorProxy.addInterceptor(regBean.getInterceptor());
         }

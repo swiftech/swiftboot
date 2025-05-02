@@ -24,7 +24,7 @@ public class IdInterceptor implements Interceptor {
 
     @Override
     public void preFlush(Iterator entities) {
-        log.trace("preFlush()");
+        if (log.isTraceEnabled()) log.trace("preFlush()");
         try {
             while (entities.hasNext()) {
                 Object e = entities.next();
