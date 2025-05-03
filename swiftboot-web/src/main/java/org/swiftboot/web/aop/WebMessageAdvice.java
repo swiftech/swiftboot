@@ -31,10 +31,10 @@ public class WebMessageAdvice extends RequestBodyAdviceAdapter {
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         HttpHeaders headers = inputMessage.getHeaders();
         if (!headers.isEmpty()) {
-            for (String hname : headers.keySet()) {
-                List<String> hValues = headers.getValuesAsList(hname);
+            for (String hKey : headers.keySet()) {
+                List<String> hValues = headers.getValuesAsList(hKey);
                 if (!hValues.isEmpty()) {
-                    ((HttpRequest) body).setHeader(hname, hValues.get(0));
+                    ((HttpRequest) body).setHeader(hKey, hValues.get(0));
                 }
             }
         }

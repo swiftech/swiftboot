@@ -34,8 +34,8 @@ public class ResponseBuilder<T> {
         return this;
     }
 
-    public ResponseBuilder<T> code(String errCode) {
-        this.code = errCode;
+    public ResponseBuilder<T> code(String code) {
+        this.code = code;
         return this;
     }
 
