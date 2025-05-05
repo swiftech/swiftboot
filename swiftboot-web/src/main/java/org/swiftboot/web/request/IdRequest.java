@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
  *
  * @author swiftech
  */
-@Schema(name="业务ID请求 Request with only ID")
+@Schema(description="业务ID请求 Request with only ID")
 public class IdRequest extends HttpRequest {
 
     /**

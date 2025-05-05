@@ -25,7 +25,6 @@ import java.util.function.Predicate;
  * @param <P> 对应的实体类
  * @author swiftech
  */
-//@Schema(name="")
 public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpRequest {
 
     private static final Logger log = LoggerFactory.getLogger(BasePopulateRequest.class);

@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author swiftech
  */
-@Schema(name="Request with ID List")
+@Schema(description="Request with ID List")
 public class IdListRequest extends HttpRequest {
 
     /**

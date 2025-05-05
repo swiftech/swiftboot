@@ -6,7 +6,7 @@ import org.swiftboot.data.model.entity.OrphanEntity;
 /**
  * @author swiftech
  **/
-@Schema(name="", description = "")
+@Schema(description = "")
 public class OrphanRequest extends BasePopulateRequest<OrphanEntity> {
 
     private String name;

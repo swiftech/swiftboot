@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author swiftech
  */
-@Schema(name="REST request")
+@Schema(description="REST request")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class HttpRequest implements Serializable {
 
