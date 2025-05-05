@@ -1,6 +1,8 @@
 package org.swiftboot.auth.config;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * swiftboot.auth.session
@@ -8,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
  * @author swiftech 2019-06-10
  * @see AuthConfigBean
  **/
+@Configuration
+@ConfigurationProperties("swiftboot.auth.session")
 public class SessionConfigBean {
 
     /**

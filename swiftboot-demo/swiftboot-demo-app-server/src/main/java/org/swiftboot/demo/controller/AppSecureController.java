@@ -54,7 +54,7 @@ public class AppSecureController {
 
     @Operation(description = "Test unauthorized")
     @GetMapping(value = "unauthorized")
-    public Response<Void> appUserSign() {
+    public Response<Void> unauthorized() {
         log.info("> /app/unauthorized");
         String userRole = "GUEST";
         if (!"admin".equals(userRole)) {

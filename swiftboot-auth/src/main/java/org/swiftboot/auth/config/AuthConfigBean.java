@@ -18,9 +18,9 @@ public class AuthConfigBean {
     private boolean enabled = false;
 
     /**
-     * type of authentication, use 'jwt' or 'session'
+     * 认证模式，'jwt' 或 'session'， 默认为 `jwt`
      */
-    private String authType;
+    private String authType = "jwt";
 
     /**
      * 会话令牌的名称，作为客户端保存和传递时的 key
@@ -32,11 +32,11 @@ public class AuthConfigBean {
      */
     private String passwordSalt;
 
-    /**
-     * 会话配置
-     */
-    @NestedConfigurationProperty
-    private SessionConfigBean session = new SessionConfigBean();
+//    /**
+//     * 会话配置
+//     */
+//    @NestedConfigurationProperty
+//    private SessionConfigBean session = new SessionConfigBean();
 
 //    @NestedConfigurationProperty
 //    private JwtConfigBean jwt = new JwtConfigBean();
@@ -73,13 +73,13 @@ public class AuthConfigBean {
         this.passwordSalt = passwordSalt;
     }
 
-    public SessionConfigBean getSession() {
-        return session;
-    }
-
-    public void setSession(SessionConfigBean session) {
-        this.session = session;
-    }
+//    public SessionConfigBean getSession() {
+//        return session;
+//    }
+//
+//    public void setSession(SessionConfigBean session) {
+//        this.session = session;
+//    }
 
 //    public JwtConfigBean getJwt() {
 //        return jwt;

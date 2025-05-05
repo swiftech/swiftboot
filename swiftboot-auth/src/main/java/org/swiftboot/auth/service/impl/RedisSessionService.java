@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.auth.config.SessionConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.web.exception.ErrMessageException;
@@ -36,6 +37,9 @@ public class RedisSessionService implements SessionService {
     @Resource
     private AuthConfigBean config;
 
+    @Resource
+    private SessionConfigBean sessionConfig;
+
     @Override
     public void addSession(String token, Session session) throws RuntimeException {
         if (isBlank(token) || session == null) {
@@ -44,8 +48,8 @@ public class RedisSessionService implements SessionService {
         try {
             // Session 中的超时时间覆盖配置中的超时时间
             if (session.getExpireTime() == null) {
-                if (config.getSession().getExpiresIn() > 0) {
-                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000L));
+                if (sessionConfig.getExpiresIn() > 0) {
+                    session.setExpireTime(System.currentTimeMillis() + (sessionConfig.getExpiresIn() * 1000L));
                 }
             }
             else {
@@ -64,9 +68,9 @@ public class RedisSessionService implements SessionService {
     private void saveSession(String token, Session session) throws JsonProcessingException {
         byte[] bytes = mapper.writeValueAsBytes(session);
         if (isBlank(session.getGroup())) {
-            if (StringUtils.isNotBlank(config.getSession().getGroup())) {
-                strRedisTemplate.opsForHash().put(config.getSession().getGroup(), token, new String(bytes));
-//                    ret = redisTemplate.hset(config.getSession().getGroup(), token, new String(bytes));// group -> token ->  会话
+            if (StringUtils.isNotBlank(sessionConfig.getGroup())) {
+                strRedisTemplate.opsForHash().put(sessionConfig.getGroup(), token, new String(bytes));
+//                    ret = redisTemplate.hset(sessionConfig.getGroup(), token, new String(bytes));// group -> token ->  会话
                 log.debug(String.format("Session %s saved, expired at %s", token,
                         session.getExpireTime() == null ? "never" : DateFormatUtils.format(session.getExpireTime(), "yyyy-MM-dd HH:mm:ss")));
             }
@@ -85,7 +89,7 @@ public class RedisSessionService implements SessionService {
 
     @Override
     public Session getSession(String token) {
-        return getSession(config.getSession().getGroup(), token);
+        return getSession(sessionConfig.getGroup(), token);
     }
 
     @Override
@@ -95,7 +99,7 @@ public class RedisSessionService implements SessionService {
         }
 
         if (isBlank(group)) {
-            group = config.getSession().getGroup();
+            group = sessionConfig.getGroup();
         }
         log.debug(String.format("token: %s", token));
         byte[] bytes = null;
@@ -134,7 +138,7 @@ public class RedisSessionService implements SessionService {
 
     @Override
     public void removeSession(String token) {
-        this.removeSession(config.getSession().getGroup(), token);
+        this.removeSession(sessionConfig.getGroup(), token);
     }
 
     @Override
@@ -145,9 +149,9 @@ public class RedisSessionService implements SessionService {
 //            result = redisTemplate.hdel(group, token);
         }
         else {
-            if (StringUtils.isNotBlank(config.getSession().getGroup())) {
-                result = strRedisTemplate.opsForHash().delete(config.getSession().getGroup(), token);
-//                result = jedis.hdel(config.getSession().getGroup(), token);
+            if (StringUtils.isNotBlank(sessionConfig.getGroup())) {
+                result = strRedisTemplate.opsForHash().delete(sessionConfig.getGroup(), token);
+//                result = jedis.hdel(sessionConfig.getGroup(), token);
             }
             else {
                 strRedisTemplate.opsForValue().getAndDelete(token);
@@ -162,7 +166,7 @@ public class RedisSessionService implements SessionService {
 
     @Override
     public Session verifySession(String token) {
-        return this.verifySession(config.getSession().getGroup(), token);
+        return this.verifySession(sessionConfig.getGroup(), token);
     }
 
     @Override
@@ -187,9 +191,9 @@ public class RedisSessionService implements SessionService {
                 throw new ErrMessageException(ResponseCode.CODE_SESSION_TIMEOUT);
             }
             else {
-                if (config.getSession().isUpdateExpireTime()) {
+                if (sessionConfig.isUpdateExpireTime()) {
                     // Update expire time if allowed and there is expired time in session
-                    session.setExpireTime(System.currentTimeMillis() + (config.getSession().getExpiresIn() * 1000L));
+                    session.setExpireTime(System.currentTimeMillis() + (sessionConfig.getExpiresIn() * 1000L));
                     try {
                         this.saveSession(token, session);
                     } catch (JsonProcessingException e) {
@@ -205,8 +209,8 @@ public class RedisSessionService implements SessionService {
 
     @Override
     public void clearAllSessions() {
-        if (StringUtils.isNoneBlank(config.getSession().getGroup())) {
-            strRedisTemplate.delete(config.getSession().getGroup());
+        if (StringUtils.isNoneBlank(sessionConfig.getGroup())) {
+            strRedisTemplate.delete(sessionConfig.getGroup());
         }
     }
 }

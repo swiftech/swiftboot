@@ -6,7 +6,8 @@ import org.swiftboot.common.auth.aop.JwtLogoutResponseAdvice;
 import org.swiftboot.web.response.Response;
 
 /**
- * Return the response to controller method .
+ * Return the response to client in controller method,
+ * the refresh token(JWT mode) or user session(Session mode) will be cleared automatically.
  *
  * @param <R> Type of DTO object returns to client.
  * @see JwtLogoutResponseAdvice

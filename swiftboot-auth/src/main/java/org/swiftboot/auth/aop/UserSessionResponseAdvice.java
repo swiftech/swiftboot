@@ -14,6 +14,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.auth.config.SessionConfigBean;
 import org.swiftboot.common.auth.response.AuthenticatedResponse;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
@@ -37,7 +38,10 @@ public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBod
     private static final Logger log = LoggerFactory.getLogger(UserSessionResponseAdvice.class);
 
     @Resource
-    private AuthConfigBean authConfigBean;
+    private AuthConfigBean authConfig;
+
+    @Resource
+    private SessionConfigBean sessionConfig;
 
     @Resource
     private SessionService sessionService;
@@ -64,17 +68,17 @@ public class UserSessionResponseAdvice extends AbstractMappingJacksonResponseBod
 
             // return cookie to client
             ServletServerHttpResponse servletResponse = (ServletServerHttpResponse) response;
-            if (authConfigBean.getSession().isUseCookie()) {
-                Cookie cookie = new Cookie(authConfigBean.getTokenKey(), userToken);
-                cookie.setPath(authConfigBean.getSession().getCookiePath());
-                int expiresIn = authConfigBean.getSession().getExpiresIn();
+            if (sessionConfig.isUseCookie()) {
+                Cookie cookie = new Cookie(authConfig.getTokenKey(), userToken);
+                cookie.setPath(sessionConfig.getCookiePath());
+                int expiresIn = sessionConfig.getExpiresIn();
                 cookie.setMaxAge(expiresIn == 0 ? Integer.MAX_VALUE : expiresIn);
                 servletResponse.getServletResponse().addCookie(cookie);
-                if (log.isDebugEnabled()) log.debug("Response with cookie %s".formatted(authConfigBean.getTokenKey()));
+                if (log.isDebugEnabled()) log.debug("Response with cookie %s".formatted(authConfig.getTokenKey()));
             }
             else {
-                servletResponse.getServletResponse().setHeader(authConfigBean.getTokenKey(), userToken);
-                if (log.isDebugEnabled()) log.debug("Response with header %s".formatted(authConfigBean.getTokenKey()));
+                servletResponse.getServletResponse().setHeader(authConfig.getTokenKey(), userToken);
+                if (log.isDebugEnabled()) log.debug("Response with header %s".formatted(authConfig.getTokenKey()));
             }
         }
 

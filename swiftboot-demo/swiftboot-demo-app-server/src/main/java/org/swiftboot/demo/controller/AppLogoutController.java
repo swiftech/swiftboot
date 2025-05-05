@@ -13,7 +13,6 @@ import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.annotation.Token;
 import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.JwtAuthentication;
-import org.swiftboot.web.response.Response;
 
 /**
  * @since 3.0
@@ -31,10 +30,11 @@ public class AppLogoutController {
 
     @Operation(description = "App user logout")
     @PostMapping(value = "logout")
-    public Response<Void> appUserLogout(@Token String accessToken) {
+    public LogoutResponse<Void> appUserLogout(@Token String accessToken) {
         log.info("> /app/logout");
-        LogoutResponse<String> objectLogoutResponse = userAuthService.userLogout(accessToken);
-        return Response.builder().message("Logout success").build();
+        LogoutResponse<Void> logoutResponse = userAuthService.userLogout(accessToken);
+        logoutResponse.setMessage("Logout successful");
+        return logoutResponse;
     }
 
 }

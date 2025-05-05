@@ -6,14 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.response.Response;
-
-import java.io.IOException;
 
 /**
  * Handler authorization exception globally.
@@ -30,10 +28,11 @@ public class AuthExceptionProcessor {
     @ResponseBody
     public ResponseEntity<?> handle401Exception(AuthenticationException e, HttpServletRequest req) {
         if (log.isDebugEnabled()) log.debug("handle %s to HTTP response ".formatted(e.getClass().getSimpleName()));
-        Response<String> response = new Response<>(String.valueOf(HttpStatus.UNAUTHORIZED.value()), e.getMessage());
+        Response<Void> response = Response.builder().code(String.valueOf(HttpStatus.UNAUTHORIZED.value())).message(e.getMessage()).build();
         try {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(JsonUtils.object2Json(response));
-        } catch (IOException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+        } catch (Exception ex) {
             // TODO
             throw new RuntimeException(ex);
         }

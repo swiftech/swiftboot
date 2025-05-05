@@ -4,14 +4,15 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.model.SessionBuilder;
 import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.response.LogoutResponse;
-import org.swiftboot.util.CryptoUtils;
 import org.swiftboot.util.IdUtils;
+import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.ResponseCode;
 
@@ -27,9 +28,12 @@ public class DefaultUserSessionAuthService<T extends UserPersistable> implements
     @Resource
     private UserAuthRepository<T> appUserRepository;
 
+    @Resource
+    private AuthConfigBean authConfig;
+
     @Override
     public Session userSignIn(String loginId, String loginPwd) {
-        String encryptedPwd = CryptoUtils.md5(loginPwd);
+        String encryptedPwd = PasswordUtils.createPassword(loginPwd, authConfig.getPasswordSalt());
         Optional<T> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
             T appUserEntity = optUser.get();
