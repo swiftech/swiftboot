@@ -29,7 +29,7 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
     private static final Logger log = LoggerFactory.getLogger(DefaultUserJwtAuthService.class);
 
     @Resource
-    private UserAuthRepository<T> appUserRepository;
+    private UserAuthRepository<T> userAuthRepository;
 
     @Resource
     private JwtTokenProvider jwtTokenProvider;
@@ -43,7 +43,7 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
     @Override
     public JwtAuthentication userSignIn(String loginId, String loginPwd) {
         String encryptedPwd = PasswordUtils.createPassword(loginPwd, authConfig.getPasswordSalt());
-        Optional<T> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
+        Optional<T> optUser = userAuthRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
             T appUserEntity = optUser.get();
             log.debug(appUserEntity.getId());
@@ -67,7 +67,7 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
         }
 
         String userId = jwtTokenProvider.getUserId(refreshToken);
-        Optional<T> byId = appUserRepository.findById(userId);
+        Optional<T> byId = userAuthRepository.findById(userId);
         if (byId.isPresent()) {
             T appUserEntity = byId.get();
 

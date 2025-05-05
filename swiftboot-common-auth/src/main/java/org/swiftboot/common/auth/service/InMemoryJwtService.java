@@ -32,35 +32,70 @@ public class InMemoryJwtService implements JwtService {
 
     @Override
     public void saveJwtAuthentication(JwtAuthentication jwtAuthentication) {
-        accessTokenMap.put(jwtAuthentication.getAccessToken().tokenValue(), jwtAuthentication);
-        refreshTokenMap.put(jwtAuthentication.getRefreshToken().tokenValue(), jwtAuthentication);
+        if (jwtConfig.isRefreshRevokeType()) {
+            if (jwtAuthentication.getRefreshToken() == null) {
+                throw new IllegalArgumentException("No refresh token provided.");
+            }
+            refreshTokenMap.put(jwtAuthentication.getRefreshToken().tokenValue(), jwtAuthentication);
+        }
+        else {
+            if (jwtAuthentication.getAccessToken() == null) {
+                throw new IllegalArgumentException("No access token provided.");
+            }
+            accessTokenMap.put(jwtAuthentication.getAccessToken().tokenValue(), jwtAuthentication);
+        }
     }
 
     @Override
     public void saveJwtAuthentication(AccessToken accessToken, RefreshToken refreshToken) {
         JwtAuthentication jwtAuthentication = new JwtAuthentication(accessToken, refreshToken);
-        accessTokenMap.put(accessToken.tokenValue(), jwtAuthentication);
-        refreshTokenMap.put(refreshToken.tokenValue(), jwtAuthentication);
+        if (jwtConfig.isRefreshRevokeType()) {
+            if (jwtAuthentication.getRefreshToken() == null) {
+                throw new IllegalArgumentException("No refresh token provided.");
+            }
+            refreshTokenMap.put(refreshToken.tokenValue(), jwtAuthentication);
+        }
+        else {
+            if (jwtAuthentication.getAccessToken() == null) {
+                throw new IllegalArgumentException("No access token provided.");
+            }
+            accessTokenMap.put(accessToken.tokenValue(), jwtAuthentication);
+        }
     }
 
     @Override
     public void saveJwtAuthentication(String accessToken, Long accessTokenExpiresAt, String refreshToken, Long refreshTokenExpiresAt) {
         JwtAuthentication jwtAuthentication = new JwtAuthentication(accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt);
-        accessTokenMap.put(accessToken, jwtAuthentication);
-        refreshTokenMap.put(refreshToken, jwtAuthentication);
-        if (log.isInfoEnabled()) log.info("Saved JWT access token and refresh token: %s".formatted(accessToken));
+        if (jwtConfig.isRefreshRevokeType()) {
+            if (jwtAuthentication.getRefreshToken() == null) {
+                throw new IllegalArgumentException("No refresh token provided.");
+            }
+            refreshTokenMap.put(refreshToken, jwtAuthentication);
+            if (log.isInfoEnabled())
+                log.info("Saved JWT access token and refresh token: %s".formatted(abbreviateToken(accessToken)));
+        }
+        else {
+            if (jwtAuthentication.getAccessToken() == null) {
+                throw new IllegalArgumentException("No access token provided.");
+            }
+            accessTokenMap.put(accessToken, jwtAuthentication);
+            if (log.isInfoEnabled())
+                log.info("Saved JWT access token without refresh token: %s".formatted(abbreviateToken(accessToken)));
+        }
     }
 
     @Override
     public boolean revokeAuthenticationByAccessToken(String accessToken) {
         if (log.isDebugEnabled())
-            log.debug("Revoke JWT access token: " + StringUtils.abbreviateMiddle(accessToken, ".", 64));
+            log.debug("Revoke JWT authentication by access token: " + abbreviateToken(accessToken));
         JwtAuthentication jwtAuthentication = accessTokenMap.get(accessToken);
         if (jwtAuthentication != null) {
             if (jwtConfig.isRefreshRevokeType()) {
                 refreshTokenMap.remove(jwtAuthentication.getRefreshToken().tokenValue());
             }
-            accessTokenMap.remove(accessToken);
+            else {
+                accessTokenMap.remove(accessToken);
+            }
             return true;
         }
         return false;
@@ -69,14 +104,21 @@ public class InMemoryJwtService implements JwtService {
     @Override
     public boolean revokeAuthenticationByRefreshToken(String refreshToken) {
         if (log.isDebugEnabled())
-            log.debug("Revoke JWT access token by refresh token: " + StringUtils.abbreviateMiddle(refreshToken, ".", 64));
+            log.debug("Revoke JWT authentication by refresh token: " + abbreviateToken(refreshToken));
+        if (!jwtConfig.isRefreshRevokeType()) {
+            return false;
+        }
         JwtAuthentication jwtAuthentication = refreshTokenMap.get(refreshToken);
         if (jwtAuthentication != null) {
-            accessTokenMap.remove(jwtAuthentication.getAccessToken().tokenValue());
+            // accessTokenMap.remove(jwtAuthentication.getAccessToken().tokenValue());
             refreshTokenMap.remove(refreshToken);
             return true;
         }
         return false;
+    }
+
+    private String abbreviateToken(String token) {
+        return StringUtils.abbreviateMiddle(token, "...", 64);
     }
 
     @Override

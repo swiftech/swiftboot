@@ -26,7 +26,7 @@ public class DefaultUserSessionAuthService<T extends UserPersistable> implements
     private static final Logger log = LoggerFactory.getLogger(DefaultUserSessionAuthService.class);
 
     @Resource
-    private UserAuthRepository<T> appUserRepository;
+    private UserAuthRepository<T> userAuthRepository;
 
     @Resource
     private AuthConfigBean authConfig;
@@ -34,7 +34,7 @@ public class DefaultUserSessionAuthService<T extends UserPersistable> implements
     @Override
     public Session userSignIn(String loginId, String loginPwd) {
         String encryptedPwd = PasswordUtils.createPassword(loginPwd, authConfig.getPasswordSalt());
-        Optional<T> optUser = appUserRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
+        Optional<T> optUser = userAuthRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
             T appUserEntity = optUser.get();
             log.debug(appUserEntity.getId());
