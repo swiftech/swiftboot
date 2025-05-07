@@ -1,16 +1,16 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.request.GoodsOrderRelCreateCommand;
-import org.swiftboot.demo.request.GoodsOrderRelDelPurgeCommand;
-import org.swiftboot.demo.request.GoodsOrderRelSaveCommand;
-import org.swiftboot.demo.model.dao.GoodsOrderRelDao;
+import org.swiftboot.demo.request.GoodsOrderRelCreateRequest;
+import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
+import org.swiftboot.demo.request.GoodsOrderRelSaveRequest;
+import org.swiftboot.demo.repository.GoodsOrderRelDao;
 import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
-import org.swiftboot.demo.result.GoodsOrderRelCreateResult;
-import org.swiftboot.demo.result.GoodsOrderRelListResult;
-import org.swiftboot.demo.result.GoodsOrderRelResult;
-import org.swiftboot.demo.result.GoodsOrderRelSaveResult;
+import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
+import org.swiftboot.demo.dto.GoodsOrderRelListResult;
+import org.swiftboot.demo.dto.GoodsOrderRelResult;
+import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
 import org.swiftboot.demo.service.GoodsOrderRelService;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.web.request.IdListRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      * @return
      */
     @Override
-    public GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateCommand cmd) {
+    public GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateRequest cmd) {
         GoodsOrderRelEntity p = cmd.createEntity();
         GoodsOrderRelEntity saved = goodsOrderRelDao.save(p);
         log.debug("创建商品订单关系: " + saved.getId());
@@ -56,7 +56,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      * @return
      */
     @Override
-    public GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveCommand cmd) {
+    public GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveRequest cmd) {
         GoodsOrderRelSaveResult ret = new GoodsOrderRelSaveResult();
         Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(cmd.getId());
         if (optEntity.isPresent()) {
@@ -89,7 +89,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      * @param cmd
      */
     @Override
-    public void deleteGoodsOrderRelList(IdListCommand cmd) {
+    public void deleteGoodsOrderRelList(IdListRequest request) {
         List<GoodsOrderRelEntity> entities = goodsOrderRelDao.findAllByIdIn(cmd.getIds());
         for (GoodsOrderRelEntity entity : entities) {
             entity.setIsDelete(true);
@@ -104,7 +104,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      * @param cmd
      */
     @Override
-    public void deleteGoodsOrderRel(GoodsOrderRelDelPurgeCommand cmd) {
+    public void deleteGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd) {
         List<GoodsOrderRelEntity> entities =
         goodsOrderRelDao.findByGoodsIdAndOrderId(
             cmd.getGoodsId(), cmd.getOrderId());
@@ -135,7 +135,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      * @param cmd
      */
     @Override
-    public void purgeGoodsOrderRelList(IdListCommand cmd) {
+    public void purgeGoodsOrderRelList(IdListRequest request) {
         List<GoodsOrderRelEntity> entities = goodsOrderRelDao.findAllByIdIn(cmd.getIds());
         for (GoodsOrderRelEntity entity : entities) {
             goodsOrderRelDao.deleteById(entity.getId());
@@ -149,7 +149,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      * @param cmd
      */
     @Override
-    public void purgeGoodsOrderRel(GoodsOrderRelDelPurgeCommand cmd) {
+    public void purgeGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd) {
         goodsOrderRelDao.deleteByGoodsIdAndOrderId (
             cmd.getGoodsId(), cmd.getOrderId());
     }

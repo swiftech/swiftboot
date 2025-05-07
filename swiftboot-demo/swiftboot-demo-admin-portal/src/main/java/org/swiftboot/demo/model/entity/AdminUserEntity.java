@@ -3,7 +3,7 @@ package org.swiftboot.demo.model.entity;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseEntity;
-import org.swiftboot.shiro.model.entity.UserEntityStub;
+//import org.swiftboot.shiro.model.entity.UserEntityStub;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 @Description("管理员")
 @Entity
 @Table(name = "DEMO_ADMIN_USER")
-public class AdminUserEntity extends BaseEntity implements UserEntityStub {
+public class AdminUserEntity extends BaseEntity {// implements UserEntityStub {
 
     /**
      * 登录名

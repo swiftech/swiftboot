@@ -1,17 +1,17 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.model.dao.GoodsDao;
-import org.swiftboot.demo.request.GoodsDetailCreateCommand;
-import org.swiftboot.demo.request.GoodsDetailSaveCommand;
-import org.swiftboot.demo.model.dao.GoodsDetailDao;
+import org.swiftboot.demo.repository.GoodsDao;
+import org.swiftboot.demo.request.GoodsDetailCreateRequest;
+import org.swiftboot.demo.request.GoodsDetailSaveRequest;
+import org.swiftboot.demo.repository.GoodsDetailDao;
 import org.swiftboot.demo.model.entity.GoodsDetailEntity;
 import org.swiftboot.demo.model.entity.GoodsEntity;
-import org.swiftboot.demo.result.GoodsDetailCreateResult;
-import org.swiftboot.demo.result.GoodsDetailListResult;
-import org.swiftboot.demo.result.GoodsDetailResult;
-import org.swiftboot.demo.result.GoodsDetailSaveResult;
+import org.swiftboot.demo.dto.GoodsDetailCreateResult;
+import org.swiftboot.demo.dto.GoodsDetailListResult;
+import org.swiftboot.demo.dto.GoodsDetailResult;
+import org.swiftboot.demo.dto.GoodsDetailSaveResult;
 import org.swiftboot.demo.service.GoodsDetailService;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.web.request.IdListRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
      * @return
      */
     @Override
-    public GoodsDetailCreateResult createGoodsDetail(GoodsDetailCreateCommand cmd) {
+    public GoodsDetailCreateResult createGoodsDetail(GoodsDetailCreateRequest cmd) {
         GoodsDetailEntity p = cmd.createEntity();
         GoodsDetailEntity saved = goodsDetailDao.save(p);
         Optional<GoodsEntity> optGoods = goodsDao.findById(cmd.getGoodsId());
@@ -66,7 +66,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
      * @return
      */
     @Override
-    public GoodsDetailSaveResult saveGoodsDetail(GoodsDetailSaveCommand cmd) {
+    public GoodsDetailSaveResult saveGoodsDetail(GoodsDetailSaveRequest cmd) {
         GoodsDetailSaveResult ret = new GoodsDetailSaveResult();
         Optional<GoodsDetailEntity> optEntity = goodsDetailDao.findById(cmd.getId());
         if (optEntity.isPresent()) {
@@ -99,7 +99,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
      * @param cmd
      */
     @Override
-    public void deleteGoodsDetailList(IdListCommand cmd) {
+    public void deleteGoodsDetailList(IdListRequest request) {
         List<GoodsDetailEntity> entities = goodsDetailDao.findAllByIdIn(cmd.getIds());
         for (GoodsDetailEntity entity : entities) {
             entity.setIsDelete(true);
@@ -130,7 +130,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
      * @param cmd
      */
     @Override
-    public void purgeGoodsDetailList(IdListCommand cmd) {
+    public void purgeGoodsDetailList(IdListRequest request) {
         List<GoodsDetailEntity> entities = goodsDetailDao.findAllByIdIn(cmd.getIds());
         for (GoodsDetailEntity entity : entities) {
             goodsDetailDao.deleteById(entity.getId());

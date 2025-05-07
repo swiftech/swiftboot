@@ -1,12 +1,12 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.GoodsDetailCreateCommand;
-import org.swiftboot.demo.request.GoodsDetailSaveCommand;
-import org.swiftboot.demo.result.GoodsDetailCreateResult;
-import org.swiftboot.demo.result.GoodsDetailListResult;
-import org.swiftboot.demo.result.GoodsDetailResult;
-import org.swiftboot.demo.result.GoodsDetailSaveResult;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.demo.request.GoodsDetailCreateRequest;
+import org.swiftboot.demo.request.GoodsDetailSaveRequest;
+import org.swiftboot.demo.dto.GoodsDetailCreateResult;
+import org.swiftboot.demo.dto.GoodsDetailListResult;
+import org.swiftboot.demo.dto.GoodsDetailResult;
+import org.swiftboot.demo.dto.GoodsDetailSaveResult;
+import org.swiftboot.web.request.IdListRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -23,7 +23,7 @@ public interface GoodsDetailService {
      * @param cmd
      * @return
      */
-    GoodsDetailCreateResult createGoodsDetail(GoodsDetailCreateCommand cmd);
+    GoodsDetailCreateResult createGoodsDetail(GoodsDetailCreateRequest cmd);
 
     /**
      * 保存对商品详情的修改
@@ -31,7 +31,7 @@ public interface GoodsDetailService {
      * @param cmd
      * @return
      */
-    GoodsDetailSaveResult saveGoodsDetail(GoodsDetailSaveCommand cmd);
+    GoodsDetailSaveResult saveGoodsDetail(GoodsDetailSaveRequest cmd);
 
     /**
      * 逻辑删除商品详情
@@ -45,7 +45,7 @@ public interface GoodsDetailService {
      *
      * @param cmd
      */
-    void deleteGoodsDetailList(IdListCommand cmd);
+    void deleteGoodsDetailList(IdListRequest request);
 
 
     /**
@@ -60,7 +60,7 @@ public interface GoodsDetailService {
      *
      * @param cmd
      */
-    void purgeGoodsDetailList(IdListCommand cmd);
+    void purgeGoodsDetailList(IdListRequest request);
 
 
     /**

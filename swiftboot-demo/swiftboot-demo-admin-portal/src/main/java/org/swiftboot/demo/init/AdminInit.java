@@ -1,5 +1,7 @@
 package org.swiftboot.demo.init;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,17 +11,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.swiftboot.demo.config.SwiftbootDemoConfigBean;
 import org.swiftboot.demo.config.PermissionConfigBean;
 import org.swiftboot.demo.config.RoleConfigBean;
+import org.swiftboot.demo.config.SwiftbootDemoConfigBean;
 import org.swiftboot.demo.config.UserConfigBean;
 import org.swiftboot.demo.constant.AuthConstants;
-import org.swiftboot.demo.model.dao.*;
 import org.swiftboot.demo.model.entity.*;
-import org.swiftboot.shiro.service.PasswordManager;
+import org.swiftboot.demo.repository.*;
+import org.swiftboot.util.PasswordUtils;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
 import java.util.*;
 
 /**
@@ -54,8 +54,8 @@ public class AdminInit {
     @Resource
     private AdminRolePermissionRelDao adminRolePermissionRelDao;
 
-    @Resource
-    private PasswordManager passwordManager;
+//    @Resource
+//    private PasswordManager passwordManager;
 
     @Resource
     protected PlatformTransactionManager txManager;
@@ -72,7 +72,7 @@ public class AdminInit {
 
         Optional<AdminPermissionEntity> exist = adminPermissionDao.findByPermCode(permConfig.getCode());
         AdminPermissionEntity permissionEntity;
-        if (!exist.isPresent()) {
+        if (exist.isEmpty()) {
             permissionEntity = new AdminPermissionEntity();
         }
         else {
@@ -158,7 +158,7 @@ public class AdminInit {
             log.info("角色：" + roles.size());
             for (RoleConfigBean role : roles) {
                 Optional<AdminRoleEntity> exist = adminRoleDao.findByRoleName(role.getName());
-                if (!exist.isPresent()) {
+                if (exist.isEmpty()) {
                     log.info("  创建角色：" + role.getName());
                     AdminRoleEntity roleEntity = new AdminRoleEntity();
                     roleEntity.setRoleName(role.getName());
@@ -171,14 +171,14 @@ public class AdminInit {
         // 用户
         Set<UserConfigBean> users = demoConfig.getInit().getUsers();
         if (users != null) {
-            log.info("用户：" + users.size());
+            log.info("用户：%d".formatted(users.size()));
             for (UserConfigBean user : users) {
                 Optional<AdminUserEntity> exist = adminUserDao.findByLoginName(user.getLoginName());
-                if (!exist.isPresent()) {
-                    log.info("  创建用户：" + user.getLoginName());
+                if (exist.isEmpty()) {
+                    log.info("  创建用户：%s".formatted(user.getLoginName()));
                     AdminUserEntity userEntity = new AdminUserEntity();
                     userEntity.setLoginName(user.getLoginName());
-                    userEntity.setLoginPwd(passwordManager.encryptPassword(user.getLoginPwd(), AuthConstants.MY_AUTH_SERVICE_NAME));
+                    userEntity.setLoginPwd(PasswordUtils.createPassword(user.getLoginPwd(), AuthConstants.MY_AUTH_SERVICE_NAME));
                     adminUserDao.save(userEntity);
                 }
             }

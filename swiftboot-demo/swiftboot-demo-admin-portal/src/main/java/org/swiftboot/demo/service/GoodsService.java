@@ -1,13 +1,13 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.GoodsCreateCommand;
-import org.swiftboot.demo.request.GoodsSaveCommand;
-import org.swiftboot.demo.request.GoodsWithDetailCreateCommand;
-import org.swiftboot.demo.result.GoodsCreateResult;
-import org.swiftboot.demo.result.GoodsListResult;
-import org.swiftboot.demo.result.GoodsResult;
-import org.swiftboot.demo.result.GoodsSaveResult;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.demo.request.GoodsCreateRequest;
+import org.swiftboot.demo.request.GoodsSaveRequest;
+import org.swiftboot.demo.request.GoodsWithDetailCreateRequest;
+import org.swiftboot.demo.dto.GoodsCreateResult;
+import org.swiftboot.demo.dto.GoodsListResult;
+import org.swiftboot.demo.dto.GoodsResult;
+import org.swiftboot.demo.dto.GoodsSaveResult;
+import org.swiftboot.web.request.IdListRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -24,21 +24,21 @@ public interface GoodsService {
      * @param cmd
      * @return
      */
-    GoodsCreateResult createGoods(GoodsCreateCommand cmd);
+    GoodsCreateResult createGoods(GoodsCreateRequest cmd);
 
     /**
      * 测试事务
      * @param cmd
      * @return
      */
-    GoodsCreateResult createWithException(GoodsCreateCommand cmd);
+    GoodsCreateResult createWithException(GoodsCreateRequest cmd);
 
     /**
      * 测试 JPA 关联
      * @param cmd
      * @return
      */
-    GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateCommand cmd);
+    GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateRequest cmd);
 
     /**
      * 保存对商品的修改
@@ -46,7 +46,7 @@ public interface GoodsService {
      * @param cmd
      * @return
      */
-    GoodsSaveResult saveGoods(GoodsSaveCommand cmd);
+    GoodsSaveResult saveGoods(GoodsSaveRequest cmd);
 
     /**
      * 逻辑删除商品
@@ -60,7 +60,7 @@ public interface GoodsService {
      *
      * @param cmd
      */
-    void deleteGoodsList(IdListCommand cmd);
+    void deleteGoodsList(IdListRequest request);
 
 
     /**
@@ -75,7 +75,7 @@ public interface GoodsService {
      *
      * @param cmd
      */
-    void purgeGoodsList(IdListCommand cmd);
+    void purgeGoodsList(IdListRequest request);
 
 
     /**

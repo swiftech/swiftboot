@@ -18,6 +18,11 @@
             <version>${swiftboot.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.github.swiftech</groupId>
+            <artifactId>swiftboot-common-auth</artifactId>
+            <version>${swiftboot.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>

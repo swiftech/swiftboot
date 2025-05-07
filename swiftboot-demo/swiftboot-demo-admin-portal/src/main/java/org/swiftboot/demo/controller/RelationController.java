@@ -1,7 +1,7 @@
 package org.swiftboot.demo.controller;
 
-import org.swiftboot.demo.result.OrderCreateResult;
-import org.swiftboot.demo.result.OrderSaveResult;
+import org.swiftboot.demo.dto.OrderCreateResult;
+import org.swiftboot.demo.dto.OrderSaveResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.demo.request.OrderWithDetailCreateCommand;
-import org.swiftboot.demo.request.OrderWithDetailSaveCommand;
+import org.swiftboot.demo.request.OrderWithDetailCreateRequest;
+import org.swiftboot.demo.request.OrderWithDetailSaveRequest;
 import org.swiftboot.demo.service.OrderDetailRelationService;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.exception.ErrorCodeSupport;
-import org.swiftboot.web.dto.HttpResponse;
+import org.swiftboot.web.response.ResponseCode;
+import org.swiftboot.web.response.Response;
 import org.swiftboot.web.validate.ConvertValidateResult;
 
 import jakarta.annotation.Resource;
@@ -39,28 +39,28 @@ public class RelationController {
     @Resource
     private OrderDetailRelationService orderService;
 
-    @Operation(description = "创建订单（带详情）", value = "创建订单（带详情）")
+    @Operation(description = "创建订单（带详情）")
     @RequestMapping(value = "/with_detail/create", method = RequestMethod.POST)
-    public HttpResponse<OrderCreateResult> orderWithDetailCreate(
-            @RequestBody @Validated @Parameter(description = "创建订单（带详情）参数") OrderWithDetailCreateCommand command) {
+    public Response<OrderCreateResult> orderWithDetailCreate(
+            @RequestBody @Validated @Parameter(description = "创建订单（带详情）参数") OrderWithDetailCreateRequest request) {
         log.info("> /order/with_detail/create");
-        log.debug(JsonUtils.object2PrettyJson(command));
-        OrderCreateResult ret = orderService.createOrderWithDetail(command);
-        return new HttpResponse<>(ret);
+        log.debug(JsonUtils.object2PrettyJson(request));
+        OrderCreateResult ret = orderService.createOrderWithDetail(request);
+        return new Response<>(ret);
     }
 
-    @Operation(description = "编辑保存订单（带详情）", value = "编辑保存订单（带详情）")
+    @Operation(description = "编辑保存订单（带详情）")
     @RequestMapping(value = "/with_detail/save", method = RequestMethod.POST)
-    public HttpResponse<OrderSaveResult> orderWithDetailSave(
-            @RequestBody @Validated @Parameter(description = "编辑保存订单参数（带详情）") OrderWithDetailSaveCommand command,
+    public Response<OrderSaveResult> orderWithDetailSave(
+            @RequestBody @Validated @Parameter(description = "编辑保存订单参数（带详情）") OrderWithDetailSaveRequest request,
             BindingResult bindingResult) {
         log.info("> /order/with_detail/save");
         if (bindingResult.hasErrors()) {
             log.error("验证错误：" + bindingResult.getErrorCount());
-            return new HttpResponse<>(ErrorCodeSupport.CODE_SYS_ERR, "验证错误");
+            return new Response<>(ResponseCode.CODE_SYS_ERR, "验证错误");
         }
-        log.debug(JsonUtils.object2PrettyJson(command));
-        OrderSaveResult ret = orderService.saveOrderWithNewDetail(command);
-        return new HttpResponse<>(ret);
+        log.debug(JsonUtils.object2PrettyJson(request));
+        OrderSaveResult ret = orderService.saveOrderWithNewDetail(request);
+        return new Response<>(ret);
     }
 }

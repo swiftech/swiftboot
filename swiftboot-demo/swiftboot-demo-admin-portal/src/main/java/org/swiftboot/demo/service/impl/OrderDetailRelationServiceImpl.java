@@ -1,16 +1,16 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.model.dao.OrderDetailDao;
+import org.swiftboot.demo.repository.OrderDetailDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.swiftboot.demo.request.OrderWithDetailCreateCommand;
-import org.swiftboot.demo.request.OrderWithDetailSaveCommand;
-import org.swiftboot.demo.model.dao.OrderDao;
+import org.swiftboot.demo.request.OrderWithDetailCreateRequest;
+import org.swiftboot.demo.request.OrderWithDetailSaveRequest;
+import org.swiftboot.demo.repository.OrderDao;
 import org.swiftboot.demo.model.entity.OrderDetailEntity;
 import org.swiftboot.demo.model.entity.OrderEntity;
-import org.swiftboot.demo.result.OrderCreateResult;
-import org.swiftboot.demo.result.OrderSaveResult;
+import org.swiftboot.demo.dto.OrderCreateResult;
+import org.swiftboot.demo.dto.OrderSaveResult;
 import org.swiftboot.demo.service.OrderDetailRelationService;
 
 import jakarta.annotation.Resource;
@@ -44,7 +44,7 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
      * @return
      */
     @Override
-    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateCommand cmd) {
+    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateRequest cmd) {
         OrderEntity entity = cmd.createEntity();
         // Add extra permanent detail ( will be merged if already existed)
         OrderDetailEntity od = new OrderDetailEntity();
@@ -64,7 +64,7 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
      * @return
      */
     @Override
-    public OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveCommand cmd) {
+    public OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveRequest cmd) {
         OrderSaveResult ret = new OrderSaveResult();
         Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
         if (optEntity.isPresent()) {
@@ -87,7 +87,7 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
      * @return
      */
     @Override
-    public OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveCommand cmd) {
+    public OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveRequest cmd) {
         OrderSaveResult ret = new OrderSaveResult();
         Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
         if (optEntity.isPresent()) {

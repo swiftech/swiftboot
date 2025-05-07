@@ -1,15 +1,15 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.request.OrderDetailCreateCommand;
-import org.swiftboot.demo.request.OrderDetailSaveCommand;
-import org.swiftboot.demo.model.dao.OrderDetailDao;
+import org.swiftboot.demo.request.OrderDetailCreateRequest;
+import org.swiftboot.demo.request.OrderDetailSaveRequest;
+import org.swiftboot.demo.repository.OrderDetailDao;
 import org.swiftboot.demo.model.entity.OrderDetailEntity;
-import org.swiftboot.demo.result.OrderDetailCreateResult;
-import org.swiftboot.demo.result.OrderDetailListResult;
-import org.swiftboot.demo.result.OrderDetailResult;
-import org.swiftboot.demo.result.OrderDetailSaveResult;
+import org.swiftboot.demo.dto.OrderDetailCreateResult;
+import org.swiftboot.demo.dto.OrderDetailListResult;
+import org.swiftboot.demo.dto.OrderDetailResult;
+import org.swiftboot.demo.dto.OrderDetailSaveResult;
 import org.swiftboot.demo.service.OrderDetailService;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.web.request.IdListRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      * @return
      */
     @Override
-    public OrderDetailCreateResult createOrderDetail(OrderDetailCreateCommand cmd) {
+    public OrderDetailCreateResult createOrderDetail(OrderDetailCreateRequest cmd) {
         OrderDetailEntity p = cmd.createEntity();
         OrderDetailEntity saved = orderDetailDao.save(p);
         log.debug("创建订单明细: " + saved.getId());
@@ -55,7 +55,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      * @return
      */
     @Override
-    public OrderDetailSaveResult saveOrderDetail(OrderDetailSaveCommand cmd) {
+    public OrderDetailSaveResult saveOrderDetail(OrderDetailSaveRequest cmd) {
         OrderDetailSaveResult ret = new OrderDetailSaveResult();
         Optional<OrderDetailEntity> optEntity = orderDetailDao.findById(cmd.getId());
         if (optEntity.isPresent()) {
@@ -88,7 +88,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      * @param cmd
      */
     @Override
-    public void deleteOrderDetailList(IdListCommand cmd) {
+    public void deleteOrderDetailList(IdListRequest request) {
         List<OrderDetailEntity> entities = orderDetailDao.findAllByIdIn(cmd.getIds());
         for (OrderDetailEntity entity : entities) {
             entity.setIsDelete(true);
@@ -119,7 +119,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      * @param cmd
      */
     @Override
-    public void purgeOrderDetailList(IdListCommand cmd) {
+    public void purgeOrderDetailList(IdListRequest request) {
         List<OrderDetailEntity> entities = orderDetailDao.findAllByIdIn(cmd.getIds());
         for (OrderDetailEntity entity : entities) {
             orderDetailDao.deleteById(entity.getId());

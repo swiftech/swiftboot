@@ -1,13 +1,13 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.OrderCreateCommand;
-import org.swiftboot.demo.request.OrderSaveCommand;
-import org.swiftboot.demo.result.OrderCreateResult;
-import org.swiftboot.demo.result.OrderListResult;
-import org.swiftboot.demo.result.OrderResult;
-import org.swiftboot.demo.result.OrderSaveResult;
+import org.swiftboot.demo.request.OrderCreateRequest;
+import org.swiftboot.demo.request.OrderSaveRequest;
+import org.swiftboot.demo.dto.OrderCreateResult;
+import org.swiftboot.demo.dto.OrderListResult;
+import org.swiftboot.demo.dto.OrderResult;
+import org.swiftboot.demo.dto.OrderSaveResult;
 import org.springframework.transaction.annotation.Transactional;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.web.request.IdListRequest;
 
 /**
  * 订单服务接口
@@ -23,7 +23,7 @@ public interface OrderService {
      * @param cmd
      * @return
      */
-    OrderCreateResult createOrder(OrderCreateCommand cmd);
+    OrderCreateResult createOrder(OrderCreateRequest cmd);
 
     /**
      * 保存对订单的修改
@@ -31,7 +31,7 @@ public interface OrderService {
      * @param cmd
      * @return
      */
-    OrderSaveResult saveOrder(OrderSaveCommand cmd);
+    OrderSaveResult saveOrder(OrderSaveRequest cmd);
 
 
     /**
@@ -46,7 +46,7 @@ public interface OrderService {
      *
      * @param cmd
      */
-    void deleteOrderList(IdListCommand cmd);
+    void deleteOrderList(IdListRequest request);
 
 
     /**
@@ -61,7 +61,7 @@ public interface OrderService {
      *
      * @param cmd
      */
-    void purgeOrderList(IdListCommand cmd);
+    void purgeOrderList(IdListRequest request);
 
 
     /**

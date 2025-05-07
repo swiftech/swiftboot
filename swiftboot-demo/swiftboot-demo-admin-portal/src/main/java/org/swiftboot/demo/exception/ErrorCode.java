@@ -1,7 +1,7 @@
 package org.swiftboot.demo.exception;
 
 import org.springframework.stereotype.Component;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -15,7 +15,7 @@ public class ErrorCode {
     public static final String CODE_TEST_PARAMS = "4001";
 
     @Resource
-    private ErrorCodeSupport errorCodeSupport;
+    private ResponseCode errorCodeSupport;
 
     @PostConstruct
     public void init() {

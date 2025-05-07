@@ -1,13 +1,13 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.GoodsOrderRelCreateCommand;
-import org.swiftboot.demo.request.GoodsOrderRelDelPurgeCommand;
-import org.swiftboot.demo.request.GoodsOrderRelSaveCommand;
-import org.swiftboot.demo.result.GoodsOrderRelCreateResult;
-import org.swiftboot.demo.result.GoodsOrderRelListResult;
-import org.swiftboot.demo.result.GoodsOrderRelResult;
-import org.swiftboot.demo.result.GoodsOrderRelSaveResult;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.demo.request.GoodsOrderRelCreateRequest;
+import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
+import org.swiftboot.demo.request.GoodsOrderRelSaveRequest;
+import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
+import org.swiftboot.demo.dto.GoodsOrderRelListResult;
+import org.swiftboot.demo.dto.GoodsOrderRelResult;
+import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
+import org.swiftboot.web.request.IdListRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -24,7 +24,7 @@ public interface GoodsOrderRelService {
      * @param cmd
      * @return
      */
-    GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateCommand cmd);
+    GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateRequest cmd);
 
     /**
      * 保存对商品订单关系的修改
@@ -32,7 +32,7 @@ public interface GoodsOrderRelService {
      * @param cmd
      * @return
      */
-    GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveCommand cmd);
+    GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveRequest cmd);
 
     /**
      * 逻辑删除商品订单关系
@@ -46,14 +46,14 @@ public interface GoodsOrderRelService {
      *
      * @param cmd
      */
-    void deleteGoodsOrderRelList(IdListCommand cmd);
+    void deleteGoodsOrderRelList(IdListRequest request);
 
     /**
      * 逻辑删除商品订单关系
      *
      * @param cmd
      */
-    void deleteGoodsOrderRel(GoodsOrderRelDelPurgeCommand cmd);
+    void deleteGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd);
 
     /**
      * 永久删除商品订单关系
@@ -67,14 +67,14 @@ public interface GoodsOrderRelService {
      *
      * @param cmd
      */
-    void purgeGoodsOrderRelList(IdListCommand cmd);
+    void purgeGoodsOrderRelList(IdListRequest request);
 
     /**
      * 永久删除商品订单关系
      *
      * @param cmd
      */
-    void purgeGoodsOrderRel(GoodsOrderRelDelPurgeCommand cmd);
+    void purgeGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd);
 
     /**
      * 查询商品订单关系

@@ -1,22 +1,22 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.model.dao.OrderDetailDao;
+import org.swiftboot.demo.repository.OrderDetailDao;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.demo.request.OrderCreateCommand;
-import org.swiftboot.demo.request.OrderSaveCommand;
-import org.swiftboot.demo.model.dao.OrderDao;
+import org.swiftboot.demo.request.OrderCreateRequest;
+import org.swiftboot.demo.request.OrderSaveRequest;
+import org.swiftboot.demo.repository.OrderDao;
 import org.swiftboot.demo.model.entity.OrderEntity;
-import org.swiftboot.demo.result.OrderCreateResult;
-import org.swiftboot.demo.result.OrderListResult;
-import org.swiftboot.demo.result.OrderResult;
-import org.swiftboot.demo.result.OrderSaveResult;
+import org.swiftboot.demo.dto.OrderCreateResult;
+import org.swiftboot.demo.dto.OrderListResult;
+import org.swiftboot.demo.dto.OrderResult;
+import org.swiftboot.demo.dto.OrderSaveResult;
 import org.swiftboot.demo.service.OrderService;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.web.request.IdListRequest;
 
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityManager;
@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderCreateResult createOrder(OrderCreateCommand cmd) {
+    public OrderCreateResult createOrder(OrderCreateRequest cmd) {
         OrderEntity p = cmd.createEntity();
         p.setUserId(cmd.getUserId()); // call explicitly for the field COULD be different.
         OrderEntity saved = orderDao.save(p);
@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderSaveResult saveOrder(OrderSaveCommand cmd) {
+    public OrderSaveResult saveOrder(OrderSaveRequest cmd) {
         OrderSaveResult ret = new OrderSaveResult();
         Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
         if (optEntity.isPresent()) {
@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
      * @param cmd
      */
     @Override
-    public void deleteOrderList(IdListCommand cmd) {
+    public void deleteOrderList(IdListRequest request) {
         List<OrderEntity> entities = orderDao.findAllByIdIn(cmd.getIds());
         for (OrderEntity entity : entities) {
             entity.setIsDelete(true);
@@ -130,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
      * @param cmd
      */
     @Override
-    public void purgeOrderList(IdListCommand cmd) {
+    public void purgeOrderList(IdListRequest request) {
         List<OrderEntity> entities = orderDao.findAllByIdIn(cmd.getIds());
         for (OrderEntity entity : entities) {
             orderDao.deleteById(entity.getId());

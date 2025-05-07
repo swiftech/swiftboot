@@ -1,9 +1,9 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.OrderWithDetailCreateCommand;
-import org.swiftboot.demo.request.OrderWithDetailSaveCommand;
-import org.swiftboot.demo.result.OrderCreateResult;
-import org.swiftboot.demo.result.OrderSaveResult;
+import org.swiftboot.demo.request.OrderWithDetailCreateRequest;
+import org.swiftboot.demo.request.OrderWithDetailSaveRequest;
+import org.swiftboot.demo.dto.OrderCreateResult;
+import org.swiftboot.demo.dto.OrderSaveResult;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -18,10 +18,10 @@ public interface OrderDetailRelationService {
      * @param cmd
      * @return
      */
-    OrderCreateResult createOrderWithDetail(OrderWithDetailCreateCommand cmd);
+    OrderCreateResult createOrderWithDetail(OrderWithDetailCreateRequest cmd);
 
 
-    OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveCommand cmd);
+    OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveRequest cmd);
 
-    OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveCommand cmd);
+    OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveRequest cmd);
 }

@@ -1,7 +1,7 @@
 package org.swiftboot.demo.controller;
 
 import jakarta.validation.Valid;
-import org.swiftboot.demo.request.ValidationCommand;
+import org.swiftboot.demo.request.ValidationRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.web.dto.HttpResponse;
+import org.swiftboot.web.response.Response;
 
 
 /**
@@ -25,8 +25,8 @@ public class ValidationController {
     @RequestMapping(value = "phone_no", method = RequestMethod.POST)
     public
     @ResponseBody
-    HttpResponse<Void> testPhoneNo(@Valid @RequestBody ValidationCommand command) {
-        log.info(command.getPhoneNo());
-        return new HttpResponse<>();
+    Response<Void> testPhoneNo(@Valid @RequestBody ValidationRequest request) {
+        log.info(request.getPhoneNo());
+        return new Response<>();
     }
 }

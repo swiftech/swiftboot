@@ -1,11 +1,11 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.AdminUserCreateCommand;
-import org.swiftboot.demo.request.AdminUserSaveCommand;
-import org.swiftboot.demo.request.AdminUserSigninCommand;
-import org.swiftboot.demo.request.AdminUserSignoutCommand;
-import org.swiftboot.demo.result.*;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.demo.request.AdminUserCreateRequest;
+import org.swiftboot.demo.request.AdminUserSaveRequest;
+import org.swiftboot.demo.request.AdminUserSigninRequest;
+import org.swiftboot.demo.request.AdminUserSignoutRequest;
+import org.swiftboot.demo.dto.*;
+import org.swiftboot.web.request.IdListRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -22,7 +22,7 @@ public interface AdminUserService {
      * @param command
      * @return
      */
-    AdminUserSigninResult adminUserSignin(AdminUserSigninCommand command);
+    AdminUserSigninResult adminUserSignin(AdminUserSigninRequest command);
 
     /**
      * Admin user signin
@@ -30,7 +30,7 @@ public interface AdminUserService {
      * @param command
      * @return
      */
-    AdminUserSignoutResult adminUserSignout(AdminUserSignoutCommand command);
+    AdminUserSignoutResult adminUserSignout(AdminUserSignoutRequest command);
 
     /**
      * 创建管理员
@@ -38,7 +38,7 @@ public interface AdminUserService {
      * @param cmd
      * @return
      */
-    AdminUserCreateResult createAdminUser(AdminUserCreateCommand cmd);
+    AdminUserCreateResult createAdminUser(AdminUserCreateRequest cmd);
 
     /**
      * 保存对管理员的修改
@@ -46,7 +46,7 @@ public interface AdminUserService {
      * @param cmd
      * @return
      */
-    AdminUserSaveResult saveAdminUser(AdminUserSaveCommand cmd);
+    AdminUserSaveResult saveAdminUser(AdminUserSaveRequest cmd);
 
     /**
      * 逻辑删除管理员
@@ -60,7 +60,7 @@ public interface AdminUserService {
      *
      * @param cmd
      */
-    void deleteAdminUserList(IdListCommand cmd);
+    void deleteAdminUserList(IdListRequest request);
 
 
     /**
@@ -75,7 +75,7 @@ public interface AdminUserService {
      *
      * @param cmd
      */
-    void purgeAdminUserList(IdListCommand cmd);
+    void purgeAdminUserList(IdListRequest request);
 
 
     /**

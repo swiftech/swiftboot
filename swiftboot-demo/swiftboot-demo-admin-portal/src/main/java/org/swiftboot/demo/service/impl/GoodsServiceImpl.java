@@ -1,14 +1,14 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.request.GoodsCreateCommand;
-import org.swiftboot.demo.request.GoodsSaveCommand;
-import org.swiftboot.demo.request.GoodsWithDetailCreateCommand;
-import org.swiftboot.demo.model.dao.GoodsDao;
+import org.swiftboot.demo.request.GoodsCreateRequest;
+import org.swiftboot.demo.request.GoodsSaveRequest;
+import org.swiftboot.demo.request.GoodsWithDetailCreateRequest;
+import org.swiftboot.demo.repository.GoodsDao;
 import org.swiftboot.demo.model.entity.GoodsEntity;
-import org.swiftboot.demo.result.GoodsCreateResult;
-import org.swiftboot.demo.result.GoodsListResult;
-import org.swiftboot.demo.result.GoodsResult;
-import org.swiftboot.demo.result.GoodsSaveResult;
+import org.swiftboot.demo.dto.GoodsCreateResult;
+import org.swiftboot.demo.dto.GoodsListResult;
+import org.swiftboot.demo.dto.GoodsResult;
+import org.swiftboot.demo.dto.GoodsSaveResult;
 import org.swiftboot.demo.service.GoodsService;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,9 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.web.request.IdListRequest;
 import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.exception.ErrorCodeSupport;
+import org.swiftboot.web.response.ResponseCode;
 
 import jakarta.annotation.Resource;
 import java.util.List;
@@ -45,7 +45,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public GoodsCreateResult createGoods(GoodsCreateCommand cmd) {
+    public GoodsCreateResult createGoods(GoodsCreateRequest cmd) {
         GoodsEntity p = cmd.createEntity();
         GoodsEntity saved = goodsDao.save(p);
         log.debug("创建商品: " + saved.getId());
@@ -53,23 +53,23 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public GoodsCreateResult createWithException(GoodsCreateCommand cmd) {
+    public GoodsCreateResult createWithException(GoodsCreateRequest cmd) {
         GoodsEntity p1 = cmd.createEntity();
         goodsDao.save(p1);
         log.debug("创建商品: " + p1.getId());
         if (true) {
             if (RandomUtils.nextBoolean()) {
-                throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR);
+                throw new ErrMessageException(ResponseCode.CODE_SYS_ERR);
             }
             else {
-                throw new ErrMessageException(ErrorCodeSupport.CODE_SYS_ERR, "自定义错误消息");
+                throw new ErrMessageException(ResponseCode.CODE_SYS_ERR, "自定义错误消息");
             }
         }
         return new GoodsCreateResult(p1.getId());
     }
 
     @Override
-    public GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateCommand cmd) {
+    public GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateRequest cmd) {
         GoodsEntity entity = cmd.createEntity();
         GoodsEntity saved = goodsDao.save(entity);
         log.debug("创建商品: " + saved.getId());
@@ -83,7 +83,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public GoodsSaveResult saveGoods(GoodsSaveCommand cmd) {
+    public GoodsSaveResult saveGoods(GoodsSaveRequest cmd) {
         GoodsSaveResult ret = new GoodsSaveResult();
         Optional<GoodsEntity> optEntity = goodsDao.findById(cmd.getId());
         if (optEntity.isPresent()) {
@@ -119,7 +119,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @param cmd
      */
     @Override
-    public void deleteGoodsList(IdListCommand cmd) {
+    public void deleteGoodsList(IdListRequest request) {
         List<GoodsEntity> entities = goodsDao.findAllByIdIn(cmd.getIds());
         for (GoodsEntity entity : entities) {
             entity.setIsDelete(true);
@@ -150,7 +150,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @param cmd
      */
     @Override
-    public void purgeGoodsList(IdListCommand cmd) {
+    public void purgeGoodsList(IdListRequest request) {
         List<GoodsEntity> entities = goodsDao.findAllByIdIn(cmd.getIds());
         for (GoodsEntity entity : entities) {
             goodsDao.deleteById(entity.getId());

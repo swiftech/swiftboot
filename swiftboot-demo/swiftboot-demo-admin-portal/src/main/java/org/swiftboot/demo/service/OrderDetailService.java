@@ -1,12 +1,12 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.OrderDetailCreateCommand;
-import org.swiftboot.demo.request.OrderDetailSaveCommand;
-import org.swiftboot.demo.result.OrderDetailCreateResult;
-import org.swiftboot.demo.result.OrderDetailListResult;
-import org.swiftboot.demo.result.OrderDetailResult;
-import org.swiftboot.demo.result.OrderDetailSaveResult;
-import org.swiftboot.web.request.IdListCommand;
+import org.swiftboot.demo.request.OrderDetailCreateRequest;
+import org.swiftboot.demo.request.OrderDetailSaveRequest;
+import org.swiftboot.demo.dto.OrderDetailCreateResult;
+import org.swiftboot.demo.dto.OrderDetailListResult;
+import org.swiftboot.demo.dto.OrderDetailResult;
+import org.swiftboot.demo.dto.OrderDetailSaveResult;
+import org.swiftboot.web.request.IdListRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -23,7 +23,7 @@ public interface OrderDetailService {
      * @param cmd
      * @return
      */
-    OrderDetailCreateResult createOrderDetail(OrderDetailCreateCommand cmd);
+    OrderDetailCreateResult createOrderDetail(OrderDetailCreateRequest cmd);
 
     /**
      * 保存对订单明细的修改
@@ -31,7 +31,7 @@ public interface OrderDetailService {
      * @param cmd
      * @return
      */
-    OrderDetailSaveResult saveOrderDetail(OrderDetailSaveCommand cmd);
+    OrderDetailSaveResult saveOrderDetail(OrderDetailSaveRequest cmd);
 
     /**
      * 逻辑删除订单明细
@@ -45,7 +45,7 @@ public interface OrderDetailService {
      *
      * @param cmd
      */
-    void deleteOrderDetailList(IdListCommand cmd);
+    void deleteOrderDetailList(IdListRequest request);
 
 
     /**
@@ -60,7 +60,7 @@ public interface OrderDetailService {
      *
      * @param cmd
      */
-    void purgeOrderDetailList(IdListCommand cmd);
+    void purgeOrderDetailList(IdListRequest request);
 
 
     /**
