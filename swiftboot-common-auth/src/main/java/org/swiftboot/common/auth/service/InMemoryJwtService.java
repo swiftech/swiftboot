@@ -34,7 +34,7 @@ public class InMemoryJwtService implements JwtService {
     public void saveJwtAuthentication(JwtAuthentication jwtAuthentication) {
         if (jwtConfig.isRefreshRevokeType()) {
             if (jwtAuthentication.getRefreshToken() == null) {
-                throw new IllegalArgumentException("No refresh token provided.");
+                throw new IllegalArgumentException("revokeType is set to 'refresh' but no refresh token provided.");
             }
             refreshTokenMap.put(jwtAuthentication.getRefreshToken().tokenValue(), jwtAuthentication);
         }
@@ -51,7 +51,7 @@ public class InMemoryJwtService implements JwtService {
         JwtAuthentication jwtAuthentication = new JwtAuthentication(accessToken, refreshToken);
         if (jwtConfig.isRefreshRevokeType()) {
             if (jwtAuthentication.getRefreshToken() == null) {
-                throw new IllegalArgumentException("No refresh token provided.");
+                throw new IllegalArgumentException("revokeType is set to 'refresh' but no refresh token provided.");
             }
             refreshTokenMap.put(refreshToken.tokenValue(), jwtAuthentication);
         }
@@ -68,7 +68,7 @@ public class InMemoryJwtService implements JwtService {
         JwtAuthentication jwtAuthentication = new JwtAuthentication(accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt);
         if (jwtConfig.isRefreshRevokeType()) {
             if (jwtAuthentication.getRefreshToken() == null) {
-                throw new IllegalArgumentException("No refresh token provided.");
+                throw new IllegalArgumentException("revokeType is set to 'refresh' but no refresh token provided.");
             }
             refreshTokenMap.put(refreshToken, jwtAuthentication);
             if (log.isInfoEnabled())

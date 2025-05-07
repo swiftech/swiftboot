@@ -8,7 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 public abstract class BaseAuthDto {
 
-    @Schema(description = "Access Token, optional if using Cookie under Session mode", example = "772eb2add9b64e40972468c779b3b952")
+    /**
+     * optional if using Cookie under Session mode
+     */
+    @Schema(description = "Access Token", example = "772eb2add9b64e40972468c779b3b952")
     @JsonProperty(value = "access_token")
     private String accessToken;
 

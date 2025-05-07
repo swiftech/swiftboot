@@ -114,6 +114,9 @@ public class JwtTokenProvider {
     }
 
     private Key key() {
+        if (StringUtils.isBlank(jwtConfig.getSecret())) {
+            throw new RuntimeException("Secret is required to generate access token");
+        }
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()
         ));
     }

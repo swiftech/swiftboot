@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
@@ -30,7 +28,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  *
  * @author swiftech
  */
-@Order(Ordered.LOWEST_PRECEDENCE)
 public class SessionAuthFilter extends BaseAuthFilter {
 
     private static final Logger log = LoggerFactory.getLogger(SessionAuthFilter.class);
@@ -47,7 +44,7 @@ public class SessionAuthFilter extends BaseAuthFilter {
                                     FilterChain filterChain) throws IOException {
 
         if (log.isDebugEnabled()) {
-            log.debug(String.valueOf(request.getRequestURL()));
+            log.debug("do auth check for: %s".formatted(request.getRequestURI()));
             Enumeration<String> headerNames = request.getHeaderNames();
             while (headerNames.hasMoreElements()) {
                 String key = headerNames.nextElement();

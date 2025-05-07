@@ -1,6 +1,5 @@
 swiftboot:
   auth:
-    enabled: true
     authType: session
     tokenKey: access_token
     passwordSalt: 74b62b0ae8dfca1d88d8a41bd

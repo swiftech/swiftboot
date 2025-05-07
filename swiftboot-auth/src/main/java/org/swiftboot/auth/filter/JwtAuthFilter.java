@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -21,7 +19,6 @@ import java.io.IOException;
 /**
  * @since 3.0.0
  */
-@Order(Ordered.LOWEST_PRECEDENCE)
 public class JwtAuthFilter extends BaseAuthFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
@@ -31,6 +28,7 @@ public class JwtAuthFilter extends BaseAuthFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (log.isDebugEnabled()) log.debug("do auth check for: %s".formatted(request.getRequestURI()));
         // Get JWT token from HTTP request
         String token = getTokenFromRequest(request);
         // Validate Token
