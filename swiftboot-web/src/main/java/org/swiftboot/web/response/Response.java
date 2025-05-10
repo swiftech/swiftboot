@@ -24,7 +24,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 public class Response<T> implements Serializable {
 
     /**
-     * Create response builder with inner data type.
+     * Create response builder with user defined data type.
      *
      * @param clazz
      * @return
@@ -35,7 +35,7 @@ public class Response<T> implements Serializable {
     }
 
     /**
-     * Create response builder with Void data type.
+     * Create response builder with {@link Void} data type.
      *
      * @return
      */
@@ -64,7 +64,7 @@ public class Response<T> implements Serializable {
     /**
      * 返回的对象
      */
-    @Schema(description = "Result data object")
+    @Schema(description = "Response data object")
     protected T data;
 
     public Response() {

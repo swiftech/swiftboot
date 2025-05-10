@@ -3,7 +3,6 @@ package org.swiftboot.web.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.data.model.entity.BaseEntity;
 import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.Info;
@@ -33,7 +32,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
      * 按照返回值类型创建返回值对象，并从实体对象填充返回值
      *
      * @param dtoClass 返回对象类型
-     * @param entity      实体对象
+     * @param entity   实体对象
      * @param <T>
      * @return
      */
@@ -90,20 +89,20 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
          * 先处理一对多关联（保证ID属性先被处理，后续处理时略过这些字段）
          */
         List<String> ignoredFieldNameList = new LinkedList<>();// 需要忽略的目标属性名称
-        List<Field> fieldsByType = BeanUtils.getDeclaredFieldsByType(entity, BaseEntity.class);
+        List<Field> fieldsByType = BeanUtils.getDeclaredFieldsByType(entity, IdPersistable.class);
         for (Field srcField : fieldsByType) {
-            String relationFiledNameInDtoClass = srcField.getName() + "Id";
+            String relationFieldNameInDtoClass = srcField.getName() + "Id";
             try {
-                Field targetField = dto.getClass().getDeclaredField(relationFiledNameInDtoClass);
+                Field targetField = dto.getClass().getDeclaredField(relationFieldNameInDtoClass);
                 if (targetField.getAnnotation(JsonIgnore.class) != null
                         || targetField.getAnnotation(PopulateIgnore.class) != null) {
                     continue;
                 }
 
-                BaseEntity parentEntity = (BaseEntity) BeanUtils.forceGetProperty(entity, srcField);
+                IdPersistable parentEntity = (IdPersistable) BeanUtils.forceGetProperty(entity, srcField);
                 if (parentEntity != null) {
-                    BeanUtils.forceSetProperty(dto, relationFiledNameInDtoClass, parentEntity.getId());
-                    ignoredFieldNameList.add(relationFiledNameInDtoClass); // 记录目标属性名称
+                    BeanUtils.forceSetProperty(dto, relationFieldNameInDtoClass, parentEntity.getId());
+                    ignoredFieldNameList.add(relationFieldNameInDtoClass); // 记录目标属性名称
                 }
             } catch (Exception e) {
                 // 忽略处理
@@ -137,10 +136,8 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
             Object subEntity = BeanUtils.forceGetProperty(entity, srcField);
             if (subEntity instanceof IdPersistable) {
                 Class subDtoClass = (Class) targetField.getGenericType();
-                if (subDtoClass != null) {
-                    BasePopulateDto<E> subDto = createDto(subDtoClass, (IdPersistable) subEntity);
-                    BeanUtils.forceSetProperty(dto, targetField, subDto);
-                }
+                BasePopulateDto<E> subDto = createDto(subDtoClass, (IdPersistable) subEntity);
+                BeanUtils.forceSetProperty(dto, targetField, subDto);
             }
         }
 
@@ -159,7 +156,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                 e.printStackTrace();
                 throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entity.getClass(), targetField.getName()));
             }
-            // unlock
+            // unlock if un-accessible
             boolean accessible = targetField.isAccessible();
             targetField.setAccessible(true);
             // 处理集合类属性
@@ -168,31 +165,31 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                 try {
                     Type[] actualTypeArguments = ((ParameterizedType) targetField.getGenericType()).getActualTypeArguments();
                     if (actualTypeArguments.length > 0) {
-                        Collection srcCollection = (Collection) BeanUtils.forceGetProperty(entity, srcField.getName());
-                        if (srcCollection != null && !srcCollection.isEmpty()) {
-                            Collection targetCollection = (Collection) BeanUtils.forceGetProperty(dto, targetField.getName());
-                            Class elementClass = (Class) actualTypeArguments[0];
-                            if (targetCollection == null) {
+                        Collection<?> subEntities = (Collection<?>) BeanUtils.forceGetProperty(entity, srcField.getName());
+                        if (subEntities != null && !subEntities.isEmpty()) {
+                            Collection subDtos = (Collection) BeanUtils.forceGetProperty(dto, targetField.getName());
+                            Class elementClass = (Class) actualTypeArguments[0];// target element type
+                            if (subDtos == null) {
                                 if (Set.class.isAssignableFrom(targetField.getType())) {
                                     // 如果集合为 TreeSet 并且其中的元素的类型实现了 Comparable 接口，那么返回 TreeSet
                                     if (TreeSet.class.isAssignableFrom(targetField.getType())
                                             && Comparable.class.isAssignableFrom((Class<?>) elementClass)) {
-                                        targetCollection = new TreeSet<>();
+                                        subDtos = new TreeSet<>();
                                     }
                                     else {
-                                        targetCollection = new HashSet<>();
+                                        subDtos = new HashSet<>();
                                     }
                                 }
                                 else if (List.class.isAssignableFrom(targetField.getType())) {
-                                    targetCollection = new LinkedList<>();
+                                    subDtos = new LinkedList<>();
                                 }
-                                targetField.set(dto, targetCollection);
+                                targetField.set(dto, subDtos);
                             }
 
-                            for (Object subEntity : srcCollection) {
-                                if (subEntity instanceof IdPersistable) {
-                                    BasePopulateDto<E> subDto = createDto(elementClass, (IdPersistable) subEntity);
-                                    targetCollection.add(subDto);
+                            for (Object subEntity : subEntities) {
+                                if (subEntity instanceof IdPersistable subPersistable) {
+                                    BasePopulateDto<E> subDto = createDto(elementClass, subPersistable);
+                                    subDtos.add(subDto);
                                 }
                             }
                         }
@@ -202,6 +199,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                     throw new RuntimeException(Info.get(BasePopulateDto.class, R.POPULATE_COLLECTION_FAIL1, srcField.getName()));
                 }
             }
+            // 处理其他非集合类型
             else {
                 try {
                     Object value = BeanUtils.forceGetProperty(entity, srcField.getName());
