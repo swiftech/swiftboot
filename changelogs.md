@@ -1,23 +1,39 @@
 v3.0.0
-* `swiftboot-shiro` module is removed, which means Shiro is no longer supported.
-* `swiftboot-security` is introduced with Spring Security support.
-* new `swiftboot-common-auth` module to share similar classes between `swiftboot-auth` and `swiftboot-security`.
+* New Modules:
+  * `[swiftboot-security]` is introduced with Spring Security support.
+  * new `swiftboot-common-auth` module to share similar classes between `swiftboot-auth` and `swiftboot-security`.
+* Deprecated Modules; 
+  * `[swiftboot-shiro]` module is removed, which means Shiro is no longer supported.
+* New Features
+  * `[swiftboot-web]`: allow `BasePopulateDto` to include or exclude related DTOs during populating from entities.
+
+v2.4.10
+* fix: potential memory leak from ClasspathResourceUtils
+* update dependencies.
+
+v2.4.9
+* `[utils]`: new utils methods to join array or list of strings ignoring the null or the blank strings.
+* update dependencies.
+* 
+v2.4.8
+* `[collections]`: add `findAncestor()` to Node class
+* `[utils]`: add `removeQuotes()` to `TextUtils` class
 
 v2.4.7
-* `[utils]` add getPreferenceAlias() methods to PreferenceManager for migrating preferences.
+* `[utils]` add `getPreferenceAlias()` methods to PreferenceManager for migrating preferences.
 
 v2.4.6
-* `[utils]`: fix PathUtils.isParentFolder doesn't work well;
+* `[utils]`: fix `PathUtils.isParentFolder` doesn't work well;
 * update dependencies.
 
 v2.4.5
-* `[utils]`: add new PathUtils, UrlUtils classes, and new method to ClasspathResourceUtils, SysUtils, EnvUtils, WordUtils.
+* `[utils]`: add new `PathUtils`, `UrlUtils` classes, and new method to `ClasspathResourceUtils`, `SysUtils`, `EnvUtils`, `WordUtils`.
 * `[collections]`: remove deprecated classes.
 * refactor for logger and update docs.
 
 v2.4.4.1
-* `[utils]`: add forceGetProperties(Object) and forceSetProperties(Object, Map) to BeanUtils.
-* `[utils]`: add getPreference(String) method to PreferenceManager
+* `[utils]`: add `forceGetProperties(Object)` and `forceSetProperties(Object, Map)` to `BeanUtils`.
+* `[utils]`: add `getPreference(String)` method to `PreferenceManager`
 
 v2.4.3
 * `[sheet]`: Fix exception when selecting sheet by name.
