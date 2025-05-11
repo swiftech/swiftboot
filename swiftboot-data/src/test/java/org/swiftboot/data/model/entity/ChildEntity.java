@@ -13,8 +13,10 @@ public class ChildEntity extends BaseLongTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID")
-    @JsonIgnore
     private ParentEntity parent;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private ToyEntity toy;
 
     @Column
     private String name;
@@ -37,6 +39,14 @@ public class ChildEntity extends BaseLongTimeEntity {
 
     public void setParent(ParentEntity parent) {
         this.parent = parent;
+    }
+
+    public ToyEntity getToy() {
+        return toy;
+    }
+
+    public void setToy(ToyEntity wife) {
+        this.toy = wife;
     }
 
     public String getName() {

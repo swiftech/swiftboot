@@ -13,8 +13,7 @@ import java.util.List;
 @Table(name = "UT_PARENT_TABLE")
 public class ParentEntity extends BaseLongTimeEntity implements Serializable {
     @Column
-    private
-    String name;
+    private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent", orphanRemoval = true)
     private
