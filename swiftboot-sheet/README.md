@@ -248,6 +248,6 @@ builder.sheet(0, "my first sheet")
 <dependency>
   <groupId>com.github.swiftech</groupId>
   <artifactId>swiftboot-sheet</artifactId>
-  <version>2.4.5</version>
+  <version>2.4.10</version>
 </dependency>
 ```

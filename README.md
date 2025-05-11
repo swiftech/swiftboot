@@ -20,98 +20,18 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 * 主键ID自动生成，字段自动填充机制。
 * 提供常见的服务（例如 Redis服务，用户认证等等），减少不必要的重复开发工作，关注核心业务逻辑。
 * 提供基本的用户认证（基于 Redis），可用于 Web 和移动应用的用户认证。
-* 提供基于 Shiro 框架的用户认证和授权，简化 Shiro 框架的使用。
+* 提供基于主流安全框架的用户认证和授权。
 * 表格数据模版化导入导出，支持 Excel, CSV。
 * 企业 Web 开发常用的工具类和集合类。
 
-### 模块
-
-##### 基础模块:
-
-* [swiftboot-web](swiftboot-web): 企业Web应用基础框架
-* [swiftboot-data](swiftboot-data): 数据访问层模块
-* [swiftboot-collections](swiftboot-collections): 企业应用集合类
-* [swiftboot-utils](swiftboot-utils): 企业应用工具类
-
-##### 扩展模块:
-
-* [swiftboot-service](swiftboot-service): 企业应用基础服务
-* [swiftboot-auth](swiftboot-auth): 用户认证服务
-* [swiftboot-shiro](swiftboot-shiro): 集成 Shiro 用户认证和鉴权
-* [swiftboot-sheet](swiftboot-sheet): 表格数据模版化导入导出（支持 Excel, CSV)
-* [swiftboot-fileconvert](swiftboot-fileconvert): 文档格式转换（开发中 development）
-
-##### Demo:
-
-* [swiftboot-demo](swiftboot-demo)：演示项目，可以作为脚手架快速搭建新项目
-
-
 ### 版本
 
-##### Stable: v2.3.1
-
-* `[utils]` Add CalcUtils for calculating.
-* `[utils]` Add support for Reader to IoUtils.
-* `[utils]` Add readAllAsString() method to BufferedIoUtils.
-* `[collections]` Improve the CollectionUtils.toLinkedList() method.
-* Dependencies update:
-  * SpringBoot 2.7.12
-  * SpringDataJPA 2.7.9
-  * Hibernate 5.6.14.Final
-  * Jedis 4.3.1
-  * Poi 5.2.3
-  * JSON 20220320
-  * etc.
-
-##### Unstable: v2.4.8
-
-* add `findAncestor()` to Node class
-* add `removeQuotes()` to `TextUtils` class
+##### 稳定版: v2.4.10
+[v2.md](docs/v2.md)
 
 
-[完整更新记录](changelogs)
-
-### 概览
-
-* 入参自动填充
-  * 从接口的 Command 对象创建 Entity 实例并自动填充传递进来的值：
+##### 不稳定版: v3.0.0
+[v3.md](docs/v3.md)
 
 
-  ```java
-  OrderEntity p = orderCommand.createEntity();
-  orderRepository.save(p);
-  ```
-  * 编辑实体对象时调用 `populateEntity()` 方法，此实体类一对一、一对多关联的实体类（集合）也会被自动创建和填充 ：
-
-
-  ```java
-  orderEntity.getDetails().clear();
-  orderCommand.populateEntity(orderEntity);
-  orderRepository.save(p);
-  ```
-
-> 一对一，一对多关联的实体类（集合）也会被自动创建和填充
-> 详细参考： [swiftboot-web](swiftboot-web)
-
-* 从 Entity 实例创建返回值对象并自动填充值：
-
-
-  ```java
-  OrderResult r = OrderResult.createResult(OrderResult.class, orderEntity);
-  ```
-
-  > 一对一或一对多关联的实体类（集合）也会自动填充返回值对象的关联类（集合）
-  > 详细参考： [swiftboot-web](swiftboot-web)
-
-* 字段自动填充 
-  * ID 自动填充，创建 Entity 实例时无需调用生成器生成 ID，SwiftBoot 会自动创建并填充。 
-  * 全局 ID 生成器，生成如 `order20191231000850307uxplsioasi` 的长度为 32 字节的全局ID，比 UUID 有更好的插入性能且易于识别出所对应的业务对象以及创建时间。
-  * 保存实体类时创建时间和修改时间自动填充。
-
-> 详细参考： [swiftboot-data](swiftboot-data)
-
-* 认证和授权：
-    * 如果仅需要认证机制，那么集成 [swiftboot-auth](swiftboot-auth) 模块
-    * 如果不仅需要认证，还需要授权，那么集成 [swiftboot-shiro](swiftboot-shiro) 模块
-
-  > 两个模块不能同时启用，且他们的认证实现机制不同
+[完整更新记录](changelogs.md)
