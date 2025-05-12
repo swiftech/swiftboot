@@ -41,7 +41,7 @@ public class ArrayUtils {
      * @param clazz
      * @return
      */
-    public static Object getFirstMatch(Object[] array, Class clazz) {
+    public static Object getFirstMatch(Object[] array, Class<?> clazz) {
         if (array == null || clazz == null) {
             return null;
         }

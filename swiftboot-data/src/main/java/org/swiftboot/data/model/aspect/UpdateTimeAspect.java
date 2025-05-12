@@ -61,12 +61,12 @@ public class UpdateTimeAspect {
         }
 
         for (Object arg : args) {
-            if (arg instanceof TimePersistable timePersistable) {
+            if (arg instanceof TimePersistable<?> timePersistable) {
                 this.tryToSetUpdateTime(timePersistable);
             }
             else if (arg instanceof Iterable iterable) {
                 for (Object entity : iterable) {
-                    if (entity instanceof TimePersistable subTimePersistable) {
+                    if (entity instanceof TimePersistable<?> subTimePersistable) {
                         this.tryToSetUpdateTime(subTimePersistable);
                     }
                 }
@@ -95,7 +95,7 @@ public class UpdateTimeAspect {
         Type type = parameterizedType.getActualTypeArguments()[0];
         if (log.isTraceEnabled()) log.trace(String.valueOf(type));
         if (type == Long.class) {
-            return Long.valueOf(System.currentTimeMillis());
+            return System.currentTimeMillis();
         }
         else if (type == Date.class) {
             return new Date();

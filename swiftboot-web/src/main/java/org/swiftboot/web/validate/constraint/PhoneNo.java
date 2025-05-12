@@ -24,6 +24,11 @@ public @interface PhoneNo {
 
     String message() default "{org.swiftboot.constraints.PhoneNo.message}";
 
+    /**
+     * The prefix of the phone NO.
+     *
+     * @return
+     */
     String prefix();
 
     Class<?>[] groups() default {};

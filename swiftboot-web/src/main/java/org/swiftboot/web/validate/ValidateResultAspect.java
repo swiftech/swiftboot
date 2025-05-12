@@ -45,19 +45,25 @@ public class ValidateResultAspect {
     public void process(JoinPoint joinPoint) {
         log.trace("validate arguments ...");
         Object[] args = joinPoint.getArgs();
-        Object result = ArrayUtils.getFirstMatch(args, BindingResult.class);
-        if (result != null) {
-            BindingResult bindingResult = (BindingResult) result;
-            log.info(Objects.requireNonNull(bindingResult.getTarget()).toString());
-            List<ObjectError> allErrors = bindingResult.getAllErrors();
-            if (!allErrors.isEmpty()) {
-                ValidationResult validationResult =
-                        ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
-                throw new ValidationException("Arguments validation failed", validationResult);
-            }
+
+        if (args.length == 0 || org.apache.commons.lang3.ArrayUtils.contains(args, null)) {
+            log.debug("No arguments to be validated.");
         }
         else {
-            log.debug("No arguments to be validated.");
+            Object result = ArrayUtils.getFirstMatch(args, BindingResult.class);
+            if (result == null) {
+                log.debug("No arguments to be validated.");
+            }
+            else {
+                BindingResult bindingResult = (BindingResult) result;
+                log.info(Objects.requireNonNull(bindingResult.getTarget()).toString());
+                List<ObjectError> allErrors = bindingResult.getAllErrors();
+                if (!allErrors.isEmpty()) {
+                    ValidationResult validationResult =
+                            ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
+                    throw new ValidationException("Arguments validation failed", validationResult);
+                }
+            }
         }
     }
 

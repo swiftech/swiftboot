@@ -37,16 +37,15 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
      * @return
      */
     public static <T extends BasePopulateDto> T createDto(
-            Class<T> dtoClass,
-            IdPersistable entity) {
+            Class<T> dtoClass, IdPersistable entity) {
         return createDto(dtoClass, entity, true);
     }
 
     /**
      * 按照返回值类型创建返回值对象，并从实体对象填充返回值
      *
-     * @param dtoClass 返回对象类型
-     * @param entity   实体对象
+     * @param dtoClass        返回对象类型
+     * @param entity          实体对象
      * @param includeRelation 是否自动填充关联对象
      * @param <T>
      * @return
@@ -101,8 +100,8 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
      *
      * @param entity
      * @param dto
-     * @return
      * @param <E>
+     * @return
      */
     public static <E extends IdPersistable> BasePopulateDto<E> populateByEntity(E entity, BasePopulateDto<E> dto) {
         return populateByEntity(entity, dto, dto, true);
@@ -114,8 +113,8 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
      * @param entity
      * @param dto
      * @param includeRelation 是否自动填充关联对象
-     * @return
      * @param <E>
+     * @return
      */
     public static <E extends IdPersistable> BasePopulateDto<E> populateByEntity(E entity, BasePopulateDto<E> dto, boolean includeRelation) {
         return populateByEntity(entity, dto, dto, includeRelation);
