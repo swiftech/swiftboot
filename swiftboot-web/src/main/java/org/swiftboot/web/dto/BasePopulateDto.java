@@ -174,7 +174,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                     srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
-                    throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entity.getClass(), targetField.getName()));
+                    throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entity.getClass(), targetField.getName()), e);
                 }
 
 
@@ -216,7 +216,7 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                 srcField = BeanUtils.getDeclaredField(entity, targetField.getName());
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
-                throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entity.getClass(), targetField.getName()));
+                throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entity.getClass(), targetField.getName()), e);
             }
             // unlock if un-accessible
             boolean accessible = targetField.isAccessible();
@@ -269,17 +269,19 @@ public abstract class BasePopulateDto<E extends IdPersistable> implements Dto {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new RuntimeException(Info.get(BasePopulateDto.class, R.POPULATE_COLLECTION_FAIL1, srcField.getName()));
+                    throw new RuntimeException(Info.get(BasePopulateDto.class, R.POPULATE_COLLECTION_FAIL1, srcField.getName()), e);
                 }
             }
-            // 处理其他非集合类型
             else {
+                // 处理其他非集合类型以及非Dto类型（如果
                 try {
-                    Object value = BeanUtils.forceGetProperty(entity, srcField.getName());
-                    targetField.set(dto, value);
+                    if (!Dto.class.isAssignableFrom(targetField.getType())) {
+                        Object value = BeanUtils.forceGetProperty(entity, srcField.getName());
+                        targetField.set(dto, value);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
+                    throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()), e);
                 }
             }
             targetField.setAccessible(accessible);
