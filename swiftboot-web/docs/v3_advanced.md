@@ -1,16 +1,22 @@
 # SwiftBoot-Web 高级
 
 
+### 请求对象参数自动填充
 
-### 子集合的参数自动填充
+* 输入参数对象继承 `BasePopulateRequest`，并指定范型类型为对应的实体类的类型，例如 `BasePopulateRequest<OrderEntity>`。
+* 对于新增数据的操作，调用 `createEntity()` 方法即可实例化相对应的实体类，并把输入参数对象中所有名称对应的值填充到实体类中。对于用 `@OneToOne` 和 `@OneToMany` 注解标注的子类或者子集合也会被自动填充。
+* 对于修改数据的操作，查询出需要修改的实体类之后，调用 `populateEntity()` 方法将输入参数对象中所有名称对应的值填充到实体类中。 对于用 `@OneToOne` 和 `@OneToMany` 注解标注的子类或者子集合也会被自动填充。
 
-  对于编辑一个对象时的子集合的增删改查，无需对子对象分别进行各自的处理，只需要查询父实体并对其子实体集合执行 `clear()` 操作， 然后再调用 `populateEntity()` 将参数中的子集合填充至父实体中，SwiftBoot 会自动判断实体是否存在，如果已经存在则进行更新，如果不存在则新增，其余不在子集合中的实体都会被删除。
-  例如：
+
+#### 子集合的参数自动填充
+
+对于编辑一个对象时的子集合的增删改查，无需对子对象分别进行各自的处理，只需要查询父实体并对其子实体集合执行 `clear()` 操作， 然后再调用 `populateEntity()` 将参数中的子集合填充至父实体中，SwiftBoot 会自动判断实体是否存在，如果已经存在则进行更新，如果不存在则新增，其余不在子集合中的实体都会被删除。
+例如：
 
 
 父参数对象定义，包含子对象的集合：
   ```java
-  public class OrderSaveRequest extends BasePopulateRequest<OrderEntity> {
+  public class OrderRequest extends BasePopulateRequest<OrderEntity> {
     private List<OrderDetail> details;
   }
   ```
@@ -25,7 +31,7 @@
   ```java
   @Entity
   @Table(name = "DEMO_ORDER")
-  public class OrderEntity extends BaseEntity {
+  public class OrderEntity extends BaseIdEntity {
       @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order", orphanRemoval = true)
       private List<OrderDetailEntity> details;
   }
@@ -33,7 +39,7 @@
 
 实现业务逻辑：
   ```java
-  public void editOrder(OrderSaveRequest request) {
+  public void editOrder(OrderRequest request) {
     Optional<OrderEntity> optEntity = orderRepository.findById(request.getId());
     if (optEntity.isPresent()) {
         OrderEntity orderEntity = optEntity.get();
@@ -47,6 +53,14 @@
 以上代码实现简化了子集合的操作：
 * 无需直接操作子集合中的对象就能自动填充子实体。
 * 无需区别处理集合中删除、编辑和新增的子对象。
+
+
+### DTO 参数的自动填充
+* 返回值对象 DTO 通常要继承 `BasePopulateDto` 类就可以利用自动填充功能。如果需要避免继承关系获得更多的灵活性，DTO 类可以不继承 `BasePopulateDto` 但是必须实现 `PopulatableDto` 接口。
+* 对于继承 `BasePopulateDto` 的方式，在代码中直接实例化 DTO 实例，然后调用它的 `populateByEntity()` 方法进行填充。
+* 对于实现 `PopulatableDto` 方式，在需要创建 DTO 实例的地方调用 `PopulatableDto` 的静态方法 `createDto()` 即可实例化 DTO，并把将查询到的实体类中所有对应名称的值填充到输出对象中。
+* 如果实体类定义了一对一、一对多关联，那么 DTO 类也可以定义相应的关联关系（变量名相同），这样的关联对象也会被自动填充
+* 有时候虽然 DTO 对象之间定义了关联关系，但是你可能不希望在所有的场景下都自动的填充关联的对象，那么 `populateByEntity()` 方法提供了一个 `includeRelation` 可以覆盖默认的填充行为，只对当前 DTO 类的属性进行填充，而不会处理关联对象。
 
 
 ### 错误处理

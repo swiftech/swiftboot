@@ -42,7 +42,7 @@ public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extend
 
         List<T> list = new ArrayList<>();
         for (E entity : entities) {
-            T item = BasePopulateDto.createDto(itemClass, entity);
+            T item = PopulatableDto.createDto(itemClass, entity);
             list.add(item);
         }
         this.setItems(list);
@@ -69,7 +69,7 @@ public abstract class BasePopulateListDto<T extends BasePopulateDto<E>, E extend
 
         List<T> list = new ArrayList<>();
         for (E entity : entities) {
-            T item = BasePopulateDto.createDto(itemClass, entity);
+            T item = PopulatableDto.createDto(itemClass, entity);
             if (populateHandler != null) {
                 populateHandler.onPopulated(item, entity);
             }

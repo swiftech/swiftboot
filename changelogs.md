@@ -6,6 +6,8 @@ v3.0.0
   * `[swiftboot-shiro]` module is removed, which means Shiro is no longer supported.
 * New Features
   * `[swiftboot-web]`: allow `BasePopulateDto` to include or exclude related DTOs during populating from entities.
+  * `[swiftboot-web]`: handle DTO automatic populating by new interface `PopulatableDto` instead of class `BasePopulateDto`, so that
+  the DTOs would never inherit from a class but an interface, which gives more flexibility. All static methods are moved from `BasePopulateDto` to `PopulatableDto`.
 
 v2.4.10
 * fix: potential memory leak from ClasspathResourceUtils
