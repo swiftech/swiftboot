@@ -12,9 +12,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("spring.data.redis")
 public class RedisConfigBean {
 
-    private String host = "";
+    private String host = "localhost";
 
     private int port = 6379;
+
+    private String password = "";
 
 //    private String cluster = "localhost:6379";
 
@@ -34,7 +36,15 @@ public class RedisConfigBean {
         this.port = port;
     }
 
-//    public String getCluster() {
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    //    public String getCluster() {
 //        return cluster;
 //    }
 //

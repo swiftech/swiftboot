@@ -4,6 +4,7 @@ package org.swiftboot.service.service.impl;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.service.config.RedisConfigBean;
@@ -29,10 +30,6 @@ public class RedisServiceImpl implements RedisService {
 
     private JedisPool jedisPool;
 
-    private String redisHost = "localhost";
-
-    private int redisPort = 6379;
-
     @Resource
     SwiftbootServiceConfigBean swiftbootServiceConfigBean;
 
@@ -41,9 +38,14 @@ public class RedisServiceImpl implements RedisService {
 
     @PostConstruct
     public void init() {
-        redisHost = redisConfig.getHost();
-        redisPort = redisConfig.getPort();
-        jedisPool = new JedisPool(redisHost, redisPort == 0 ? 6379 : redisPort);
+        String redisHost = redisConfig.getHost();
+        int redisPort = redisConfig.getPort();
+        if (StringUtils.isBlank(redisConfig.getPassword())) {
+            jedisPool = new JedisPool(redisHost, redisPort == 0 ? 6379 : redisPort);
+        }
+        else {
+            jedisPool = new JedisPool(redisHost, redisPort == 0 ? 6379 : redisPort, "default", redisConfig.getPassword());
+        }
         log.info(String.format("Connected to Redis Server -> %s:%d", redisHost, redisPort));
     }
 

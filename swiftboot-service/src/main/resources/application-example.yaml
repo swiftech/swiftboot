@@ -1,8 +1,12 @@
-swiftboot:
-  service:
+spring:
+  data:
     redis:
       host: localhost
       port: 6379
+      password: changeme
+swiftboot:
+  service:
+    redis:
       cluster: localhost:6379
     captcha:
       expiresIn: 300

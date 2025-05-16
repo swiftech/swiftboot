@@ -20,7 +20,7 @@ import java.io.IOException;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
- * 用 Redis 实现会话（Session）控制，客户端采用 Jedis
+ * 用 Redis 实现会话（Session）控制，客户端采用 Spring Data 提供的 RedisTemplate.
  * 当部署集群时或多服务器时启用，非集群时使用 {@code SessionServiceImpl}
  *
  * @author swiftech
