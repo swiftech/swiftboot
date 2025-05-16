@@ -103,7 +103,7 @@ public class AppLoginController {
         signInDto.setLoginName(appUserEntity.getLoginName());
         signInDto.setAccessToken(session.getUserToken());
         signInDto.setExpiresAt(session.getExpireTime());
-        return new AuthenticatedResponse(signInDto, session);
+        return new AuthenticatedResponse<>(signInDto, session);
     }
 
     private AuthenticatedResponse<AppUserSignInDto, JwtAuthentication> createJwtResponse(AppUserEntity appUserEntity, JwtAuthentication jwtAuthentication) {

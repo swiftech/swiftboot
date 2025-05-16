@@ -26,7 +26,6 @@ import java.util.List;
  **/
 @Configuration
 @EnableConfigurationProperties
-@Order(2)
 @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "session")
 public class SwiftbootAuthSessionConfig implements WebMvcConfigurer {
 

@@ -44,9 +44,15 @@ public class JwtTokenProvider {
     }
 
     public AccessToken generateAccessToken(String userId, String userName, Map<String, Object> additions) {
-        if (additions == null) additions = new HashMap<>();
-        if (StringUtils.isNotBlank(userName)) additions.put(USERNAME_KEY, userName);
-        return this.generateAccessToken(userId, additions);
+        Map<String, Object> newAdditions;
+        if (additions != null) {
+            newAdditions = new HashMap<>(additions);
+        }
+        else {
+            newAdditions = new HashMap<>();
+        }
+        if (StringUtils.isNotBlank(userName)) newAdditions.put(USERNAME_KEY, userName);
+        return this.generateAccessToken(userId, newAdditions);
     }
 
     public AccessToken generateAccessToken(String userId, Map<String, Object> additions) {
@@ -88,19 +94,19 @@ public class JwtTokenProvider {
     }
 
     /**
-     * @deprecated
      * @param refreshToken
      * @return
+     * @deprecated
      */
     public AccessToken refreshAccessToken(String refreshToken) {
         return refreshAccessToken(refreshToken, null);
     }
 
     /**
-     * @deprecated
      * @param refreshToken
      * @param additions
      * @return
+     * @deprecated
      */
     public AccessToken refreshAccessToken(String refreshToken, Map<String, Object> additions) {
         if (!validateToken(refreshToken)) {

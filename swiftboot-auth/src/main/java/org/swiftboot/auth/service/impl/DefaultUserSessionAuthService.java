@@ -16,40 +16,50 @@ import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.ResponseCode;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
+ *
+ * @param <E> Type of user entity inherited from {@link UserPersistable}.
  * @author swiftech
  */
-public class DefaultUserSessionAuthService<T extends UserPersistable> implements UserAuthService<Session> {
+public class DefaultUserSessionAuthService<E extends UserPersistable> implements UserAuthService<Session> {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultUserSessionAuthService.class);
 
     @Resource
-    private UserAuthRepository<T> userAuthRepository;
+    protected UserAuthRepository<E> userAuthRepository;
 
     @Resource
-    private AuthConfigBean authConfig;
+    protected AuthConfigBean authConfig;
 
     @Override
     public Session userSignIn(String loginId, String loginPwd) {
+        return this.userSignIn(loginId, loginPwd, null);
+    }
+
+    @Override
+    public Session userSignIn(String loginId, String loginPwd, Map<String, Object> additions) {
         String encryptedPwd = PasswordUtils.createPassword(loginPwd, authConfig.getPasswordSalt());
-        Optional<T> optUser = userAuthRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
+        Optional<E> optUser = userAuthRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
-            T appUserEntity = optUser.get();
-            log.debug(appUserEntity.getId());
+            E userEntity = optUser.get();
+            log.debug(userEntity.getId());
             // session
             String token = IdUtils.makeID("usrtoken");
-            Session session = new SessionBuilder()
+            SessionBuilder sessionBuilder = new SessionBuilder()
                     .userToken(token)
-                    .userId(appUserEntity.getId())
-                    .userName(appUserEntity.getLoginName())
-                    .addition("login_time", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"))
-                    .createSession();
-            return session;
+                    .userId(userEntity.getId())
+                    .userName(userEntity.getLoginName())
+                    .addition("login_time", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
+            if (additions != null && !additions.isEmpty()) {
+                additions.forEach(sessionBuilder::addition);
+            }
+            return sessionBuilder.createSession();
         }
         else {
-            log.debug("Sign in failed for user: " + loginId);
+            log.debug("Sign in failed for user: %s".formatted(loginId));
             throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
         }
     }
@@ -61,7 +71,6 @@ public class DefaultUserSessionAuthService<T extends UserPersistable> implements
 
     @Override
     public LogoutResponse<String> userLogout(String accessToken) {
-        LogoutResponse<String> logoutResponse = new LogoutResponse<>(accessToken);
-        return logoutResponse;
+        return new LogoutResponse<>(accessToken);
     }
 }

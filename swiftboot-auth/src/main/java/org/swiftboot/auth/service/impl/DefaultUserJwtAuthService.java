@@ -18,36 +18,42 @@ import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.ResponseCode;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * @param <T> Type of user entity.
+ * @param <E> Type of user entity inherited from {@link UserPersistable}.
  * @since 3.0
  */
-public class DefaultUserJwtAuthService<T extends UserPersistable> implements UserAuthService<JwtAuthentication> {
+public class DefaultUserJwtAuthService<E extends UserPersistable> implements UserAuthService<JwtAuthentication> {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultUserJwtAuthService.class);
 
     @Resource
-    private UserAuthRepository<T> userAuthRepository;
+    protected UserAuthRepository<E> userAuthRepository;
 
     @Resource
-    private JwtTokenProvider jwtTokenProvider;
+    protected JwtTokenProvider jwtTokenProvider;
 
     @Resource
-    private JwtService jwtService;
+    protected JwtService jwtService;
 
     @Resource
-    private AuthConfigBean authConfig;
+    protected AuthConfigBean authConfig;
 
     @Override
     public JwtAuthentication userSignIn(String loginId, String loginPwd) {
+        return this.userSignIn(loginId, loginPwd, null);
+    }
+
+    @Override
+    public JwtAuthentication userSignIn(String loginId, String loginPwd, Map<String, Object> additions) {
         String encryptedPwd = PasswordUtils.createPassword(loginPwd, authConfig.getPasswordSalt());
-        Optional<T> optUser = userAuthRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
+        Optional<E> optUser = userAuthRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
-            T appUserEntity = optUser.get();
-            log.debug(appUserEntity.getId());
-            return this.generateTokens(appUserEntity);
+            E userEntity = optUser.get();
+            log.debug("Sign in user id: %s".formatted(userEntity.getId()));
+            return this.generateTokens(userEntity, additions);
         }
         else {
             log.warn("Sign in failed for user: %s".formatted(loginId));
@@ -57,7 +63,7 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
 
     @Override
     public JwtAuthentication refreshAccessToken(String refreshToken) {
-        // whether valid.
+        // validate refresh token
         if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
             throw new RuntimeException("Refresh Token is invalid");
         }
@@ -67,12 +73,12 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
         }
 
         String userId = jwtTokenProvider.getUserId(refreshToken);
-        Optional<T> byId = userAuthRepository.findById(userId);
+        Optional<E> byId = userAuthRepository.findById(userId);
         if (byId.isPresent()) {
-            T appUserEntity = byId.get();
+            E userEntity = byId.get();
 
             // generate new access token and refresh token
-            JwtAuthentication jwtAuthentication = this.generateTokens(appUserEntity);
+            JwtAuthentication jwtAuthentication = this.generateTokens(userEntity, null);
 
             // save new refresh token
             jwtService.saveJwtAuthentication(jwtAuthentication);
@@ -90,13 +96,12 @@ public class DefaultUserJwtAuthService<T extends UserPersistable> implements Use
 
     @Override
     public LogoutResponse<String> userLogout(String accessToken) {
-        LogoutResponse<String> response = new LogoutResponse(accessToken);
-        return response;
+        return new LogoutResponse<>(accessToken);
     }
 
-    private JwtAuthentication generateTokens(T appUserEntity) {
-        AccessToken accessToken = jwtTokenProvider.generateAccessToken(appUserEntity.getId(), appUserEntity.getLoginName());
-        RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(appUserEntity.getId());
+    protected JwtAuthentication generateTokens(E userEntity, Map<String, Object> additions) {
+        AccessToken accessToken = jwtTokenProvider.generateAccessToken(userEntity.getId(), userEntity.getLoginName(), additions);
+        RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getId());
         return new JwtAuthentication(accessToken, refreshToken);
     }
 

@@ -1,7 +1,10 @@
 package org.swiftboot.common.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.response.ResponseCode;
@@ -17,6 +20,20 @@ import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYP
  * @since 3.0
  */
 public abstract class BaseAuthFilter extends OncePerRequestFilter {
+
+    /**
+     * Be used for JWT
+     *
+     * @param request
+     * @return
+     */
+    protected String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
 
     /**
      * @param response

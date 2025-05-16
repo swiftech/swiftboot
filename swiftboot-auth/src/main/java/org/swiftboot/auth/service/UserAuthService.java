@@ -3,6 +3,8 @@ package org.swiftboot.auth.service;
 import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.Authenticated;
 
+import java.util.Map;
+
 /**
  * The authentication service for user login with user login id and password.
  * SwiftBoot provides 2 default implementation {@link org.swiftboot.auth.service.impl.DefaultUserJwtAuthService}
@@ -24,6 +26,8 @@ public interface UserAuthService<T extends Authenticated> {
      * @return
      */
     T userSignIn(String loginId, String loginPwd);
+
+    T userSignIn(String loginId, String loginPwd, Map<String, Object> additions);
 
     /**
      * Refresh the user's Access Token, Used only for JWT mode.

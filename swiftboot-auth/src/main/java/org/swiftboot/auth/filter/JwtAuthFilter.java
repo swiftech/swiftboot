@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.swiftboot.common.auth.JwtTokenProvider;
@@ -30,7 +29,7 @@ public class JwtAuthFilter extends BaseAuthFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (log.isDebugEnabled()) log.debug("do auth check for: %s".formatted(request.getRequestURI()));
         // Get JWT token from HTTP request
-        String token = getTokenFromRequest(request);
+        String token = super.getTokenFromRequest(request);
         // Validate Token
         try {
             if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
@@ -52,11 +51,4 @@ public class JwtAuthFilter extends BaseAuthFilter {
         }
     }
 
-    private String getTokenFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
 }
