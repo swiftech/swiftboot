@@ -17,6 +17,10 @@ public class SwiftBootWebConfigBean {
 
     private String formatPatternLocalTime = "HH:mm:ss";
 
+    private String formatPatternYearMonth = "yyyy-MM";
+
+    private String formatPatternMonthDay = "MM-dd";
+
     /**
      * 验证配置
      */
@@ -51,6 +55,22 @@ public class SwiftBootWebConfigBean {
 
     public void setFormatPatternLocalTime(String formatPatternLocalTime) {
         this.formatPatternLocalTime = formatPatternLocalTime;
+    }
+
+    public String getFormatPatternYearMonth() {
+        return formatPatternYearMonth;
+    }
+
+    public void setFormatPatternYearMonth(String formatPatternYearMonth) {
+        this.formatPatternYearMonth = formatPatternYearMonth;
+    }
+
+    public String getFormatPatternMonthDay() {
+        return formatPatternMonthDay;
+    }
+
+    public void setFormatPatternMonthDay(String formatPatternMonthDay) {
+        this.formatPatternMonthDay = formatPatternMonthDay;
     }
 
     public ValidationResultConfigBean getValidation() {

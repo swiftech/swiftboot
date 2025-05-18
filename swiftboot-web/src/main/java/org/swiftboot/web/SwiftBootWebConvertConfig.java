@@ -2,12 +2,8 @@ package org.swiftboot.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.*;
+import com.fasterxml.jackson.datatype.jsr310.ser.*;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.web.config.SwiftBootWebConfigBean;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -41,9 +35,13 @@ public class SwiftBootWebConvertConfig implements WebMvcConfigurer {
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalDateTime())));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalDate())));
         javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalTime())));
+        javaTimeModule.addSerializer(YearMonth.class, new YearMonthSerializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternYearMonth())));
+        javaTimeModule.addSerializer(MonthDay.class, new MonthDaySerializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternMonthDay())));
         javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalDateTime())));
         javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalDate())));
         javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalTime())));
+        javaTimeModule.addDeserializer(YearMonth.class, new YearMonthDeserializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternYearMonth())));
+        javaTimeModule.addDeserializer(MonthDay.class, new MonthDayDeserializer(DateTimeFormatter.ofPattern(configBean.getFormatPatternMonthDay())));
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setDateFormat(new SimpleDateFormat(configBean.getFormatPatternLocalDateTime()));

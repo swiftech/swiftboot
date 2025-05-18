@@ -177,8 +177,8 @@ public interface PopulatableDto<E extends IdPersistable> extends Dto {
                         BeanUtils.forceSetProperty(dto, targetField, oneDto);
                     }
                     else {
-                        if (log.isTraceEnabled()) log.trace("Loop for one, break it");
                         //break the loop
+                        if (log.isTraceEnabled()) log.trace("Loop for one, break it");
                     }
                 }
             }

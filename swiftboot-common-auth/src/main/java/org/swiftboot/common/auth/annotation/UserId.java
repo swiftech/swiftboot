@@ -9,6 +9,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author swiftech
+ * @see org.swiftboot.common.auth.service.JwtArgumentResolver
  * @since 2.1
  */
 @Target({ElementType.PARAMETER})
