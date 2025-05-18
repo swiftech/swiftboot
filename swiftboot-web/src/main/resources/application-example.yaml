@@ -22,6 +22,8 @@ swiftboot:
     formatPatternLocalDateTime: yyyy-MM-dd HH:mm:ss
     formatPatternLocalDate: yyyy-MM-dd
     formatPatternLocalTime: HH:mm:ss
+    formatPatternYearMonth: yyyy-MM
+    formatPatternMonthDay: MM-dd
   data:
     model:
       # 是否自动生成实体类的 ID

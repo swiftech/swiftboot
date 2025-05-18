@@ -60,7 +60,20 @@
 * 对于继承 `BasePopulateDto` 的方式，在代码中直接实例化 DTO 实例，然后调用它的 `populateByEntity()` 方法进行填充。
 * 对于实现 `PopulatableDto` 方式，在需要创建 DTO 实例的地方调用 `PopulatableDto` 的静态方法 `createDto()` 即可实例化 DTO，并把将查询到的实体类中所有对应名称的值填充到输出对象中。
 * 如果实体类定义了一对一、一对多关联，那么 DTO 类也可以定义相应的关联关系（变量名相同），这样的关联对象也会被自动填充
-* 有时候虽然 DTO 对象之间定义了关联关系，但是你可能不希望在所有的场景下都自动的填充关联的对象，那么 `populateByEntity()` 方法提供了一个 `includeRelation` 可以覆盖默认的填充行为，只对当前 DTO 类的属性进行填充，而不会处理关联对象。
+* 有时候虽然 DTO 对象之间定义了关联关系，但是你可能不希望在所有的场景下都自动的填充关联的对象，那么 `populateByEntity()` 方法提供了一个 `includeRelation` 参数可以覆盖默认的填充行为，只对当前 DTO 类的属性进行填充，而不会处理关联对象（包括一对一，多对一或者一对多关系）。
+
+
+### Java8 时间类型的处理
+
+SwiftBoot-Web 提供了对 Java8 时间类型的支持，包括 `LocalDateTime`，`LocalDate`，`LocalTime`，`YearMonth`，`MonthDay`。
+例如对于 `LocalDateTime` 类型的时间，输入参数只需要提供格式为 `2025-05-01 11:11:11` 这样的字符串，就会自动转换为 `LocalDateTime` 类型，对于 DTO 来说也是类似。
+如果需要使用其他时间格式，只需要在配置文件中定义即可：
+```
+swiftboot:
+  web:
+    formatPatternLocalDateTime: yyyy-MM-dd HH:mm:ss
+```
+> 其他的时间类型格式参考 [application-example.yaml](../src/main/resources/application-example.yaml)
 
 
 ### 错误处理
