@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class ImageUtils {
 
     /**
+     * 按照指定比例缩放从文件加载的图片，并且写入到目标文件路径。
      *
      * @param srcFile
      * @param scale

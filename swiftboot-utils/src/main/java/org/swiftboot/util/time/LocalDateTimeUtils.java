@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 /**
- * @since 3.0
+ * @since 3.0.0
  */
 public class LocalDateTimeUtils {
 
