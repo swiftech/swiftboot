@@ -24,19 +24,19 @@ public interface CaptchaService {
 
     /**
      * 获取 Captcha 文字内容
-     *
+     * @param group
      * @param captchaId
      * @return
      */
-    String getCaptchaText(String captchaId);
+    String getCaptchaText(String group, String captchaId);
 
     /**
-     * 校验 Captcha
-     *
+     * 校验 Captcha，校验后失效
+     * @param group
      * @param captchaId
      * @param captcha
      * @return
      */
-    boolean verifyCaptcha(String captchaId, String captcha);
+    boolean verifyCaptcha(String group, String captchaId, String captcha);
 
 }
