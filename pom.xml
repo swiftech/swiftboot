@@ -39,7 +39,7 @@
         <commons.lang.version>3.17.0</commons.lang.version>
         <commons.codec.version>1.18.0</commons.codec.version>
         <commons.collections.version>4.4</commons.collections.version>
-        <commons.beanutils.version>1.10.1</commons.beanutils.version>
+        <commons.beanutils.version>1.11.0</commons.beanutils.version>
         <commons.text.version>1.13.1</commons.text.version>
         <commons.io.version>2.19.0</commons.io.version>
         <spring.version>6.2.6</spring.version>
