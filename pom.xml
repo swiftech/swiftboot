@@ -42,7 +42,7 @@
         <commons.beanutils.version>1.11.0</commons.beanutils.version>
         <commons.text.version>1.13.1</commons.text.version>
         <commons.io.version>2.19.0</commons.io.version>
-        <spring.version>6.2.7</spring.version>
+        <spring.version>6.2.8</spring.version>
         <spring.boot.version>3.4.6</spring.boot.version>
         <spring.data.version>3.4.6</spring.data.version>
         <spring.data.jpa.version>3.4.6</spring.data.jpa.version>
