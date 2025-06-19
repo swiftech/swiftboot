@@ -103,6 +103,7 @@ public class JsonUtils {
      * @param map
      * @return
      * @throws JsonProcessingException
+     * @deprecated to object2Json
      */
     public static String mapToJson(Map map) throws JsonProcessingException {
         ObjectMapper mapper = getJava8ObjectMapper();
@@ -119,6 +120,22 @@ public class JsonUtils {
     public static String object2Json(Object obj) throws IOException {
         ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.writeValueAsString(obj);
+    }
+
+    /**
+     * 把对象转换为 JSON 格式字符串，错误的话不会抛出异常，而是返回错误信息
+     *
+     * @param obj
+     * @return
+     * @since 3.0
+     */
+    public static String object2JsonSafe(Object obj) {
+        ObjectMapper mapper = getJava8ObjectMapper();
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            return e.getLocalizedMessage();
+        }
     }
 
     /**

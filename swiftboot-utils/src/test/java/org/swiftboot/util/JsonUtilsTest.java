@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author swiftech
@@ -25,6 +27,18 @@ public class JsonUtilsTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void map2Json() {
+        Map<String, Object> map = new HashMap<>() {
+            {
+                put("key1", "value1");
+            }
+        };
+        String s = JsonUtils.object2JsonSafe(map);
+        Assertions.assertEquals("{\"key1\":\"value1\"}", s);
+    }
+
 
     public static class JsonObject {
         private LocalDateTime localDateTime = LocalDateTime.now();

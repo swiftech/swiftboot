@@ -39,13 +39,23 @@
 
 ### Maven
 
+稳定版：
 ```xml
-<dependencies>
-	<dependency>
-		<groupId>com.github.swiftech</groupId>
-		<artifactId>swiftboot-utils</artifactId>
-		<version>2.4.5</version>
-	</dependency>
-</dependencies>
+<dependency>
+    <groupId>com.github.swiftech</groupId>
+    <artifactId>swiftboot-utils</artifactId>
+    <version>2.4.10</version>
+</dependency>
 
 ```
+
+不稳定版:
+[v3.md](docs/v3.md)
+
+  ```xml
+  <dependency>
+    <groupId>com.github.swiftech</groupId>
+    <artifactId>swiftboot-utils</artifactId>
+    <version>3.0.0</version>
+  </dependency>
+  ```
