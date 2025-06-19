@@ -27,12 +27,12 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 ### 版本
 
 ##### 稳定版: v2.4.10
-基于SpringBoot 2.7，JDK 9
+基于SpringBoot 2.7，JDK 8
 [v2.md](docs/v2.md)
 
 
 ##### 不稳定版: v3.0.0
-基于SpringBoot 3.4，JDK 17
+基于SpringBoot 3.4+，JDK 17+
 [v3.md](docs/v3.md)
 
 
