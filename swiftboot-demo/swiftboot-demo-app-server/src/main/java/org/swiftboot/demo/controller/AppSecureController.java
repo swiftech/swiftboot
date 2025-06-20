@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.auth.AuthenticationException;
 import org.swiftboot.common.auth.annotation.UserId;
 import org.swiftboot.common.auth.annotation.UserName;
+import org.swiftboot.data.model.entity.IdPersistable;
+import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.demo.dto.AppUserDto;
+import org.swiftboot.demo.model.AppUserEntity;
 import org.swiftboot.demo.service.AppUserService;
 import org.swiftboot.web.response.Response;
 import org.swiftboot.web.response.ResponseCode;
@@ -31,10 +34,17 @@ public class AppSecureController {
     @Resource
     private AppUserService appUserService;
 
+    @Resource
+    private IdGenerator<IdPersistable> idGenerator;
+
     @Operation(description = "Secure domain that needs authentication")
     @GetMapping(value = "secure")
     public Response<String> secure() {
         log.info("> /app/secure");
+        AppUserEntity entity = new AppUserEntity();
+        // this is for testing the loading of IdGenerator Bean
+        String id = idGenerator.generate(entity);
+        log.info("generated ID: {}", id);
         return new Response<>("Authenticated");
     }
 

@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.4.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.swiftboot</groupId>
@@ -25,7 +25,7 @@
         <swiftboot.version>3.0.0</swiftboot.version>
         <!--        <junit.version>5.5.2</junit.version>-->
         <mysql.version>9.2.0</mysql.version>
-        <postgres.version>42.7.5</postgres.version>
+        <postgres.version>42.7.6</postgres.version>
         <jwt.version>0.12.6</jwt.version>
         <junit.version>5.12.1</junit.version>
         <embedded-redis.version>1.4.3</embedded-redis.version>
