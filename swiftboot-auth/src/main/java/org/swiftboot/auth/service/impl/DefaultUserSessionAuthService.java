@@ -66,6 +66,11 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
 
     @Override
     public Session refreshAccessToken(String refreshToken) {
+        return this.refreshAccessToken(refreshToken, null);
+    }
+
+    @Override
+    public Session refreshAccessToken(String refreshToken, Map<String, Object> additions) {
         throw new UnsupportedOperationException("Not supported.");
     }
 

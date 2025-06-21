@@ -63,6 +63,11 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
 
     @Override
     public JwtAuthentication refreshAccessToken(String refreshToken) {
+        return this.refreshAccessToken(refreshToken, null);
+    }
+
+    @Override
+    public JwtAuthentication refreshAccessToken(String refreshToken, Map<String, Object> additions) {
         // validate refresh token
         if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
             throw new RuntimeException("Refresh Token is invalid");
@@ -78,7 +83,7 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
             E userEntity = byId.get();
 
             // generate new access token and refresh token
-            JwtAuthentication jwtAuthentication = this.generateTokens(userEntity, null);
+            JwtAuthentication jwtAuthentication = this.generateTokens(userEntity, additions);
 
             // save new refresh token
             jwtService.saveJwtAuthentication(jwtAuthentication);

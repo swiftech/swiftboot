@@ -19,7 +19,7 @@ import java.util.Map;
 public interface UserAuthService<T extends Authenticated> {
 
     /**
-     * Authenticate user and return a valid {@link Authenticated} object if success.
+     * Authenticate user ith user login name and password, return a valid {@link Authenticated} object if success.
      *
      * @param loginId
      * @param loginPwd
@@ -27,6 +27,14 @@ public interface UserAuthService<T extends Authenticated> {
      */
     T userSignIn(String loginId, String loginPwd);
 
+    /**
+     * Authenticate user with user login name and password (and additions), return a valid {@link Authenticated} object if success.
+     *
+     * @param loginId
+     * @param loginPwd
+     * @param additions
+     * @return
+     */
     T userSignIn(String loginId, String loginPwd, Map<String, Object> additions);
 
     /**
@@ -35,6 +43,15 @@ public interface UserAuthService<T extends Authenticated> {
      * @param refreshToken
      */
     T refreshAccessToken(String refreshToken);
+
+    /**
+     * Refresh the user's Access Token with Refresh Token (and additions), Used only for JWT mode.
+     *
+     * @param refreshToken
+     * @param additions
+     * @return
+     */
+    T refreshAccessToken(String refreshToken, Map<String, Object> additions);
 
     /**
      * User logout

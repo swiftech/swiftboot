@@ -16,7 +16,6 @@ import org.swiftboot.common.auth.token.JwtAuthentication;
  * @since 3.0
  **/
 @Configuration
-@EnableConfigurationProperties
 @ConditionalOnProperty(value = "swiftboot.auth.authType", havingValue = "jwt")
 public class SwiftbootAuthJwtConfig {
 

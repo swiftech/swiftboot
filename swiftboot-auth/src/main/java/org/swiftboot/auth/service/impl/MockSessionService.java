@@ -21,9 +21,9 @@ import java.io.IOException;
 
 /**
  * Mock session management for development.
- * No matter what session token provided from caller client, the same session will be used,
+ * No matter what session token provided from a caller client, the same session will be used,
  * unless addSession() called with a new mock session.
- * the mock session is dumped to a file and restart application will restore session from it.
+ * The mock session is dumped to a file, and restarting application will restore session from it.
  *
  * @author swiftech
  */
