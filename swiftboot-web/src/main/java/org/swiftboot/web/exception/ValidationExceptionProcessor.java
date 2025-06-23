@@ -69,7 +69,7 @@ public class ValidationExceptionProcessor {
 
 
     /**
-     * 应用到所有 {@link org.springframework.web.bind.annotation.RequestMapping} 注解的方法,在其抛出 {@link ValidationException} 的时候执行
+     * 应用到所有 {@link org.springframework.web.bind.annotation.RequestMapping} 注解的方法, 在其抛出 {@link ValidationException} 的时候执行
      *
      * @param request
      * @param e
@@ -100,7 +100,7 @@ public class ValidationExceptionProcessor {
         if (validationResult == null) {
             return StringUtils.EMPTY;
         }
-        List<String> msgs = validationResult.stream().map(ValidationResult.InputError::getMsg).collect(Collectors.toList());
+        List<String> msgs = validationResult.stream().map(ValidationResult.InputError::getMsg).toList();
         return StringUtils.join(msgs, ",");
     }
 }

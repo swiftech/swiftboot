@@ -59,7 +59,7 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
                 String actualMsg;
                 if (objectError.getArguments() != null && objectError.getArguments().length > 1) { // > 1 means there are message arguments.
                     // handle the user-defined parameterized message;
-                    List<String> argumentList = Arrays.stream(objectError.getArguments()).map(String::valueOf).collect(Collectors.toList());
+                    List<String> argumentList = Arrays.stream(objectError.getArguments()).map(String::valueOf).toList();
                     String[] arguments = argumentList.subList(1, argumentList.size()).toArray(new String[]{}); // first one is not argument.
                     actualMsg = MessageUtils.concatSentences(fieldDesc,
                             MessageUtils.instantiateMessage(objectError.getDefaultMessage(), arguments));

@@ -1,18 +1,21 @@
 package org.swiftboot.web.response;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import org.apache.commons.collections4.map.LRUMap;
+import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
-import org.swiftboot.web.util.MessageUtils;
+import org.swiftboot.web.i18n.MessageHelper;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -51,7 +54,7 @@ public class ResponseCode {
     public static final String CODE_FILE_DOWNLOAD_FAIL = "3009"; // 下载文件失败
     public static final String CODE_FILE_NOT_EXIST = "3010"; // 文件不存在
     public static final String CODE_TX_VERSION_ERROR = "3012"; // 他人已做操作，请刷新当前页面或数据
-
+    public static final String CODE_ARGUMENTS_ERROR_PARAM = "3013"; // 输入参数错误 {0}
 
     /**
      * 用户错误代码定义 31xx
@@ -85,12 +88,17 @@ public class ResponseCode {
     // 其他
     public static final String CODE_CHANGE_PWD_FAILED = "3141";// 修改密码失败
 
+    // mapping for fallback resource:  code -> resource key
+    private static final HashMap<String, String> codeKeyMap = new HashMap<>();
 
-    // code -> message
-    private static final HashMap<String, String> errorCodeMap = new HashMap<>();
+    // mapping for locale bundled resource: code + locale -> resource key
+    private static final MultiKeyMap<Object, String> codeLocaleKeyMap = MultiKeyMap.multiKeyMap(new LRUMap<>());
 
     @Resource
     private MessageSource messageSource;
+
+    @Resource
+    private MessageHelper messageHelper;
 
     /**
      * 设置错误代码对应的错误消息
@@ -98,35 +106,47 @@ public class ResponseCode {
      * @param code
      * @param msg
      */
-    public static void putErrorCodeAndMessage(String code, String msg) {
-        errorCodeMap.put(code, msg);
-    }
-
-    public String getMessage(String code, String... args) {
-        return ResponseCode.getErrorMessage(code, args);
-    }
-
-    /**
-     * 获取参数化的错误消息
-     *
-     * @param code
-     * @param args
-     * @return
-     */
-    public static String getErrorMessage(String code, String... args) {
-        String template = getErrorMessage(code);
-        if (code.equals(template)) {
-            return code;
+    public void putErrorCodeAndMessage(String code, Locale locale, String msg) {
+        if (locale == null) {
+            codeKeyMap.put(code, msg);
         }
-        return MessageUtils.instantiateMessage(template, args);
+        else {
+            codeLocaleKeyMap.put(code, locale, msg);
+        }
     }
 
     public String getMessage(String code) {
-        return ResponseCode.getErrorMessage(code);
+        return getMessage(code, null);
+    }
+
+    public String getMessage(String code, String... args) {
+        String msg;
+        try {
+            Locale locale = LocaleContextHolder.getLocale();
+            String key;
+            if (StringUtils.isBlank(locale.getLanguage())) {
+                key = codeKeyMap.get(code);
+            }
+            else {
+                key = codeLocaleKeyMap.get(code, locale);
+                // still need to fall back if not found
+                if (StringUtils.isBlank(key)) {
+                    key = codeKeyMap.get(code);
+                }
+            }
+            msg = messageSource.getMessage(key, args, locale);
+            if (StringUtils.isBlank(msg)) {
+                System.out.printf("WARN: message not found for code '%s'-'%s'%n", code, locale);
+            }
+        } catch (Exception e) {
+            System.out.println(Info.get(ResponseCode.class, R.NO_MSG_FOR_CODE1, code));
+            msg = code; // 没有则直接返回 CODE
+        }
+        return msg;
     }
 
     /**
-     * 获取错误代码对于的错误消息
+     * 获取错误代码对应的错误消息
      *
      * @param code
      * @return
@@ -134,10 +154,21 @@ public class ResponseCode {
     public static String getErrorMessage(String code) {
         String msg;
         try {
-            msg = errorCodeMap.get(code);
-            if (StringUtils.isBlank(msg)) {
-                System.out.printf("WARN: message not found for code '%s'%n", code);
+            String key;
+            if (StringUtils.isBlank(LocaleContextHolder.getLocale().getLanguage())) {
+                key = codeKeyMap.get(code);
             }
+            else {
+                key = codeLocaleKeyMap.get(code, LocaleContextHolder.getLocale());
+                // still need to fall back if not found
+                if (StringUtils.isBlank(key)) {
+                    key = codeKeyMap.get(code);
+                }
+            }
+            if (StringUtils.isBlank(key)) {
+                System.out.printf("WARN: message not found for code '%s'-'%s'%n", code, LocaleContextHolder.getLocale());
+            }
+            msg = code;
         } catch (Exception e) {
             System.out.println(Info.get(ResponseCode.class, R.NO_MSG_FOR_CODE1, code));
             msg = code; // 没有则直接返回 CODE
@@ -179,15 +210,18 @@ public class ResponseCode {
             log.info(Info.get(ResponseCode.class, R.INIT_PRE_DEFINED_MSG1, this.getClass()));
             this.loadFromClass(ResponseCode.class);
 //            log.info(Info.get(ErrorCodeSupport.class, R.INIT_USER_DEFINED_MSG1, this.getClass()));
-            if (errorCodeMap.isEmpty()) {
+            if (codeLocaleKeyMap.isEmpty()) {
                 log.warn(Info.get(ResponseCode.class, R.INIT_FAIL));
                 return;
             }
             else {
-                log.info(Info.get(ResponseCode.class, R.INIT_COUNT1, errorCodeMap.size()));
+                log.info(Info.get(ResponseCode.class, R.INIT_COUNT1, codeLocaleKeyMap.size()));
             }
-            String argumentedMsg = getErrorMessage(CODE_OK_WITH_CONTENT, "this is a param of message");
-            log.debug(Info.get(ResponseCode.class, R.VALIDATE_INI1T, argumentedMsg));
+            // validate immediately
+            if (log.isDebugEnabled()) {
+                String argumentedMsg = getMessage(CODE_OK_WITH_CONTENT, "this is a param of message");
+                log.debug(Info.get(ResponseCode.class, R.VALIDATE_INI1T, argumentedMsg));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -196,34 +230,36 @@ public class ResponseCode {
     }
 
     /**
-     *
      * @param errCodeClass
      * @throws IllegalAccessException
      */
-    public void loadFromClass(Class<?> errCodeClass) throws IllegalAccessException {
+    public void loadFromClass(Class<?> errCodeClass) throws IllegalAccessException, IOException {
         List<Field> fields = BeanUtils.getStaticFieldsByType(errCodeClass, String.class);
+
+        // load fallback messages
+        this.loadMessagesForLocale(fields, null);
+        // load messages for all supported locales
+        List<Locale> supportedLocales = messageHelper.getSupportedLocales("message");
+        for (Locale supportedLocale : supportedLocales) {
+            log.info("Load messages for %s".formatted(supportedLocale));
+            this.loadMessagesForLocale(fields, supportedLocale);
+        }
+    }
+
+    private void loadMessagesForLocale(List<Field> fields, Locale locale) throws IllegalAccessException {
+        log.info("Load messages for %s".formatted(locale));
         for (Field field : fields) {
             if (field.getName().startsWith("CODE_")) {
                 String codeNum = field.get(null).toString();
-                log.debug(String.format("  %s(%s)", field.getName(), codeNum));
-                if (StringUtils.isNotBlank(errorCodeMap.get(codeNum))) {
+                log.debug(String.format("  %s(%s)-%s", field.getName(), codeNum, locale));
+                boolean alreadyExist = locale == null ? StringUtils.isNotBlank(codeKeyMap.get(codeNum))
+                        : StringUtils.isNotBlank(codeLocaleKeyMap.get(codeNum, locale));
+                if (alreadyExist) {
                     // ignore if already loaded
                     log.warn(Info.get(ResponseCode.class, R.CODE_EXIST2, field.getName(), codeNum));
                     continue;
                 }
-                String message;
-                try {
-                    message = messageSource.getMessage(field.getName(), null, Locale.getDefault());
-                } catch (NoSuchMessageException e) {
-                    log.info(Info.get(ResponseCode.class, R.IGNORE_MSG1, field.getName()));
-                    continue;
-                }
-                if (StringUtils.isBlank(message)) {
-                    log.info(Info.get(ResponseCode.class, R.NOT_FOUND_MSG1, field.getName()));
-                }
-                else {
-                    putErrorCodeAndMessage(codeNum, message);
-                }
+                this.putErrorCodeAndMessage(codeNum, locale, field.getName());
             }
         }
     }

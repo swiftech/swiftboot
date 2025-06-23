@@ -3,6 +3,7 @@ package org.swiftboot.web.constant;
 /**
  *
  * @author swiftech
+ * @deprecated
  **/
 public class HttpConstants {
 

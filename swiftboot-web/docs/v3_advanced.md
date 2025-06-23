@@ -91,8 +91,8 @@ return new Response(ResponseCode.CODE_PARAMS_ERROR); // 返回 '输入参数错�
 }
 ```
 
-> 如果需要改变错误信息输出，那么可以传入第二个参数： `new Response(ResponseCode.CODE_PARAMS_ERROR, "我的错误信息");`，
-> 如果资源存在参数化：`new ResponseBuilder<Void>().code(ResponseCode.CODE_PARAMS_ERROR).msg("我的错误信息: {0} {1}").msgParams("参数0", "参数1"")";`
+> 如果需要自定义错误信息，那么可以传入第二个参数： `new Response(ResponseCode.CODE_PARAMS_ERROR, "我的错误信息");`，
+> 如果资源存在参数化：`new ResponseBuilder<Void>().code(ResponseCode.CODE_PARAMS_ERROR).message("我的错误信息: {0} {1}").messageArgs("参数0", "参数1"")";`
 > `ResponseBuilder` 也可以创建非参数化的 `Response`
 
 如果需要自定义错误代码，那么实现一个 Bean，将错误代码定义以静态字符串变量放入这个 Bean 中，变量名需要以 `CODE_` 开头，并在启动时进行加载，例如：
@@ -105,12 +105,12 @@ public class ErrorCode {
     public static final String CODE_MY_ERR_CODE2 = "4001";
 
     @Resource
-    private ResponseCode errorCodeSupport;
+    private ResponseCode responseCode;
 
     @PostConstruct
     public void init() {
         try {
-            errorCodeSupport.loadFromClass(this.getClass());
+            responseCode.loadFromClass(this.getClass());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

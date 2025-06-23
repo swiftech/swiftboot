@@ -18,6 +18,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
  *
  * @param <T> 内容对象的类型
  * @author swiftech
+ * @see ResponseBuilder
  */
 @Schema(description = "Response Body")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -52,8 +53,8 @@ public class Response<T> implements Serializable {
     /**
      * 响应代码对应的响应信息
      */
-    @Schema(description = "Response message, default is OK", requiredMode = NOT_REQUIRED, example = "OK")
-    protected String message = "OK";
+    @Schema(description = "Response message", requiredMode = NOT_REQUIRED, example = "OK")
+    protected String message = null;
 
     /**
      * 响应资源中的参数值
@@ -94,9 +95,9 @@ public class Response<T> implements Serializable {
         this.data = data;
     }
 
-    public Response(ErrMessageException errMsgException) {
-        this.code = errMsgException.getErrorCode();
-        this.message = errMsgException.getMessage();
+    public Response(ErrMessageException e) {
+        this.code = e.getErrorCode();
+        this.message = e.getMessage();
     }
 
     public String getCode() {

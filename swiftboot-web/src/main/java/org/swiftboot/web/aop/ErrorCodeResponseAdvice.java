@@ -52,7 +52,7 @@ public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyA
         String msg = responseBody.getMessage();
 
         if (StringUtils.isBlank(msg)) {
-            // not user-defined message.
+            // not a user-defined message.
             if (StringUtils.isNotBlank(errorCode)) {
                 String errorMessage;
                 if (ArrayUtils.isEmpty(msgParams)) {
@@ -61,14 +61,16 @@ public class ErrorCodeResponseAdvice extends AbstractMappingJacksonResponseBodyA
                 else {
                     errorMessage = responseCode.getMessage(errorCode, msgParams);
                 }
+                if (log.isDebugEnabled()) log.debug("Got message by error code: %s".formatted(errorMessage));
                 responseBody.setMessage(errorMessage);
             }
         }
         else {
-            // user-defined message, need instantiate if message parameterized.
+            // user-defined message, need to instantiate if a message parameterized.
             String errorMessage = msg;
-            if (!ArrayUtils.isEmpty(msgParams)) {
+            if (ArrayUtils.isNotEmpty(msgParams)) {
                 errorMessage = MessageUtils.instantiateMessage(msg, msgParams);
+                if(log.isDebugEnabled()) log.debug("Got user defined parameterized message: %s".formatted(errorMessage));
             }
             responseBody.setMessage(errorMessage);
         }

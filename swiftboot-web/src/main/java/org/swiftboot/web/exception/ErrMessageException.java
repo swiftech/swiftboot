@@ -5,6 +5,9 @@ import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
 import org.swiftboot.web.response.ResponseCode;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 服务层使用的异常
  *
@@ -14,11 +17,12 @@ public class ErrMessageException extends RuntimeException {
 
     protected String errorCode;
 
+    protected List<String> messageArgs;
+
     public ErrMessageException() {
     }
 
     public ErrMessageException(ErrMessageException exception) {
-        super(ResponseCode.getErrorMessage(exception.getErrorCode()));
         this.errorCode = exception.getErrorCode();
     }
 
@@ -28,7 +32,6 @@ public class ErrMessageException extends RuntimeException {
      * @param errorCode
      */
     public ErrMessageException(String errorCode) {
-        super(ResponseCode.getErrorMessage(errorCode));
         this.errorCode = errorCode;
         if (StringUtils.isBlank(ResponseCode.getErrorMessage(errorCode))) {
             System.out.println(Info.get(ErrMessageException.class, R.NO_RESOURCE_FOR_ERR_CODE1, errorCode));
@@ -47,15 +50,23 @@ public class ErrMessageException extends RuntimeException {
     }
 
     public ErrMessageException(String errorCode, String[] args) {
-        super(ResponseCode.getErrorMessage(errorCode, args));
         this.errorCode = errorCode;
+        this.messageArgs = Arrays.asList(args);
+        if (StringUtils.isBlank(super.getMessage())) {
+            System.out.println(Info.get(ErrMessageException.class, R.NO_RESOURCE_FOR_ERR_CODE1, errorCode));
+        }
+    }
+
+    public ErrMessageException(String errorCode, List<String> args) {
+        this.errorCode = errorCode;
+        this.messageArgs = args;
         if (StringUtils.isBlank(super.getMessage())) {
             System.out.println(Info.get(ErrMessageException.class, R.NO_RESOURCE_FOR_ERR_CODE1, errorCode));
         }
     }
 
     public ErrMessageException(String errorCode, Throwable cause) {
-        super(ResponseCode.getErrorMessage(errorCode), cause);
+        super(cause);
         this.errorCode = errorCode;
     }
 
@@ -65,6 +76,14 @@ public class ErrMessageException extends RuntimeException {
 
     public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public List<String> getMessageArgs() {
+        return messageArgs;
+    }
+
+    public void setMessageArgs(List<String> messageArgs) {
+        this.messageArgs = messageArgs;
     }
 
     @Override

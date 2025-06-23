@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author swiftech
  * @since 2.2
+ * @see Response
+ * @see org.swiftboot.web.aop.ErrorCodeResponseAdvice
  */
 public class ResponseBuilder<T> {
 
@@ -54,6 +56,11 @@ public class ResponseBuilder<T> {
         return this;
     }
 
+    /**
+     * Build the {@link Response} object, and the i18n and parameters will be handled in {@link org.swiftboot.web.aop.ErrorCodeResponseAdvice}
+     *
+     * @return
+     */
     public Response<T> build() {
         Response<T> response = new Response<>();
         response.setCode(code);
