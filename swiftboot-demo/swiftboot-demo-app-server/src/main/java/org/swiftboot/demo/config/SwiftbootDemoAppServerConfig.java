@@ -44,8 +44,9 @@ public class SwiftbootDemoAppServerConfig {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:message", "classpath:validation", "classpath:error_message");
+        messageSource.setBasenames("classpath:messages", "classpath:message", "classpath:validation", "classpath:error_message");
         messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setFallbackToSystemLocale(false); // not using system default locale.
         return messageSource;
     }
 

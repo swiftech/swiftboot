@@ -2,7 +2,7 @@ package org.swiftboot.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationStartingEvent;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.swiftboot.web.SpringBootEnv;
@@ -35,7 +35,7 @@ public class SwiftbootDemoAppServerApplication implements ApplicationListener<Ap
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        if (event instanceof ApplicationStartingEvent) {
+        if (event instanceof ApplicationReadyEvent) {
             //
         }
     }
