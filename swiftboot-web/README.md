@@ -24,3 +24,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
     <version>3.0.0</version>
   </dependency>
   ```
+
+## Changelogs
+
+[changelogs.md](docs/changelogs.md)
