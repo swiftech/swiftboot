@@ -4,17 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.response.ResponseCode;
 import org.swiftboot.web.response.Response;
+import org.swiftboot.web.response.ResponseCode;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-
-import static org.swiftboot.web.constant.HttpConstants.DEFAULT_RESPONSE_DATA_TYPE;
 
 /**
  * @since 3.0
@@ -44,7 +43,7 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
         Response<?> resp = new Response<>(errorCode);
         resp.setMessage(ResponseCode.getErrorMessage(errorCode));
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(resp));
         response.flushBuffer();
         response.getWriter().close();
@@ -60,7 +59,7 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
     protected void responseWithHttpStatus(HttpServletResponse response, int statusCode, String msg) throws IOException {
         response.setStatus(statusCode);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setContentType(DEFAULT_RESPONSE_DATA_TYPE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         try (PrintWriter writer = response.getWriter()) {
             Response<String> resp = new Response<>(String.valueOf(statusCode), msg);
             String body = JsonUtils.object2Json(resp);
