@@ -39,6 +39,10 @@ public class UserEntity extends BaseLocalDateTimeEntity {
     @Column(name = "NICK_NAME", length = 64)
     private String nickName;
 
+    @PropertyDescription(value = "Role of the user", example = "Emperor")
+    @Column(name = "ROLE", length = 64)
+    private String role;
+
     @PropertyDescription(value = "Permission code separated with comma", example = "perm_a, perm_b")
     @Column(name = "PERMISSIONS", length = 1024)
     private String permissions;
@@ -93,6 +97,14 @@ public class UserEntity extends BaseLocalDateTimeEntity {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getPermissions() {

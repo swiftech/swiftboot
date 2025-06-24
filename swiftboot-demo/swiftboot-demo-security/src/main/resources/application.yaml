@@ -28,6 +28,20 @@ swiftboot:
 spring:
   application:
     name: swiftboot-demo-security
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:file:${user.dir}/db/swiftboot-demo-security
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+    show-sql: false
+    open-in-view: false
 #  datasource:
 #    url: jdbc:postgresql://${DB_URL:127.0.0.1}:${DB_PORT:5432}/${DB_DATABASE:postgres}
 #    username: ${DB_USERNAME:postgres}
@@ -44,20 +58,6 @@ spring:
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 #        tmp:
 #          use_jdbc_metadata_defaults: false
-    datasource:
-      driverClassName: org.h2.Driver
-      url: jdbc:h2:file:./target/swiftboot-demo-security
-    jpa:
-      database-platform: org.hibernate.dialect.H2Dialect
-      hibernate:
-        ddl-auto: update
-        naming:
-          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      properties:
-        hibernate:
-          current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-      show-sql: false
-      open-in-view: false
   sql:
     init:
       mode: always

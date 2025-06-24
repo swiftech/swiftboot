@@ -48,25 +48,30 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @PostConstruct
     public void initData() {
         // create a new user for testing
-        GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
-        GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
-        GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);
-        List<CustomUserDetails> users = Arrays.asList(
-                new CustomUserDetails("1001", "admin", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA, gaPermissionB})),
-                new CustomUserDetails("1002", "manager", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA})),
-                new CustomUserDetails("1003", "staff", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionB}))
-        );
+        Optional<UserEntity> optAdminUser = userRepository.findByLoginName("admin");
+        if (optAdminUser.isEmpty()) {
+            log.info("测试用户数据不存在，初始化数据");
+            GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
+            GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
+            GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);
+            List<CustomUserDetails> users = Arrays.asList(
+                    new CustomUserDetails("1001", "admin", passwordEncoder.encode("123456"), "ROLE_ADMIN", List.of(new GrantedAuthority[]{gaRole, gaPermissionA, gaPermissionB})),
+                    new CustomUserDetails("1002", "manager", passwordEncoder.encode("123456"), "ROLE_MANAGER", List.of(new GrantedAuthority[]{gaRole, gaPermissionA})),
+                    new CustomUserDetails("1003", "staff", passwordEncoder.encode("123456"), "ROLE_STAFF", List.of(new GrantedAuthority[]{gaRole, gaPermissionB}))
+            );
 
-        users.forEach(user -> {
-            Optional<UserEntity> optUser = userRepository.findById(user.getId());
-            if (optUser.isEmpty()) {
-                UserEntity newEntity = new UserEntity();
-                newEntity.setLoginName(user.getUsername());
-                newEntity.setLoginPwd(user.getPassword());
-                newEntity.setPermissions(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
-                userRepository.save(newEntity);
-            }
-        });
+            users.forEach(user -> {
+                Optional<UserEntity> optUser = userRepository.findById(user.getId());
+                if (optUser.isEmpty()) {
+                    UserEntity newEntity = new UserEntity();
+                    newEntity.setLoginName(user.getUsername());
+                    newEntity.setLoginPwd(user.getPassword());
+                    newEntity.setRole(user.getRole());
+                    newEntity.setPermissions(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
+                    userRepository.save(newEntity);
+                }
+            });
+        }
     }
 
     @Override
@@ -81,13 +86,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Load user for : %s".formatted(username));
-        UserEntity userEntity = userRepository.findByLoginName(username);
-        if (userEntity == null) {
+        Optional<UserEntity> optUser = userRepository.findByLoginName(username);
+        if (optUser.isEmpty()) {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         }
+        UserEntity userEntity = optUser.get();
         List<SimpleGrantedAuthority> auhorities = Arrays.stream(userEntity.getPermissions().split(",")).map(SimpleGrantedAuthority::new).toList();
         CustomUserDetails userDetails = new CustomUserDetails(userEntity.getId(),
-                userEntity.getLoginName(), userEntity.getLoginPwd(), auhorities);
+                userEntity.getLoginName(), userEntity.getLoginPwd(), userEntity.getRole(), auhorities);
         return userDetails;
 
 //        GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
@@ -105,12 +111,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserInfoDto findUserByOpenId(String openId) {
-        UserEntity userEntity = userRepository.findByOpenId(openId);
-        if (userEntity == null) {
+        Optional<UserEntity> optUser = userRepository.findByOpenId(openId);
+        if (optUser.isEmpty()) {
             return null;
         }
         UserInfoDto userInfoDto = new UserInfoDto();
-        userInfoDto.populateByEntity(userEntity);
+        userInfoDto.populateByEntity(optUser.get());
         return userInfoDto;
     }
 

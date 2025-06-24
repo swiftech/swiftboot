@@ -31,6 +31,7 @@ import org.swiftboot.demo.model.UserEntity;
 import org.swiftboot.demo.repository.UserRepository;
 import org.swiftboot.web.response.Response;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,7 @@ public class SecurityAuthController {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginName, loginPwd);
         log.info("user %s login...".formatted(loginName));
+        // authenticate by Spring Security.
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authentication);
@@ -73,7 +75,9 @@ public class SecurityAuthController {
         if (authentication.getPrincipal() instanceof CustomUserDetails ud) {
             log.debug(ud.getId());
             log.debug(ud.getUsername());
-            AccessToken accessToken = jwtTokenProvider.generateAccessToken(ud.getId(), loginName);
+            log.debug(ud.getRole());
+
+            AccessToken accessToken = jwtTokenProvider.generateAccessToken(ud.getId(), loginName, ud.getRole() == null ? null : Map.of("role", ud.getRole()));
             RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(ud.getId());
 
             jwtService.saveJwtAuthentication(accessToken, refreshToken);
@@ -127,7 +131,7 @@ public class SecurityAuthController {
     }
 
     private JwtAuthentication generateTokens(UserEntity appUserEntity) {
-        AccessToken accessToken = jwtTokenProvider.generateAccessToken(appUserEntity.getId(), appUserEntity.getLoginName());
+        AccessToken accessToken = jwtTokenProvider.generateAccessToken(appUserEntity.getId(), appUserEntity.getLoginName(), appUserEntity.getRole() == null ? null : Map.of("role", appUserEntity.getRole()));
         RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(appUserEntity.getId());
         return new JwtAuthentication(accessToken, refreshToken);
     }

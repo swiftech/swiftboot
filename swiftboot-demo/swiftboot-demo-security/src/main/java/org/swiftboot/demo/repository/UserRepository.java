@@ -3,12 +3,14 @@ package org.swiftboot.demo.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.swiftboot.demo.model.UserEntity;
 
+import java.util.Optional;
+
 /**
  *
  */
 public interface UserRepository extends CrudRepository<UserEntity, String> {
 
-    UserEntity findByOpenId(String openId);
+    Optional<UserEntity> findByOpenId(String openId);
 
-    UserEntity findByLoginName(String loginName);
+    Optional<UserEntity> findByLoginName(String loginName);
 }
