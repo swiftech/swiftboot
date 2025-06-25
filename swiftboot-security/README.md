@@ -1,6 +1,6 @@
 # SwiftBoot-Security
 
-快速实现基于 `SpringSecurity` 的用户认证和鉴权
+快速实现基于 `SpringSecurity` 和 `JWT` 的用户认证和鉴权
 
 ## 认证
 
@@ -31,3 +31,12 @@ Authorization=Bearer <access token>
 
 ## 鉴权
 
+遵循 Spring Security 提供的方式实现用户鉴权。
+对于鉴权失败的情况，会返回状态码为 403，内容格式如下的错误信息：
+
+```json
+{
+  "code": "403",
+  "message": "Access Denied"
+}
+```
