@@ -11,7 +11,7 @@ import org.swiftboot.demo.dto.PayloadDto;
 import org.swiftboot.web.response.Response;
 
 /**
- * Secure realm that needs user is authenticated and permitted to visit.
+ * The Secure realm that needs user is authenticated and permitted to visit.
  * Require permission by permission codes.
  */
 @Tag(name = "Security Permission", description = "Security endpoints for testing permissions.")
@@ -30,7 +30,7 @@ public class SecurityPermissionController {
     @PreAuthorize("hasAuthority('PERM_A')")
     public Response<PayloadDto> onePermissionA() {
         PayloadDto dto = new PayloadDto();
-        dto.setData("this endpoint is only authorized to whom has PERM_A permission");
+        dto.setPayload("this endpoint is only authorized to whom has PERM_A permission");
         return new Response<>(dto);
     }
 
@@ -44,7 +44,7 @@ public class SecurityPermissionController {
     @PreAuthorize("hasAuthority('PERM_B')")
     public Response<PayloadDto> onePermissionB() {
         PayloadDto dto = new PayloadDto();
-        dto.setData("this endpoint is only authorized to whom has PERM_B permission");
+        dto.setPayload("this endpoint is only authorized to whom has PERM_B permission");
         return new Response<>(dto);
     }
 
@@ -58,7 +58,7 @@ public class SecurityPermissionController {
     @PreAuthorize("hasAuthority('PERM_A') or hasAuthority('PERM_B')")
     public Response<PayloadDto> permissionsOr() {
         PayloadDto dto = new PayloadDto();
-        dto.setData("this endpoint is only authorized to whom has either permissions");
+        dto.setPayload("this endpoint is only authorized to whom has either permissions");
         return new Response<>(dto);
     }
 
@@ -72,7 +72,7 @@ public class SecurityPermissionController {
     @PreAuthorize("hasAuthority('PERM_A') and hasAuthority('PERM_B')")
     public Response<PayloadDto> permissionsAnd() {
         PayloadDto dto = new PayloadDto();
-        dto.setData("this endpoint is only authorized to whom has both permissions");
+        dto.setPayload("this endpoint is only authorized to whom has both permissions");
         return new Response<>(dto);
     }
 

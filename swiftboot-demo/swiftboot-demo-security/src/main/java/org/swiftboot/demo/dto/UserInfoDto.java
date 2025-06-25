@@ -16,6 +16,8 @@ public class UserInfoDto extends BasePopulateDto<UserEntity> implements Dto {
 
     private String nickName;
 
+    private String role;
+
     /**
      * permission codes separated with comma.
      */
@@ -44,6 +46,14 @@ public class UserInfoDto extends BasePopulateDto<UserEntity> implements Dto {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getPermissions() {

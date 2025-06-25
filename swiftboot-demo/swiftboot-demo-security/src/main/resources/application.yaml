@@ -101,3 +101,6 @@ logging:
     org.swiftboot: TRACE
   file:
     name: ${user.dir}/logs/swiftboot-demo-security.log
+  pattern:
+    dateformat: HH:mm:ss
+    console: ${CONSOLE_LOG_PATTERN:%clr(%d{HH:mm:ss}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(--){faint} %clr([%12.12t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx}

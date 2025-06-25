@@ -7,13 +7,13 @@ import org.swiftboot.web.dto.Dto;
  */
 public class PayloadDto implements Dto {
 
-    private String data;
+    private String payload;
 
-    public String getData() {
-        return data;
+    public String getPayload() {
+        return payload;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 }

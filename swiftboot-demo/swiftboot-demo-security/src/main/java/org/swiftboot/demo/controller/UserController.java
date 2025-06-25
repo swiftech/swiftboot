@@ -45,6 +45,7 @@ public class UserController {
         return new Response<>(user);
     }
 
+    @Deprecated
     @Operation(description = "Get user permissions")
     @GetMapping(value = "/user/permissions")
     public Response<UserInfoDto> userPermissions() {

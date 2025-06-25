@@ -18,7 +18,8 @@ public class CustomUserDetails extends User {
     private String id;
 
     /**
-     * User Role
+     * User Role, for present in client side only.
+     * The user role must be put into authorities for Spring Security to do validation.
      */
     private String role;
 

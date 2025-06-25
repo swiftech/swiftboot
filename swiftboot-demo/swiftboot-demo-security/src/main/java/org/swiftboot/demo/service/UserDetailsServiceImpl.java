@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.stereotype.Service;
+import org.swiftboot.demo.constants.RoleConstants;
 import org.swiftboot.demo.dto.CustomUserDetails;
 import org.swiftboot.demo.dto.UserInfoDto;
 import org.swiftboot.demo.model.PlatformAuthorization;
@@ -20,6 +21,7 @@ import org.swiftboot.demo.model.UserEntity;
 import org.swiftboot.demo.repository.PlatformAuthorizationRepository;
 import org.swiftboot.demo.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -51,13 +53,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         Optional<UserEntity> optAdminUser = userRepository.findByLoginName("admin");
         if (optAdminUser.isEmpty()) {
             log.info("测试用户数据不存在，初始化数据");
-            GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
+            GrantedAuthority gaRole = new SimpleGrantedAuthority(RoleConstants.ROLE_ADMIN);
             GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
             GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);
             List<CustomUserDetails> users = Arrays.asList(
-                    new CustomUserDetails("1001", "admin", passwordEncoder.encode("123456"), "ROLE_ADMIN", List.of(new GrantedAuthority[]{gaRole, gaPermissionA, gaPermissionB})),
-                    new CustomUserDetails("1002", "manager", passwordEncoder.encode("123456"), "ROLE_MANAGER", List.of(new GrantedAuthority[]{gaRole, gaPermissionA})),
-                    new CustomUserDetails("1003", "staff", passwordEncoder.encode("123456"), "ROLE_STAFF", List.of(new GrantedAuthority[]{gaRole, gaPermissionB}))
+                    new CustomUserDetails("1001", "admin", passwordEncoder.encode("123456"), RoleConstants.ROLE_ADMIN, List.of(new GrantedAuthority[]{gaPermissionA, gaPermissionB})),
+                    new CustomUserDetails("1002", "manager", passwordEncoder.encode("123456"), RoleConstants.ROLE_MANAGER, List.of(new GrantedAuthority[]{gaPermissionA})),
+                    new CustomUserDetails("1003", "staff", passwordEncoder.encode("123456"), RoleConstants.ROLE_STAFF, List.of(new GrantedAuthority[]{gaPermissionB}))
             );
 
             users.forEach(user -> {
@@ -77,10 +79,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Override
     public UserInfoDto findById(String id) {
         Optional<UserEntity> byId = userRepository.findById(id);
-        if (byId.isPresent()) {
-            return (UserInfoDto) new UserInfoDto().populateByEntity(byId.get());
-        }
-        return null;
+        return byId.map(userEntity -> (UserInfoDto) new UserInfoDto().populateByEntity(userEntity)).orElse(null);
     }
 
     @Override
@@ -91,22 +90,11 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         }
         UserEntity userEntity = optUser.get();
-        List<SimpleGrantedAuthority> auhorities = Arrays.stream(userEntity.getPermissions().split(",")).map(SimpleGrantedAuthority::new).toList();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>(Arrays.stream(userEntity.getPermissions().split(",")).map(SimpleGrantedAuthority::new).toList());
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + userEntity.getRole()));
         CustomUserDetails userDetails = new CustomUserDetails(userEntity.getId(),
-                userEntity.getLoginName(), userEntity.getLoginPwd(), userEntity.getRole(), auhorities);
+                userEntity.getLoginName(), userEntity.getLoginPwd(), userEntity.getRole(), authorities);
         return userDetails;
-
-//        GrantedAuthority gaRole = new SimpleGrantedAuthority("ROLE_ADMIN");
-//        GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
-//        GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);
-//        return switch (username) {
-//            case "admin" ->
-//                    new CustomUserDetails("1001", "admin", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA, gaPermissionB}));
-//            case "manager" ->
-//                    new CustomUserDetails("1002", "manager", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionA}));
-//            default ->
-//                    new CustomUserDetails("1003", "staff", passwordEncoder.encode("123456"), List.of(new GrantedAuthority[]{gaRole, gaPermissionB}));
-//        };
     }
 
     @Override

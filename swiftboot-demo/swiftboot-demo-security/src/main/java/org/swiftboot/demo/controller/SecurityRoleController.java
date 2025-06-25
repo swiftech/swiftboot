@@ -11,7 +11,7 @@ import org.swiftboot.demo.dto.PayloadDto;
 import org.swiftboot.web.response.Response;
 
 /**
- * Secure realm that needs user is authenticated and permitted to visit.
+ * The Secure realm that needs user is authenticated and permitted to visit.
  * Require permission by user role.
  *
  * @author swiftech
@@ -29,10 +29,10 @@ public class SecurityRoleController {
      */
     @Operation(description = "This endpoint requires admin role")
     @GetMapping(value = "/require/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') || hasAuthority('ROLE_ADMIN')")
     public Response<PayloadDto> requireAdmin() {
         PayloadDto dto = new PayloadDto();
-        dto.setData("this endpoint is only authorized to admin");
+        dto.setPayload("this endpoint is only authorized to admin");
         return new Response<>(dto);
     }
 
@@ -46,7 +46,7 @@ public class SecurityRoleController {
     @PreAuthorize("hasRole('MANAGER')")
     public Response<PayloadDto> requireManager() {
         PayloadDto dto = new PayloadDto();
-        dto.setData("this endpoint is only authorized to manager");
+        dto.setPayload("this endpoint is only authorized to manager");
         return new Response<>(dto);
     }
 }
