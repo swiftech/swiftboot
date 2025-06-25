@@ -49,7 +49,7 @@ public class OrderController {
             @RequestBody @Validated @Parameter(description = "创建订单参数") OrderCreateRequest request,
             BindingResult bindingResult) {
         log.info("> /order/create");
-        log.info(request.getUserId());
+//        log.info(request.getUserId());
         log.info(request.getHeader("swiftboot_token"));
         log.debug(JsonUtils.object2PrettyJson(request));
         OrderCreateResult ret = orderService.createOrder(request);

@@ -2,13 +2,14 @@ package org.swiftboot.demo.service.impl;
 
 import org.swiftboot.demo.request.OrderDetailCreateRequest;
 import org.swiftboot.demo.request.OrderDetailSaveRequest;
-import org.swiftboot.demo.repository.OrderDetailDao;
-import org.swiftboot.demo.model.entity.OrderDetailEntity;
+import org.swiftboot.demo.repository.OrderDetailRepository;
+import org.swiftboot.demo.model.OrderDetailEntity;
 import org.swiftboot.demo.dto.OrderDetailCreateResult;
 import org.swiftboot.demo.dto.OrderDetailListResult;
 import org.swiftboot.demo.dto.OrderDetailResult;
 import org.swiftboot.demo.dto.OrderDetailSaveResult;
 import org.swiftboot.demo.service.OrderDetailService;
+import org.swiftboot.web.dto.PopulatableDto;
 import org.swiftboot.web.request.IdListRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,18 +33,18 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     private static final Logger log = LoggerFactory.getLogger(OrderDetailServiceImpl.class);
 
     @Resource
-    private OrderDetailDao orderDetailDao;
+    private OrderDetailRepository orderDetailRepository;
 
     /**
      * 创建订单明细
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public OrderDetailCreateResult createOrderDetail(OrderDetailCreateRequest cmd) {
-        OrderDetailEntity p = cmd.createEntity();
-        OrderDetailEntity saved = orderDetailDao.save(p);
+    public OrderDetailCreateResult createOrderDetail(OrderDetailCreateRequest request) {
+        OrderDetailEntity p = request.createEntity();
+        OrderDetailEntity saved = orderDetailRepository.save(p);
         log.debug("创建订单明细: " + saved.getId());
         return new OrderDetailCreateResult(saved.getId());
     }
@@ -51,17 +52,17 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     /**
      * 保存对订单明细的修改
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public OrderDetailSaveResult saveOrderDetail(OrderDetailSaveRequest cmd) {
+    public OrderDetailSaveResult saveOrderDetail(OrderDetailSaveRequest request) {
         OrderDetailSaveResult ret = new OrderDetailSaveResult();
-        Optional<OrderDetailEntity> optEntity = orderDetailDao.findById(cmd.getId());
+        Optional<OrderDetailEntity> optEntity = orderDetailRepository.findById(request.getId());
         if (optEntity.isPresent()) {
             OrderDetailEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            OrderDetailEntity saved = orderDetailDao.save(p);
+            p = request.populateEntity(p);
+            OrderDetailEntity saved = orderDetailRepository.save(p);
             ret.setOrderDetailId(saved.getId());
         }
         return ret;
@@ -74,25 +75,25 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      */
     @Override
     public void deleteOrderDetail(String orderDetailId) {
-        Optional<OrderDetailEntity> optEntity = orderDetailDao.findById(orderDetailId);
+        Optional<OrderDetailEntity> optEntity = orderDetailRepository.findById(orderDetailId);
         if (optEntity.isPresent()) {
             OrderDetailEntity p = optEntity.get();
             p.setIsDelete(true);
-            orderDetailDao.save(p);
+            orderDetailRepository.save(p);
         }
     }
 
     /**
      * 批量逻辑删除订单明细
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void deleteOrderDetailList(IdListRequest request) {
-        List<OrderDetailEntity> entities = orderDetailDao.findAllByIdIn(cmd.getIds());
+        List<OrderDetailEntity> entities = orderDetailRepository.findAllByIdIn(request.getIds());
         for (OrderDetailEntity entity : entities) {
             entity.setIsDelete(true);
-            orderDetailDao.save(entity);
+            orderDetailRepository.save(entity);
             // TODO 处理关联表的数据删除
         }
     }
@@ -106,7 +107,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public void purgeOrderDetail(String orderDetailId) {
         if (StringUtils.isNotBlank(orderDetailId)) {
-            orderDetailDao.deleteById(orderDetailId);
+            orderDetailRepository.deleteById(orderDetailId);
         }
         else {
             throw new RuntimeException("");
@@ -116,13 +117,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     /**
      * 批量永久删除订单明细
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void purgeOrderDetailList(IdListRequest request) {
-        List<OrderDetailEntity> entities = orderDetailDao.findAllByIdIn(cmd.getIds());
+        List<OrderDetailEntity> entities = orderDetailRepository.findAllByIdIn(request.getIds());
         for (OrderDetailEntity entity : entities) {
-            orderDetailDao.deleteById(entity.getId());
+            orderDetailRepository.deleteById(entity.getId());
             // TODO 处理关联表的数据删除
         }
     }
@@ -137,10 +138,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetailResult queryOrderDetail(String orderDetailId) {
         OrderDetailResult ret = null;
-        Optional<OrderDetailEntity> optEntity = orderDetailDao.findById(orderDetailId);
+        Optional<OrderDetailEntity> optEntity = orderDetailRepository.findById(orderDetailId);
         if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
-            ret = OrderDetailResult.createResult(OrderDetailResult.class, optEntity.get());
+            ret = PopulatableDto.createDto(OrderDetailResult.class, optEntity.get());
         }
         else {
             log.debug("没有查询到订单明细, ID: " + orderDetailId);
@@ -156,10 +157,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetailListResult queryOrderDetailList() {
         OrderDetailListResult ret = new OrderDetailListResult();
-        Iterable<OrderDetailEntity> all = orderDetailDao.findAll();
+        Iterable<OrderDetailEntity> all = orderDetailRepository.findAll();
         if (all != null) {
             ret.populateByEntities(all);
-            ret.setTotal(orderDetailDao.count());
+            ret.setTotal(orderDetailRepository.count());
         }
         else {
             log.debug("没有查询到订单明细");
@@ -177,10 +178,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetailListResult queryOrderDetailList(int page, int pageSize) {
         OrderDetailListResult ret = new OrderDetailListResult();
-        Page<OrderDetailEntity> allPagination = orderDetailDao.findAll(PageRequest.of(page, pageSize));
+        Page<OrderDetailEntity> allPagination = orderDetailRepository.findAll(PageRequest.of(page, pageSize));
         if (allPagination != null) {
             ret.populateByEntities(allPagination);
-            ret.setTotal(orderDetailDao.count());
+            ret.setTotal(orderDetailRepository.count());
         }
         else {
             log.debug("没有查到订单明细");

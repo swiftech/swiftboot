@@ -1,14 +1,14 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.repository.OrderDetailDao;
+import org.swiftboot.demo.repository.OrderDetailRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.swiftboot.demo.request.OrderWithDetailCreateRequest;
 import org.swiftboot.demo.request.OrderWithDetailSaveRequest;
-import org.swiftboot.demo.repository.OrderDao;
-import org.swiftboot.demo.model.entity.OrderDetailEntity;
-import org.swiftboot.demo.model.entity.OrderEntity;
+import org.swiftboot.demo.repository.OrderRepository;
+import org.swiftboot.demo.model.OrderDetailEntity;
+import org.swiftboot.demo.model.OrderEntity;
 import org.swiftboot.demo.dto.OrderCreateResult;
 import org.swiftboot.demo.dto.OrderSaveResult;
 import org.swiftboot.demo.service.OrderDetailRelationService;
@@ -29,10 +29,10 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
     private final String permanentDetailId = "12345678901234567890123456789012";
 
     @Resource
-    private OrderDao orderDao;
+    private OrderRepository orderRepository;
 
     @Resource
-    private OrderDetailDao orderDetailDao;
+    private OrderDetailRepository orderDetailRepository;
 
     @Resource
     private EntityManager entityManager;
@@ -40,19 +40,19 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
     /**
      * 创建带有详情的订单
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateRequest cmd) {
-        OrderEntity entity = cmd.createEntity();
+    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateRequest request) {
+        OrderEntity entity = request.createEntity();
         // Add extra permanent detail ( will be merged if already existed)
         OrderDetailEntity od = new OrderDetailEntity();
         od.setId(permanentDetailId);
         od.setDescription("固定订单明细项");
         od.setOrder(entity);
         entity.getOrderDetails().add(od);
-        OrderEntity saved = orderDao.save(entity);
+        OrderEntity saved = orderRepository.save(entity);
         return new OrderCreateResult(saved.getId());
     }
 
@@ -60,21 +60,21 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
     /**
      * 编辑订单，在原来明细上再添加新的明细。
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveRequest cmd) {
+    public OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveRequest request) {
         OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
+        Optional<OrderEntity> optEntity = orderRepository.findById(request.getId());
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            OrderEntity saved = orderDao.save(p);
+            p = request.populateEntity(p);
+            OrderEntity saved = orderRepository.save(p);
             ret.setOrderId(saved.getId());
         }
         else {
-            throw new RuntimeException("Order Not found: " + cmd.getId());
+            throw new RuntimeException("Order Not found: " + request.getId());
         }
         return ret;
     }
@@ -83,28 +83,28 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
     /**
      * 编辑订单， 删除原来的明细，添加新的明细
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveRequest cmd) {
+    public OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveRequest request) {
         OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
+        Optional<OrderEntity> optEntity = orderRepository.findById(request.getId());
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
             System.out.println(p.getOrderDetails().hashCode());
             p.getOrderDetails().clear(); // remove old details
-            p = cmd.populateEntity(p);
+            p = request.populateEntity(p);
             for (OrderDetailEntity orderDetail : p.getOrderDetails()) {
                 System.out.printf("'%s' - '%s'%n", orderDetail.getId(), orderDetail.getDescription());
                 System.out.println("parent order: " + orderDetail.getOrder());
             }
             System.out.println(p.getOrderDetails().hashCode());
-            OrderEntity saved = orderDao.save(p);
+            OrderEntity saved = orderRepository.save(p);
             ret.setOrderId(saved.getId());
         }
         else {
-            throw new RuntimeException("Order Not found: " + cmd.getId());
+            throw new RuntimeException("Order Not found: " + request.getId());
         }
         return ret;
     }

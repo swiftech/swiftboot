@@ -1,12 +1,11 @@
 package org.swiftboot.demo.shiro;
 
-import org.swiftboot.demo.constant.AuthConstants;
-import org.swiftboot.demo.repository.AdminUserDao;
-import org.swiftboot.demo.model.entity.AdminUserEntity;
-import org.springframework.stereotype.Component;
-import org.swiftboot.shiro.model.dao.UserAuthDaoStub;
-
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Component;
+import org.swiftboot.demo.constant.AuthConstants;
+import org.swiftboot.demo.model.AdminUserEntity;
+import org.swiftboot.demo.repository.AdminUserRepository;
+
 import java.util.Optional;
 
 /**
@@ -15,14 +14,14 @@ import java.util.Optional;
  * @deprecated
  */
 @Component(AuthConstants.MY_AUTH_SERVICE_NAME)
-public class DemoUserAuthDao implements UserAuthDaoStub<AdminUserEntity> {
+public class DemoUserAuthDao {//implements UserAuthDaoStub<AdminUserEntity> {
 
     @Resource
-    private AdminUserDao adminUserDao;
+    private AdminUserRepository adminUserRepository;
 
-    @Override
+//    @Override
     public AdminUserEntity findByLoginName(String loginName) {
-        Optional<AdminUserEntity> optAdminUser = adminUserDao.findByLoginName(loginName);
+        Optional<AdminUserEntity> optAdminUser = adminUserRepository.findByLoginName(loginName);
         return optAdminUser.orElse(null);
     }
 }

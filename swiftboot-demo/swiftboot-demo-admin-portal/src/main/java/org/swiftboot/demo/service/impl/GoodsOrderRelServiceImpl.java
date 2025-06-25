@@ -3,13 +3,14 @@ package org.swiftboot.demo.service.impl;
 import org.swiftboot.demo.request.GoodsOrderRelCreateRequest;
 import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
 import org.swiftboot.demo.request.GoodsOrderRelSaveRequest;
-import org.swiftboot.demo.repository.GoodsOrderRelDao;
-import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
+import org.swiftboot.demo.repository.GoodsOrderRelRepository;
+import org.swiftboot.demo.model.GoodsOrderRelEntity;
 import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
 import org.swiftboot.demo.dto.GoodsOrderRelListResult;
 import org.swiftboot.demo.dto.GoodsOrderRelResult;
 import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
 import org.swiftboot.demo.service.GoodsOrderRelService;
+import org.swiftboot.web.dto.PopulatableDto;
 import org.swiftboot.web.request.IdListRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,18 +34,18 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     private static final Logger log = LoggerFactory.getLogger(GoodsOrderRelServiceImpl.class);
 
     @Resource
-    private GoodsOrderRelDao goodsOrderRelDao;
+    private GoodsOrderRelRepository goodsOrderRelRepository;
 
     /**
      * 创建商品订单关系
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateRequest cmd) {
-        GoodsOrderRelEntity p = cmd.createEntity();
-        GoodsOrderRelEntity saved = goodsOrderRelDao.save(p);
+    public GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateRequest request) {
+        GoodsOrderRelEntity p = request.createEntity();
+        GoodsOrderRelEntity saved = goodsOrderRelRepository.save(p);
         log.debug("创建商品订单关系: " + saved.getId());
         return new GoodsOrderRelCreateResult(saved.getId());
     }
@@ -52,17 +53,17 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     /**
      * 保存对商品订单关系的修改
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveRequest cmd) {
+    public GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveRequest request) {
         GoodsOrderRelSaveResult ret = new GoodsOrderRelSaveResult();
-        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(cmd.getId());
+        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelRepository.findById(request.getId());
         if (optEntity.isPresent()) {
             GoodsOrderRelEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            GoodsOrderRelEntity saved = goodsOrderRelDao.save(p);
+            p = request.populateEntity(p);
+            GoodsOrderRelEntity saved = goodsOrderRelRepository.save(p);
             ret.setGoodsOrderRelId(saved.getId());
         }
         return ret;
@@ -75,25 +76,25 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      */
     @Override
     public void deleteGoodsOrderRel(String goodsOrderRelId) {
-        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(goodsOrderRelId);
+        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelRepository.findById(goodsOrderRelId);
         if (optEntity.isPresent()) {
             GoodsOrderRelEntity p = optEntity.get();
             p.setIsDelete(true);
-            goodsOrderRelDao.save(p);
+            goodsOrderRelRepository.save(p);
         }
     }
 
     /**
      * 批量逻辑删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void deleteGoodsOrderRelList(IdListRequest request) {
-        List<GoodsOrderRelEntity> entities = goodsOrderRelDao.findAllByIdIn(cmd.getIds());
+        List<GoodsOrderRelEntity> entities = goodsOrderRelRepository.findAllByIdIn(request.getIds());
         for (GoodsOrderRelEntity entity : entities) {
             entity.setIsDelete(true);
-            goodsOrderRelDao.save(entity);
+            goodsOrderRelRepository.save(entity);
             // TODO 处理关联表的数据删除
         }
     }
@@ -101,16 +102,16 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     /**
      * 逻辑删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
     @Override
-    public void deleteGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd) {
+    public void deleteGoodsOrderRel(GoodsOrderRelDelPurgeRequest request) {
         List<GoodsOrderRelEntity> entities =
-        goodsOrderRelDao.findByGoodsIdAndOrderId(
-            cmd.getGoodsId(), cmd.getOrderId());
+        goodsOrderRelRepository.findByGoodsIdAndOrderId(
+            request.getGoodsId(), request.getOrderId());
         for (GoodsOrderRelEntity p : entities) {
             p.setIsDelete(true);
-            goodsOrderRelDao.save(p);
+            goodsOrderRelRepository.save(p);
         }
     }
 
@@ -122,7 +123,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     @Override
     public void purgeGoodsOrderRel(String goodsOrderRelId) {
         if (StringUtils.isNotBlank(goodsOrderRelId)) {
-            goodsOrderRelDao.deleteById(goodsOrderRelId);
+            goodsOrderRelRepository.deleteById(goodsOrderRelId);
         }
         else {
             throw new RuntimeException("");
@@ -132,13 +133,13 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     /**
      * 批量永久删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void purgeGoodsOrderRelList(IdListRequest request) {
-        List<GoodsOrderRelEntity> entities = goodsOrderRelDao.findAllByIdIn(cmd.getIds());
+        List<GoodsOrderRelEntity> entities = goodsOrderRelRepository.findAllByIdIn(request.getIds());
         for (GoodsOrderRelEntity entity : entities) {
-            goodsOrderRelDao.deleteById(entity.getId());
+            goodsOrderRelRepository.deleteById(entity.getId());
             // TODO 处理关联表的数据删除
         }
     }
@@ -146,12 +147,12 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     /**
      * 永久删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
     @Override
-    public void purgeGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd) {
-        goodsOrderRelDao.deleteByGoodsIdAndOrderId (
-            cmd.getGoodsId(), cmd.getOrderId());
+    public void purgeGoodsOrderRel(GoodsOrderRelDelPurgeRequest request) {
+        goodsOrderRelRepository.deleteByGoodsIdAndOrderId (
+            request.getGoodsId(), request.getOrderId());
     }
 
     /**
@@ -163,10 +164,10 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     @Override
     public GoodsOrderRelResult queryGoodsOrderRel(String goodsOrderRelId) {
         GoodsOrderRelResult ret = null;
-        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelDao.findById(goodsOrderRelId);
+        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelRepository.findById(goodsOrderRelId);
         if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
-            ret = GoodsOrderRelResult.createResult(GoodsOrderRelResult.class, optEntity.get());
+            ret = PopulatableDto.createDto(GoodsOrderRelResult.class, optEntity.get());
         }
         else {
             log.debug("没有查询到商品订单关系, ID: " + goodsOrderRelId);
@@ -182,10 +183,10 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     @Override
     public GoodsOrderRelListResult queryGoodsOrderRelList() {
         GoodsOrderRelListResult ret = new GoodsOrderRelListResult();
-        Iterable<GoodsOrderRelEntity> all = goodsOrderRelDao.findAll();
+        Iterable<GoodsOrderRelEntity> all = goodsOrderRelRepository.findAll();
         if (all != null) {
             ret.populateByEntities(all);
-            ret.setTotal(goodsOrderRelDao.count());
+            ret.setTotal(goodsOrderRelRepository.count());
         }
         else {
             log.debug("没有查询到商品订单关系");
@@ -203,10 +204,10 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     @Override
     public GoodsOrderRelListResult queryGoodsOrderRelList(int page, int pageSize) {
         GoodsOrderRelListResult ret = new GoodsOrderRelListResult();
-        Page<GoodsOrderRelEntity> allPagination = goodsOrderRelDao.findAll(PageRequest.of(page, pageSize));
+        Page<GoodsOrderRelEntity> allPagination = goodsOrderRelRepository.findAll(PageRequest.of(page, pageSize));
         if (allPagination != null) {
             ret.populateByEntities(allPagination);
-            ret.setTotal(goodsOrderRelDao.count());
+            ret.setTotal(goodsOrderRelRepository.count());
         }
         else {
             log.debug("没有查到商品订单关系");

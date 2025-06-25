@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.swiftboot.demo.config.PermissionConfigBean;
-import org.swiftboot.demo.model.entity.AdminUserPermissionView;
+import org.swiftboot.demo.model.AdminUserPermissionView;
 import org.swiftboot.demo.service.AdminPermissionService;
-import org.swiftboot.demo.shiro.AdminUserPermissionDao;
+import org.swiftboot.demo.repository.AdminUserPermissionRepository;
 
 import jakarta.annotation.Resource;
 import java.util.HashSet;
@@ -21,7 +21,7 @@ public class AdminPermissionServiceImpl implements AdminPermissionService {
     Logger log = LoggerFactory.getLogger(AdminPermissionServiceImpl.class);
 
     @Resource
-    private AdminUserPermissionDao userPermissionDao;
+    private AdminUserPermissionRepository userPermissionDao;
 
     @Override
     public Set<PermissionConfigBean> queryAllPermissionForUser(String loginName) {

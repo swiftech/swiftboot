@@ -16,10 +16,11 @@ import org.swiftboot.demo.config.RoleConfigBean;
 import org.swiftboot.demo.config.SwiftbootDemoConfigBean;
 import org.swiftboot.demo.config.UserConfigBean;
 import org.swiftboot.demo.constant.AuthConstants;
-import org.swiftboot.demo.model.entity.*;
+import org.swiftboot.demo.model.*;
 import org.swiftboot.demo.repository.*;
 import org.swiftboot.util.PasswordUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -40,19 +41,19 @@ public class AdminInit {
     private SwiftbootDemoConfigBean demoConfig;
 
     @Resource
-    private AdminUserDao adminUserDao;
+    private AdminUserRepository adminUserRepository;
 
     @Resource
-    private AdminRoleDao adminRoleDao;
+    private AdminRoleRepository adminRoleRepository;
 
     @Resource
-    private AdminPermissionDao adminPermissionDao;
+    private AdminPermissionRepository adminPermissionRepository;
 
     @Resource
-    private AdminUserRoleRelDao adminUserRoleRelDao;
+    private AdminUserRoleRelRepository adminUserRoleRelRepository;
 
     @Resource
-    private AdminRolePermissionRelDao adminRolePermissionRelDao;
+    private AdminRolePermissionRelRepository adminRolePermissionRelRepository;
 
 //    @Resource
 //    private PasswordManager passwordManager;
@@ -70,21 +71,21 @@ public class AdminInit {
         // 所有code都以 ':*' 结尾
         permConfig.setCode(PermissionCodeUtils.standardPermCode(permConfig.getCode()));
 
-        Optional<AdminPermissionEntity> exist = adminPermissionDao.findByPermCode(permConfig.getCode());
+        Optional<AdminPermissionEntity> exist = adminPermissionRepository.findByPermCode(permConfig.getCode());
         AdminPermissionEntity permissionEntity;
         if (exist.isEmpty()) {
             permissionEntity = new AdminPermissionEntity();
         }
         else {
             permissionEntity = exist.get();
-            permissionEntity.setUpdateTime(System.currentTimeMillis());
+            permissionEntity.setUpdateTime(LocalDateTime.now());
         }
 
         log.debug("新建或者更新权限：" + permConfig.getCode());
         permissionEntity.setPermCode(permConfig.getCode());
         permissionEntity.setPermDesc(permConfig.getDesc());
         permissionEntity.setParentPermission(parent);
-        adminPermissionDao.save(permissionEntity);
+        adminPermissionRepository.save(permissionEntity);
         // 子权限处理
         if (permConfig.getPermissions() != null && !permConfig.getPermissions().isEmpty()) {
             for (PermissionConfigBean subPermConfig : permConfig.getPermissions()) {
@@ -97,7 +98,7 @@ public class AdminInit {
             Set<AdminPermissionEntity> subPerms = new HashSet<>();
             subPerms.add(permissionEntity);
             parent.setSubPermissions(subPerms);
-            adminPermissionDao.save(parent);
+            adminPermissionRepository.save(parent);
         }
     }
 
@@ -117,7 +118,7 @@ public class AdminInit {
     private void doInit() {
 
         // 权限（至少有一个所有权限）
-        Optional<AdminPermissionEntity> optRootPerm = adminPermissionDao.findByPermCode("*");
+        Optional<AdminPermissionEntity> optRootPerm = adminPermissionRepository.findByPermCode("*");
         AdminPermissionEntity rootPermission;
         if (optRootPerm.isPresent()) {
             rootPermission = optRootPerm.get();
@@ -126,7 +127,7 @@ public class AdminInit {
             rootPermission = new AdminPermissionEntity();
             rootPermission.setPermCode("*");
             rootPermission.setPermDesc("所有权限");
-            adminPermissionDao.save(rootPermission);
+            adminPermissionRepository.save(rootPermission);
         }
         Set<PermissionConfigBean> permissions = demoConfig.getInit().getPermissions();
         if (permissions != null) {
@@ -157,13 +158,13 @@ public class AdminInit {
         if (roles != null) {
             log.info("角色：" + roles.size());
             for (RoleConfigBean role : roles) {
-                Optional<AdminRoleEntity> exist = adminRoleDao.findByRoleName(role.getName());
+                Optional<AdminRoleEntity> exist = adminRoleRepository.findByRoleName(role.getName());
                 if (exist.isEmpty()) {
                     log.info("  创建角色：" + role.getName());
                     AdminRoleEntity roleEntity = new AdminRoleEntity();
                     roleEntity.setRoleName(role.getName());
                     roleEntity.setRoleDesc(role.getDesc());
-                    adminRoleDao.save(roleEntity);
+                    adminRoleRepository.save(roleEntity);
                 }
             }
         }
@@ -173,13 +174,13 @@ public class AdminInit {
         if (users != null) {
             log.info("用户：%d".formatted(users.size()));
             for (UserConfigBean user : users) {
-                Optional<AdminUserEntity> exist = adminUserDao.findByLoginName(user.getLoginName());
+                Optional<AdminUserEntity> exist = adminUserRepository.findByLoginName(user.getLoginName());
                 if (exist.isEmpty()) {
                     log.info("  创建用户：%s".formatted(user.getLoginName()));
                     AdminUserEntity userEntity = new AdminUserEntity();
                     userEntity.setLoginName(user.getLoginName());
                     userEntity.setLoginPwd(PasswordUtils.createPassword(user.getLoginPwd(), AuthConstants.MY_AUTH_SERVICE_NAME));
-                    adminUserDao.save(userEntity);
+                    adminUserRepository.save(userEntity);
                 }
             }
         }
@@ -190,23 +191,23 @@ public class AdminInit {
             log.info(String.format("%d 个角色需要初始化权限关联", rolePermsRels.size()));
             for (String roleName : rolePermsRels.keySet()) {
                 List<String> permCodeList = rolePermsRels.get(roleName);
-                Optional<AdminRoleEntity> optAdminRole = adminRoleDao.findByRoleName(roleName);
+                Optional<AdminRoleEntity> optAdminRole = adminRoleRepository.findByRoleName(roleName);
                 // 排除不存在的角色
                 if (optAdminRole.isPresent()) {
                     for (String permCode : permCodeList) {
                         permCode = PermissionCodeUtils.standardPermCode(permCode);
 
-                        Optional<AdminPermissionEntity> optAdminPerm = adminPermissionDao.findByPermCode(permCode);
+                        Optional<AdminPermissionEntity> optAdminPerm = adminPermissionRepository.findByPermCode(permCode);
                         // 排除不存在的权限
                         if (optAdminPerm.isPresent()) {
-                            Optional<AdminRolePermissionRelEntity> exist = adminRolePermissionRelDao.findByAdminRoleAndAdminPermission(
+                            Optional<AdminRolePermissionRelEntity> exist = adminRolePermissionRelRepository.findByAdminRoleAndAdminPermission(
                                     optAdminRole.get(), optAdminPerm.get());
                             if (!exist.isPresent()) {
                                 log.info(String.format("  创建角色权限关联：%s - %s", roleName, permCode));
                                 AdminRolePermissionRelEntity rolePermRelEntity = new AdminRolePermissionRelEntity();
                                 rolePermRelEntity.setAdminRole(optAdminRole.get());
                                 rolePermRelEntity.setAdminPermission(optAdminPerm.get());
-                                adminRolePermissionRelDao.save(rolePermRelEntity);
+                                adminRolePermissionRelRepository.save(rolePermRelEntity);
                             }
                         }
                         else {
@@ -226,18 +227,18 @@ public class AdminInit {
             log.info(String.format("%d 个用户需要初始化角色关联", roleUserRels.size()));
             for (String roleName : roleUserRels.keySet()) {
                 List<String> userLoginNameList = roleUserRels.get(roleName);
-                Optional<AdminRoleEntity> optAdminRole = adminRoleDao.findByRoleName(roleName);
+                Optional<AdminRoleEntity> optAdminRole = adminRoleRepository.findByRoleName(roleName);
                 if (userLoginNameList != null) {
                     for (String userLoginName : userLoginNameList) {
-                        Optional<AdminUserEntity> optAdminUser = adminUserDao.findByIsDeleteFalseAndLoginName(userLoginName);
+                        Optional<AdminUserEntity> optAdminUser = adminUserRepository.findByIsDeleteFalseAndLoginName(userLoginName);
                         if (optAdminUser.isPresent()) {
-                            Optional<AdminUserRoleRelEntity> exist = adminUserRoleRelDao.findByAdminRoleAndAdminUser(optAdminRole.get(), optAdminUser.get());
+                            Optional<AdminUserRoleRelEntity> exist = adminUserRoleRelRepository.findByAdminRoleAndAdminUser(optAdminRole.get(), optAdminUser.get());
                             if (!exist.isPresent()) {
                                 log.info(String.format("  创建用户角色关联：%s - %s", userLoginName, roleName));
                                 AdminUserRoleRelEntity userRoleRelEntity = new AdminUserRoleRelEntity();
                                 userRoleRelEntity.setAdminRole(optAdminRole.get());
                                 userRoleRelEntity.setAdminUser(optAdminUser.get());
-                                adminUserRoleRelDao.save(userRoleRelEntity);
+                                adminUserRoleRelRepository.save(userRoleRelEntity);
                             }
                         }
                     }

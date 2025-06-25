@@ -46,8 +46,9 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  *     <li>代码包结构必须是：
  *     <pre>
  *     model
- *       |- dao
- *       |- entity
+ *          *Entity.java
+ *     repository
+ *          *Repository.java
  *     </pre>
  *     </li>
  * </ul>
@@ -255,9 +256,9 @@ public class Initializer implements ApplicationContextAware {
     @Transactional
     void initOne(InputStream fileIns, Class<?> entityClass) throws Exception {
         // try to get dao bean
-        String baseName = substringBeforeLast(entityClass.getName(), ".entity.");
+        String baseName = substringBeforeLast(entityClass.getName(), ".model.");
         String entityName = StringUtils.substringBefore(entityClass.getSimpleName(), "Entity");
-        String daoName = String.format("%s.dao.%sDao", baseName, entityName);
+        String daoName = String.format("%s.repository.%sDao", baseName, entityName);
 
         Class<?> daoClass = Class.forName(daoName);
         log.info("Dao class: " + daoClass);

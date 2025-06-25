@@ -2,7 +2,7 @@ package org.swiftboot.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.swiftboot.demo.model.entity.OrderEntity;
+import org.swiftboot.demo.model.OrderEntity;
 import org.swiftboot.web.dto.BasePopulateDto;
 
 import java.util.Set;

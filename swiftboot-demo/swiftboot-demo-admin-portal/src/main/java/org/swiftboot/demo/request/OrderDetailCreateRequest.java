@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-import org.swiftboot.demo.model.entity.OrderDetailEntity;
+import org.swiftboot.demo.model.OrderDetailEntity;
 import org.swiftboot.web.request.BasePopulateRequest;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;

@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-import org.swiftboot.demo.model.entity.OrderDetailEntity;
-import org.swiftboot.demo.model.entity.OrderPaymentEntity;
+import org.swiftboot.demo.model.OrderDetailEntity;
+import org.swiftboot.demo.model.OrderPaymentEntity;
 import org.swiftboot.web.request.BasePopulateRequest;
 
 import java.math.BigDecimal;

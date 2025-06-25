@@ -1,5 +1,6 @@
 package org.swiftboot.data;
 
+import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,8 +14,6 @@ import org.swiftboot.data.model.id.DefaultIdGenerator;
 import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.data.model.id.IdPopulator;
 import org.swiftboot.data.model.interceptor.*;
-
-import jakarta.annotation.Resource;
 
 /**
  * @author swiftech

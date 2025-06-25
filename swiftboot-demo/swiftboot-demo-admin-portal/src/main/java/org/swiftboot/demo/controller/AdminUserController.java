@@ -4,14 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
 import org.swiftboot.demo.config.PermissionConfigBean;
 import org.swiftboot.demo.dto.AdminUserCreateResult;
 import org.swiftboot.demo.dto.AdminUserListResult;
@@ -21,14 +18,12 @@ import org.swiftboot.demo.request.AdminUserCreateRequest;
 import org.swiftboot.demo.request.AdminUserSaveRequest;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
-import org.swiftboot.shiro.constant.ShiroSessionConstants;
 import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.request.IdListRequest;
 import org.swiftboot.web.request.IdRequest;
 import org.swiftboot.web.response.Response;
-import org.swiftboot.web.response.ResponseCode;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -50,8 +45,8 @@ public class AdminUserController {
     @Resource
     private AdminPermissionService adminPermissionService;
 
-    @Resource
-    private SwiftbootAuthConfigBean authConfigBean;
+//    @Resource
+//    private SwiftbootAuthConfigBean authConfigBean;
 
 
     @Operation(description = "创建管理员")
@@ -96,15 +91,16 @@ public class AdminUserController {
     @RequestMapping(value = "permissions", method = RequestMethod.GET)
     public Response<Set<PermissionConfigBean>> adminUserPermissionList() {
         log.info("> /admin/user/permissions");
-        Session session = SecurityUtils.getSubject().getSession();
-        if (session == null) {
-            throw new ErrMessageException(ResponseCode.CODE_USER_SESSION_NOT_EXIST);
-        }
-        if (session.getAttribute(ShiroSessionConstants.SESSION_KEY_LOGIN_NAME) == null) {
-            throw new ErrMessageException(ResponseCode.CODE_SYS_ERR, "No login name found");
-        }
-        Set<PermissionConfigBean> ret = adminPermissionService.queryAllPermissionForUser(
-                session.getAttribute(ShiroSessionConstants.SESSION_KEY_LOGIN_NAME).toString());
+//        Session session = SecurityUtils.getSubject().getSession();
+//        if (session == null) {
+//            throw new ErrMessageException(ResponseCode.CODE_USER_SESSION_NOT_EXIST);
+//        }
+//        if (session.getAttribute(ShiroSessionConstants.SESSION_KEY_LOGIN_NAME) == null) {
+//            throw new ErrMessageException(ResponseCode.CODE_SYS_ERR, "No login name found");
+//        }
+//        Set<PermissionConfigBean> ret = adminPermissionService.queryAllPermissionForUser(
+//                session.getAttribute(ShiroSessionConstants.SESSION_KEY_LOGIN_NAME).toString());
+        Set<PermissionConfigBean> ret = new HashSet<>();
         return new Response<>(ret);
     }
 

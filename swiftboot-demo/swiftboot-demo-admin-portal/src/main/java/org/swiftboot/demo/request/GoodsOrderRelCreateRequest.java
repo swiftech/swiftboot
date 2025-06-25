@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
-import org.swiftboot.demo.model.entity.GoodsOrderRelEntity;
+import org.swiftboot.demo.model.GoodsOrderRelEntity;
 import org.swiftboot.web.request.BasePopulateRequest;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;

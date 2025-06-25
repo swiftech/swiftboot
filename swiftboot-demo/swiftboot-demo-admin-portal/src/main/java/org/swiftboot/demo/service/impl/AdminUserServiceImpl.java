@@ -1,35 +1,25 @@
 package org.swiftboot.demo.service.impl;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.auth.config.SwiftbootAuthConfigBean;
-import org.swiftboot.auth.service.SessionService;
+import org.swiftboot.demo.dto.*;
+import org.swiftboot.demo.model.AdminUserEntity;
+import org.swiftboot.demo.repository.AdminUserRepository;
 import org.swiftboot.demo.request.AdminUserCreateRequest;
 import org.swiftboot.demo.request.AdminUserSaveRequest;
 import org.swiftboot.demo.request.AdminUserSigninRequest;
 import org.swiftboot.demo.request.AdminUserSignoutRequest;
-import org.swiftboot.demo.repository.AdminUserDao;
-import org.swiftboot.demo.model.entity.AdminUserEntity;
-import org.swiftboot.demo.dto.*;
 import org.swiftboot.demo.service.AdminUserService;
+import org.swiftboot.web.dto.PopulatableDto;
 import org.swiftboot.web.request.IdListRequest;
-import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.response.ResponseCode;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
-
-import static org.swiftboot.demo.constant.AuthConstants.MY_AUTH_SERVICE_NAME;
 
 /**
  * 管理员服务接口实现
@@ -42,13 +32,13 @@ public class AdminUserServiceImpl implements AdminUserService {
     private static final Logger log = LoggerFactory.getLogger(AdminUserServiceImpl.class);
 
     @Resource
-    private AdminUserDao adminUserDao;
+    private AdminUserRepository adminUserRepository;
 
-    @Resource
-    private SessionService sessionService;
-
-    @Resource
-    private SwiftbootAuthConfigBean authConfigBean;
+//    @Resource
+//    private SessionService sessionService;
+//
+//    @Resource
+//    private SwiftbootAuthConfigBean authConfigBean;
 
 // Use AdminInit instead
 //    @PostConstruct
@@ -66,38 +56,38 @@ public class AdminUserServiceImpl implements AdminUserService {
     public AdminUserSigninResult adminUserSignin(AdminUserSigninRequest command) {
         AdminUserSigninResult ret = new AdminUserSigninResult();
 
-        Subject currentUser = SecurityUtils.getSubject();
-        try {
-            currentUser.login(new UsernamePasswordToken(request.getLoginName(), request.getLoginPwd(), MY_AUTH_SERVICE_NAME));
-            Session session = SecurityUtils.getSubject().getSession();
-            ret.setSuccess(true);
-            ret.setLoginName(request.getLoginName());
-            ret.setToken(session.getId().toString());
-            ret.setId(session.getAttribute("user_id").toString());
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL, e.getMessage());
-        }
+//        Subject currentUser = SecurityUtils.getSubject();
+//        try {
+//            currentUser.login(new UsernamePasswordToken(request.getLoginName(), request.getLoginPwd(), MY_AUTH_SERVICE_NAME));
+//            Session session = SecurityUtils.getSubject().getSession();
+//            ret.setSuccess(true);
+//            ret.setLoginName(request.getLoginName());
+//            ret.setToken(session.getId().toString());
+//            ret.setId(session.getAttribute("user_id").toString());
+//        } catch (AuthenticationException e) {
+//            e.printStackTrace();
+//            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL, e.getMessage());
+//        }
         return ret;
     }
 
     @Override
     public AdminUserSignoutResult adminUserSignout(AdminUserSignoutRequest command) {
-        Subject currentUser = SecurityUtils.getSubject();
-        currentUser.logout();
+//        Subject currentUser = SecurityUtils.getSubject();
+//        currentUser.logout();
         return new AdminUserSignoutResult();
     }
 
     /**
      * 创建管理员
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public AdminUserCreateResult createAdminUser(AdminUserCreateRequest cmd) {
-        AdminUserEntity p = cmd.createEntity();
-        AdminUserEntity saved = adminUserDao.save(p);
+    public AdminUserCreateResult createAdminUser(AdminUserCreateRequest request) {
+        AdminUserEntity p = request.createEntity();
+        AdminUserEntity saved = adminUserRepository.save(p);
         log.debug("创建管理员: " + saved.getId());
         return new AdminUserCreateResult(saved.getId());
     }
@@ -105,17 +95,17 @@ public class AdminUserServiceImpl implements AdminUserService {
     /**
      * 保存对管理员的修改
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public AdminUserSaveResult saveAdminUser(AdminUserSaveRequest cmd) {
+    public AdminUserSaveResult saveAdminUser(AdminUserSaveRequest request) {
         AdminUserSaveResult ret = new AdminUserSaveResult();
-        Optional<AdminUserEntity> optEntity = adminUserDao.findById(cmd.getId());
+        Optional<AdminUserEntity> optEntity = adminUserRepository.findById(request.getId());
         if (optEntity.isPresent()) {
             AdminUserEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            AdminUserEntity saved = adminUserDao.save(p);
+            p = request.populateEntity(p);
+            AdminUserEntity saved = adminUserRepository.save(p);
             ret.setAdminUserId(saved.getId());
         }
         return ret;
@@ -128,11 +118,11 @@ public class AdminUserServiceImpl implements AdminUserService {
      */
     @Override
     public void deleteAdminUser(String adminUserId) {
-        Optional<AdminUserEntity> optEntity = adminUserDao.findById(adminUserId);
+        Optional<AdminUserEntity> optEntity = adminUserRepository.findById(adminUserId);
         if (optEntity.isPresent()) {
             AdminUserEntity p = optEntity.get();
             p.setIsDelete(true);
-            adminUserDao.save(p);
+            adminUserRepository.save(p);
         }
     }
 
@@ -143,10 +133,10 @@ public class AdminUserServiceImpl implements AdminUserService {
      */
     @Override
     public void deleteAdminUserList(IdListRequest request) {
-        List<AdminUserEntity> entities = adminUserDao.findAllByIdIn(request.getIds());
+        List<AdminUserEntity> entities = adminUserRepository.findAllByIdIn(request.getIds());
         for (AdminUserEntity entity : entities) {
             entity.setIsDelete(true);
-            adminUserDao.save(entity);
+            adminUserRepository.save(entity);
             // TODO 处理关联表的数据删除
         }
     }
@@ -160,7 +150,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public void purgeAdminUser(String adminUserId) {
         if (StringUtils.isNotBlank(adminUserId)) {
-            adminUserDao.deleteById(adminUserId);
+            adminUserRepository.deleteById(adminUserId);
         }
         else {
             throw new RuntimeException("");
@@ -174,9 +164,9 @@ public class AdminUserServiceImpl implements AdminUserService {
      */
     @Override
     public void purgeAdminUserList(IdListRequest request) {
-        List<AdminUserEntity> entities = adminUserDao.findAllByIdIn(request.getIds());
+        List<AdminUserEntity> entities = adminUserRepository.findAllByIdIn(request.getIds());
         for (AdminUserEntity entity : entities) {
-            adminUserDao.deleteById(entity.getId());
+            adminUserRepository.deleteById(entity.getId());
             // TODO 处理关联表的数据删除
         }
     }
@@ -191,10 +181,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public AdminUserResult queryAdminUser(String adminUserId) {
         AdminUserResult ret = null;
-        Optional<AdminUserEntity> optEntity = adminUserDao.findById(adminUserId);
+        Optional<AdminUserEntity> optEntity = adminUserRepository.findById(adminUserId);
         if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
-            ret = AdminUserResult.createDto(AdminUserResult.class, optEntity.get());
+            ret = PopulatableDto.createDto(AdminUserResult.class, optEntity.get());
         }
         else {
             log.debug("没有查询到管理员, ID: " + adminUserId);
@@ -210,10 +200,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public AdminUserListResult queryAdminUserList() {
         AdminUserListResult ret = new AdminUserListResult();
-        Iterable<AdminUserEntity> all = adminUserDao.findAll();
+        Iterable<AdminUserEntity> all = adminUserRepository.findAll();
         if (all != null) {
             ret.populateByEntities(all);
-            ret.setTotal(adminUserDao.count());
+            ret.setTotal(adminUserRepository.count());
         }
         else {
             log.debug("没有查询到管理员");
@@ -231,10 +221,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     public AdminUserListResult queryAdminUserList(int page, int pageSize) {
         AdminUserListResult ret = new AdminUserListResult();
-        Page<AdminUserEntity> allPagination = adminUserDao.findAll(PageRequest.of(page, pageSize));
+        Page<AdminUserEntity> allPagination = adminUserRepository.findAll(PageRequest.of(page, pageSize));
         if (allPagination != null) {
             ret.populateByEntities(allPagination);
-            ret.setTotal(adminUserDao.count());
+            ret.setTotal(adminUserRepository.count());
         }
         else {
             log.debug("没有查到管理员");

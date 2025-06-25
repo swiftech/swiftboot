@@ -3,8 +3,8 @@ package org.swiftboot.demo.service.impl;
 import org.swiftboot.demo.request.GoodsCreateRequest;
 import org.swiftboot.demo.request.GoodsSaveRequest;
 import org.swiftboot.demo.request.GoodsWithDetailCreateRequest;
-import org.swiftboot.demo.repository.GoodsDao;
-import org.swiftboot.demo.model.entity.GoodsEntity;
+import org.swiftboot.demo.repository.GoodsRepository;
+import org.swiftboot.demo.model.GoodsEntity;
 import org.swiftboot.demo.dto.GoodsCreateResult;
 import org.swiftboot.demo.dto.GoodsListResult;
 import org.swiftboot.demo.dto.GoodsResult;
@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.swiftboot.web.dto.PopulatableDto;
 import org.swiftboot.web.request.IdListRequest;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.ResponseCode;
@@ -36,26 +37,26 @@ public class GoodsServiceImpl implements GoodsService {
     private static final Logger log = LoggerFactory.getLogger(GoodsServiceImpl.class);
 
     @Resource
-    private GoodsDao goodsDao;
+    private GoodsRepository goodsRepository;
 
     /**
      * 创建商品
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public GoodsCreateResult createGoods(GoodsCreateRequest cmd) {
-        GoodsEntity p = cmd.createEntity();
-        GoodsEntity saved = goodsDao.save(p);
+    public GoodsCreateResult createGoods(GoodsCreateRequest request) {
+        GoodsEntity p = request.createEntity();
+        GoodsEntity saved = goodsRepository.save(p);
         log.debug("创建商品: " + saved.getId());
         return new GoodsCreateResult(saved.getId());
     }
 
     @Override
-    public GoodsCreateResult createWithException(GoodsCreateRequest cmd) {
-        GoodsEntity p1 = cmd.createEntity();
-        goodsDao.save(p1);
+    public GoodsCreateResult createWithException(GoodsCreateRequest request) {
+        GoodsEntity p1 = request.createEntity();
+        goodsRepository.save(p1);
         log.debug("创建商品: " + p1.getId());
         if (true) {
             if (RandomUtils.nextBoolean()) {
@@ -69,9 +70,9 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateRequest cmd) {
-        GoodsEntity entity = cmd.createEntity();
-        GoodsEntity saved = goodsDao.save(entity);
+    public GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateRequest request) {
+        GoodsEntity entity = request.createEntity();
+        GoodsEntity saved = goodsRepository.save(entity);
         log.debug("创建商品: " + saved.getId());
         return new GoodsCreateResult(saved.getId());
     }
@@ -79,17 +80,17 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 保存对商品的修改
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public GoodsSaveResult saveGoods(GoodsSaveRequest cmd) {
+    public GoodsSaveResult saveGoods(GoodsSaveRequest request) {
         GoodsSaveResult ret = new GoodsSaveResult();
-        Optional<GoodsEntity> optEntity = goodsDao.findById(cmd.getId());
+        Optional<GoodsEntity> optEntity = goodsRepository.findById(request.getId());
         if (optEntity.isPresent()) {
             GoodsEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            GoodsEntity saved = goodsDao.save(p);
+            p = request.populateEntity(p);
+            GoodsEntity saved = goodsRepository.save(p);
             ret.setGoodsId(saved.getId());
         }
         return ret;
@@ -103,11 +104,11 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void deleteGoods(String goodsId) {
 //        goodsDao.deleteLogically(goodsId);
-        Optional<GoodsEntity> optEntity = goodsDao.findById(goodsId);
+        Optional<GoodsEntity> optEntity = goodsRepository.findById(goodsId);
         if (optEntity.isPresent()) {
             GoodsEntity p = optEntity.get();
             log.trace(String.format("Delete goods %s - %s - %s logically", p.getId(), p.getName(), p.getIsDelete()));
-            goodsDao.deleteLogically(p);
+            goodsRepository.deleteLogically(p);
 //            p.setDelete(true);
 //            goodsDao.save(p);
         }
@@ -116,14 +117,14 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 批量逻辑删除商品
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void deleteGoodsList(IdListRequest request) {
-        List<GoodsEntity> entities = goodsDao.findAllByIdIn(cmd.getIds());
+        List<GoodsEntity> entities = goodsRepository.findAllByIdIn(request.getIds());
         for (GoodsEntity entity : entities) {
             entity.setIsDelete(true);
-            goodsDao.save(entity);
+            goodsRepository.save(entity);
             // TODO 处理关联表的数据删除
         }
     }
@@ -137,7 +138,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void purgeGoods(String goodsId) {
         if (StringUtils.isNotBlank(goodsId)) {
-            goodsDao.deleteById(goodsId);
+            goodsRepository.deleteById(goodsId);
         }
         else {
             throw new RuntimeException("");
@@ -147,13 +148,13 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 批量永久删除商品
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void purgeGoodsList(IdListRequest request) {
-        List<GoodsEntity> entities = goodsDao.findAllByIdIn(cmd.getIds());
+        List<GoodsEntity> entities = goodsRepository.findAllByIdIn(request.getIds());
         for (GoodsEntity entity : entities) {
-            goodsDao.deleteById(entity.getId());
+            goodsRepository.deleteById(entity.getId());
             // TODO 处理关联表的数据删除
         }
     }
@@ -168,10 +169,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public GoodsResult queryGoods(String goodsId) {
         GoodsResult ret = null;
-        Optional<GoodsEntity> optEntity = goodsDao.findById(goodsId);
+        Optional<GoodsEntity> optEntity = goodsRepository.findById(goodsId);
         if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
-            ret = GoodsResult.createResult(GoodsResult.class, optEntity.get());
+            ret = PopulatableDto.createDto(GoodsResult.class, optEntity.get());
         }
         else {
             log.debug("没有查询到商品, ID: " + goodsId);
@@ -187,10 +188,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public GoodsListResult queryGoodsList() {
         GoodsListResult ret = new GoodsListResult();
-        Iterable<GoodsEntity> all = goodsDao.findAll();
+        Iterable<GoodsEntity> all = goodsRepository.findAll();
         if (all != null) {
             ret.populateByEntities(all);
-            ret.setTotal(goodsDao.count());
+            ret.setTotal(goodsRepository.count());
         }
         else {
             log.debug("没有查询到商品");
@@ -208,10 +209,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public GoodsListResult queryGoodsList(int page, int pageSize) {
         GoodsListResult ret = new GoodsListResult();
-        Page<GoodsEntity> allPagination = goodsDao.findAll(PageRequest.of(page, pageSize));
+        Page<GoodsEntity> allPagination = goodsRepository.findAll(PageRequest.of(page, pageSize));
         if (allPagination != null) {
             ret.populateByEntities(allPagination);
-            ret.setTotal(goodsDao.count());
+            ret.setTotal(goodsRepository.count());
         }
         else {
             log.debug("没有查到商品");

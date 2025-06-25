@@ -1,6 +1,6 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.repository.OrderDetailDao;
+import org.swiftboot.demo.repository.OrderDetailRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,13 +9,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.swiftboot.demo.request.OrderCreateRequest;
 import org.swiftboot.demo.request.OrderSaveRequest;
-import org.swiftboot.demo.repository.OrderDao;
-import org.swiftboot.demo.model.entity.OrderEntity;
+import org.swiftboot.demo.repository.OrderRepository;
+import org.swiftboot.demo.model.OrderEntity;
 import org.swiftboot.demo.dto.OrderCreateResult;
 import org.swiftboot.demo.dto.OrderListResult;
 import org.swiftboot.demo.dto.OrderResult;
 import org.swiftboot.demo.dto.OrderSaveResult;
 import org.swiftboot.demo.service.OrderService;
+import org.swiftboot.web.dto.PopulatableDto;
 import org.swiftboot.web.request.IdListRequest;
 
 import jakarta.annotation.Resource;
@@ -34,10 +35,10 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Resource
-    private OrderDao orderDao;
+    private OrderRepository orderRepository;
 
     @Resource
-    private OrderDetailDao orderDetailDao;
+    private OrderDetailRepository orderDetailRepository;
 
     @Resource
     private EntityManager entityManager;
@@ -45,14 +46,14 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 创建订单
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public OrderCreateResult createOrder(OrderCreateRequest cmd) {
-        OrderEntity p = cmd.createEntity();
-        p.setUserId(cmd.getUserId()); // call explicitly for the field COULD be different.
-        OrderEntity saved = orderDao.save(p);
+    public OrderCreateResult createOrder(OrderCreateRequest request) {
+        OrderEntity p = request.createEntity();
+//        p.setUserId(request.getUserId()); // call explicitly for the field COULD be different.
+        OrderEntity saved = orderRepository.save(p);
         log.debug("创建订单: " + saved.getId());
         return new OrderCreateResult(saved.getId());
     }
@@ -60,17 +61,17 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 保存对订单的修改
      *
-     * @param cmd
+     * @param request
      * @return
      */
     @Override
-    public OrderSaveResult saveOrder(OrderSaveRequest cmd) {
+    public OrderSaveResult saveOrder(OrderSaveRequest request) {
         OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderDao.findById(cmd.getId());
+        Optional<OrderEntity> optEntity = orderRepository.findById(request.getId());
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
-            p = cmd.populateEntity(p);
-            OrderEntity saved = orderDao.save(p);
+            p = request.populateEntity(p);
+            OrderEntity saved = orderRepository.save(p);
             ret.setOrderId(saved.getId());
         }
         return ret;
@@ -85,25 +86,25 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public void deleteOrder(String orderId) {
-        Optional<OrderEntity> optEntity = orderDao.findById(orderId);
+        Optional<OrderEntity> optEntity = orderRepository.findById(orderId);
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
             p.setIsDelete(true);
-            orderDao.save(p);
+            orderRepository.save(p);
         }
     }
 
     /**
      * 批量逻辑删除订单
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void deleteOrderList(IdListRequest request) {
-        List<OrderEntity> entities = orderDao.findAllByIdIn(cmd.getIds());
+        List<OrderEntity> entities = orderRepository.findAllByIdIn(request.getIds());
         for (OrderEntity entity : entities) {
             entity.setIsDelete(true);
-            orderDao.save(entity);
+            orderRepository.save(entity);
             // TODO 处理关联表的数据删除
         }
     }
@@ -117,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void purgeOrder(String orderId) {
         if (StringUtils.isNotBlank(orderId)) {
-            orderDao.deleteById(orderId);
+            orderRepository.deleteById(orderId);
         }
         else {
             throw new RuntimeException("");
@@ -127,13 +128,13 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 批量永久删除订单
      *
-     * @param cmd
+     * @param request
      */
     @Override
     public void purgeOrderList(IdListRequest request) {
-        List<OrderEntity> entities = orderDao.findAllByIdIn(cmd.getIds());
+        List<OrderEntity> entities = orderRepository.findAllByIdIn(request.getIds());
         for (OrderEntity entity : entities) {
-            orderDao.deleteById(entity.getId());
+            orderRepository.deleteById(entity.getId());
             // TODO 处理关联表的数据删除
         }
     }
@@ -148,10 +149,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResult queryOrder(String orderId) {
         OrderResult ret = null;
-        Optional<OrderEntity> optEntity = orderDao.findById(orderId);
+        Optional<OrderEntity> optEntity = orderRepository.findById(orderId);
         if (optEntity.isPresent()) {
             log.debug(optEntity.get().getId());
-            ret = OrderResult.createResult(OrderResult.class, optEntity.get());
+            ret = PopulatableDto.createDto(OrderResult.class, optEntity.get());
         }
         else {
             log.debug("没有查询到订单, ID: " + orderId);
@@ -167,10 +168,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderListResult queryOrderList(String userId) {
         OrderListResult ret = new OrderListResult();
-        Iterable<OrderEntity> all = orderDao.findByIsDeleteFalseAndUserId(userId);
+        Iterable<OrderEntity> all = orderRepository.findByIsDeleteFalseAndUserId(userId);
         if (all != null) {
             ret.populateByEntities(all);
-            ret.setTotal(orderDao.count());
+            ret.setTotal(orderRepository.count());
         }
         else {
             log.debug("没有查询到订单");
@@ -188,10 +189,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderListResult queryOrderList(int page, int pageSize) {
         OrderListResult ret = new OrderListResult();
-        Page<OrderEntity> allPagination = orderDao.findAll(PageRequest.of(page, pageSize));
+        Page<OrderEntity> allPagination = orderRepository.findAll(PageRequest.of(page, pageSize));
         if (allPagination != null) {
             ret.populateByEntities(allPagination);
-            ret.setTotal(orderDao.count());
+            ret.setTotal(orderRepository.count());
         }
         else {
             log.debug("没有查到订单");

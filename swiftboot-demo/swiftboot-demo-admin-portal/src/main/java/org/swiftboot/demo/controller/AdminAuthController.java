@@ -3,7 +3,6 @@ package org.swiftboot.demo.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import org.swiftboot.demo.request.AdminUserSigninRequest;
 import org.swiftboot.demo.request.AdminUserSignoutRequest;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
-import org.swiftboot.shiro.config.SwiftbootShiroConfigBean;
 import org.swiftboot.web.response.Response;
 
 /**
@@ -37,8 +35,8 @@ public class AdminAuthController {
     @Resource
     private AdminPermissionService adminPermissionService;
 
-    @Resource
-    private SwiftbootShiroConfigBean shiroConfigBean;
+//    @Resource
+//    private SwiftbootShiroConfigBean shiroConfigBean;
 
 
     @Operation(description = "Admin user signin")
@@ -48,11 +46,11 @@ public class AdminAuthController {
             HttpServletResponse response) {
         log.info("> /admin/auth/signin");
         AdminUserSigninResult adminUserResult = adminUserService.adminUserSignin(request);
-        String tokenKey = shiroConfigBean.getCookie().getName();
-        Cookie cookie  = new Cookie(tokenKey, adminUserResult.getToken());
-        cookie.setDomain(shiroConfigBean.getCookie().getDomain());
-        cookie.setMaxAge(shiroConfigBean.getCookie().getMaxAge());
-        response.addCookie(cookie);
+//        String tokenKey = shiroConfigBean.getCookie().getName();
+//        Cookie cookie  = new Cookie(tokenKey, adminUserResult.getToken());
+//        cookie.setDomain(shiroConfigBean.getCookie().getDomain());
+//        cookie.setMaxAge(shiroConfigBean.getCookie().getMaxAge());
+//        response.addCookie(cookie);
         return new Response<>(adminUserResult);
     }
 
@@ -63,11 +61,11 @@ public class AdminAuthController {
             HttpServletResponse response) {
         log.info("> /admin/auth/signout");
         AdminUserSignoutResult adminUserResult = adminUserService.adminUserSignout(request);
-        String tokenKey = shiroConfigBean.getCookie().getName();
-        Cookie cookie  = new Cookie(tokenKey, null);
-        cookie.setDomain(shiroConfigBean.getCookie().getDomain());
-        cookie.setMaxAge(shiroConfigBean.getCookie().getMaxAge());
-        response.addCookie(cookie);
+//        String tokenKey = shiroConfigBean.getCookie().getName();
+//        Cookie cookie  = new Cookie(tokenKey, null);
+//        cookie.setDomain(shiroConfigBean.getCookie().getDomain());
+//        cookie.setMaxAge(shiroConfigBean.getCookie().getMaxAge());
+//        response.addCookie(cookie);
         return new Response<>(adminUserResult);
     }
 }

@@ -1,7 +1,7 @@
 package org.swiftboot.demo.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.swiftboot.demo.model.entity.AdminUserEntity;
+import org.swiftboot.demo.model.AdminUserEntity;
 import org.swiftboot.web.request.BasePopulateRequest;
 
 /**
