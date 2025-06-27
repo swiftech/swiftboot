@@ -28,9 +28,13 @@ public class AdminUserSigninResult extends BasePopulateDto<AdminUserEntity> {
     @Schema(description = "Sign in success", example = "true")
     private boolean success = false;
 
-    @Schema(description = "Token for admin user", example = "772eb2add9b64e40972468c779b3b952")
-    @JsonProperty("swiftboot_shiro_token")
-    private String token;
+    @Schema(description = "Access token for admin user", example = "772eb2add9b64e40972468c779b3b952")
+    @JsonProperty("access_token")
+    private String accessToken;
+
+    @Schema(description = "Access token expires at a specific time in milliseconds")
+    @JsonProperty("expires_at")
+    private Long expiresAt;
 
 
     /**
@@ -95,11 +99,19 @@ public class AdminUserSigninResult extends BasePopulateDto<AdminUserEntity> {
         this.success = success;
     }
 
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public Long getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Long expiresAt) {
+        this.expiresAt = expiresAt;
     }
 }

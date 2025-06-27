@@ -1,14 +1,13 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.GoodsOrderRelCreateRequest;
-import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
-import org.swiftboot.demo.request.GoodsOrderRelSaveRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
 import org.swiftboot.demo.dto.GoodsOrderRelListResult;
 import org.swiftboot.demo.dto.GoodsOrderRelResult;
 import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
+import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
+import org.swiftboot.demo.request.GoodsOrderRelRequest;
 import org.swiftboot.web.request.IdListRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 商品订单关系服务接口
@@ -21,18 +20,19 @@ public interface GoodsOrderRelService {
     /**
      * 创建商品订单关系
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateRequest cmd);
+    GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelRequest request);
 
     /**
      * 保存对商品订单关系的修改
      *
-     * @param cmd
+     * @param id
+     * @param request
      * @return
      */
-    GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveRequest cmd);
+    GoodsOrderRelSaveResult saveGoodsOrderRel(String id, GoodsOrderRelRequest request);
 
     /**
      * 逻辑删除商品订单关系
@@ -44,16 +44,16 @@ public interface GoodsOrderRelService {
     /**
      * 批量逻辑删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
     void deleteGoodsOrderRelList(IdListRequest request);
 
     /**
      * 逻辑删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
-    void deleteGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd);
+    void deleteGoodsOrderRel(GoodsOrderRelDelPurgeRequest request);
 
     /**
      * 永久删除商品订单关系
@@ -65,16 +65,16 @@ public interface GoodsOrderRelService {
     /**
      * 批量永久删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
     void purgeGoodsOrderRelList(IdListRequest request);
 
     /**
      * 永久删除商品订单关系
      *
-     * @param cmd
+     * @param request
      */
-    void purgeGoodsOrderRel(GoodsOrderRelDelPurgeRequest cmd);
+    void purgeGoodsOrderRel(GoodsOrderRelDelPurgeRequest request);
 
     /**
      * 查询商品订单关系

@@ -1,12 +1,11 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.AdminUserCreateRequest;
-import org.swiftboot.demo.request.AdminUserSaveRequest;
+import org.springframework.transaction.annotation.Transactional;
+import org.swiftboot.demo.dto.*;
+import org.swiftboot.demo.request.AdminUserRequest;
 import org.swiftboot.demo.request.AdminUserSigninRequest;
 import org.swiftboot.demo.request.AdminUserSignoutRequest;
-import org.swiftboot.demo.dto.*;
 import org.swiftboot.web.request.IdListRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 管理员服务接口
@@ -35,18 +34,18 @@ public interface AdminUserService {
     /**
      * 创建管理员
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    AdminUserCreateResult createAdminUser(AdminUserCreateRequest cmd);
+    AdminUserCreateResult createAdminUser(AdminUserRequest request);
 
     /**
      * 保存对管理员的修改
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    AdminUserSaveResult saveAdminUser(AdminUserSaveRequest cmd);
+    AdminUserSaveResult saveAdminUser(String userId, AdminUserRequest request);
 
     /**
      * 逻辑删除管理员
@@ -58,7 +57,7 @@ public interface AdminUserService {
     /**
      * 批量逻辑删除管理员
      *
-     * @param cmd
+     * @param request
      */
     void deleteAdminUserList(IdListRequest request);
 
@@ -73,7 +72,7 @@ public interface AdminUserService {
     /**
      * 批量永久删除管理员
      *
-     * @param cmd
+     * @param request
      */
     void purgeAdminUserList(IdListRequest request);
 

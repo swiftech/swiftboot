@@ -29,7 +29,7 @@ swiftboot:
   auth:
     authType: jwt
     jwt:
-      secret: JWT密钥
+      secret: 75bfeb1d4454a7a57410a17589b44d3926851ed6df75966e0331a3431d7560c7
       accessTokenExpirationSeconds: 600
       revokeType: direct
       refreshTokenExpirationSeconds: 86400

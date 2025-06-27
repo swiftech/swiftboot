@@ -1,25 +1,24 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.request.GoodsOrderRelCreateRequest;
-import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
-import org.swiftboot.demo.request.GoodsOrderRelSaveRequest;
-import org.swiftboot.demo.repository.GoodsOrderRelRepository;
-import org.swiftboot.demo.model.GoodsOrderRelEntity;
-import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
-import org.swiftboot.demo.dto.GoodsOrderRelListResult;
-import org.swiftboot.demo.dto.GoodsOrderRelResult;
-import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
-import org.swiftboot.demo.service.GoodsOrderRelService;
-import org.swiftboot.web.dto.PopulatableDto;
-import org.swiftboot.web.request.IdListRequest;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
+import org.swiftboot.demo.dto.GoodsOrderRelListResult;
+import org.swiftboot.demo.dto.GoodsOrderRelResult;
+import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
+import org.swiftboot.demo.model.GoodsOrderRelEntity;
+import org.swiftboot.demo.repository.GoodsOrderRelRepository;
+import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
+import org.swiftboot.demo.request.GoodsOrderRelRequest;
+import org.swiftboot.demo.service.GoodsOrderRelService;
+import org.swiftboot.web.dto.PopulatableDto;
+import org.swiftboot.web.request.IdListRequest;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
      * @return
      */
     @Override
-    public GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelCreateRequest request) {
+    public GoodsOrderRelCreateResult createGoodsOrderRel(GoodsOrderRelRequest request) {
         GoodsOrderRelEntity p = request.createEntity();
         GoodsOrderRelEntity saved = goodsOrderRelRepository.save(p);
         log.debug("创建商品订单关系: " + saved.getId());
@@ -53,13 +52,14 @@ public class GoodsOrderRelServiceImpl implements GoodsOrderRelService {
     /**
      * 保存对商品订单关系的修改
      *
+     * @param id
      * @param request
      * @return
      */
     @Override
-    public GoodsOrderRelSaveResult saveGoodsOrderRel(GoodsOrderRelSaveRequest request) {
+    public GoodsOrderRelSaveResult saveGoodsOrderRel(String id, GoodsOrderRelRequest request) {
         GoodsOrderRelSaveResult ret = new GoodsOrderRelSaveResult();
-        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelRepository.findById(request.getId());
+        Optional<GoodsOrderRelEntity> optEntity = goodsOrderRelRepository.findById(id);
         if (optEntity.isPresent()) {
             GoodsOrderRelEntity p = optEntity.get();
             p = request.populateEntity(p);

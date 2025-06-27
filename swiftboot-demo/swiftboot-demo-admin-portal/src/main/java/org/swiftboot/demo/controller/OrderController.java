@@ -16,8 +16,7 @@ import org.swiftboot.demo.dto.OrderCreateResult;
 import org.swiftboot.demo.dto.OrderListResult;
 import org.swiftboot.demo.dto.OrderResult;
 import org.swiftboot.demo.dto.OrderSaveResult;
-import org.swiftboot.demo.request.OrderCreateRequest;
-import org.swiftboot.demo.request.OrderSaveRequest;
+import org.swiftboot.demo.request.OrderRequest;
 import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.request.IdListRequest;
@@ -43,10 +42,10 @@ public class OrderController {
     private OrderService orderService;
 
     @Operation(description = "创建订单")
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @PostMapping(value = "create")
     @ConvertValidateResult
     public Response<OrderCreateResult> orderCreate(
-            @RequestBody @Validated @Parameter(description = "创建订单参数") OrderCreateRequest request,
+            @RequestBody @Validated @Parameter(description = "创建订单参数") OrderRequest request,
             BindingResult bindingResult) {
         log.info("> /order/create");
 //        log.info(request.getUserId());
@@ -57,9 +56,9 @@ public class OrderController {
     }
 
     @Operation(description = "保存订单")
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Response<OrderSaveResult> orderSave(
-            @RequestBody @Validated @Parameter(description = "保存订单参数") OrderSaveRequest request,
+    @PutMapping(value = "{id}")
+    public Response<OrderSaveResult> orderSave(@PathVariable String id,
+            @RequestBody @Validated @Parameter(description = "保存订单参数") OrderRequest request,
             BindingResult bindingResult) {
         log.info("> /order/save");
         if (bindingResult.hasErrors()) {
@@ -67,12 +66,12 @@ public class OrderController {
             return new Response<>(ResponseCode.CODE_SYS_ERR, "验证错误");
         }
         log.debug(JsonUtils.object2PrettyJson(request));
-        OrderSaveResult ret = orderService.saveOrder(request);
+        OrderSaveResult ret = orderService.saveOrder(id, request);
         return new Response<>(ret);
     }
 
     @Operation(description = "查询订单")
-    @RequestMapping(value = "query", method = RequestMethod.GET)
+    @GetMapping(value = "query")
     public Response<OrderResult> orderQuery(
             @RequestParam("order_id") String orderId) {
         log.info("> /order/query");
@@ -82,7 +81,7 @@ public class OrderController {
     }
 
     @Operation(description = "查询订单列表")
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @GetMapping(value = "list")
     public Response<OrderListResult> orderList(@UserId String userId, @Addition("some_addition") String some_addition) {
         log.info("> /order/list");
         log.debug(userId);
@@ -92,7 +91,7 @@ public class OrderController {
     }
 
     @Operation(description = "逻辑删除订单")
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete")
 //    @RequiresPermissions("order:delete")
     public Response<Void> orderDelete(
             @RequestBody @Validated @Parameter(description = "订单ID") IdRequest request) {
@@ -103,7 +102,7 @@ public class OrderController {
     }
 
     @Operation(description = "逻辑删除多个订单")
-    @RequestMapping(value = "delete/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete/list")
     public Response<Void> orderDeleteList(
             @RequestBody @Validated @Parameter(description = "订单ID列表") IdListRequest request) {
         log.info("> /order/delete/list");
@@ -114,7 +113,7 @@ public class OrderController {
 
 
     @Operation(description = "永久删除订单")
-    @RequestMapping(value = "purge", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge")
 //    @RequiresPermissions("order:purge")
     public Response<Void> orderPurge(
             @RequestBody @Validated @Parameter(description = "订单ID") IdRequest request) {
@@ -125,7 +124,7 @@ public class OrderController {
     }
 
     @Operation(description = "永久删除多个订单")
-    @RequestMapping(value = "purge/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge/list")
     public Response<Void> orderPurgeList(
             @RequestBody @Validated @Parameter(description = "订单ID列表") IdListRequest request) {
         log.info("> /order/purge/list");

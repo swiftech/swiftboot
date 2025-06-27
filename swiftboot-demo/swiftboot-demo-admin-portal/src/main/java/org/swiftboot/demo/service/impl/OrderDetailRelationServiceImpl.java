@@ -4,7 +4,7 @@ import org.swiftboot.demo.repository.OrderDetailRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.swiftboot.demo.request.OrderWithDetailCreateRequest;
+import org.swiftboot.demo.request.OrderWithDetailRequest;
 import org.swiftboot.demo.request.OrderWithDetailSaveRequest;
 import org.swiftboot.demo.repository.OrderRepository;
 import org.swiftboot.demo.model.OrderDetailEntity;
@@ -44,7 +44,7 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
      * @return
      */
     @Override
-    public OrderCreateResult createOrderWithDetail(OrderWithDetailCreateRequest request) {
+    public OrderCreateResult createOrderWithDetail(OrderWithDetailRequest request) {
         OrderEntity entity = request.createEntity();
         // Add extra permanent detail ( will be merged if already existed)
         OrderDetailEntity od = new OrderDetailEntity();
@@ -60,13 +60,14 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
     /**
      * 编辑订单，在原来明细上再添加新的明细。
      *
+     * @param id
      * @param request
      * @return
      */
     @Override
-    public OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveRequest request) {
+    public OrderSaveResult saveOrderWithDetail(String id, OrderWithDetailSaveRequest request) {
         OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderRepository.findById(request.getId());
+        Optional<OrderEntity> optEntity = orderRepository.findById(id);
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
             p = request.populateEntity(p);
@@ -74,7 +75,7 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
             ret.setOrderId(saved.getId());
         }
         else {
-            throw new RuntimeException("Order Not found: " + request.getId());
+            throw new RuntimeException("Order Not found: " + id);
         }
         return ret;
     }
@@ -83,13 +84,14 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
     /**
      * 编辑订单， 删除原来的明细，添加新的明细
      *
+     * @param id
      * @param request
      * @return
      */
     @Override
-    public OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveRequest request) {
+    public OrderSaveResult saveOrderWithNewDetail(String id, OrderWithDetailSaveRequest request) {
         OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderRepository.findById(request.getId());
+        Optional<OrderEntity> optEntity = orderRepository.findById(id);
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
             System.out.println(p.getOrderDetails().hashCode());
@@ -104,7 +106,7 @@ public class OrderDetailRelationServiceImpl implements OrderDetailRelationServic
             ret.setOrderId(saved.getId());
         }
         else {
-            throw new RuntimeException("Order Not found: " + request.getId());
+            throw new RuntimeException("Order Not found: " + id);
         }
         return ret;
     }

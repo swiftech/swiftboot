@@ -20,7 +20,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
  * @author swiftech
  */
 @Schema
-public class OrderWithDetailCreateRequest extends OrderCreateRequest {
+public class OrderWithDetailRequest extends OrderRequest {
 
     @Schema(description = "订单明细")
     @JsonProperty("details")

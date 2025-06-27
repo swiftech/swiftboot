@@ -13,6 +13,10 @@ import org.swiftboot.web.dto.BasePopulateDto;
 @Schema
 public class AdminUserResult extends BasePopulateDto<AdminUserEntity> {
 
+    @Schema(description = "Entity ID", example = "basident20191119010450544siobnic")
+    @JsonProperty("id")
+    private String id;
+
     @Schema(description = "Login name of administrator", example = "admin")
     @JsonProperty("login_name")
     private String loginName;
@@ -37,9 +41,6 @@ public class AdminUserResult extends BasePopulateDto<AdminUserEntity> {
     @JsonProperty("is_delete")
     private Boolean isDelete;
 
-    @Schema(description = "Entity ID", example = "basident20191119010450544siobnic")
-    @JsonProperty("id")
-    private String id;
 
     /**
      * 获取Login name of administrator

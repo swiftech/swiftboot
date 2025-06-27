@@ -1,26 +1,25 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.repository.OrderDetailRepository;
+import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.swiftboot.demo.request.OrderCreateRequest;
-import org.swiftboot.demo.request.OrderSaveRequest;
-import org.swiftboot.demo.repository.OrderRepository;
-import org.swiftboot.demo.model.OrderEntity;
 import org.swiftboot.demo.dto.OrderCreateResult;
 import org.swiftboot.demo.dto.OrderListResult;
 import org.swiftboot.demo.dto.OrderResult;
 import org.swiftboot.demo.dto.OrderSaveResult;
+import org.swiftboot.demo.model.OrderEntity;
+import org.swiftboot.demo.repository.OrderDetailRepository;
+import org.swiftboot.demo.repository.OrderRepository;
+import org.swiftboot.demo.request.OrderRequest;
 import org.swiftboot.demo.service.OrderService;
 import org.swiftboot.web.dto.PopulatableDto;
 import org.swiftboot.web.request.IdListRequest;
 
-import jakarta.annotation.Resource;
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderCreateResult createOrder(OrderCreateRequest request) {
+    public OrderCreateResult createOrder(OrderRequest request) {
         OrderEntity p = request.createEntity();
 //        p.setUserId(request.getUserId()); // call explicitly for the field COULD be different.
         OrderEntity saved = orderRepository.save(p);
@@ -61,13 +60,14 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 保存对订单的修改
      *
+     * @param id
      * @param request
      * @return
      */
     @Override
-    public OrderSaveResult saveOrder(OrderSaveRequest request) {
+    public OrderSaveResult saveOrder(String id, OrderRequest request) {
         OrderSaveResult ret = new OrderSaveResult();
-        Optional<OrderEntity> optEntity = orderRepository.findById(request.getId());
+        Optional<OrderEntity> optEntity = orderRepository.findById(id);
         if (optEntity.isPresent()) {
             OrderEntity p = optEntity.get();
             p = request.populateEntity(p);

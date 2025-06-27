@@ -1,24 +1,23 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.request.OrderDetailCreateRequest;
-import org.swiftboot.demo.request.OrderDetailSaveRequest;
-import org.swiftboot.demo.repository.OrderDetailRepository;
-import org.swiftboot.demo.model.OrderDetailEntity;
-import org.swiftboot.demo.dto.OrderDetailCreateResult;
-import org.swiftboot.demo.dto.OrderDetailListResult;
-import org.swiftboot.demo.dto.OrderDetailResult;
-import org.swiftboot.demo.dto.OrderDetailSaveResult;
-import org.swiftboot.demo.service.OrderDetailService;
-import org.swiftboot.web.dto.PopulatableDto;
-import org.swiftboot.web.request.IdListRequest;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.swiftboot.demo.dto.OrderDetailCreateResult;
+import org.swiftboot.demo.dto.OrderDetailListResult;
+import org.swiftboot.demo.dto.OrderDetailResult;
+import org.swiftboot.demo.dto.OrderDetailSaveResult;
+import org.swiftboot.demo.model.OrderDetailEntity;
+import org.swiftboot.demo.repository.OrderDetailRepository;
+import org.swiftboot.demo.request.OrderDetailRequest;
+import org.swiftboot.demo.service.OrderDetailService;
+import org.swiftboot.web.dto.PopulatableDto;
+import org.swiftboot.web.request.IdListRequest;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +41,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
      * @return
      */
     @Override
-    public OrderDetailCreateResult createOrderDetail(OrderDetailCreateRequest request) {
+    public OrderDetailCreateResult createOrderDetail(OrderDetailRequest request) {
         OrderDetailEntity p = request.createEntity();
         OrderDetailEntity saved = orderDetailRepository.save(p);
         log.debug("创建订单明细: " + saved.getId());
@@ -52,13 +51,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     /**
      * 保存对订单明细的修改
      *
+     * @param id
      * @param request
      * @return
      */
     @Override
-    public OrderDetailSaveResult saveOrderDetail(OrderDetailSaveRequest request) {
+    public OrderDetailSaveResult saveOrderDetail(String id, OrderDetailRequest request) {
         OrderDetailSaveResult ret = new OrderDetailSaveResult();
-        Optional<OrderDetailEntity> optEntity = orderDetailRepository.findById(request.getId());
+        Optional<OrderDetailEntity> optEntity = orderDetailRepository.findById(id);
         if (optEntity.isPresent()) {
             OrderDetailEntity p = optEntity.get();
             p = request.populateEntity(p);

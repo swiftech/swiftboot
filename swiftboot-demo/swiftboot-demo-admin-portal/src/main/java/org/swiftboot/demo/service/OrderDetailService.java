@@ -1,13 +1,12 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.OrderDetailCreateRequest;
-import org.swiftboot.demo.request.OrderDetailSaveRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.swiftboot.demo.dto.OrderDetailCreateResult;
 import org.swiftboot.demo.dto.OrderDetailListResult;
 import org.swiftboot.demo.dto.OrderDetailResult;
 import org.swiftboot.demo.dto.OrderDetailSaveResult;
+import org.swiftboot.demo.request.OrderDetailRequest;
 import org.swiftboot.web.request.IdListRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 订单明细服务接口
@@ -20,18 +19,19 @@ public interface OrderDetailService {
     /**
      * 创建订单明细
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    OrderDetailCreateResult createOrderDetail(OrderDetailCreateRequest cmd);
+    OrderDetailCreateResult createOrderDetail(OrderDetailRequest request);
 
     /**
      * 保存对订单明细的修改
      *
-     * @param cmd
+     * @param id
+     * @param request
      * @return
      */
-    OrderDetailSaveResult saveOrderDetail(OrderDetailSaveRequest cmd);
+    OrderDetailSaveResult saveOrderDetail(String id, OrderDetailRequest request);
 
     /**
      * 逻辑删除订单明细
@@ -43,7 +43,7 @@ public interface OrderDetailService {
     /**
      * 批量逻辑删除订单明细
      *
-     * @param cmd
+     * @param request
      */
     void deleteOrderDetailList(IdListRequest request);
 
@@ -58,7 +58,7 @@ public interface OrderDetailService {
     /**
      * 批量永久删除订单明细
      *
-     * @param cmd
+     * @param request
      */
     void purgeOrderDetailList(IdListRequest request);
 

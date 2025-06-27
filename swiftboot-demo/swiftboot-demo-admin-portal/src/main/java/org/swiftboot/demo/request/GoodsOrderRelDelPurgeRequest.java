@@ -5,5 +5,5 @@ package org.swiftboot.demo.request;
  *
  * @author swiftech 2019-08-22
  **/
-public class GoodsOrderRelDelPurgeRequest extends GoodsOrderRelCreateRequest {
+public class GoodsOrderRelDelPurgeRequest extends GoodsOrderRelRequest {
 }

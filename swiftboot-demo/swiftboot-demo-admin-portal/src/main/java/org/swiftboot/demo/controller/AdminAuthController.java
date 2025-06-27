@@ -7,10 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.swiftboot.demo.dto.AdminUserSigninResult;
 import org.swiftboot.demo.dto.AdminUserSignoutResult;
 import org.swiftboot.demo.request.AdminUserSigninRequest;
@@ -40,7 +37,7 @@ public class AdminAuthController {
 
 
     @Operation(description = "Admin user signin")
-    @RequestMapping(value = "signin", method = RequestMethod.POST)
+    @PostMapping(value = "signin")
     public Response<AdminUserSigninResult> adminUserSignin(
             @RequestBody AdminUserSigninRequest request,
             HttpServletResponse response) {
@@ -55,7 +52,7 @@ public class AdminAuthController {
     }
 
     @Operation(description = "Admin user signout")
-    @RequestMapping(value = "signout", method = RequestMethod.POST)
+    @PostMapping(value = "signout")
     public Response<AdminUserSignoutResult> adminUserSignout(
             @RequestBody AdminUserSignoutRequest request,
             HttpServletResponse response) {

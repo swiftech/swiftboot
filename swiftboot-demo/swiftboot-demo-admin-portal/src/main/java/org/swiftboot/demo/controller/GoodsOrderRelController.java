@@ -1,27 +1,25 @@
 package org.swiftboot.demo.controller;
 
-import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
-import org.swiftboot.demo.dto.GoodsOrderRelListResult;
-import org.swiftboot.demo.dto.GoodsOrderRelResult;
-import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
-import org.swiftboot.demo.request.GoodsOrderRelCreateRequest;
-import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
-import org.swiftboot.demo.request.GoodsOrderRelSaveRequest;
-import org.swiftboot.demo.service.GoodsOrderRelService;
-import org.swiftboot.util.JsonUtils;
-import org.swiftboot.web.response.Response;
-import org.swiftboot.web.request.IdRequest;
-import org.swiftboot.web.request.IdListRequest;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.annotation.Resource;
+import org.swiftboot.demo.dto.GoodsOrderRelCreateResult;
+import org.swiftboot.demo.dto.GoodsOrderRelListResult;
+import org.swiftboot.demo.dto.GoodsOrderRelResult;
+import org.swiftboot.demo.dto.GoodsOrderRelSaveResult;
+import org.swiftboot.demo.request.GoodsOrderRelDelPurgeRequest;
+import org.swiftboot.demo.request.GoodsOrderRelRequest;
+import org.swiftboot.demo.service.GoodsOrderRelService;
+import org.swiftboot.util.JsonUtils;
+import org.swiftboot.web.request.IdListRequest;
+import org.swiftboot.web.request.IdRequest;
+import org.swiftboot.web.response.Response;
 
 /**
  * 商品订单关系
@@ -40,9 +38,9 @@ public class GoodsOrderRelController {
     private GoodsOrderRelService goodsOrderRelService;
 
     @Operation(description = "创建商品订单关系")
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @PostMapping(value = "create")
     public Response<GoodsOrderRelCreateResult> goodsOrderRelCreate(
-            @RequestBody @Validated @Parameter(description = "创建商品订单关系参数") GoodsOrderRelCreateRequest request) {
+            @RequestBody @Validated @Parameter(description = "创建商品订单关系参数") GoodsOrderRelRequest request) {
         log.info("> /goods/order/rel/create");
         log.debug(JsonUtils.object2PrettyJson(request));
         GoodsOrderRelCreateResult ret = goodsOrderRelService.createGoodsOrderRel(request);
@@ -50,17 +48,17 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "保存商品订单关系")
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Response<GoodsOrderRelSaveResult> goodsOrderRelSave(
-            @RequestBody @Validated @Parameter(description = "保存商品订单关系参数") GoodsOrderRelSaveRequest request) {
+    @PutMapping(value = "{id}")
+    public Response<GoodsOrderRelSaveResult> goodsOrderRelSave(@PathVariable String id,
+            @RequestBody @Validated @Parameter(description = "保存商品订单关系参数") GoodsOrderRelRequest request) {
         log.info("> /goods/order/rel/save");
         log.debug(JsonUtils.object2PrettyJson(request));
-        GoodsOrderRelSaveResult ret = goodsOrderRelService.saveGoodsOrderRel(request);
+        GoodsOrderRelSaveResult ret = goodsOrderRelService.saveGoodsOrderRel(id, request);
         return new Response<>(ret);
     }
 
     @Operation(description = "查询商品订单关系")
-    @RequestMapping(value = "query", method = RequestMethod.GET)
+    @GetMapping(value = "query")
     public Response<GoodsOrderRelResult> goodsOrderRelQuery(
             @RequestParam("goods_order_rel_id") String goodsOrderRelId) {
         log.info("> /goods/order/rel/query");
@@ -70,7 +68,7 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "查询商品订单关系列表")
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @GetMapping(value = "list")
     public Response<GoodsOrderRelListResult> goodsOrderRelList() {
         log.info("> /goods/order/rel/list");
         GoodsOrderRelListResult ret = goodsOrderRelService.queryGoodsOrderRelList();
@@ -78,7 +76,7 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "逻辑删除商品订单关系")
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete")
     public Response<Void> goodsOrderRelDelete(
             @RequestBody @Validated @Parameter(description = "商品订单关系ID") IdRequest request) {
         log.info("> /goods/order/rel/delete");
@@ -88,7 +86,7 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "逻辑删除多个商品订单关系")
-    @RequestMapping(value = "delete/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete/list")
     public Response<Void> goodsOrderRelDeleteList(
             @RequestBody @Validated @Parameter(description = "商品订单关系ID列表") IdListRequest request) {
         log.info("> /goods/order/rel/delete/list");
@@ -98,7 +96,7 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "逻辑删除商品订单关系，按照商品ID和订单ID")
-    @RequestMapping(value = "delete/byfk", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete/byfk")
     public Response<Void> goodsOrderRelDeleteByFk(
             @RequestBody @Validated @Parameter(description = "商品订单关系关系ID") GoodsOrderRelDelPurgeRequest request) {
         log.info("> /goods/order/rel/delete/byfk");
@@ -108,7 +106,7 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "永久删除商品订单关系")
-    @RequestMapping(value = "purge", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge")
     public Response<Void> goodsOrderRelPurge(
             @RequestBody @Validated @Parameter(description = "商品订单关系ID") IdRequest request) {
         log.info("> /goods/order/rel/purge");
@@ -118,7 +116,7 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "永久删除多个商品订单关系")
-    @RequestMapping(value = "purge/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge/list")
     public Response<Void> goodsOrderRelPurgeList(
             @RequestBody @Validated @Parameter(description = "商品订单关系ID列表") IdListRequest request) {
         log.info("> /goods/order/rel/purge/list");
@@ -128,7 +126,7 @@ public class GoodsOrderRelController {
     }
 
     @Operation(description = "永久删除商品订单关系，按照商品ID和订单ID")
-    @RequestMapping(value = "purge/byfk", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge/byfk")
     public Response<Void> goodsOrderRelPurgeByFk(
             @RequestBody @Validated @Parameter(description = "商品订单关系ID") GoodsOrderRelDelPurgeRequest request) {
         log.info("> /goods/order/rel/purge/byfk");

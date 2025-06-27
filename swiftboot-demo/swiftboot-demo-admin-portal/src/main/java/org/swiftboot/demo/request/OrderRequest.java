@@ -13,7 +13,7 @@ import org.swiftboot.web.request.BasePopulateRequest;
  * @author swiftech 2019-08-22
  **/
 @Schema
-public class OrderCreateRequest extends BasePopulateRequest<OrderEntity> {// extends BaseAuthenticatedRequest<OrderEntity> {
+public class OrderRequest extends BasePopulateRequest<OrderEntity> {// extends BaseAuthenticatedRequest<OrderEntity> {
 
     @Schema(description = "订单编号", example = "2019032411081201")
     @JsonProperty("order_code")

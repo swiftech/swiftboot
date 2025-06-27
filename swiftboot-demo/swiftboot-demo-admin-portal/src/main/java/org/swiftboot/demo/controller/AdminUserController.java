@@ -14,8 +14,7 @@ import org.swiftboot.demo.dto.AdminUserCreateResult;
 import org.swiftboot.demo.dto.AdminUserListResult;
 import org.swiftboot.demo.dto.AdminUserResult;
 import org.swiftboot.demo.dto.AdminUserSaveResult;
-import org.swiftboot.demo.request.AdminUserCreateRequest;
-import org.swiftboot.demo.request.AdminUserSaveRequest;
+import org.swiftboot.demo.request.AdminUserRequest;
 import org.swiftboot.demo.service.AdminPermissionService;
 import org.swiftboot.demo.service.AdminUserService;
 import org.swiftboot.util.JsonUtils;
@@ -50,9 +49,9 @@ public class AdminUserController {
 
 
     @Operation(description = "创建管理员")
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @PostMapping(value = "create")
     public Response<AdminUserCreateResult> adminUserCreate(
-            @RequestBody @Validated @Parameter(description = "创建管理员参数") AdminUserCreateRequest request) {
+            @RequestBody @Validated @Parameter(description = "创建管理员参数") AdminUserRequest request) {
         log.info("> /admin/user/create");
         log.debug(JsonUtils.object2PrettyJson(request));
         AdminUserCreateResult ret = adminUserService.createAdminUser(request);
@@ -60,17 +59,17 @@ public class AdminUserController {
     }
 
     @Operation(description = "保存管理员")
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Response<AdminUserSaveResult> adminUserSave(
-            @RequestBody @Validated @Parameter(description = "保存管理员参数") AdminUserSaveRequest request) {
+    @PutMapping(value = "{userId}")
+    public Response<AdminUserSaveResult> adminUserSave(@PathVariable String userId,
+            @RequestBody @Validated @Parameter(description = "保存管理员参数") AdminUserRequest request) {
         log.info("> /admin/user/save");
         log.debug(JsonUtils.object2PrettyJson(request));
-        AdminUserSaveResult ret = adminUserService.saveAdminUser(request);
+        AdminUserSaveResult ret = adminUserService.saveAdminUser(userId, request);
         return new Response<>(ret);
     }
 
     @Operation(description = "查询管理员")
-    @RequestMapping(value = "query", method = RequestMethod.GET)
+    @GetMapping(value = "query")
     public Response<AdminUserResult> adminUserQuery(
             @RequestParam("admin_user_id") String adminUserId) {
         log.info("> /admin/user/query");
@@ -80,7 +79,7 @@ public class AdminUserController {
     }
 
     @Operation(description = "查询管理员列表")
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @GetMapping(value = "list")
     public Response<AdminUserListResult> adminUserList() {
         log.info("> /admin/user/list");
         AdminUserListResult ret = adminUserService.queryAdminUserList();
@@ -88,7 +87,7 @@ public class AdminUserController {
     }
 
     @Operation(description = "查询管理员权限列表")
-    @RequestMapping(value = "permissions", method = RequestMethod.GET)
+    @GetMapping(value = "permissions")
     public Response<Set<PermissionConfigBean>> adminUserPermissionList() {
         log.info("> /admin/user/permissions");
 //        Session session = SecurityUtils.getSubject().getSession();
@@ -105,7 +104,7 @@ public class AdminUserController {
     }
 
     @Operation(description = "逻辑删除管理员")
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete")
     public Response<Void> adminUserDelete(
             @RequestBody @Validated @Parameter(description = "管理员ID") IdRequest request) {
         log.info("> /admin/user/delete");
@@ -115,7 +114,7 @@ public class AdminUserController {
     }
 
     @Operation(description = "逻辑删除多个管理员")
-    @RequestMapping(value = "delete/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete/list")
     public Response<Void> adminUserDeleteList(
             @RequestBody @Validated @Parameter(description = "管理员ID列表") IdListRequest request) {
         log.info("> /admin/user/delete/list");
@@ -126,7 +125,7 @@ public class AdminUserController {
 
 
     @Operation(description = "永久删除管理员")
-    @RequestMapping(value = "purge", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge")
     public Response<Void> adminUserPurge(
             @RequestBody @Validated @Parameter(description = "管理员ID") IdRequest request) {
         log.info("> /admin/user/purge");
@@ -136,7 +135,7 @@ public class AdminUserController {
     }
 
     @Operation(description = "永久删除多个管理员")
-    @RequestMapping(value = "purge/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge/list")
     public Response<Void> adminUserPurgeList(
             @RequestBody @Validated @Parameter(description = "管理员ID列表") IdListRequest request) {
         log.info("> /admin/user/purge/list");

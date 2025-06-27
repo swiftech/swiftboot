@@ -6,17 +6,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.demo.dto.*;
 import org.swiftboot.demo.model.AdminUserEntity;
 import org.swiftboot.demo.repository.AdminUserRepository;
-import org.swiftboot.demo.request.AdminUserCreateRequest;
-import org.swiftboot.demo.request.AdminUserSaveRequest;
+import org.swiftboot.demo.request.AdminUserRequest;
 import org.swiftboot.demo.request.AdminUserSigninRequest;
 import org.swiftboot.demo.request.AdminUserSignoutRequest;
+import org.swiftboot.demo.security.AuthUser;
 import org.swiftboot.demo.service.AdminUserService;
 import org.swiftboot.web.dto.PopulatableDto;
+import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.request.IdListRequest;
+import org.swiftboot.web.response.ResponseCode;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +40,14 @@ import java.util.Optional;
 public class AdminUserServiceImpl implements AdminUserService {
 
     private static final Logger log = LoggerFactory.getLogger(AdminUserServiceImpl.class);
+    @Resource
+    private AuthenticationManager authenticationManager;
+
+    @Resource
+    private JwtService jwtService;
+
+    @Resource
+    private JwtTokenProvider jwtTokenProvider;
 
     @Resource
     private AdminUserRepository adminUserRepository;
@@ -53,8 +71,29 @@ public class AdminUserServiceImpl implements AdminUserService {
 //    }
 
     @Override
-    public AdminUserSigninResult adminUserSignin(AdminUserSigninRequest command) {
-        AdminUserSigninResult ret = new AdminUserSigninResult();
+    public AdminUserSigninResult adminUserSignin(AdminUserSigninRequest req) {
+        String loginName = req.getLoginName();
+        String loginPwd = req.getLoginPwd();
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginName, loginPwd);
+        log.info("user %s login...".formatted(loginName));
+        // authenticate by Spring Security.
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(authentication);
+
+        if (authentication.getPrincipal() instanceof AuthUser user) {
+            AccessToken accessToken = jwtTokenProvider.generateAccessToken(user.getId(), user.getUsername());
+            jwtService.saveJwtAuthentication(accessToken, null); // TODO 为什么必须调用这个？
+            AdminUserSigninResult ret = new AdminUserSigninResult();
+            ret.setAccessToken(accessToken.tokenValue());
+            ret.setExpiresAt(accessToken.expiresAt());
+            return ret;
+        }
+        else {
+            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL, "登录失败");
+        }
+
 
 //        Subject currentUser = SecurityUtils.getSubject();
 //        try {
@@ -68,7 +107,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 //            e.printStackTrace();
 //            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL, e.getMessage());
 //        }
-        return ret;
+//        return ret;
     }
 
     @Override
@@ -85,7 +124,7 @@ public class AdminUserServiceImpl implements AdminUserService {
      * @return
      */
     @Override
-    public AdminUserCreateResult createAdminUser(AdminUserCreateRequest request) {
+    public AdminUserCreateResult createAdminUser(AdminUserRequest request) {
         AdminUserEntity p = request.createEntity();
         AdminUserEntity saved = adminUserRepository.save(p);
         log.debug("创建管理员: " + saved.getId());
@@ -99,9 +138,9 @@ public class AdminUserServiceImpl implements AdminUserService {
      * @return
      */
     @Override
-    public AdminUserSaveResult saveAdminUser(AdminUserSaveRequest request) {
+    public AdminUserSaveResult saveAdminUser(String userId, AdminUserRequest request) {
         AdminUserSaveResult ret = new AdminUserSaveResult();
-        Optional<AdminUserEntity> optEntity = adminUserRepository.findById(request.getId());
+        Optional<AdminUserEntity> optEntity = adminUserRepository.findById(userId);
         if (optEntity.isPresent()) {
             AdminUserEntity p = optEntity.get();
             p = request.populateEntity(p);

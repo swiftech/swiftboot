@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,7 +26,7 @@ public class TestController {
     private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @Operation(description = "测试资源")
-    @RequestMapping(value = "message/resource/code", method = RequestMethod.GET)
+    @GetMapping(value = "message/resource/code")
     public
     @ResponseBody
     Response<Void> testMessageResource() {
@@ -33,7 +34,7 @@ public class TestController {
     }
 
     @Operation(description = "测试资源")
-    @RequestMapping(value = "message/resource/customize", method = RequestMethod.GET)
+    @GetMapping(value = "message/resource/customize")
     public
     @ResponseBody
     Response<Void> testMessageResourceCustomize() {
@@ -41,7 +42,7 @@ public class TestController {
     }
 
     @Operation(description = "测试资源")
-    @RequestMapping(value = "message/resource/params", method = RequestMethod.GET)
+    @GetMapping(value = "message/resource/params")
     public
     @ResponseBody
     Response<Void> testMessageResourceParams() {
@@ -49,7 +50,7 @@ public class TestController {
     }
 
     @Operation(description = "测试资源")
-    @RequestMapping(value = "message/resource/customize/params", method = RequestMethod.GET)
+    @GetMapping(value = "message/resource/customize/params")
     public
     @ResponseBody
     Response<Void> testMessageResourceCustomizeParams() {

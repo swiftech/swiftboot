@@ -1,15 +1,6 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.request.GoodsCreateRequest;
-import org.swiftboot.demo.request.GoodsSaveRequest;
-import org.swiftboot.demo.request.GoodsWithDetailCreateRequest;
-import org.swiftboot.demo.repository.GoodsRepository;
-import org.swiftboot.demo.model.GoodsEntity;
-import org.swiftboot.demo.dto.GoodsCreateResult;
-import org.swiftboot.demo.dto.GoodsListResult;
-import org.swiftboot.demo.dto.GoodsResult;
-import org.swiftboot.demo.dto.GoodsSaveResult;
-import org.swiftboot.demo.service.GoodsService;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,12 +8,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.swiftboot.demo.dto.GoodsCreateResult;
+import org.swiftboot.demo.dto.GoodsListResult;
+import org.swiftboot.demo.dto.GoodsResult;
+import org.swiftboot.demo.dto.GoodsSaveResult;
+import org.swiftboot.demo.model.GoodsEntity;
+import org.swiftboot.demo.repository.GoodsRepository;
+import org.swiftboot.demo.request.GoodsRequest;
+import org.swiftboot.demo.request.GoodsWithDetailRequest;
+import org.swiftboot.demo.service.GoodsService;
 import org.swiftboot.web.dto.PopulatableDto;
-import org.swiftboot.web.request.IdListRequest;
 import org.swiftboot.web.exception.ErrMessageException;
+import org.swiftboot.web.request.IdListRequest;
 import org.swiftboot.web.response.ResponseCode;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public GoodsCreateResult createGoods(GoodsCreateRequest request) {
+    public GoodsCreateResult createGoods(GoodsRequest request) {
         GoodsEntity p = request.createEntity();
         GoodsEntity saved = goodsRepository.save(p);
         log.debug("创建商品: " + saved.getId());
@@ -54,7 +53,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public GoodsCreateResult createWithException(GoodsCreateRequest request) {
+    public GoodsCreateResult createWithException(GoodsRequest request) {
         GoodsEntity p1 = request.createEntity();
         goodsRepository.save(p1);
         log.debug("创建商品: " + p1.getId());
@@ -70,7 +69,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateRequest request) {
+    public GoodsCreateResult createGoodsWithDetail(GoodsWithDetailRequest request) {
         GoodsEntity entity = request.createEntity();
         GoodsEntity saved = goodsRepository.save(entity);
         log.debug("创建商品: " + saved.getId());
@@ -84,9 +83,9 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public GoodsSaveResult saveGoods(GoodsSaveRequest request) {
+    public GoodsSaveResult saveGoods(String id, GoodsRequest request) {
         GoodsSaveResult ret = new GoodsSaveResult();
-        Optional<GoodsEntity> optEntity = goodsRepository.findById(request.getId());
+        Optional<GoodsEntity> optEntity = goodsRepository.findById(id);
         if (optEntity.isPresent()) {
             GoodsEntity p = optEntity.get();
             p = request.populateEntity(p);

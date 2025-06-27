@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.swiftboot.demo.request.HttpHeaderRequest;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.response.Response;
@@ -24,7 +21,7 @@ public class HttpHeaderController {
     private static final Logger log = LoggerFactory.getLogger(HttpHeaderController.class);
 
     @Operation(description = "自动获取 http header 值")
-    @RequestMapping(value = "post", method = RequestMethod.POST)
+    @PostMapping(value = "post")
     @ConvertValidateResult
     public
     @ResponseBody

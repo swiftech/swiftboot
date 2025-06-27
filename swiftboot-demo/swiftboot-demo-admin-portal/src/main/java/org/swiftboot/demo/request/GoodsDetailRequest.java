@@ -14,7 +14,7 @@ import org.swiftboot.web.request.BasePopulateRequest;
  * @author swiftech 2019-08-22
  **/
 @Schema
-public class GoodsDetailCreateRequest extends BasePopulateRequest<GoodsDetailEntity> {
+public class GoodsDetailRequest extends BasePopulateRequest<GoodsDetailEntity> {
 
     @Schema(description = "商品ID")
     @JsonProperty("goods_id")

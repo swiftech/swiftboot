@@ -1,6 +1,6 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.OrderWithDetailCreateRequest;
+import org.swiftboot.demo.request.OrderWithDetailRequest;
 import org.swiftboot.demo.request.OrderWithDetailSaveRequest;
 import org.swiftboot.demo.dto.OrderCreateResult;
 import org.swiftboot.demo.dto.OrderSaveResult;
@@ -15,13 +15,13 @@ public interface OrderDetailRelationService {
     /**
      * 创建带有详情的订单
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    OrderCreateResult createOrderWithDetail(OrderWithDetailCreateRequest cmd);
+    OrderCreateResult createOrderWithDetail(OrderWithDetailRequest request);
 
 
-    OrderSaveResult saveOrderWithDetail(OrderWithDetailSaveRequest cmd);
+    OrderSaveResult saveOrderWithDetail(String id, OrderWithDetailSaveRequest request);
 
-    OrderSaveResult saveOrderWithNewDetail(OrderWithDetailSaveRequest cmd);
+    OrderSaveResult saveOrderWithNewDetail(String id, OrderWithDetailSaveRequest request);
 }

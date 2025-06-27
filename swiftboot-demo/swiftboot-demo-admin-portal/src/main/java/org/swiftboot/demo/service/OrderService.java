@@ -1,12 +1,11 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.OrderCreateRequest;
-import org.swiftboot.demo.request.OrderSaveRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.swiftboot.demo.dto.OrderCreateResult;
 import org.swiftboot.demo.dto.OrderListResult;
 import org.swiftboot.demo.dto.OrderResult;
 import org.swiftboot.demo.dto.OrderSaveResult;
-import org.springframework.transaction.annotation.Transactional;
+import org.swiftboot.demo.request.OrderRequest;
 import org.swiftboot.web.request.IdListRequest;
 
 /**
@@ -20,18 +19,19 @@ public interface OrderService {
     /**
      * 创建订单
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    OrderCreateResult createOrder(OrderCreateRequest cmd);
+    OrderCreateResult createOrder(OrderRequest request);
 
     /**
      * 保存对订单的修改
      *
-     * @param cmd
+     * @param id
+     * @param request
      * @return
      */
-    OrderSaveResult saveOrder(OrderSaveRequest cmd);
+    OrderSaveResult saveOrder(String id, OrderRequest request);
 
 
     /**
@@ -44,7 +44,7 @@ public interface OrderService {
     /**
      * 批量逻辑删除订单
      *
-     * @param cmd
+     * @param request
      */
     void deleteOrderList(IdListRequest request);
 
@@ -59,7 +59,7 @@ public interface OrderService {
     /**
      * 批量永久删除订单
      *
-     * @param cmd
+     * @param request
      */
     void purgeOrderList(IdListRequest request);
 

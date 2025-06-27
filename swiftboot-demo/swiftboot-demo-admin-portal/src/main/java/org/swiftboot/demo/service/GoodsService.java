@@ -1,14 +1,13 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.GoodsCreateRequest;
-import org.swiftboot.demo.request.GoodsSaveRequest;
-import org.swiftboot.demo.request.GoodsWithDetailCreateRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.swiftboot.demo.dto.GoodsCreateResult;
 import org.swiftboot.demo.dto.GoodsListResult;
 import org.swiftboot.demo.dto.GoodsResult;
 import org.swiftboot.demo.dto.GoodsSaveResult;
+import org.swiftboot.demo.request.GoodsRequest;
+import org.swiftboot.demo.request.GoodsWithDetailRequest;
 import org.swiftboot.web.request.IdListRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 商品服务接口
@@ -21,32 +20,32 @@ public interface GoodsService {
     /**
      * 创建商品
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    GoodsCreateResult createGoods(GoodsCreateRequest cmd);
+    GoodsCreateResult createGoods(GoodsRequest request);
 
     /**
      * 测试事务
-     * @param cmd
+     * @param request
      * @return
      */
-    GoodsCreateResult createWithException(GoodsCreateRequest cmd);
+    GoodsCreateResult createWithException(GoodsRequest request);
 
     /**
      * 测试 JPA 关联
-     * @param cmd
+     * @param request
      * @return
      */
-    GoodsCreateResult createGoodsWithDetail(GoodsWithDetailCreateRequest cmd);
+    GoodsCreateResult createGoodsWithDetail(GoodsWithDetailRequest request);
 
     /**
      * 保存对商品的修改
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    GoodsSaveResult saveGoods(GoodsSaveRequest cmd);
+    GoodsSaveResult saveGoods(String id, GoodsRequest request);
 
     /**
      * 逻辑删除商品
@@ -58,7 +57,7 @@ public interface GoodsService {
     /**
      * 批量逻辑删除商品
      *
-     * @param cmd
+     * @param request
      */
     void deleteGoodsList(IdListRequest request);
 
@@ -73,7 +72,7 @@ public interface GoodsService {
     /**
      * 批量永久删除商品
      *
-     * @param cmd
+     * @param request
      */
     void purgeGoodsList(IdListRequest request);
 

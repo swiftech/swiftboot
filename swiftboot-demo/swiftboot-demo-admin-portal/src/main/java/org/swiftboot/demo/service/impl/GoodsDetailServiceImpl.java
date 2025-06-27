@@ -1,26 +1,25 @@
 package org.swiftboot.demo.service.impl;
 
-import org.swiftboot.demo.repository.GoodsRepository;
-import org.swiftboot.demo.request.GoodsDetailCreateRequest;
-import org.swiftboot.demo.request.GoodsDetailSaveRequest;
-import org.swiftboot.demo.repository.GoodsDetailRepository;
-import org.swiftboot.demo.model.GoodsDetailEntity;
-import org.swiftboot.demo.model.GoodsEntity;
-import org.swiftboot.demo.dto.GoodsDetailCreateResult;
-import org.swiftboot.demo.dto.GoodsDetailListResult;
-import org.swiftboot.demo.dto.GoodsDetailResult;
-import org.swiftboot.demo.dto.GoodsDetailSaveResult;
-import org.swiftboot.demo.service.GoodsDetailService;
-import org.swiftboot.web.dto.PopulatableDto;
-import org.swiftboot.web.request.IdListRequest;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.swiftboot.demo.dto.GoodsDetailCreateResult;
+import org.swiftboot.demo.dto.GoodsDetailListResult;
+import org.swiftboot.demo.dto.GoodsDetailResult;
+import org.swiftboot.demo.dto.GoodsDetailSaveResult;
+import org.swiftboot.demo.model.GoodsDetailEntity;
+import org.swiftboot.demo.model.GoodsEntity;
+import org.swiftboot.demo.repository.GoodsDetailRepository;
+import org.swiftboot.demo.repository.GoodsRepository;
+import org.swiftboot.demo.request.GoodsDetailRequest;
+import org.swiftboot.demo.service.GoodsDetailService;
+import org.swiftboot.web.dto.PopulatableDto;
+import org.swiftboot.web.request.IdListRequest;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +47,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
      * @return
      */
     @Override
-    public GoodsDetailCreateResult createGoodsDetail(GoodsDetailCreateRequest request) {
+    public GoodsDetailCreateResult createGoodsDetail(GoodsDetailRequest request) {
         GoodsDetailEntity p = request.createEntity();
         GoodsDetailEntity saved = goodsDetailRepository.save(p);
         Optional<GoodsEntity> optGoods = goodsRepository.findById(request.getGoodsId());
@@ -63,13 +62,14 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
     /**
      * 保存对商品详情的修改
      *
+     * @param id
      * @param request
      * @return
      */
     @Override
-    public GoodsDetailSaveResult saveGoodsDetail(GoodsDetailSaveRequest request) {
+    public GoodsDetailSaveResult saveGoodsDetail(String id, GoodsDetailRequest request) {
         GoodsDetailSaveResult ret = new GoodsDetailSaveResult();
-        Optional<GoodsDetailEntity> optEntity = goodsDetailRepository.findById(request.getId());
+        Optional<GoodsDetailEntity> optEntity = goodsDetailRepository.findById(id);
         if (optEntity.isPresent()) {
             GoodsDetailEntity p = optEntity.get();
             p = request.populateEntity(p);

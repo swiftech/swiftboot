@@ -14,13 +14,7 @@ import java.util.List;
  * @author swiftech
  **/
 @Schema
-public class OrderWithDetailSaveRequest extends OrderCreateRequest {
-
-    @Schema(description = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
-    @NotBlank
-    @Length(min = 32, max = 32)
-    @JsonProperty("id")
-    private String id;
+public class OrderWithDetailSaveRequest extends OrderRequest {
 
     @Schema(description = "订单明细")
     @JsonProperty("details")
@@ -31,24 +25,6 @@ public class OrderWithDetailSaveRequest extends OrderCreateRequest {
     private OrderPayment orderPayment;
 
     private List<String> comments;
-
-    /**
-     * 获取 ID
-     *
-     * @return
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * 设置 ID
-     *
-     * @param id
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
 
     /**
      * 获取订单明细
@@ -88,7 +64,7 @@ public class OrderWithDetailSaveRequest extends OrderCreateRequest {
      * 订单明细保存对象
      */
     @Schema
-    public static class OrderDetailSave extends OrderWithDetailCreateRequest.OrderDetailCreate {
+    public static class OrderDetailSave extends OrderWithDetailRequest.OrderDetailCreate {
 
         @Schema(description = "唯一标识", example = "441a3c4cbe574f17b2a3dc3fb5cda1c4")
         @NotBlank
@@ -109,7 +85,7 @@ public class OrderWithDetailSaveRequest extends OrderCreateRequest {
      * 订单支付保存对象
      */
     @Schema
-    public static class OrderPayment extends OrderWithDetailCreateRequest.OrderPaymentCreate {
+    public static class OrderPayment extends OrderWithDetailRequest.OrderPaymentCreate {
 
     }
 }

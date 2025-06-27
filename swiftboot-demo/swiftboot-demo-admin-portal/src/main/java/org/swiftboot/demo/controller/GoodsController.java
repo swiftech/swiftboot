@@ -14,8 +14,7 @@ import org.swiftboot.demo.dto.GoodsCreateResult;
 import org.swiftboot.demo.dto.GoodsListResult;
 import org.swiftboot.demo.dto.GoodsResult;
 import org.swiftboot.demo.dto.GoodsSaveResult;
-import org.swiftboot.demo.request.GoodsCreateRequest;
-import org.swiftboot.demo.request.GoodsSaveRequest;
+import org.swiftboot.demo.request.GoodsRequest;
 import org.swiftboot.demo.service.GoodsService;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.request.IdListRequest;
@@ -41,10 +40,10 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @Operation(description = "创建商品")
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @PostMapping(value = "create")
 //    @RequiresPermissions("goods:create")
     public Response<GoodsCreateResult> goodsCreate(
-            @RequestBody @Validated @Parameter(description = "创建商品参数") GoodsCreateRequest request,
+            @RequestBody @Validated @Parameter(description = "创建商品参数") GoodsRequest request,
             BindingResult bindingResult) {
         log.info("> /goods/create");
         log.debug(JsonUtils.object2PrettyJson(request));
@@ -53,18 +52,18 @@ public class GoodsController {
     }
 
     @Operation(description = "保存商品")
-    @RequestMapping(value = "save", method = RequestMethod.POST)
+    @PostMapping(value = "{id}")
 //    @RequiresPermissions("goods:save")
-    public Response<GoodsSaveResult> goodsSave(
-            @RequestBody @Validated @Parameter(description = "保存商品参数") GoodsSaveRequest request) {
+    public Response<GoodsSaveResult> goodsSave(@PathVariable String id,
+            @RequestBody @Validated @Parameter(description = "保存商品参数") GoodsRequest request) {
         log.info("> /goods/save");
         log.debug(JsonUtils.object2PrettyJson(request));
-        GoodsSaveResult ret = goodsService.saveGoods(request);
+        GoodsSaveResult ret = goodsService.saveGoods(id, request);
         return new Response<>(ret);
     }
 
     @Operation(description = "查询商品")
-    @RequestMapping(value = "query", method = RequestMethod.GET)
+    @GetMapping(value = "query")
 //    @RequiresPermissions("goods:query")
     public Response<GoodsResult> goodsQuery(
             @RequestParam("goods_id") String goodsId) {
@@ -75,7 +74,7 @@ public class GoodsController {
     }
 
     @Operation(description = "查询商品列表")
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @GetMapping(value = "list")
 //    @RequiresPermissions("goods:list")
     public Response<GoodsListResult> goodsList() {
         log.info("> /goods/list");
@@ -84,7 +83,7 @@ public class GoodsController {
     }
 
     @Operation(description = "逻辑删除商品")
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete")
 //    @RequiresPermissions("goods:delete")
     public Response<Void> goodsDelete(
             @RequestBody @Validated @Parameter(description = "商品ID") IdRequest request) {
@@ -95,7 +94,7 @@ public class GoodsController {
     }
 
     @Operation(description = "逻辑删除多个商品")
-    @RequestMapping(value = "delete/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "delete/list")
 //    @RequiresPermissions("goods:delete")
     public Response<Void> goodsDeleteList(
             @RequestBody @Validated @Parameter(description = "商品ID列表") IdListRequest request) {
@@ -107,7 +106,7 @@ public class GoodsController {
 
 
     @Operation(description = "永久删除商品")
-    @RequestMapping(value = "purge", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge")
 //    @RequiresPermissions("goods:purge")
     public Response<Void> goodsPurge(
             @RequestBody @Validated @Parameter(description = "商品ID") IdRequest request) {
@@ -118,7 +117,7 @@ public class GoodsController {
     }
 
     @Operation(description = "永久删除多个商品")
-    @RequestMapping(value = "purge/list", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "purge/list")
 //    @RequiresPermissions("goods:purge")
     public Response<Void> goodsPurgeList(
             @RequestBody @Validated @Parameter(description = "商品ID列表") IdListRequest request) {

@@ -1,13 +1,12 @@
 package org.swiftboot.demo.service;
 
-import org.swiftboot.demo.request.GoodsDetailCreateRequest;
-import org.swiftboot.demo.request.GoodsDetailSaveRequest;
+import org.springframework.transaction.annotation.Transactional;
 import org.swiftboot.demo.dto.GoodsDetailCreateResult;
 import org.swiftboot.demo.dto.GoodsDetailListResult;
 import org.swiftboot.demo.dto.GoodsDetailResult;
 import org.swiftboot.demo.dto.GoodsDetailSaveResult;
+import org.swiftboot.demo.request.GoodsDetailRequest;
 import org.swiftboot.web.request.IdListRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 商品详情服务接口
@@ -20,18 +19,19 @@ public interface GoodsDetailService {
     /**
      * 创建商品详情
      *
-     * @param cmd
+     * @param request
      * @return
      */
-    GoodsDetailCreateResult createGoodsDetail(GoodsDetailCreateRequest cmd);
+    GoodsDetailCreateResult createGoodsDetail(GoodsDetailRequest request);
 
     /**
      * 保存对商品详情的修改
      *
-     * @param cmd
+     * @param id
+     * @param request
      * @return
      */
-    GoodsDetailSaveResult saveGoodsDetail(GoodsDetailSaveRequest cmd);
+    GoodsDetailSaveResult saveGoodsDetail(String id, GoodsDetailRequest request);
 
     /**
      * 逻辑删除商品详情
@@ -43,7 +43,7 @@ public interface GoodsDetailService {
     /**
      * 批量逻辑删除商品详情
      *
-     * @param cmd
+     * @param request
      */
     void deleteGoodsDetailList(IdListRequest request);
 
@@ -58,7 +58,7 @@ public interface GoodsDetailService {
     /**
      * 批量永久删除商品详情
      *
-     * @param cmd
+     * @param request
      */
     void purgeGoodsDetailList(IdListRequest request);
 

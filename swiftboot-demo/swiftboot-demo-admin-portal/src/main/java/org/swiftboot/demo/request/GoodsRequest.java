@@ -1,11 +1,16 @@
 package org.swiftboot.demo.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.swiftboot.demo.model.GoodsEntity;
 import org.swiftboot.web.request.BasePopulateRequest;
+import org.swiftboot.web.validate.constraint.DecimalString;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 创建商品
@@ -13,7 +18,7 @@ import org.swiftboot.web.request.BasePopulateRequest;
  * @author swiftech 2019-08-22
  **/
 @Schema
-public class GoodsWithDetailCreateRequest extends BasePopulateRequest<GoodsEntity> {
+public class GoodsRequest extends BasePopulateRequest<GoodsEntity> {
 
     @Schema(description = "商品名称", example = "闲趣清闲薄脆饼干")
     @JsonProperty("name")
@@ -27,13 +32,24 @@ public class GoodsWithDetailCreateRequest extends BasePopulateRequest<GoodsEntit
 
     @Schema(description = "商品价格", example = "12.5")
     @JsonProperty("price")
-    @NotNull
     private Double price;
 
-    @Schema(description = "商品详情")
-    @JsonProperty("goods_detail")
+    @Schema(description = "商品重量", example = "35.7")
+    @JsonProperty("weight")
+    @Length(max = 32)
     @NotNull
-    private GoodsDetailCreateRequest goodsDetail;
+    @DecimalString
+    private String weight;
+
+    @Schema(description = "生产时间", example = "2020-01-16 00:00:00")
+    @JsonProperty("production_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime productionTime;
+
+    @Schema(description = "过期日期", example = "2021-01-16")
+    @JsonProperty("expire_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate expireDate;
 
     /**
      * 获取商品名称
@@ -89,11 +105,49 @@ public class GoodsWithDetailCreateRequest extends BasePopulateRequest<GoodsEntit
         this.price = price;
     }
 
-    public GoodsDetailCreateRequest getGoodsDetail() {
-        return goodsDetail;
+    public String getWeight() {
+        return weight;
     }
 
-    public void setGoodsDetail(GoodsDetailCreateRequest goodsDetail) {
-        this.goodsDetail = goodsDetail;
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    /**
+     * 获取生产时间
+     *
+     * @return
+     */
+    public LocalDateTime getProductionTime() {
+        return productionTime;
+    }
+
+    /**
+     * 设置生产时间
+     *
+     * @param productionTime
+     */
+    public GoodsRequest setProductionTime(LocalDateTime productionTime) {
+        this.productionTime = productionTime;
+        return this;
+    }
+
+    /**
+     * 获取过期日期
+     *
+     * @return
+     */
+    public LocalDate getExpireDate() {
+        return expireDate;
+    }
+
+    /**
+     * 设置过期日期
+     *
+     * @param expireDate
+     */
+    public GoodsRequest setExpireDate(LocalDate expireDate) {
+        this.expireDate = expireDate;
+        return this;
     }
 }

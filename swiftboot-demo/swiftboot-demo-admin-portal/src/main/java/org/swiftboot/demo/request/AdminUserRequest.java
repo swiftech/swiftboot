@@ -15,7 +15,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
  * @author swiftech 2020-01-06
  **/
 @Schema
-public class AdminUserCreateRequest extends BasePopulateRequest<AdminUserEntity> {
+public class AdminUserRequest extends BasePopulateRequest<AdminUserEntity> {
 
     @Schema(description = "登录名",  requiredMode = REQUIRED, example = "admin")
     @JsonProperty("login_name")
