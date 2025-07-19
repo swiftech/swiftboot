@@ -186,6 +186,20 @@ public class MyRequest extends HttpRequest {
 String myHeader = myRequest.getHeader("my_header");
 ```
 
+### 多语言
+
+* 定义 `MessageSource`，配置默认的资源文件，如果有自定义资源文件的也要配置。
+* 
+```java
+@Bean
+public MessageSource messageSource() {
+    ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+    messageSource.setBasenames("classpath:message", "classpath:validation");
+    messageSource.setDefaultEncoding("UTF-8");
+    messageSource.setFallbackToSystemLocale(false); // not using system default locale.
+    return messageSource;
+}
+```
 
 ### 其他
 * 开启 CORS 跨域

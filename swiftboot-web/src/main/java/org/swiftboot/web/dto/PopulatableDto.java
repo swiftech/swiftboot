@@ -22,6 +22,7 @@ import java.util.*;
  * 注意：一对一关系如果需要填充，则必须使用 fetch = FetchType.LAZY 来标注，否则将无法通过反射获取到带有属性值的子类。
  * 标记 {@link JsonIgnore} 注解的 DTO 类属性不会被处理。
  * 如果希望某个实体类中不存在的属性也能出现在 DTO 类中，那么可以用 {@link PopulateIgnore} 来标注这个属性。
+ *
  * @since 3.0
  */
 public interface PopulatableDto<E extends IdPersistable> extends Dto {
@@ -240,7 +241,7 @@ public interface PopulatableDto<E extends IdPersistable> extends Dto {
                                 }
                             }
                             else {
-                                System.out.println("Loop for many, break it");
+                                if (log.isTraceEnabled()) log.trace("Loop for many, break it");
                                 // break the loop
                             }
                         }
