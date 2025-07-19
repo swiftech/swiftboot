@@ -5,7 +5,6 @@ import java.math.RoundingMode;
 
 /**
  * Utils for calculating.
- *
  */
 public class CalcUtils {
     /**
@@ -58,19 +57,21 @@ public class CalcUtils {
 
     /**
      * Limit a float value between 0 and 1,
+     *
      * @param v
      * @return
      */
-    public static float limitInZeroToOne(float v){
+    public static float limitInZeroToOne(float v) {
         return limitIn(v, 0f, 1f);
     }
 
     /**
      * Limit a double value between 0 and 1,
+     *
      * @param v
      * @return
      */
-    public static double limitInZeroToOne(double v){
+    public static double limitInZeroToOne(double v) {
         return limitIn(v, 0f, 1f);
     }
 
@@ -111,5 +112,45 @@ public class CalcUtils {
     public static boolean equalsIgnoreScale(BigDecimal a, BigDecimal b, int scale) {
         return a.setScale(scale, RoundingMode.DOWN)
                 .equals(b.setScale(scale, RoundingMode.DOWN));
+    }
+
+    /**
+     * Add 2 {@link BigDecimal}s even if one of them is null.
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static BigDecimal add(BigDecimal a, BigDecimal b) {
+        if (a == null && b == null) {
+            return BigDecimal.ZERO;
+        }
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
+        }
+        return a.add(b);
+    }
+
+    /**
+     * Subtract the {@link BigDecimal} b from the {@link BigDecimal} a even if a or b is null.
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static BigDecimal subtract(BigDecimal a, BigDecimal b) {
+        if (a == null && b == null) {
+            return BigDecimal.ZERO;
+        }
+        if (a == null) {
+            return BigDecimal.ZERO.subtract(b);
+        }
+        if (b == null) {
+            return a;
+        }
+        return a.subtract(b);
     }
 }

@@ -3,7 +3,9 @@ package org.swiftboot.util.time;
 import java.time.LocalDateTime;
 
 /**
+ * Utils for Cron expression in Spring.
  *
+ * @since 3.0
  */
 public class CronUtils {
 
@@ -14,6 +16,7 @@ public class CronUtils {
      * @return
      */
     public static String toCronExpression(LocalDateTime dateTime) {
+        // Spring doesn't support year in the expression.
         return String.format("%d %d %d %d %d ?",
                 dateTime.getSecond(),      // seconds (0-59)
                 dateTime.getMinute(),      // minutes (0-59)
