@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 /**
  * @author swiftech
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Import(EntityIdAspectTestConfig.class)
 @ActiveProfiles("id-h2")

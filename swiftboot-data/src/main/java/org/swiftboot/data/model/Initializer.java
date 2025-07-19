@@ -258,7 +258,7 @@ public class Initializer implements ApplicationContextAware {
         // try to get dao bean
         String baseName = substringBeforeLast(entityClass.getName(), ".model.");
         String entityName = StringUtils.substringBefore(entityClass.getSimpleName(), "Entity");
-        String daoName = String.format("%s.repository.%sDao", baseName, entityName);
+        String daoName = String.format("%s.repository.%sRepository", baseName, entityName);
 
         Class<?> daoClass = Class.forName(daoName);
         log.info("Dao class: " + daoClass);
