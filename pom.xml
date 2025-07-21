@@ -42,7 +42,7 @@
 <!--        <commons.beanutils.version>1.11.0</commons.beanutils.version>-->
         <commons.text.version>1.13.1</commons.text.version>
         <commons.io.version>2.19.0</commons.io.version>
-        <spring.version>6.2.8</spring.version>
+        <spring.version>6.2.9</spring.version>
         <spring.boot.version>3.4.7</spring.boot.version>
         <spring.data.version>3.4.7</spring.data.version>
         <spring.data.jpa.version>3.4.7</spring.data.jpa.version>
@@ -79,7 +79,7 @@
         <plugin.maven.deploy>3.1.4</plugin.maven.deploy>
         <plugin.maven.install>3.1.4</plugin.maven.install>
         <plugin.maven.gpg>3.2.7</plugin.maven.gpg>
-
+        <plugin.sonatype.publish>0.8.0</plugin.sonatype.publish>
     </properties>
 
 
@@ -482,6 +482,14 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -538,6 +546,11 @@
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>${plugin.maven.gpg}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>${plugin.sonatype.publish}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -553,16 +566,6 @@
     <profiles>
         <profile>
             <id>release</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
             <build>
                 <plugins>
                     <plugin>
