@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.swiftboot.common.auth.JwtUtils;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.response.Response;
 import org.swiftboot.web.response.ResponseCode;
@@ -28,10 +28,7 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
      */
     protected String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
+        return JwtUtils.extractBearerToken(bearerToken);
     }
 
     /**

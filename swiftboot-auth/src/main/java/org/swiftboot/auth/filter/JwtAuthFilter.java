@@ -42,10 +42,7 @@ public class JwtAuthFilter extends BaseAuthFilter {
                 if (log.isWarnEnabled()) log.warn("User does not have a valid token");
                 super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
             }
-        } catch (JwtException e) {
-            log.error(e.getMessage(), e);
-            super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
-        } catch (IOException e) {
+        } catch (JwtException | IOException e) {
             log.error(e.getMessage(), e);
             super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
         }

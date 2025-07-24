@@ -1,6 +1,49 @@
 # SwiftBoot-Auth V3 高级
 
-### Session 模式：
+
+## 自动获取用户 ID 和名称
+
+对于已登录的用户的请求，用户 ID 会被自动的注入，无需写代码从 Header 或者 Cookie 获取用户 Token，再从会话中获取用户 ID 了。
+
+* 对于 `POST` 请求，只要是继承自 `BaseAuthenticatedRequest` 或者其子类的接口参数对象，都会被自动的注入用户ID和用户名称，在 Controller 中只要通过 `request.getUerId()` 和 `request.getUserName()` 就可以获得。例如：
+
+```java
+public class OrderCreateRequest extends BaseAuthenticatedRequest<OrderEntity> {
+
+}
+```
+
+```java
+@RequestMapping(value = "order/create", method = RequestMethod.POST)
+public HttpResponse<OrderCreateResult> orderCreate(@RequestBody OrderCreateRequest request) {
+    log.info(request.getUserId());
+    log.info(request.getUserName());
+}
+```
+* 对于 `GET` 请求，只需要在 Controller 方法上加一个 `String` 类型的参数，并且加上 `@UserId` 注解即可得到用户ID。例如：
+
+```java
+public HttpResponse<?> getOrderList(@UserId String userId) {
+    log.info(userId);
+}
+```
+
+> 除了 `@UserId`，还有 `@UserName` 可以直接获得登录的用户名，`@ExpireTime`可以获得会话超时的时间点(类型为long)，或者可以通过 `@UserSession` 直接获得 session 对象
+
+> 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
+
+
+## 自定义 `UserAuthService`
+如果默认提供的 `DefaultUserJwtAuthService` 或 `DefaultUserSessionAuthService` 不能满足需要，那么你可以自定义 `UserAuthService`：
+
+```json
+@Service
+public class MyUserAuthService implements UserAuthService<JwtAuthentication> {
+    // 实现自己的认证逻辑
+}
+```
+
+## Session 模式：
 
 一旦启用了 Session 模式，用户认证之后的用户 Token 会被自动写入到 Cookie 或者 Header 中返回给客户端，
 如果写入的是 Header，那么客户端从接口返回的 Header 中取得 Token 后需要放入后续请求的 Header 中，名称和配置的 `swiftboot.auth.tokenKey` 一样，例如 `user_token`。
@@ -30,7 +73,7 @@ public AuthenticatedResponse<AppUserSignInDto, Session> userSignIn(@RequestBody 
 ```
 
 
-#### 用户认证后的处理
+### 用户认证后的处理
 
 * 配置过滤器
 
@@ -52,7 +95,7 @@ public FilterRegistrationBean<AuthFilter> regAuthFilter() {
 
 
 
-#### 配置 application.yaml 例子
+### 配置 application.yaml 例子
 
 ```yaml
 swiftboot:
@@ -94,36 +137,3 @@ swiftboot:
 
 * cookiePath
   Cookie 中用户 Token 的有效路径，默认为 `/`，只有在 `useCookie` 为 `true` 时有效。
-
-
-### 自动获取用户 ID 和名称
-
-对于已登录的用户的请求，用户 ID 会被自动的注入，无需写代码从 Header 或者 Cookie 获取用户 Token，再从会话中获取用户 ID 了。
-
-* 对于 `POST` 请求，只要是继承自 `BaseAuthenticatedRequest` 或者其子类的接口参数对象，都会被自动的注入用户ID和用户名称，在 Controller 中只要通过 `request.getUerId()` 和 `request.getUserName()` 就可以获得。例如：
-
-```java
-public class OrderCreateRequest extends BaseAuthenticatedRequest<OrderEntity> {
-
-}
-```
-
-```java
-@RequestMapping(value = "order/create", method = RequestMethod.POST)
-public HttpResponse<OrderCreateResult> orderCreate(@RequestBody OrderCreateRequest request) {
-    log.info(request.getUserId());
-    log.info(request.getUserName());
-}
-```
-* 对于 `GET` 请求，只需要在 Controller 方法上加一个 `String` 类型的参数，并且加上 `@UserId` 注解即可得到用户ID。例如：
-
-```java
-public HttpResponse<?> getOrderList(@UserId String userId) {
-    log.info(userId);
-}
-```
-
-> 除了 `@UserId`，还有 `@UserName` 可以直接获得登录的用户名，`@ExpireTime`可以获得会话超时的时间点(类型为long)，或者可以通过 `@UserSession` 直接获得 session 对象
-
-> 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
-
