@@ -1,8 +1,10 @@
 package org.swiftboot.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +25,7 @@ public class TextUtils {
      */
     public static int lastIndexOf(String text, String search, int startPos) {
         String substr = org.apache.commons.lang3.StringUtils.substring(text, 0, startPos + 1); // +1 for startPos is inclusive
-        return org.apache.commons.lang3.StringUtils.lastIndexOf(substr, search, startPos);
+        return Strings.CS.lastIndexOf(substr, search, startPos);
     }
 
     /**
@@ -37,7 +39,7 @@ public class TextUtils {
      */
     public static int lastIndexOfIgnoreCase(String text, String search, int startPos) {
         String substr = org.apache.commons.lang3.StringUtils.substring(text, 0, startPos + 1); // +1 for startPos is inclusive
-        return org.apache.commons.lang3.StringUtils.lastIndexOfIgnoreCase(substr, search, startPos);
+        return Strings.CI.lastIndexOf(substr, search, startPos);
     }
 
     /**
@@ -55,7 +57,7 @@ public class TextUtils {
     }
 
     /**
-     * Join list of strings ignoring the null or the blank strings.
+     * Join a list of strings ignoring the null or the blank strings.
      *
      * @param list
      * @param separator
@@ -68,7 +70,7 @@ public class TextUtils {
     }
 
     /**
-     * Join array of strings ignoring the null or the blank strings.
+     * Join an array of strings ignoring the null or the blank strings.
      *
      * @param array
      * @param separator
@@ -83,6 +85,25 @@ public class TextUtils {
             }
         }
         return StringUtils.join(withoutNullOrBlank, separator);
+    }
+
+    /**
+     * Split a string with separator and return non-blank substrings as {@code List}, return null if no non-blank substring exists.
+     *
+     * @param str
+     * @param separator
+     * @return
+     */
+    public static List<String> splitWithoutBlank(String str, String separator) {
+        if (StringUtils.isBlank(str)) {
+            return null;
+        }
+        List<String> list = Arrays.stream(StringUtils.split(str, ",")).map(String::trim).toList();
+        List<String> notBlankList = list.stream().filter(StringUtils::isNotBlank).toList();
+        if (notBlankList.isEmpty()) {
+            return null;
+        }
+        return notBlankList;
     }
 
 }
