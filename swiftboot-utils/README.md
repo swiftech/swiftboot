@@ -40,6 +40,8 @@
 ### Maven
 
 稳定版：
+[v2.md](docs/v2.md)
+
 ```xml
 <dependency>
     <groupId>com.github.swiftech</groupId>
