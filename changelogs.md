@@ -10,7 +10,7 @@ v3.0.0
   the DTOs would never inherit from a class but an interface, which gives more flexibility. All static methods are moved from `BasePopulateDto` to `PopulatableDto`.
 
 v2.4.10
-* fix: potential memory leak from ClasspathResourceUtils
+* fix: potential memory leak from `ClasspathResourceUtils`
 * update dependencies.
 
 v2.4.9
@@ -38,7 +38,7 @@ v2.4.4.1
 * `[utils]`: add `getPreference(String)` method to `PreferenceManager`
 
 v2.4.3
-* `[sheet]`: Fix exception when selecting sheet by name.
+* `[sheet]`: Fix exception when selecting sheets by name.
 * `[sheet]`: Fix exception when reading cells with blank cell ahead.
 * update spring boot and spring data to 2.7.15
 
@@ -51,8 +51,8 @@ v2.4.1
 
 v2.4.0
 * `[sheet]`: Add support for reading images from Excel.
-* `[sheet]`: Add support for reading csv/excel data from dynamic position(which is determined by a function).
-* `[sheet]`: Add support for reading uncertain rows for Excel(stops when getting first empty row).
+* `[sheet]`: Add support for reading csv/excel data from dynamic position (which is determined by a function).
+* `[sheet]`: Add support for reading uncertain rows for Excel (stops when getting first empty row).
 * `[sheet]`: Replace SheetHandler/CellHandler interfaces with Consumer.
 * `[sheet]`: Fix some bugs of importing csv and Excel files.
 * `[sheet]`: Fix bug of reading value of Excel FORMULA cell.

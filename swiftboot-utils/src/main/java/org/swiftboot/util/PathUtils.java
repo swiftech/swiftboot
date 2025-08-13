@@ -1,6 +1,6 @@
 package org.swiftboot.util;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -17,7 +17,7 @@ public class PathUtils {
     }
 
     public static boolean isAbsolutePath(String path) {
-        return StringUtils.startsWith(path, "/") || isWindowsPath(path);
+        return Strings.CS.startsWith(path, "/") || isWindowsPath(path);
     }
 
     /**
@@ -26,10 +26,10 @@ public class PathUtils {
      * @return
      */
     public static boolean isParentFolder(File folder, File file) {
-        String parentFolderPath = StringUtils.endsWith(folder.getPath(), File.separator)
+        String parentFolderPath = Strings.CS.endsWith(folder.getPath(), File.separator)
                 ? folder.getPath()
                 : folder.getPath() + File.separator;
-        return StringUtils.startsWith(file.getPath(), parentFolderPath);
+        return Strings.CS.startsWith(file.getPath(), parentFolderPath);
     }
 
     /**

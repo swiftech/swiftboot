@@ -3,6 +3,7 @@ package org.swiftboot.web.validate.constraintvalidator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.swiftboot.web.validate.constraint.PhoneNo;
 import org.slf4j.Logger;
@@ -35,6 +36,6 @@ public class PhoneNoValidator implements ConstraintValidator<PhoneNo, String> {
         }
         return s.trim().length() == 11
                 && NumberUtils.isDigits(s.trim())
-                && StringUtils.startsWith(s.trim(), this.prefix);
+                && Strings.CS.startsWith(s.trim(), this.prefix);
     }
 }

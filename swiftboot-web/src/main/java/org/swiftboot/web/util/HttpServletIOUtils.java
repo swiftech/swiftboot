@@ -1,15 +1,15 @@
 package org.swiftboot.web.util;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.swiftboot.util.BufferedIoUtils;
-import org.swiftboot.web.Info;
 import org.swiftboot.util.IoUtils;
+import org.swiftboot.web.Info;
 import org.swiftboot.web.R;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.ResponseCode;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
 import java.net.URLConnection;
@@ -51,7 +51,7 @@ public class HttpServletIOUtils {
     public static void writeImageToResponseStream(File file,
                                                   HttpServletResponse response) {
         String fileExt = StringUtils.substringAfterLast(file.getName(), ".");
-        if (StringUtils.equalsAnyIgnoreCase(fileExt, IMAGE_FILES)) {
+        if (Strings.CI.equalsAny(fileExt, IMAGE_FILES)) {
             String contentType = URLConnection.guessContentTypeFromName(file.getName());
             writeFileToResponseStream(file, response, contentType, null);
         }

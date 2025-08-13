@@ -6,8 +6,8 @@ import org.swiftboot.data.model.entity.IdPersistable;
 
 /**
  * ID generator with snowflake algorithm.
- * Default result is 32 bytes numeric string begin with snowflake ID and pad with random string,
- * set isPadTo32 = false if you want to keep original 19 bytes snowflake id.
+ * The Default result is 32 bytes numeric string begins with snowflake ID and pad with random string,
+ * set isPadTo32 = false if you want to keep the original 19 bytes snowflake id.
  *
  * @author swiftech
  * @since 2.0.0
@@ -32,7 +32,7 @@ public class SnowflakeIdGenerator implements IdGenerator<IdPersistable> {
     public String generate(IdPersistable object) {
         String snowflakeId = String.valueOf(sequence.nextId());
         if (isPadTo32){
-            snowflakeId = StringUtils.rightPad(snowflakeId, 32, RandomStringUtils.randomNumeric(32 - snowflakeId.length()));
+            snowflakeId = StringUtils.rightPad(snowflakeId, 32, RandomStringUtils.secure().nextNumeric(32 - snowflakeId.length()));
         }
         return snowflakeId;
     }

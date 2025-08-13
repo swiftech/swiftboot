@@ -14,7 +14,6 @@ import org.swiftboot.web.util.MessageUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 表单提交输入验证返回值，出现表单验证错误时创建并填充　{@link Response}　对象。

@@ -2,6 +2,7 @@ package org.swiftboot.util.time;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -9,6 +10,16 @@ import java.util.TimeZone;
  * @since 3.0.0
  */
 public class LocalDateTimeUtils {
+
+    /**
+     * Convert {@link LocalDateTime} to {@link ZonedDateTime} with default time zone.
+     *
+     * @param localDateTime
+     * @return
+     */
+    public static ZonedDateTime toZonedDateTime(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault());
+    }
 
     /**
      * Convert {@link LocalDateTime} to millisecond with default time zone.
