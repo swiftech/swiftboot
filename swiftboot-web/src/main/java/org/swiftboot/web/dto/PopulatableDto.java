@@ -247,7 +247,8 @@ public interface PopulatableDto<E extends IdPersistable> extends Dto {
                         }
                     }
                     else {
-                        log.debug("Ignore relation field %s".formatted(targetField.getName()));
+                        if (log.isTraceEnabled())
+                            log.trace("Ignore relation field %s".formatted(targetField.getName()));
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);

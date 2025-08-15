@@ -229,7 +229,7 @@ public class BeanUtils {
             throw new IllegalArgumentException(Info.get(BeanUtils.class, R.PARAMS_REQUIRED));
         }
 
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(object);
         field.setAccessible(true);
 
         Object result = null;
@@ -254,7 +254,7 @@ public class BeanUtils {
             throws NoSuchFieldException {
 
         Field field = getDeclaredField(object, propertyName);
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(object);
         field.setAccessible(true);
         try {
             field.set(object, newValue);
@@ -272,7 +272,7 @@ public class BeanUtils {
      * @param newValue 属性值
      */
     public static void forceSetProperty(Object object, Field field, Object newValue) {
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(object);
         field.setAccessible(true);
         try {
             field.set(object, newValue);
@@ -387,7 +387,7 @@ public class BeanUtils {
         if (method == null)
             throw new NoSuchMethodException(Info.get(BeanUtils.class, R.NO_FIELD2, clazz.getSimpleName(), methodName));
 
-        boolean accessible = method.isAccessible();
+        boolean accessible = method.canAccess(object);
         method.setAccessible(true);
         Object result = null;
         try {
