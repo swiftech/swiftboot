@@ -1,6 +1,7 @@
 package org.swiftboot.util.tuple;
 
 /**
+ * Tuple object with 2 objects a, b
  *
  * @param <A>
  * @param <B>
@@ -8,8 +9,8 @@ package org.swiftboot.util.tuple;
  */
 public class Tuple2<A, B> {
 
-    private A a;
-    private B b;
+    private final A a;
+    private final B b;
 
     public Tuple2(A a, B b) {
         this.a = a;

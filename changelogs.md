@@ -1,5 +1,7 @@
 v2.4.11
-
+* `[utils]`: new Tuple classes for fixed size 2, 3, 4 and 5.
+* `[utils]`: new utils methods to CalcUtils, JsonUtils and TextUtils. 
+* update dependencies.
 
 v2.4.10
 * fix: potential memory leak from `ClasspathResourceUtils`

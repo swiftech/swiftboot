@@ -1,6 +1,7 @@
 package org.swiftboot.util.tuple;
 
 /**
+ * Tuple object with 5 objects a, b, c, d, e
  *
  * @param <A>
  * @param <B>
@@ -11,11 +12,11 @@ package org.swiftboot.util.tuple;
  */
 public class Tuple5<A, B, C, D, E> {
 
-    private A a;
-    private B b;
-    private C c;
-    private D d;
-    private E e;
+    private final A a;
+    private final B b;
+    private final C c;
+    private final D d;
+    private final E e;
 
     public Tuple5(A a, B b, C c, D d, E e) {
         this.a = a;
