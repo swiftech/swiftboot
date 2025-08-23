@@ -1,3 +1,18 @@
+v2.4.11
+
+
+v2.4.10
+* fix: potential memory leak from `ClasspathResourceUtils`
+* update dependencies.
+
+v2.4.9
+* `[utils]`: new utils methods to join array or list of strings ignoring the null or the blank strings.
+* update dependencies.
+
+v2.4.8
+* `[collections]`: add `findAncestor()` to Node class
+* `[utils]`: add `removeQuotes()` to `TextUtils` class
+
 v2.4.7
 * `[utils]` add getPreferenceAlias() methods to PreferenceManager for migrating preferences.
 

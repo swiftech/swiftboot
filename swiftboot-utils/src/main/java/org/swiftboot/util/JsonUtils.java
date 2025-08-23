@@ -103,6 +103,7 @@ public class JsonUtils {
      * @param map
      * @return
      * @throws JsonProcessingException
+     * @deprecated to object2Json
      */
     public static String mapToJson(Map map) throws JsonProcessingException {
         ObjectMapper mapper = getJava8ObjectMapper();
@@ -122,6 +123,22 @@ public class JsonUtils {
     }
 
     /**
+     * 把对象转换为 JSON 格式字符串，错误的话不会抛出异常，而是返回错误信息
+     *
+     * @param obj
+     * @return
+     * @since 3.0
+     */
+    public static String object2JsonSafe(Object obj) {
+        ObjectMapper mapper = getJava8ObjectMapper();
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            return e.getLocalizedMessage();
+        }
+    }
+
+    /**
      * 转换为格式化过的 JSON 格式字符串
      *
      * @param obj
@@ -137,6 +154,11 @@ public class JsonUtils {
         }
     }
 
+    /**
+     * As of the Java 8, the time implementation has been changed wit new classes.
+     *
+     * @return
+     */
     public static ObjectMapper getJava8ObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
