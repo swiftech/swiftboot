@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>swiftboot-rpc</artifactId>
+    <name>swiftboot-rpc</name>
 
     <dependencies>
         <dependency>

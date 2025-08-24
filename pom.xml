@@ -14,7 +14,9 @@
     <artifactId>swiftboot</artifactId>
     <packaging>pom</packaging>
     <version>2.4.11</version>
+    <name>SwiftBoot</name>
     <description>A rapid development framework based on Spring Boot, Spring MVC and Spring Data for enterprise</description>
+    <url>https://github.com/swiftech/swiftboot</url>
 
     <modules>
         <module>swiftboot-utils</module>
@@ -175,17 +177,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -270,12 +261,12 @@
         </pluginManagement>
     </build>
 
-    <repositories>
-        <repository>
-            <id>Central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>Central</id>-->
+<!--            <url>https://repo1.maven.org/maven2/</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 
 
     <profiles>
@@ -313,9 +304,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <configuration>
-                            <keyname>8560012322E4B7B6</keyname>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -368,5 +356,4 @@
             <organization>swiftech</organization>
         </developer>
     </developers>
-
 </project>

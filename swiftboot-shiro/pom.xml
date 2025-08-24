@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>swiftboot-shiro</artifactId>
+    <name>swiftboot-shiro</name>
     <description>shiro supporting for swiftboot web applications</description>
 
     <dependencies>

@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>swiftboot-data</artifactId>
+    <name>swiftboot-data</name>
     <description>Data access component based on Spring-Data-JPA</description>
 
     <dependencies>
