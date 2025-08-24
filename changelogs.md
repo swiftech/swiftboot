@@ -1,13 +1,18 @@
 v3.0.0
 * New Modules:
-  * `[swiftboot-security]` is introduced with Spring Security support.
-  * new `swiftboot-common-auth` module to share similar classes between `swiftboot-auth` and `swiftboot-security`.
-* Deprecated Modules; 
-  * `[swiftboot-shiro]` module is removed, which means Shiro is no longer supported.
+    * `[swiftboot-security]` is introduced with Spring Security support.
+    * new `swiftboot-common-auth` module to share similar classes between `swiftboot-auth` and `swiftboot-security`.
+* Deprecated Modules;
+    * `[swiftboot-shiro]` module is removed, which means Shiro is no longer supported.
 * New Features
-  * `[swiftboot-web]`: allow `BasePopulateDto` to include or exclude related DTOs during populating from entities.
-  * `[swiftboot-web]`: handle DTO automatic populating by new interface `PopulatableDto` instead of class `BasePopulateDto`, so that
-  the DTOs would never inherit from a class but an interface, which gives more flexibility. All static methods are moved from `BasePopulateDto` to `PopulatableDto`.
+    * `[swiftboot-web]`: allow `BasePopulateDto` to include or exclude related DTOs during populating from entities.
+    * `[swiftboot-web]`: handle DTO automatic populating by new interface `PopulatableDto` instead of class `BasePopulateDto`, so that
+      the DTOs would never inherit from a class but an interface, which gives more flexibility. All static methods are moved from `BasePopulateDto` to `PopulatableDto`.
+
+v2.4.11
+* `[utils]`: new Tuple classes for fixed size 2, 3, 4 and 5.
+* `[utils]`: new utils methods to CalcUtils, JsonUtils and TextUtils. 
+* update dependencies.
 
 v2.4.10
 * fix: potential memory leak from `ClasspathResourceUtils`
@@ -16,7 +21,7 @@ v2.4.10
 v2.4.9
 * `[utils]`: new utils methods to join array or list of strings ignoring the null or the blank strings.
 * update dependencies.
-* 
+
 v2.4.8
 * `[collections]`: add `findAncestor()` to Node class
 * `[utils]`: add `removeQuotes()` to `TextUtils` class

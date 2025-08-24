@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>swiftboot-utils</artifactId>
+    <name>swiftboot-utils</name>
     <description>Utils library for enterprise applications</description>
 
     <dependencies>

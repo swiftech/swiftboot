@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>swiftboot-collections</artifactId>
+    <name>swiftboot-collections</name>
     <description>Extended collections classes for enterprise development</description>
 
     <dependencies>
