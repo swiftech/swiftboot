@@ -41,8 +41,8 @@
         <commons.codec.version>1.19.0</commons.codec.version>
         <commons.collections.version>4.5.0</commons.collections.version>
 <!--        <commons.beanutils.version>1.11.0</commons.beanutils.version>-->
-        <commons.text.version>1.13.1</commons.text.version>
-        <commons.io.version>2.19.0</commons.io.version>
+        <commons.text.version>1.14.0</commons.text.version>
+        <commons.io.version>2.20.0</commons.io.version>
         <spring.boot.version>3.4.9</spring.boot.version>
         <spring.data.version>3.4.9</spring.data.version>
         <spring.data.jpa.version>3.4.9</spring.data.jpa.version>
