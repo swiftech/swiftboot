@@ -83,8 +83,8 @@ public class SecurityAuthController {
             jwtService.saveJwtAuthentication(accessToken, refreshToken);
 
             log.info("User login in: %s".formatted(loginName));
-            AuthenticatedDto authenticatedDto = new AuthenticatedDto(accessToken.tokenValue(), accessToken.expiresAt(),
-                    refreshToken.tokenValue(), refreshToken.expiresAt());
+            AuthenticatedDto authenticatedDto = new AuthenticatedDto(accessToken.getTokenValue(), accessToken.getExpiresAt(),
+                    refreshToken.getTokenValue(), refreshToken.getExpiresAt());
             // TODO
             authenticatedDto.setRole(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
             return new Response<>(authenticatedDto);

@@ -92,8 +92,8 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
             AccessToken userAccessToken = jwtTokenProvider.generateAccessToken(userByOpenId.getId(), userByOpenId.getLoginName());
             RefreshToken userRefreshToken = jwtTokenProvider.generateRefreshToken(userByOpenId.getId());
 
-            AuthenticatedDto authenticatedDto = new AuthenticatedDto(userAccessToken.tokenValue(), userAccessToken.expiresAt(),
-                    userRefreshToken.tokenValue(), userRefreshToken.expiresAt());
+            AuthenticatedDto authenticatedDto = new AuthenticatedDto(userAccessToken.getTokenValue(), userAccessToken.getExpiresAt(),
+                    userRefreshToken.getTokenValue(), userRefreshToken.getExpiresAt());
 
             Response<Object> responseDto = new ResponseBuilder<>().data(authenticatedDto).build();
             String data = JsonUtils.object2Json(responseDto);

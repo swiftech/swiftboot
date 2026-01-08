@@ -1,6 +1,8 @@
 package org.swiftboot.auth;
 
 /**
+ * Throw this exception returns {@code HttpStatus.UNAUTHORIZED} 401 to client.
+ *
  * @since 3.0
  */
 public class AuthenticationException extends RuntimeException {

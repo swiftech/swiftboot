@@ -101,8 +101,7 @@ public class AppLoginController {
         signInDto.setAuthType("session");
         signInDto.setId(appUserEntity.getId());
         signInDto.setLoginName(appUserEntity.getLoginName());
-        signInDto.setAccessToken(session.getUserToken());
-        signInDto.setExpiresAt(session.getExpireTime());
+        signInDto.setAccessToken(new AccessToken(session.getUserToken(), session.getExpireTime()));
         return new AuthenticatedResponse<>(signInDto, session);
     }
 
@@ -114,10 +113,8 @@ public class AppLoginController {
         dto.setId(appUserEntity.getId());
         dto.setLoginName(appUserEntity.getLoginName());
         dto.setUpdateTime(LocalDateTimeUtils.toMillisecond(appUserEntity.getUpdateTime()));
-        dto.setAccessToken(accessToken.tokenValue());
-        dto.setExpiresAt(accessToken.expiresAt());
-        dto.setRefreshToken(refreshToken.tokenValue());
-        dto.setRefreshTokenExpiresAt(refreshToken.expiresAt());
+        dto.setAccessToken(accessToken);
+        dto.setRefreshToken(refreshToken);
         return new AuthenticatedResponse<>(dto, jwtAuthentication);
     }
 }

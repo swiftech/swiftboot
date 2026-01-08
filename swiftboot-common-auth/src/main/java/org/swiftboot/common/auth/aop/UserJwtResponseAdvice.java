@@ -51,7 +51,7 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
         if (authenticated == null) return;
         if (authenticated instanceof JwtAuthentication ja) {
             AccessToken accessToken = ja.getAccessToken();
-            if (StringUtils.isBlank(accessToken.tokenValue())) return;
+            if (StringUtils.isBlank(accessToken.getTokenValue())) return;
 
             // save authenticated dual token.
             jwtService.saveJwtAuthentication(ja);

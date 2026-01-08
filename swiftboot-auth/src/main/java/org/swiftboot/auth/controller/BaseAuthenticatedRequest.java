@@ -5,7 +5,8 @@ import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.web.request.BasePopulateRequest;
 
 /**
- * If user authenticated, user id and username can be automatically set.
+ * Extends your request classes from BaseAuthenticatedRequest to have user id and username injected automatically.
+ * If user is authenticated successfully, user id and username can be automatically set.
  *
  * @author swiftech
  * @since 2.1

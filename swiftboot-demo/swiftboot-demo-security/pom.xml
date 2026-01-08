@@ -5,10 +5,10 @@
     <parent>
         <artifactId>swiftboot-demo</artifactId>
         <groupId>org.swiftboot</groupId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
     </parent>
     <artifactId>swiftboot-demo-security</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <name>swiftboot-demo-security</name>
     <description>Demo of basic usage of Spring Security</description>
     <dependencies>
@@ -51,16 +51,16 @@
 <!--            <version>0.4.9</version>-->
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>${jwt.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>${jwt.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.jsonwebtoken</groupId>-->
+<!--            <artifactId>jjwt-api</artifactId>-->
+<!--            <version>${jwt.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.jsonwebtoken</groupId>-->
+<!--            <artifactId>jjwt-impl</artifactId>-->
+<!--            <version>${jwt.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

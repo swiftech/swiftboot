@@ -29,6 +29,6 @@
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-data</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
   </dependency>
   ```

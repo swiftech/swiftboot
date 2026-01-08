@@ -105,9 +105,14 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
     }
 
     protected JwtAuthentication generateTokens(E userEntity, Map<String, Object> additions) {
-        AccessToken accessToken = jwtTokenProvider.generateAccessToken(userEntity.getId(), userEntity.getLoginName(), additions);
-        RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getId());
-        return new JwtAuthentication(accessToken, refreshToken);
+        try {
+            AccessToken accessToken = jwtTokenProvider.generateAccessToken(userEntity.getId(), userEntity.getLoginName(), additions);
+            RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getId());
+            return new JwtAuthentication(accessToken, refreshToken);
+        } catch (Exception e) {
+            log.error("Generating access token and refresh token failed, check whether the JWT secret is well setup.", e);
+            throw new RuntimeException(e);
+        }
     }
 
 }

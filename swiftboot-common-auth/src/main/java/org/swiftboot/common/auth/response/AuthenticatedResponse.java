@@ -8,7 +8,10 @@ import org.swiftboot.web.response.Response;
  * The {@link Authenticated} in AuthenticatedResponse will be saved to session storage automatically by
  * AOP advices.
  *
+ * @param <R>
+ * @param <S>
  * @author swiftech
+ * @see org.swiftboot.common.auth.aop.UserJwtResponseAdvice
  * @since 2.2
  */
 public class AuthenticatedResponse<R, S extends Authenticated> extends Response<R> {

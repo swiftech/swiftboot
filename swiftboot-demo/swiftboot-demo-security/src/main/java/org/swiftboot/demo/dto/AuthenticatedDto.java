@@ -17,11 +17,11 @@ public class AuthenticatedDto extends BaseRefreshTokenDto implements Dto {
     private String permissions;
 
     public AuthenticatedDto(String accessToken, long expiresAt, String refreshToken, long refreshTokenExpiresAt) {
-        super(accessToken, expiresAt, refreshToken, refreshTokenExpiresAt);
+        super(new AccessToken(accessToken, expiresAt), new RefreshToken(refreshToken, refreshTokenExpiresAt));
     }
 
     public AuthenticatedDto(AccessToken accessToken, RefreshToken refreshToken) {
-        super(accessToken.tokenValue(), accessToken.expiresAt(), refreshToken.tokenValue(), refreshToken.expiresAt());
+        super(accessToken, refreshToken);
     }
 
     public String getRole() {

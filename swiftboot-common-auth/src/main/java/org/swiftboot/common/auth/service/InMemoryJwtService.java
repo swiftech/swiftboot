@@ -36,13 +36,13 @@ public class InMemoryJwtService implements JwtService {
             if (jwtAuthentication.getRefreshToken() == null) {
                 throw new IllegalArgumentException("revokeType is set to 'refresh' but no refresh token provided.");
             }
-            refreshTokenMap.put(jwtAuthentication.getRefreshToken().tokenValue(), jwtAuthentication);
+            refreshTokenMap.put(jwtAuthentication.getRefreshToken().getTokenValue(), jwtAuthentication);
         }
         else {
             if (jwtAuthentication.getAccessToken() == null) {
                 throw new IllegalArgumentException("No access token provided.");
             }
-            accessTokenMap.put(jwtAuthentication.getAccessToken().tokenValue(), jwtAuthentication);
+            accessTokenMap.put(jwtAuthentication.getAccessToken().getTokenValue(), jwtAuthentication);
         }
     }
 
@@ -53,13 +53,13 @@ public class InMemoryJwtService implements JwtService {
             if (jwtAuthentication.getRefreshToken() == null) {
                 throw new IllegalArgumentException("revokeType is set to 'refresh' but no refresh token provided.");
             }
-            refreshTokenMap.put(refreshToken.tokenValue(), jwtAuthentication);
+            refreshTokenMap.put(refreshToken.getTokenValue(), jwtAuthentication);
         }
         else {
             if (jwtAuthentication.getAccessToken() == null) {
                 throw new IllegalArgumentException("No access token provided.");
             }
-            accessTokenMap.put(accessToken.tokenValue(), jwtAuthentication);
+            accessTokenMap.put(accessToken.getTokenValue(), jwtAuthentication);
         }
     }
 
@@ -91,7 +91,7 @@ public class InMemoryJwtService implements JwtService {
         JwtAuthentication jwtAuthentication = accessTokenMap.get(accessToken);
         if (jwtAuthentication != null) {
             if (jwtConfig.isRefreshRevokeType()) {
-                refreshTokenMap.remove(jwtAuthentication.getRefreshToken().tokenValue());
+                refreshTokenMap.remove(jwtAuthentication.getRefreshToken().getTokenValue());
             }
             else {
                 accessTokenMap.remove(accessToken);

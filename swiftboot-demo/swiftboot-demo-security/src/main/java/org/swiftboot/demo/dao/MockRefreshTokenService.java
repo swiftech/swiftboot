@@ -27,7 +27,7 @@ public class MockRefreshTokenService implements RefreshTokenService {
         if (!userMap.containsKey(userId)) {
             return false;
         }
-        tokenMap.remove(userMap.get(userId).tokenValue());
+        tokenMap.remove(userMap.get(userId).getTokenValue());
         userMap.remove(userId);
         return true;
     }

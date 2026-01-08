@@ -34,9 +34,9 @@ public HttpResponse<?> getOrderList(@UserId String userId) {
 
 
 ## 自定义 `UserAuthService`
-如果默认提供的 `DefaultUserJwtAuthService` 或 `DefaultUserSessionAuthService` 不能满足需要，那么你可以自定义 `UserAuthService`：
+如果默认提供的 `DefaultUserJwtAuthService` 或 `DefaultUserSessionAuthService` 实现类不能满足需要（比如希望把更多的用户信息加入Token或者会话中，如用户角色、等级等等），那么你可以自定义 `UserAuthService` 的实现类：
 
-```json
+```java
 @Service
 public class MyUserAuthService implements UserAuthService<JwtAuthentication> {
     // 实现自己的认证逻辑
