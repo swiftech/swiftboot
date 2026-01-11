@@ -1,6 +1,5 @@
 package org.swiftboot.web.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
@@ -15,10 +14,9 @@ import org.hibernate.validator.constraints.Length;
 public class IdRequest extends HttpRequest {
 
     /**
-     * 业务对象ID
+     * 业务对象 ID
      */
     @Schema(description="Business object ID")
-    @JsonProperty("id")
     @NotBlank
     @Length(min = 32, max = 32)
     private String id;

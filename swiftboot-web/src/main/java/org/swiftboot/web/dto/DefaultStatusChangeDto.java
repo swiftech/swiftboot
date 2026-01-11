@@ -1,6 +1,5 @@
 package org.swiftboot.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -15,14 +14,12 @@ public class DefaultStatusChangeDto {
      * 新状态码
      */
     @Schema(description = "New status code")
-    @JsonProperty("new_status_code")
     private int newStatusCode;
 
     /**
      * 新状态名称
      */
     @Schema(description = "New status name")
-    @JsonProperty("new_status_name")
     private String newStatusName;
 
     public DefaultStatusChangeDto(int newStatusCode) {

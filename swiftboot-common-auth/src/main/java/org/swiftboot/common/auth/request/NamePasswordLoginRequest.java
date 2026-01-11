@@ -1,6 +1,5 @@
 package org.swiftboot.common.auth.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
@@ -18,13 +17,11 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 public class NamePasswordLoginRequest {
 
     @Schema(description = "Login name of user", requiredMode = REQUIRED, example = "13066669999")
-    @JsonProperty("login_name")
     @Length(max = 32)
     @NotBlank
     private String loginName;
 
     @Schema(description = "Password for login name", requiredMode = REQUIRED, example = "my_password")
-    @JsonProperty("login_pwd")
     @Length(max = 64)
     @NotBlank
     private String loginPwd;

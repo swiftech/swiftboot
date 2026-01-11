@@ -1,6 +1,5 @@
 package org.swiftboot.common.auth.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class RefreshTokenRequest {
 
     @Schema(description = "Refresh token", requiredMode = Schema.RequiredMode.REQUIRED)
-    @JsonProperty("refresh_token")
     private String refreshToken;
 
     public RefreshTokenRequest() {

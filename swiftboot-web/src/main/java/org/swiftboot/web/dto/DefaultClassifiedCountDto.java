@@ -1,6 +1,5 @@
 package org.swiftboot.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.HashMap;
@@ -19,14 +18,13 @@ public class DefaultClassifiedCountDto<K, V> implements Dto {
      *
      */
     @Schema(description = "Counting results map")
-    @JsonProperty("count_map")
-    private Map<K, V> map = new HashMap<>();
+    private Map<K, V> countMap = new HashMap<>();
 
-    public Map<K, V> getMap() {
-        return map;
+    public Map<K, V> getCountMap() {
+        return countMap;
     }
 
-    public void setMap(Map<K, V> map) {
-        this.map = map;
+    public void setCountMap(Map<K, V> countMap) {
+        this.countMap = countMap;
     }
 }

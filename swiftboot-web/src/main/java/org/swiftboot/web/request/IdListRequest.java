@@ -1,6 +1,5 @@
 package org.swiftboot.web.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -20,7 +19,6 @@ public class IdListRequest extends HttpRequest {
      * 业务对象ID列表
      */
     @Schema(description="List of business object ID")
-    @JsonProperty("ids")
     @NotEmpty
     private List<@NotBlank @Length(min = 32, max = 32) String> ids;
 
