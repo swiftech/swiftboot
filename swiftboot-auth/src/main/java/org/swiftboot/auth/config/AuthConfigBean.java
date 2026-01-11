@@ -4,8 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ *
  * @author swiftech 2019-05-20
  * @see SessionConfigBean
+ * @see org.swiftboot.common.auth.config.JwtConfigBean
  **/
 @Configuration
 @ConfigurationProperties("swiftboot.auth")

@@ -51,10 +51,16 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
         if (authenticated == null) return;
         if (authenticated instanceof JwtAuthentication ja) {
             AccessToken accessToken = ja.getAccessToken();
-            if (StringUtils.isBlank(accessToken.getTokenValue())) return;
+            if (StringUtils.isBlank(accessToken.getTokenValue())){
+                log.warn("No access token found");
+                return;
+            }
 
-            // save authenticated dual token.
-            jwtService.saveJwtAuthentication(ja);
+            // avoid handling refreshing access token in `immutable` refresh mode since no new refresh token is generated.
+            if (ja.getRefreshToken() != null) {
+                // save authenticated dual token.
+                jwtService.saveJwtAuthentication(ja);
+            }
         }
     }
 }

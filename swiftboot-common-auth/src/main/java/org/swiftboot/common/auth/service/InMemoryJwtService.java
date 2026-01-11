@@ -86,6 +86,10 @@ public class InMemoryJwtService implements JwtService {
 
     @Override
     public boolean revokeAuthenticationByAccessToken(String accessToken) {
+        if (!jwtConfig.isDirectRevokeType()) {
+            log.warn("The revoke type is setup as %s, which is not for revoking access token".formatted(jwtConfig.getRevokeType()));
+            return false;
+        }
         if (log.isDebugEnabled())
             log.debug("Revoke JWT authentication by access token: " + abbreviateToken(accessToken));
         JwtAuthentication jwtAuthentication = accessTokenMap.get(accessToken);
@@ -103,6 +107,10 @@ public class InMemoryJwtService implements JwtService {
 
     @Override
     public boolean revokeAuthenticationByRefreshToken(String refreshToken) {
+        if (!jwtConfig.isRefreshRevokeType()) {
+            log.warn("The revoke type is setup as %s, which is not for revoking refresh token".formatted(jwtConfig.getRevokeType()));
+            return false;
+        }
         if (log.isDebugEnabled())
             log.debug("Revoke JWT authentication by refresh token: " + abbreviateToken(refreshToken));
         if (!jwtConfig.isRefreshRevokeType()) {
@@ -110,7 +118,6 @@ public class InMemoryJwtService implements JwtService {
         }
         JwtAuthentication jwtAuthentication = refreshTokenMap.get(refreshToken);
         if (jwtAuthentication != null) {
-            // accessTokenMap.remove(jwtAuthentication.getAccessToken().tokenValue());
             refreshTokenMap.remove(refreshToken);
             return true;
         }
@@ -123,11 +130,17 @@ public class InMemoryJwtService implements JwtService {
 
     @Override
     public boolean isRevokedRefreshToken(String refreshToken) {
+        if (!jwtConfig.isRefreshRevokeType()) {
+            log.warn("The revoke type is setup as %s, which is not for revoking refresh token".formatted(jwtConfig.getRevokeType()));
+            throw new RuntimeException("To refresh access token, setup revoke type to be 'refresh' first.");
+        }
+        log.debug("%d refresh tokens in memory".formatted(refreshTokenMap.size()));
         return !refreshTokenMap.containsKey(refreshToken);
     }
 
     @Override
     public boolean isRevokedAccessToken(String accessToken) {
+        log.debug("%d access tokens in memory".formatted(refreshTokenMap.size()));
         return !accessTokenMap.containsKey(accessToken);
     }
 

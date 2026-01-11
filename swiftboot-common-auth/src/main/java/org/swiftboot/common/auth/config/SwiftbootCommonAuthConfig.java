@@ -29,6 +29,7 @@ public class SwiftbootCommonAuthConfig implements WebMvcConfigurer {
     }
 
     /**
+     * Use InMemoryJwtService if now JwtService implementation specified.
      *
      * @return
      */

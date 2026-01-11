@@ -10,6 +10,7 @@ import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
@@ -41,6 +42,9 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
     @Resource
     protected AuthConfigBean authConfig;
 
+    @Resource
+    protected JwtConfigBean jwtConfig;
+
     @Override
     public JwtAuthentication userSignIn(String loginId, String loginPwd) {
         return this.userSignIn(loginId, loginPwd, null);
@@ -53,7 +57,7 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         if (optUser.isPresent()) {
             E userEntity = optUser.get();
             log.debug("Sign in user id: %s".formatted(userEntity.getId()));
-            return this.generateTokens(userEntity, additions);
+            return this.generateTokens(userEntity, additions, true);
         }
         else {
             log.warn("Sign in failed for user: %s".formatted(loginId));
@@ -82,14 +86,16 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         if (byId.isPresent()) {
             E userEntity = byId.get();
 
+            boolean rolling = "rolling".equals(jwtConfig.getRefreshMode());
             // generate new access token and refresh token
-            JwtAuthentication jwtAuthentication = this.generateTokens(userEntity, additions);
+            JwtAuthentication jwtAuthentication = this.generateTokens(userEntity, additions, rolling);
 
-            // save new refresh token
-            jwtService.saveJwtAuthentication(jwtAuthentication);
-
-            // revoke used refresh token
-            jwtService.revokeAuthenticationByRefreshToken(refreshToken);
+            if (rolling) {
+                // save new refresh token
+                jwtService.saveJwtAuthentication(jwtAuthentication);
+                // revoke used refresh token
+                jwtService.revokeAuthenticationByRefreshToken(refreshToken);
+            }
 
             return jwtAuthentication;
         }
@@ -104,11 +110,16 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         return new LogoutResponse<>(accessToken);
     }
 
-    protected JwtAuthentication generateTokens(E userEntity, Map<String, Object> additions) {
+    protected JwtAuthentication generateTokens(E userEntity, Map<String, Object> additions, boolean withRefreshToken) {
         try {
             AccessToken accessToken = jwtTokenProvider.generateAccessToken(userEntity.getId(), userEntity.getLoginName(), additions);
-            RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getId());
-            return new JwtAuthentication(accessToken, refreshToken);
+            if (withRefreshToken) {
+                RefreshToken refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getId());
+                return new JwtAuthentication(accessToken, refreshToken);
+            }
+            else {
+                return new JwtAuthentication(accessToken, null);
+            }
         } catch (Exception e) {
             log.error("Generating access token and refresh token failed, check whether the JWT secret is well setup.", e);
             throw new RuntimeException(e);

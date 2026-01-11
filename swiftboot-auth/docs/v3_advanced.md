@@ -43,6 +43,36 @@ public class MyUserAuthService implements UserAuthService<JwtAuthentication> {
 }
 ```
 
+
+## 刷新 Access Token
+如果采用的是 JWT 认证模式，那么可能需要为客户端提供刷新 Access Token 的接口，例如：
+```java
+@Resource
+private UserAuthService userAuthService;
+
+@PostMapping(value = "api/refresh_token")
+public Response<UserSignDto> refreshToken(@RequestBody RefreshTokenRequest request) {
+    Authenticated authenticated = userAuthService.refreshAccessToken(request.getRefreshToken());
+    if (authenticated instanceof JwtAuthentication ja) {
+        UserSignDto dto = new UserSignDto();
+        dto.setAccessToken(ja.getAccessToken());
+        dto.setRefreshToken(ja.getRefreshToken()); // 可选，取决于 refreshMode
+        return new AuthenticatedResponse<>(dto, ja);
+    }
+    throw new ErrMessageException("No user found");
+}
+```
+
+默认情况下每次刷新 Access Token 不会产生新的 Refresh Token（refreshMode='immutable'），但是如果需要每次刷新 Access Token 也重新生成 Refresh Token 给客户端，则设置refreshMode='rolling'：
+```yaml
+swiftboot:
+  auth:
+    jwt:
+      refreshMode: rolling
+```
+
+----
+
 ## Session 模式：
 
 一旦启用了 Session 模式，用户认证之后的用户 Token 会被自动写入到 Cookie 或者 Header 中返回给客户端，

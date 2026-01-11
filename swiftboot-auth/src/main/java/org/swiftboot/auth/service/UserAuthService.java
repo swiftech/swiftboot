@@ -39,6 +39,7 @@ public interface UserAuthService<T extends Authenticated> {
 
     /**
      * Refresh the user's Access Token, Used only for JWT mode.
+     * The used refresh token will be determined by the config {@code swiftboot.auth.jwt.refreshMode}
      *
      * @param refreshToken
      */
@@ -46,6 +47,7 @@ public interface UserAuthService<T extends Authenticated> {
 
     /**
      * Refresh the user's Access Token with Refresh Token (and additions), Used only for JWT mode.
+     * The used refresh token will be determined by the config {@code swiftboot.auth.jwt.refreshMode}
      *
      * @param refreshToken
      * @param additions
@@ -54,9 +56,12 @@ public interface UserAuthService<T extends Authenticated> {
     T refreshAccessToken(String refreshToken, Map<String, Object> additions);
 
     /**
-     * User logout
-     * TODO
+     * User logout.
+     * The user refresh token or the user session will be cleared automatically.
+     *
      * @param accessToken
+     * @see org.swiftboot.common.auth.aop.JwtLogoutResponseAdvice
+     * @see org.swiftboot.auth.aop.UserSessionLogoutResponseAdvice
      */
     <R> LogoutResponse<R> userLogout(String accessToken);
 

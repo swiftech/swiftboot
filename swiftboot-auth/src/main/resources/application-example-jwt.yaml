@@ -7,3 +7,4 @@ swiftboot:
       accessTokenExpirationSeconds: 600
       refreshTokenExpirationSeconds: 600
       revokeType: direct
+      refreshMode: immutable

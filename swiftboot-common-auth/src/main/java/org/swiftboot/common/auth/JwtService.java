@@ -48,7 +48,7 @@ public interface JwtService {
      * Only for `refresh` revoke mode.
      *
      * @param refreshToken
-     * @return
+     * @return true if the token is revoked
      */
     boolean revokeAuthenticationByRefreshToken(String refreshToken);
 

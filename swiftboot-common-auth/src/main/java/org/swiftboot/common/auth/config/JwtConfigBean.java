@@ -35,6 +35,19 @@ public class JwtConfigBean {
      */
     private String revokeType = "direct";
 
+    /**
+     * `immutable` | `rolling`
+     * How to handle the used refresh token after refreshing access token, only works when revokeType is `refresh`:
+     * immutable: keep the original refresh token until it expires.
+     * rolling: re-generate new refresh token everytime a new access token is refreshed.
+     */
+    private String refreshMode = "immutable";
+
+
+    public boolean isDirectRevokeType() {
+        return "direct".equalsIgnoreCase(revokeType);
+    }
+
     public boolean isRefreshRevokeType() {
         return "refresh".equalsIgnoreCase(revokeType);
     }
@@ -61,6 +74,14 @@ public class JwtConfigBean {
 
     public void setRefreshTokenExpirationSeconds(long refreshTokenExpirationSeconds) {
         this.refreshTokenExpirationSeconds = refreshTokenExpirationSeconds;
+    }
+
+    public String getRefreshMode() {
+        return refreshMode;
+    }
+
+    public void setRefreshMode(String refreshMode) {
+        this.refreshMode = refreshMode;
     }
 
     public String getRevokeType() {
