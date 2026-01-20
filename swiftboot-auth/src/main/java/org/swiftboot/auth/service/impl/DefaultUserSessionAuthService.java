@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.auth.AuthenticationException;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.model.SessionBuilder;
@@ -13,8 +14,6 @@ import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.PasswordUtils;
-import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.response.ResponseCode;
 
 import java.util.Map;
 import java.util.Optional;
@@ -60,7 +59,7 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
         }
         else {
             log.debug("Sign in failed for user: %s".formatted(loginId));
-            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
+            throw new AuthenticationException("Sign in failed");
         }
     }
 

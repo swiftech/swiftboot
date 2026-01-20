@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.web.response.Response;
 
 /**
- * Handler authorization exception globally.
+ * Handler authentication exception globally.
  *
  * @since 3.0
  */

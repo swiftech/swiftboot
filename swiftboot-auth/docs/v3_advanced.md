@@ -1,5 +1,8 @@
 # SwiftBoot-Auth V3 高级
 
+## 异常处理
+用户认证或者(JWT模式下）刷新 access token 失败的时候，SwiftBoot-Auth 默认的认证服务会抛出 `AuthenticationException` 异常，这个异常类会被捕获并自动转换成 `HTTP 401 Unauthorized` 错误返回给前端。
+如果你自己实现认证类，也需要在用户认证失败或者 access token 过期的时候抛出 `AuthenticationException` 异常。
 
 ## 自动获取用户 ID 和名称
 

@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.swiftboot.auth.AuthenticationException;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;
@@ -16,8 +17,6 @@ import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
 import org.swiftboot.util.PasswordUtils;
-import org.swiftboot.web.exception.ErrMessageException;
-import org.swiftboot.web.response.ResponseCode;
 
 import java.util.Map;
 import java.util.Optional;
@@ -61,7 +60,7 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         }
         else {
             log.warn("Sign in failed for user: %s".formatted(loginId));
-            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
+            throw new AuthenticationException("Sign in failed");
         }
     }
 
@@ -73,19 +72,24 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
     @Override
     public JwtAuthentication refreshAccessToken(String refreshToken, Map<String, Object> additions) {
         // validate refresh token
-        if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
-            throw new RuntimeException("Refresh Token is invalid");
+        try {
+            if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
+                throw new AuthenticationException("Refresh Token is invalid");
+            }
+        } catch (Exception e) {
+            throw new AuthenticationException(e.getLocalizedMessage());
         }
         // whether revoked.
         if (jwtService.isRevokedRefreshToken(refreshToken)) {
-            throw new RuntimeException("Refresh Token is revoked");
+            throw new AuthenticationException("Refresh Token is revoked");
         }
 
         String userId = jwtTokenProvider.getUserId(refreshToken);
-        Optional<E> byId = userAuthRepository.findById(userId);
-        if (byId.isPresent()) {
-            E userEntity = byId.get();
+        Optional<E> optUserAuth = userAuthRepository.findById(userId);
+        if (optUserAuth.isPresent()) {
+            E userEntity = optUserAuth.get();
 
+            // rolling means re-generate Refresh Token each time.
             boolean rolling = "rolling".equals(jwtConfig.getRefreshMode());
             // generate new access token and refresh token
             JwtAuthentication jwtAuthentication = this.generateTokens(userEntity, additions, rolling);
@@ -100,8 +104,8 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
             return jwtAuthentication;
         }
         else {
-            log.warn("Refresh token failed for user: %s".formatted(userId));
-            throw new ErrMessageException(ResponseCode.CODE_SIGNIN_FAIL);
+            log.warn("Could not find user for the refresh token: %s".formatted(userId));
+            throw new AuthenticationException("Could not find user for the refresh token.");
         }
     }
 
