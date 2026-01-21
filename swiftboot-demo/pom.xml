@@ -22,12 +22,12 @@
 
     <properties>
         <java.version>17</java.version>
-        <swiftboot.version>3.0.0</swiftboot.version>
+        <swiftboot.version>3.1.0</swiftboot.version>
         <!--        <junit.version>5.5.2</junit.version>-->
-        <mysql.version>9.2.0</mysql.version>
-        <postgres.version>42.7.8</postgres.version>
+        <mysql.version>9.5.0</mysql.version>
+        <postgres.version>42.7.9</postgres.version>
 <!--        <jwt.version>0.13.0</jwt.version>-->
-        <junit.version>5.14.1</junit.version>
+        <junit.version>5.14.2</junit.version>
         <embedded-redis.version>1.4.3</embedded-redis.version>
         <okhttp.version>4.12.0</okhttp.version>
         <httpclient5.version>5.4.4</httpclient5.version>

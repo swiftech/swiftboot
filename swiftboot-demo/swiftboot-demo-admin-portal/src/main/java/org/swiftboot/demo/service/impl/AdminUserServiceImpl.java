@@ -86,8 +86,8 @@ public class AdminUserServiceImpl implements AdminUserService {
             AccessToken accessToken = jwtTokenProvider.generateAccessToken(user.getId(), user.getUsername());
             jwtService.saveJwtAuthentication(accessToken, null); // TODO 为什么必须调用这个？
             AdminUserSigninResult ret = new AdminUserSigninResult();
-            ret.setAccessToken(accessToken.tokenValue());
-            ret.setExpiresAt(accessToken.expiresAt());
+            ret.setAccessToken(accessToken.getTokenValue());
+            ret.setExpiresAt(accessToken.getExpiresAt());
             return ret;
         }
         else {
