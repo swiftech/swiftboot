@@ -30,7 +30,7 @@
         <junit.version>5.14.2</junit.version>
         <embedded-redis.version>1.4.3</embedded-redis.version>
         <okhttp.version>4.12.0</okhttp.version>
-        <httpclient5.version>5.4.4</httpclient5.version>
+<!--        <httpclient5.version>5.4.4</httpclient5.version>-->
 <!--        <springdoc.version>2.8.6</springdoc.version>-->
     </properties>
 
