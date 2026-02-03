@@ -10,6 +10,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.common.auth.annotation.*;
 import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.model.Session;
@@ -67,33 +68,43 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
                 return null;
             }
             if (log.isInfoEnabled()) log.info("Find and pre-set user id: %s".formatted(session.getUserId()));
-            if (parameter.hasParameterAnnotation(Token.class)) {
-                return token;
-            }
-            else if (parameter.hasParameterAnnotation(UserId.class)) {
-                return session.getUserId();
-            }
-            else if (parameter.hasParameterAnnotation(UserName.class)) {
-                return session.getUserName();
-            }
-            else if (parameter.hasParameterAnnotation(ExpireTime.class)) {
-                return session.getExpireTime();
-            }
-            else if (parameter.hasParameterAnnotation(Addition.class)) {
-                Addition anno = parameter.getParameterAnnotation(Addition.class);
-                if (anno != null && StringUtils.isNotBlank(anno.value())) {
-                    Map<String, Object> additions = session.getAdditions();
-                    if (additions != null && additions.containsKey(anno.value())) {
-                        return additions.get(anno.value());
-                    }
+            try {
+                if (parameter.hasParameterAnnotation(Token.class)) {
+                    return token;
                 }
-                return null;
-            }
-            else if (parameter.hasParameterAnnotation(org.swiftboot.auth.annotation.Session.class)) {
-                return session;
-            }
-            else {
-                return null;
+                else if (parameter.hasParameterAnnotation(UserId.class)) {
+                    return session.getUserId();
+                }
+                else if (parameter.hasParameterAnnotation(UserName.class)) {
+                    return session.getUserName();
+                }
+                else if (parameter.hasParameterAnnotation(ExpireTime.class)) {
+                    return session.getExpireTime();
+                }
+                else if (parameter.hasParameterAnnotation(Addition.class)) {
+                    Addition anno = parameter.getParameterAnnotation(Addition.class);
+                    if (anno != null && StringUtils.isNotBlank(anno.value())) {
+                        Map<String, Object> additions = session.getAdditions();
+                        if (additions != null && additions.containsKey(anno.value())) {
+                            return additions.get(anno.value());
+                        }
+                    }
+                    return null;
+                }
+                else if (parameter.hasParameterAnnotation(org.swiftboot.auth.annotation.Session.class)) {
+                    return session;
+                }
+                else {
+                    return null;
+                }
+            } catch (Exception e) {
+                log.error(e.getLocalizedMessage());
+                if (parameter.hasParameterAnnotation(IfNecessary.class)) {
+                    throw new AuthenticationException("Invalid authentication");
+                }
+                else {
+                    return null;
+                }
             }
         }
     }

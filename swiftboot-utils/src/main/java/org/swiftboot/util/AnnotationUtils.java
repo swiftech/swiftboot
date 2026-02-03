@@ -54,7 +54,10 @@ public class AnnotationUtils {
 
     /**
      * 获取指定 Field 中的指定类型的注解实例
-     *
+     * 例如：
+     * <pre>
+     * Annotation annotation = getFieldAnnotation(field, Schema.class)
+     * </pre>
      * @param field
      * @param annotationClazz
      * @return
@@ -70,7 +73,8 @@ public class AnnotationUtils {
     }
 
     /**
-     * 获取方法参数上的注解（类型限定）
+     * 获取方法参数上的限定类型的所有注解
+     *
      * @param method
      * @param annotationClass
      * @return

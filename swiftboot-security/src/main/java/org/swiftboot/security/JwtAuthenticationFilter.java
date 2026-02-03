@@ -54,6 +54,7 @@ public class JwtAuthenticationFilter extends BaseAuthFilter {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ")) {
+            log.debug("No Authorization head provided.");
             filterChain.doFilter(request, response);
             return;
         }
@@ -66,6 +67,7 @@ public class JwtAuthenticationFilter extends BaseAuthFilter {
             // Check if the header starts with "Bearer "
             token = JwtUtils.extractBearerToken(authHeader);
             if (StringUtils.isBlank(token)) {
+                log.debug("No access token provided.");
                 throw new AuthorizationDeniedException("Invalid access token");
             }
             else {

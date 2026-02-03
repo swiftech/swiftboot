@@ -24,9 +24,9 @@ public class AuthExceptionProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(AuthExceptionProcessor.class);
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler(org.swiftboot.common.auth.AuthenticationException.class)
     @ResponseBody
-    public ResponseEntity<?> handle401Exception(AuthenticationException e, HttpServletRequest req) {
+    public ResponseEntity<?> handle401Exception(org.swiftboot.common.auth.AuthenticationException e, HttpServletRequest req) {
         if (log.isDebugEnabled()) log.debug("handle %s to HTTP response ".formatted(e.getClass().getSimpleName()));
         Response<Void> response = Response.builder().code(String.valueOf(HttpStatus.UNAUTHORIZED.value())).message(e.getMessage()).build();
         try {

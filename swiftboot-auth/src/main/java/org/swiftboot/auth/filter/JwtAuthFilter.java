@@ -45,6 +45,9 @@ public class JwtAuthFilter extends BaseAuthFilter {
         } catch (JwtException | IOException e) {
             log.error(e.getMessage(), e);
             super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            super.responseWithHttpStatus(response, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Server error");
         }
     }
 

@@ -2,6 +2,16 @@
 
 快速实现基于 `SpringSecurity` 和 `JWT` 的用户认证和鉴权
 
+## 使用
+引入
+```xml
+<dependency>
+    <groupId>com.github.swiftech</groupId>
+    <artifactId>swiftboot-security</artifactId>
+    <version>${swiftboot.version}</version>
+</dependency>
+```
+
 ## 认证
 
 SwiftBoot-Security 提供了一个基于 JWT 的过滤器，实现了基本的用户的认证管理

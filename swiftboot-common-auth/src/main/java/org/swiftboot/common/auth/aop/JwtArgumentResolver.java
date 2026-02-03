@@ -1,4 +1,4 @@
-package org.swiftboot.common.auth.service;
+package org.swiftboot.common.auth.aop;
 
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +11,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.JwtUtils;
 import org.swiftboot.common.auth.annotation.*;
@@ -48,26 +49,36 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
             return null;
         }
         else {
-            if (parameter.hasParameterAnnotation(Token.class)) {
-                return accessToken;
+            try {
+                if (parameter.hasParameterAnnotation(Token.class)) {
+                    return accessToken;
+                }
+                else if (parameter.hasParameterAnnotation(UserId.class)) {
+                    return jwtTokenProvider.getUserId(accessToken);
+                }
+                else if (parameter.hasParameterAnnotation(UserName.class)) {
+                    return jwtTokenProvider.getUsername(accessToken);
+                }
+                else if (parameter.hasParameterAnnotation(ExpireTime.class)) {
+                    return jwtTokenProvider.getExpireTime(accessToken).getTime();
+                }
+                else if (parameter.hasParameterAnnotation(Addition.class)) {
+                    Addition anno = parameter.getParameterAnnotation(Addition.class);
+                    if (anno != null && StringUtils.isNotBlank(anno.value()))
+                        return jwtTokenProvider.getAddition(accessToken, anno.value());
+                    else return null;
+                }
+                else
+                    return null;
+            } catch (Exception e) {
+                log.error(e.getLocalizedMessage());
+                if (parameter.hasParameterAnnotation(IfNecessary.class)) {
+                    throw new AuthenticationException("Invalid authentication");
+                }
+                else {
+                    return null;
+                }
             }
-            else if (parameter.hasParameterAnnotation(UserId.class)) {
-                return jwtTokenProvider.getUserId(accessToken);
-            }
-            else if (parameter.hasParameterAnnotation(UserName.class)) {
-                return jwtTokenProvider.getUsername(accessToken);
-            }
-            else if (parameter.hasParameterAnnotation(ExpireTime.class)) {
-                return jwtTokenProvider.getExpireTime(accessToken).getTime();
-            }
-            else if (parameter.hasParameterAnnotation(Addition.class)) {
-                Addition anno = parameter.getParameterAnnotation(Addition.class);
-                if (anno != null && StringUtils.isNotBlank(anno.value()))
-                    return jwtTokenProvider.getAddition(accessToken, anno.value());
-                else return null;
-            }
-            else
-                return null;
         }
     }
 }

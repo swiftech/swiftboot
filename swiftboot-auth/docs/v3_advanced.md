@@ -31,12 +31,25 @@ public HttpResponse<?> getOrderList(@UserId String userId) {
 }
 ```
 
-> 除了 `@UserId`，还有 `@UserName` 可以直接获得登录的用户名，`@ExpireTime`可以获得会话超时的时间点(类型为long)，或者可以通过 `@UserSession` 直接获得 session 对象
+> 除了 `@UserId`，还有 `@UserName` 可以直接获得登录的用户名，`@ExpireTime`可以获得会话超时的时间点(单位是毫秒， 类型为long)。
 
-> 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
+> 对于 Session 模式，可以通过 `@Session` 直接获得 session 对象。
 
+> 如果不想用以上方式获得会话中的信息，也可以通过直接继承 `BaseAuthSessionController`，调用 `fetchUserIdFromSession` 方法来拿到用户的ID。
+
+### 特殊情况
+对于一些特殊的接口，它不强制要求用户登录才能访问，但是又希望在用户已经登录的情况下仍然能够通过 JWT 或者会话 获得用户的ID等信息，如果 JWT 失效则返回 401，那么可以用 `@IfNecessary` 配合使用达到这样的效果，例如：
+
+```java
+
+public HttpResponse<?> getPublicData(@UserId @IfNecessary String userId) {
+  log.info(userId);
+}
+```
+> 注意：当你启用 `@IfNecessary` 之后，如果给出的 JWT 失效，则会抛出异常并返回 `401 Unauthorized` 错误。
 
 ## 自定义 `UserAuthService`
+
 如果默认提供的 `DefaultUserJwtAuthService` 或 `DefaultUserSessionAuthService` 实现类不能满足需要（比如希望把更多的用户信息加入Token或者会话中，如用户角色、等级等等），那么你可以自定义 `UserAuthService` 的实现类：
 
 ```java

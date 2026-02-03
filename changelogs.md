@@ -1,3 +1,12 @@
+V3.1.0
+* New Features
+  * `[swiftboot-auth]`: a new `refresh mode` configuration introduced to handle the used refresh token after refreshing an access token. 
+  * `[swiftboot-common-auth]`: new `@IfNecessary` annotation for endpoints that do not require user login, user information will still be verified and retrieved if the client provides a JWT or session ID. If the user's JWT or session is invalid, a 401 error will be returned.
+* Improvements:
+  * `[swiftboot-common-auth]`: new `AccessToken` and `RefreshToken` classes for authentication result.  
+* Bug Fixes:
+  *  `[swiftboot-auth]`: returns 401 http status code (by `AuthenticationException`) when failed to refresh access token.
+
 v3.0.0
 * New Modules:
     * `[swiftboot-security]` is introduced with Spring Security support.

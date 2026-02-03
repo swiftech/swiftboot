@@ -10,6 +10,7 @@ import java.util.Collection;
  * Used for OAuth2 authentication.
  *
  * @since 3.0
+ * @see JwtAuthenticationFilter
  */
 public class UserIdAuthenticationToken extends AbstractAuthenticationToken {
 

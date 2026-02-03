@@ -1,4 +1,4 @@
-package org.swiftboot.auth;
+package org.swiftboot.common.auth;
 
 /**
  * Throw this exception returns {@code HttpStatus.UNAUTHORIZED} 401 to client.

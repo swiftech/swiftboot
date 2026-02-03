@@ -9,7 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.common.auth.service.InMemoryJwtService;
-import org.swiftboot.common.auth.service.JwtArgumentResolver;
+import org.swiftboot.common.auth.aop.JwtArgumentResolver;
 import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 
