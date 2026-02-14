@@ -1,29 +1,31 @@
 package org.swiftboot.common.auth.service;
 
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.common.auth.JwtService;
 import org.swiftboot.common.auth.config.JwtConfigBean;
-import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.AccessToken;
+import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.swiftboot.common.auth.JwtService.abbreviateToken;
+
 /**
  * In memory JWT service implementation to handle access token refreshing without any storage.
  *
  * @since 3.0
+ * @deprecated JwtServiceImpl
  */
 public class InMemoryJwtService implements JwtService {
+    private static final Logger log = LoggerFactory.getLogger(InMemoryJwtService.class);
 
     @Resource
     private JwtConfigBean jwtConfig;
 
-    private static final Logger log = LoggerFactory.getLogger(InMemoryJwtService.class);
 
     // access token -> authentication object
     private final Map<String, JwtAuthentication> accessTokenMap = new ConcurrentHashMap<>();
@@ -124,9 +126,6 @@ public class InMemoryJwtService implements JwtService {
         return false;
     }
 
-    private String abbreviateToken(String token) {
-        return StringUtils.abbreviateMiddle(token, "...", 64);
-    }
 
     @Override
     public boolean isRevokedRefreshToken(String refreshToken) {

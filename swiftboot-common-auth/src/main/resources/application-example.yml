@@ -1,5 +1,14 @@
 swiftboot:
   auth:
     jwt:
-      secret: xxx
-      expirationSeconds: 600
+      secret: changeme
+      # default is 10 minutes
+      accessTokenExpirationSeconds: 600
+      # default is 24 hours
+      refreshTokenExpirationSeconds: 86400
+      # default is direct
+      revokeType: refresh
+      # default is immutable
+      refreshMode: rolling
+      # default is memory
+      storeMode: custom

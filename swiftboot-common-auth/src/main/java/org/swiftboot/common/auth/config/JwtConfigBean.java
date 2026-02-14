@@ -43,6 +43,17 @@ public class JwtConfigBean {
      */
     private String refreshMode = "immutable";
 
+    /**
+     * `memory` | `redis`
+     * memory: stores tokens in memory, for testing only.
+     * redis: stores tokens in redis.
+     * default is `memory`.
+     * To customize the store, like in a database, do not set this property, just implement {@code JwtStore} and register as a @Service or a @Component.
+     *
+     * @see org.swiftboot.common.auth.service.JwtStore
+     */
+    private String storeMode = "memory";
+
 
     public boolean isDirectRevokeType() {
         return "direct".equalsIgnoreCase(revokeType);
@@ -90,5 +101,13 @@ public class JwtConfigBean {
 
     public void setRevokeType(String revokeType) {
         this.revokeType = revokeType;
+    }
+
+    public String getStoreMode() {
+        return storeMode;
+    }
+
+    public void setStoreMode(String storeMode) {
+        this.storeMode = storeMode;
     }
 }

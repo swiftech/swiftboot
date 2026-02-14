@@ -8,9 +8,13 @@ spring:
     redis:
       host: localhost
       port: 6379
+  h2:
+    console:
+      enabled: true
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:file:./target/swiftboot-demo-app-server
+    url: jdbc:h2:file:${user.dir}/db/swiftboot-demo-app-server;AUTO_SERVER=TRUE
+#    url: jdbc:h2:file:${user.dir}/db/swiftboot-demo-app-server;IFEXISTS=TRUE
 #    driverClassName: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/swiftboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
 #    username: root
@@ -20,7 +24,7 @@ spring:
 #    username: postgres
 #    password: mandalorian2023
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.H2Dialect
 #    database-platform: org.hibernate.dialect.MySQL8Dialect
 #    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -54,9 +58,9 @@ spring:
 logging:
   level:
     root: INFO
-    org.swiftboot: TRACE
+    org.swiftboot: DEBUG
   file:
-    name: /var/log/swiftboot-demo-app-server.log
+    name: ${user.dir}/logs/swiftboot-demo-app-server.log
 #springdoc:
 #  packagesToScan:
 #    - org.swiftboot.demo.controller

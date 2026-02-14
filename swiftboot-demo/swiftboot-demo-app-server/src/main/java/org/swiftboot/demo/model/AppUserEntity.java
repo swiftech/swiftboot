@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.auth.model.UserPersistable;
+import org.swiftboot.common.auth.model.AccessTokenPersistable;
+import org.swiftboot.common.auth.model.RefreshTokenPersistable;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
 @Description("App用户")
 @Entity
 @Table(name = "DEMO_APP_USER")
-public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersistable {
+public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersistable, AccessTokenPersistable, RefreshTokenPersistable {
 
     /**
      * Login name of app user
@@ -37,6 +39,18 @@ public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersis
     @Column(name = "LAST_LOGIN_TIME")
     private LocalDateTime lastLoginTime;
 
+    @Column(name = "ACCESS_TOKEN")
+    private String accessToken;
+
+    @Column(name = "REFRESH_TOKEN")
+    private String refreshToken;
+
+    @Column(name = "ACCESS_TOKEN_EXPIRES_AT")
+    private Long accessTokenExpiresAt;
+
+    @Column(name = "REFRESH_TOKEN_EXPIRES_AT")
+    private Long refreshTokenExpiresAt;
+
 
     public AppUserEntity() {
     }
@@ -46,7 +60,7 @@ public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersis
     }
 
     /**
-     * 获取Login name of app user
+     * get Login name of app user
      */
     @Override
     public String getLoginName() {
@@ -54,14 +68,14 @@ public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersis
     }
 
     /**
-     * 设置Login name of app user
+     * set Login name of app user
      */
     public void setLoginName(String loginName) {
         this.loginName = loginName;
     }
 
     /**
-     * 获取Login password to login name (MD5 with salt)
+     * get Login password to login name (MD5 with salt)
      */
     @Override
     public String getLoginPwd() {
@@ -69,7 +83,7 @@ public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersis
     }
 
     /**
-     * 设置Login password to login name (MD5 with salt)
+     * set Login password to login name (MD5 with salt)
      */
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
@@ -81,5 +95,45 @@ public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersis
 
     public void setLastLoginTime(LocalDateTime lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    @Override
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    @Override
+    public Long getAccessTokenExpiresAt() {
+        return accessTokenExpiresAt;
+    }
+
+    @Override
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    @Override
+    public Long getRefreshTokenExpiresAt() {
+        return refreshTokenExpiresAt;
+    }
+
+    @Override
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    @Override
+    public void setAccessTokenExpiresAt(Long expiresAt) {
+        this.accessTokenExpiresAt = expiresAt;
+    }
+
+    @Override
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    @Override
+    public void setRefreshTokenExpiresAt(Long expiresAt) {
+        this.refreshTokenExpiresAt = expiresAt;
     }
 }

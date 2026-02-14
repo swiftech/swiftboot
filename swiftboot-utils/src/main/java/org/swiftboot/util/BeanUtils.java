@@ -56,7 +56,7 @@ public class BeanUtils {
      */
     public static List<Field> getDeclaredFields(Class<?> clazz, Class<?> fieldClass) throws NoSuchFieldException {
         List<Field> ret = new LinkedList<>();
-        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = clazz; superClass != null && superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 for (Field declaredField : superClass.getDeclaredFields()) {
                     if (declaredField.getType() == fieldClass) {
@@ -96,7 +96,7 @@ public class BeanUtils {
      * @throws NoSuchFieldException 没有该字段时抛出
      */
     public static Field getDeclaredField(Class<?> clazz, String propertyName) throws NoSuchFieldException {
-        for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class<?> superClass = clazz; superClass != null && superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 return superClass.getDeclaredField(propertyName);
             } catch (NoSuchFieldException e) {

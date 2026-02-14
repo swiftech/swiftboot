@@ -1,5 +1,6 @@
 package org.swiftboot.util.time;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -51,6 +52,17 @@ public class LocalDateTimeUtils {
      */
     public static LocalDateTime fromUtilDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    /**
+     * Converts a given millisecond value to a {@link LocalDateTime} object, using the system's default time zone.
+     *
+     * @param millisecond the millisecond value to convert, representing the number of milliseconds since the epoch
+     * @return a {@link LocalDateTime} corresponding to the provided millisecond value, or null if the input is null
+     */
+    public static LocalDateTime fromMillisecond(Long millisecond) {
+        if (millisecond == null) return null;
+        return Instant.ofEpochMilli(millisecond).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     /**

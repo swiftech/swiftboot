@@ -39,7 +39,7 @@ public class JsonUtils {
             JsonNode found = _select(rootNode, keys, 0);
             return found.textValue().trim();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             return null;
         }
     }
@@ -57,15 +57,33 @@ public class JsonUtils {
     }
 
     /**
+     * Convert JSON to map, return empty map if fail.
+     *
+     * @param strJson
+     * @return
+     * @throws IOException
+     */
+    public static Map<String, ?> jsonToMapSafe(String strJson) {
+        ObjectMapper mapper = getJava8ObjectMapper();
+        try {
+            return mapper.readValue(strJson, new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            log.error(e.getLocalizedMessage());
+            return Map.of();
+        }
+    }
+
+    /**
      * JSON 格式字符串转换为 Map
      *
      * @param strJson
      * @return
      * @throws IOException
      */
-    public static Map jsonToMap(String strJson) throws IOException {
+    public static Map<String, ?> jsonToMap(String strJson) throws IOException {
         ObjectMapper mapper = getJava8ObjectMapper();
-        return mapper.readValue(strJson, new TypeReference<Map>() {
+        return mapper.readValue(strJson, new TypeReference<>() {
         });
     }
 
@@ -105,7 +123,7 @@ public class JsonUtils {
      * @throws JsonProcessingException
      * @deprecated to object2Json
      */
-    public static String mapToJson(Map map) throws JsonProcessingException {
+    public static String mapToJson(Map<String, ?> map) throws JsonProcessingException {
         ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.writeValueAsString(map);
     }
@@ -149,7 +167,7 @@ public class JsonUtils {
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             return e.getLocalizedMessage();
         }
     }

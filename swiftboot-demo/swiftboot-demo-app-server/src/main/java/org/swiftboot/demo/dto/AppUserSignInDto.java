@@ -17,11 +17,11 @@ public class AppUserSignInDto extends BaseRefreshTokenDto {
     private String id;
 
     @Schema(description = "Login name of app user", example = "13866669999")
-    @JsonProperty("login_name")
+//    @JsonProperty("login_name")
     private String loginName;
 
     @Schema(description = "Updating time", example = "1545355038524")
-    @JsonProperty("update_time")
+//    @JsonProperty("update_time")
     private Long updateTime;
 
     @Schema(description = "Sign in success", example = "true")

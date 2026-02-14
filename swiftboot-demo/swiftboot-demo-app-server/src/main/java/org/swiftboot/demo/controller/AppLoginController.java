@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.common.auth.annotation.UserId;
+import org.swiftboot.common.auth.AuthenticationException;
+import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.request.NamePasswordLoginRequest;
 import org.swiftboot.common.auth.request.RefreshTokenRequest;
 import org.swiftboot.common.auth.response.AuthenticatedResponse;
@@ -50,6 +50,9 @@ public class AppLoginController {
     @Resource
     private AppUserRepository appUserRepository;
 
+    @Resource
+    private JwtTokenProvider jwtTokenProvider;
+
     @Operation(description = "App user sign in, return access token and refresh token if in JWT mode; return in HTTP header or set cookie(if enabled) if in Session mode")
     @PostMapping(value = "signin")
     public Response<AppUserSignInDto> appUserSign(
@@ -76,19 +79,24 @@ public class AppLoginController {
 
     @Operation(description = "Refresh Access Token, used only for JWT mode")
     @PostMapping(value = "refresh_token")
-    public Response<AppUserSignInDto> refreshToken(
-            @RequestBody RefreshTokenRequest command, @UserId String userId) {
+    public Response<AppUserSignInDto> refreshToken(@RequestBody RefreshTokenRequest command) {
         log.info("> /app/refresh_token");
         Authenticated authenticated = userAuthService.refreshAccessToken(command.getRefreshToken());
-        Optional<AppUserEntity> opt = appUserRepository.findById(userId);
-        if (opt.isEmpty()) {
-            throw new AuthenticationException("User not found");
-        }
-        AppUserEntity appUserEntity = opt.get();
         if (authenticated instanceof JwtAuthentication jwta) {
+            String userId = jwtTokenProvider.getUserId(jwta.getAccessToken().getTokenValue());
+            Optional<AppUserEntity> opt = appUserRepository.findById(userId);
+            if (opt.isEmpty()) {
+                throw new AuthenticationException("User not found");
+            }
+            AppUserEntity appUserEntity = opt.get();
             return this.createJwtResponse(appUserEntity, jwta);
         }
         else if (authenticated instanceof Session session) {
+            Optional<AppUserEntity> opt = appUserRepository.findById(session.getUserId());
+            if (opt.isEmpty()) {
+                throw new AuthenticationException("User not found");
+            }
+            AppUserEntity appUserEntity = opt.get();
             return this.createSessionResponse(appUserEntity, session);
         }
         else {

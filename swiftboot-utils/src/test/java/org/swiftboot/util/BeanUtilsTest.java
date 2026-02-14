@@ -2,7 +2,9 @@ package org.swiftboot.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.NamedExecutable;
 import org.junit.jupiter.api.Test;
+import org.swiftboot.util.time.BeanInterface;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -11,6 +13,16 @@ import java.util.*;
  * @author swiftech 2019-04-01
  **/
 public class BeanUtilsTest {
+
+    @Test
+    public void getDeclaredField() throws NoSuchFieldException {
+         BeanUtils.getDeclaredFields(BeanInterface.class, String.class);
+        List<Field> declaredFields = BeanUtils.getDeclaredFields(FooBarBean.class, String.class);
+        declaredFields.forEach(f->{
+            System.out.println(f.getName());
+        });
+        Assertions.assertThrowsExactly(NoSuchFieldException.class, (NamedExecutable) () -> BeanUtils.getDeclaredField(FooBarBean.class, "none"));
+    }
 
     @Test
     public void testGetFieldsIgnore() {

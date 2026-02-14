@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.JwtAuthFilter;
+import org.swiftboot.common.auth.service.JwtStore;
+import org.swiftboot.demo.service.JwtDatabaseStore;
 
 /**
  * Enabled when swiftboot.auth.authType = jwt
@@ -28,9 +30,18 @@ public class AppUserAuthJwtConfig implements WebMvcConfigurer {
         registrationBean.setFilter(jwtAuthFilter);
         registrationBean.addUrlPatterns("/app/secure");
         registrationBean.addUrlPatterns("/app/data");
-        registrationBean.addUrlPatterns("/app/logout");
+//        registrationBean.addUrlPatterns("/app/logout");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registrationBean;
+    }
+
+    /**
+     * Force to use database to store JWT.
+     * @return
+     */
+    @Bean
+    public JwtStore databaseJwtStore() {
+        return new JwtDatabaseStore();
     }
 
 }

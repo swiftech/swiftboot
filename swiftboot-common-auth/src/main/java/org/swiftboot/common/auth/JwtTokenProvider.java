@@ -6,6 +6,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.RefreshToken;
@@ -24,6 +26,7 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     public static final String USERNAME_KEY = "username";
+    private static final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
     private final JwtConfigBean jwtConfig;
 
     public JwtTokenProvider(JwtConfigBean jwtConfig) {
@@ -123,8 +126,10 @@ public class JwtTokenProvider {
         if (StringUtils.isBlank(jwtConfig.getSecret())) {
             throw new RuntimeException("Secret is required to generate access token");
         }
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getSecret()
-        ));
+//        log.debug("The secret(base64) length in bits: %d".formatted(jwtConfig.getSecret().length() * 4));
+        byte[] decodedSecret = Decoders.BASE64.decode(jwtConfig.getSecret().trim());
+//        log.debug("The secret length in bits: %d".formatted(decodedSecret.length * 4));
+        return Keys.hmacShaKeyFor(decodedSecret);
     }
 
     // get user ID from JWT token

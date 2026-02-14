@@ -15,6 +15,19 @@ import java.util.Map;
 public class JsonUtilsTest {
 
     @Test
+    void jsonToMapSafe() {
+        String json = """
+                {
+                    "foo":"bar"
+                    "year": 2026
+                }
+                """;
+        Map<String, ?> map = JsonUtils.jsonToMapSafe(json);
+        System.out.println(map.get("foo"));
+        System.out.println(map.get("year"));
+    }
+
+    @Test
     void testJsonToObject() {
         JsonObject jsonObject = new JsonObject();
         try {

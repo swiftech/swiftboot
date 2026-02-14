@@ -45,7 +45,7 @@ public class AppSecureController {
         // this is for testing the loading of IdGenerator Bean
         String id = idGenerator.generate(entity);
         log.info("generated ID: {}", id);
-        return new Response<>("Authenticated");
+        return new Response<>(ResponseCode.CODE_OK, "Authenticated");
     }
 
     @Operation(description = "Test data retrieval with user id in session or token")

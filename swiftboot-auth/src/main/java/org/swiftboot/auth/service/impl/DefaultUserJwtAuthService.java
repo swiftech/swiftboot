@@ -77,7 +77,8 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
                 throw new AuthenticationException("Refresh Token is invalid");
             }
         } catch (Exception e) {
-            throw new AuthenticationException(e.getLocalizedMessage());
+            log.error(e.getLocalizedMessage(), e);
+            throw new AuthenticationException("Refresh Token is invalid");
         }
         // whether revoked.
         if (jwtService.isRevokedRefreshToken(refreshToken)) {
@@ -95,10 +96,11 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
             JwtAuthentication jwtAuthentication = this.generateTokens(userEntity, additions, rolling);
 
             if (rolling) {
+                log.debug("[Rolling] Refreshing access token with new refresh token.");
+                // revoke used refresh token before saving new authentication.
+                jwtService.revokeAuthenticationByRefreshToken(refreshToken);
                 // save new refresh token
                 jwtService.saveJwtAuthentication(jwtAuthentication);
-                // revoke used refresh token
-                jwtService.revokeAuthenticationByRefreshToken(refreshToken);
             }
 
             return jwtAuthentication;
@@ -114,6 +116,14 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         return new LogoutResponse<>(accessToken);
     }
 
+    /**
+     * Generate token(s) for user.
+     *
+     * @param userEntity
+     * @param additions
+     * @param withRefreshToken true to generate new refresh token.
+     * @return
+     */
     protected JwtAuthentication generateTokens(E userEntity, Map<String, Object> additions, boolean withRefreshToken) {
         try {
             AccessToken accessToken = jwtTokenProvider.generateAccessToken(userEntity.getId(), userEntity.getLoginName(), additions);

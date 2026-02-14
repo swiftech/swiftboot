@@ -1,5 +1,6 @@
 package org.swiftboot.common.auth;
 
+import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.RefreshToken;
@@ -44,11 +45,11 @@ public interface JwtService {
     boolean revokeAuthenticationByAccessToken(String accessToken);
 
     /**
-     * Revoke a refresh token to force user to re-login.
-     * Only for `refresh` revoke mode.
+     *
+     * Only for `refresh` revoke mode and be used in the `rolling` refresh mode for revoke the used refresh token.
      *
      * @param refreshToken
-     * @return true if the token is revoked
+     * @return true if the token is revoked successfully
      */
     boolean revokeAuthenticationByRefreshToken(String refreshToken);
 
@@ -75,5 +76,10 @@ public interface JwtService {
      * @return
      */
     JwtAuthentication getJwtAuthentication(String accessToken);
+
+
+    static String abbreviateToken(String token) {
+        return StringUtils.abbreviateMiddle(token, "...", 64);
+    }
 
 }

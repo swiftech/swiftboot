@@ -24,6 +24,8 @@ public class MapUtils {
 
     /**
      * 将key-value字符串转换成Map，key不能有重复
+     * 例如内容格式：k1=v1&k2=v2，调用参数就是<pre>parseKeyValueString(content, '&', '=')</pre>
+     * 空值会被忽略掉
      *
      * @param content
      * @param pairSeparator

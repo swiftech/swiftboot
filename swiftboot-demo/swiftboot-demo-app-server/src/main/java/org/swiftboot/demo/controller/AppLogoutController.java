@@ -28,6 +28,13 @@ public class AppLogoutController {
     @Resource
     private UserAuthService<JwtAuthentication> userAuthService;
 
+    /**
+     * Logout should not be protected by JwtAuthFilter
+     * The UserAuthService will validate the JWT, if the token is expired, the logout still keeps goging.
+     *
+     * @param accessToken
+     * @return
+     */
     @Operation(description = "App user logout")
     @PostMapping(value = "logout")
     public LogoutResponse<Void> appUserLogout(@Token String accessToken) {
