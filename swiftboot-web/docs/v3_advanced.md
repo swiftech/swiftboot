@@ -200,6 +200,10 @@ public MessageSource messageSource() {
     return messageSource;
 }
 ```
+* 默认情况下 SpringBoot 会按照系统的语言设定去读取相应语言的资源文件，如果需要强制按照某种语言读取，则可以在应用程序启动的地方添加强制设定语言，例如：
+```java
+Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
+```
 
 ### 其他
 * 开启 CORS 跨域
@@ -210,4 +214,4 @@ swiftboot:
       cors: true
 ```
 
-> 💡 注意：开启后跨域访问不受限制，仅用于开发调试，生产环境如果需要跨域访问则必须自行配置 Spring 的跨域过滤器 `CorsFilter`
+> 💡 注意：开启后跨域访问不受限制，仅用于开发调试。生产环境不建议开启，设置为 `cors: false`，如果要跨域访问则必须自行配置 Spring 的跨域过滤器 `CorsFilter` 来实现多个域名的跨域请求。

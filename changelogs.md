@@ -1,15 +1,19 @@
 V3.1.0
 * New Features
-  * `[swiftboot-auth]`: a new `refresh mode` configuration introduced to handle the used refresh token after refreshing an access token. 
+  * `[swiftboot-auth]`: a new `refresh mode` configuration is introduced to handle the used refresh token after refreshing an access token. 
+  * `[swiftboot-common-auth]`: a new `storeMode` configuration is introduced to set up how to store the JWT, and new `JwtStore` interface lets user implement custom JWT store.
   * `[swiftboot-common-auth]`: new `@IfNecessary` annotation for endpoints that do not require user login, user information will still be verified and retrieved if the client provides a JWT or session ID. If the user's JWT or session is invalid, a 401 error will be returned.
 * Improvements:
   * `[swiftboot-common-auth]`: new `AccessToken` and `RefreshToken` classes for authentication result.  
+  * `[swiftboot-utils]`: new utils methods to `BeanUtils` and `LocalDateTimeUtils`.
+  * `[swiftboot-data]`: new `YearMonthAttributeConverter` to support `YearMonth` type entity attribute.
 * Bug Fixes:
   *  `[swiftboot-auth]`: returns 401 http status code (by `AuthenticationException`) when failed to refresh access token.
 
 v3.0.0
 * New Modules:
     * `[swiftboot-security]` is introduced with Spring Security support.
+    * `[swiftboot-auth]` new JWT authentication support. 
     * new `swiftboot-common-auth` module to share similar classes between `swiftboot-auth` and `swiftboot-security`.
 * Deprecated Modules;
     * `[swiftboot-shiro]` module is removed, which means Shiro is no longer supported.

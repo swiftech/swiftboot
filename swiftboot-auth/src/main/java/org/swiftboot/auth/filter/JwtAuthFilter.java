@@ -16,6 +16,8 @@ import org.swiftboot.common.auth.filter.BaseAuthFilter;
 import java.io.IOException;
 
 /**
+ * Validate JWT token from client, if invalid, 401 Unauthorized response returns.
+ *
  * @since 3.0.0
  */
 public class JwtAuthFilter extends BaseAuthFilter {

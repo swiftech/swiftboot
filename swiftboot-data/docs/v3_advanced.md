@@ -136,3 +136,11 @@ InterceptorRegisterBean<MyHibernateInterceptor> registerDataPermissionIntercepto
     return regBean;
 }
 ```
+
+### YearMonth 数据类型支持
+如果实体类字段是 `java.time.YearMonth` 类型的，默认情况下 SpringDataJPA 会以二进制字段存储，这显然不方便开发和维护，所以需要存储成数据库的 `Date` 类型，那么只需要在实体类属性上添加注解，例如：
+```java
+@Convert(converter = YearMonthAttributeConverter.class)
+@Column(name = "year_month", nullable = false)
+private YearMonth yearMonth;
+```
