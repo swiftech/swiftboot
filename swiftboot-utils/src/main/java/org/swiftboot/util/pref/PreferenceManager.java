@@ -251,7 +251,7 @@ public class PreferenceManager {
                 }
             }
         } catch (IllegalAccessException | RuntimeException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             return null;
         }
         if (val == null) {
@@ -526,7 +526,7 @@ public class PreferenceManager {
         try {
             prefs.flush();
         } catch (BackingStoreException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
         }
     }
 

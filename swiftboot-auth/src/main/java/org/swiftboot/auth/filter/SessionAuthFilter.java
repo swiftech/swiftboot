@@ -68,10 +68,10 @@ public class SessionAuthFilter extends BaseAuthFilter {
                 log.debug("User verified as valid");
                 filterChain.doFilter(new TokenRequestWrapper(request, tokenKey), response);
             } catch (ErrMessageException e) {
-                e.printStackTrace();
+                log.error(e.getLocalizedMessage(), e);
                 super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getLocalizedMessage(), e);
                 super.responseWithHttpStatus(response, HttpStatus.UNAUTHORIZED.value(), "Invalid access token");
             }
         }

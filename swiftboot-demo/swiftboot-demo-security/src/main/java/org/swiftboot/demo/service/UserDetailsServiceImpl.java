@@ -52,7 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         // create a new user for testing
         Optional<UserEntity> optAdminUser = userRepository.findByLoginName("admin");
         if (optAdminUser.isEmpty()) {
-            log.info("测试用户数据不存在，初始化数据");
+            log.info("Initialize user data for testing.");
             GrantedAuthority gaRole = new SimpleGrantedAuthority(RoleConstants.ROLE_ADMIN);
             GrantedAuthority gaPermissionA = new SimpleGrantedAuthority(PERM_A);
             GrantedAuthority gaPermissionB = new SimpleGrantedAuthority(PERM_B);
@@ -87,6 +87,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         log.debug("Load user for : %s".formatted(username));
         Optional<UserEntity> optUser = userRepository.findByLoginName(username);
         if (optUser.isEmpty()) {
+            log.warn("User does not exist.");
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         }
         UserEntity userEntity = optUser.get();

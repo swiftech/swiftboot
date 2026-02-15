@@ -133,7 +133,7 @@ public class MockSessionService implements SessionService, ApplicationContextAwa
             fos.write(s.getBytes());
             fos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
         }
     }
 
@@ -151,7 +151,7 @@ public class MockSessionService implements SessionService, ApplicationContextAwa
             }
             return JsonUtils.jsonTo(new String(bytes), Session.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             return null;
         }
     }

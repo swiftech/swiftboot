@@ -1,5 +1,7 @@
 package org.swiftboot.sheet.meta;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.swiftboot.util.IoUtils;
 
 import java.io.File;
@@ -12,6 +14,8 @@ import java.io.IOException;
  * @author swiftech
  */
 public class PictureFileLoader implements PictureLoader {
+
+    private static final Logger log = LoggerFactory.getLogger(PictureFileLoader.class);
 
     private final File file;
 
@@ -32,7 +36,7 @@ public class PictureFileLoader implements PictureLoader {
             byte[] bytes = IoUtils.readAllToBytes(fins);
             return new Picture(this.fileType, bytes);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
         }
         return null;
     }

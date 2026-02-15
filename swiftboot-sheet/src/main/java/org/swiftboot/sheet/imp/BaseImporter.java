@@ -32,7 +32,7 @@ public abstract class BaseImporter implements Importer {
         try {
             return resultClass.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             throw new RuntimeException(e.getLocalizedMessage());
         }
     }

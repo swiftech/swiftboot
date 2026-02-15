@@ -293,7 +293,7 @@ public class Initializer implements ApplicationContextAware {
                                 try {
                                     entity = (BaseIdEntity) entityClass.getDeclaredConstructor().newInstance();
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    log.error(e.getLocalizedMessage(), e);
                                 }
                             }
                         }
@@ -306,7 +306,7 @@ public class Initializer implements ApplicationContextAware {
                             try {
                                 BeanUtils.forceSetPropertyFromString(entity, columnName, cellValue);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                log.error(e.getLocalizedMessage(), e);
                             }
                         }
 
@@ -323,7 +323,7 @@ public class Initializer implements ApplicationContextAware {
                         }
                     });
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getLocalizedMessage(), e);
                     throw new RuntimeException(e);
                 }
             }

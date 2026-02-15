@@ -60,7 +60,7 @@ public class RedisSessionService implements SessionService {
             }
             this.saveSession(token, session);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
         }
     }
@@ -131,7 +131,7 @@ public class RedisSessionService implements SessionService {
         try {
             return mapper.readValue(bytes, Session.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             throw new RuntimeException("Session is invalid");
         }
     }
@@ -175,7 +175,7 @@ public class RedisSessionService implements SessionService {
         try {
             session = this.getSession(group, token);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             log.warn(String.format("Retrieve session failed: %s", token));
             throw new ErrMessageException(ResponseCode.CODE_SYS_ERR);
         }
@@ -197,7 +197,7 @@ public class RedisSessionService implements SessionService {
                     try {
                         this.saveSession(token, session);
                     } catch (JsonProcessingException e) {
-                        e.printStackTrace();
+                        log.error(e.getLocalizedMessage(), e);
                         throw new RuntimeException(String.format("Save session of %s failed", session.getUserId()));
                     }
                 }

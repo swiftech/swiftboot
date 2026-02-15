@@ -48,7 +48,7 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
             Constructor<P> constructor = entityClass.getConstructor();
             ret = constructor.newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             throw new RuntimeException(Info.get(BasePopulateRequest.class, R.CONSTRUCT_ENTITY_FAIL1, entityClass));
         }
         this.doPopulate(entityClass, ret, true);
@@ -121,7 +121,7 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
                             sub.populateEntity(relEntity);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.getLocalizedMessage(), e);
                         continue;
                     }
                     continue;
@@ -166,7 +166,7 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
                             }
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.getLocalizedMessage(), e);
                         continue;
                     }
                     continue;
@@ -184,7 +184,7 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
             try {
                 targetField = BeanUtils.getDeclaredField(entityClass, srcField.getName());
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getLocalizedMessage(), e);
                 throw new RuntimeException(Info.get(R.class, R.FIELD_REQUIRED_FOR_ENTITY2, entityClass, srcField.getName()));
             }
             if (targetField == null) {
@@ -194,7 +194,7 @@ public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpR
                 Object value = BeanUtils.forceGetProperty(this, srcField);
                 BeanUtils.forceSetProperty(entity, targetField, value);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getLocalizedMessage(), e);
                 throw new RuntimeException(Info.get(R.class, R.POPULATE_FIELD_FAIL1, srcField.getName()));
             }
         }
