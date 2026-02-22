@@ -49,7 +49,7 @@ public class HttpRequest implements Serializable {
 
     @JsonIgnore
     public String getHeaderString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         if (headers != null) {
             for (String header : headers.keySet()) {
                 buf.append(header).append(headers.get(header));

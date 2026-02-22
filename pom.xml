@@ -63,7 +63,7 @@
         <jedis.version>6.2.0</jedis.version>
         <json.version>20251224</json.version>
         <junit.version>5.14.2</junit.version>
-        <logback.version>1.5.25</logback.version>
+        <logback.version>1.5.32</logback.version>
         <postgresql.version>42.7.9</postgresql.version>
         <mysql.version>9.5.0</mysql.version>
         <h2.version>2.4.240</h2.version>

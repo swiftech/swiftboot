@@ -19,7 +19,7 @@ public class BufferedIoUtils {
      * @return
      */
     public static String readAllAsString(InputStream in) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         BufferedIoUtils.readFrom(in, 1024, bytes -> {
             String s = new String(bytes);
             buf.append(s);
@@ -38,9 +38,7 @@ public class BufferedIoUtils {
     public static void readFrom(InputStream in, int bufSize, Consumer<byte[]> consumer) {
         int properBufferSize = properBufferSize(bufSize);
         byte[] buf = new byte[properBufferSize];
-        BufferedInputStream bin = null;
-        try {
-            bin = new BufferedInputStream(in);
+        try (BufferedInputStream bin = new BufferedInputStream(in)) {
             int read;
             while ((read = bin.read(buf)) != -1) {
                 System.out.println(read);
@@ -49,14 +47,6 @@ public class BufferedIoUtils {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
-        } finally {
-            if (bin != null) {
-                try {
-                    bin.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
@@ -89,11 +79,7 @@ public class BufferedIoUtils {
     public static void writeInputStreamToFile(InputStream in, int bufSize, File targetFile) {
         int properBufferSize = properBufferSize(bufSize);
         byte[] buf = new byte[properBufferSize];
-        BufferedInputStream bin = null;
-        FileOutputStream fout = null;
-        try {
-            bin = new BufferedInputStream(in);
-            fout = new FileOutputStream(targetFile);
+        try (BufferedInputStream bin = new BufferedInputStream(in); FileOutputStream fout = new FileOutputStream(targetFile)) {
             int read;
             while ((read = bin.read(buf)) != -1) {
                 System.out.println(read);
@@ -101,21 +87,6 @@ public class BufferedIoUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (bin != null) {
-                try {
-                    bin.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fout != null) {
-                try {
-                    fout.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
