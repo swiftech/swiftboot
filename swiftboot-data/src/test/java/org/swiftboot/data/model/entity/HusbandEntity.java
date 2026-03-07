@@ -7,7 +7,7 @@ import jakarta.persistence.*;
  **/
 @Entity
 @Table(name = "UT_HUSBAND_TABLE")
-public class HusbandEntity extends BaseEntity {
+public class HusbandEntity extends BaseLongTimeEntity {
 
     @Column
     private

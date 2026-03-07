@@ -7,7 +7,7 @@ import jakarta.persistence.*;
  **/
 @Entity
 @Table(name = "UT_WIFE_TABLE")
-public class WifeEntity extends BaseEntity {
+public class WifeEntity extends BaseLongTimeEntity {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "HUSBAND_ID")
