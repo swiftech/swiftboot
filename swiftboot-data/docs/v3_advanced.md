@@ -2,6 +2,21 @@
 
 ## 实体类定义
 
+### 主键长度
+
+  为了避免 SwiftBoot-Data 对你的编码产生限制，默认情况下主键 `id` 字段不设置它的长度，如果你需要给所有的表都设置统一长度的`id`，你可以定义一个你自己的基类并指定它的长度，所有其他实体类都继承你自己的基类，例如：
+```java
+@MappedSuperclass
+@AttributeOverrides({
+        @AttributeOverride(
+                name = "id", // 父类中ID字段的名称
+                column = @Column(name = "ID", length = 32, nullable = false) // 子类指定的长度和约束
+        )
+})
+public abstract class MyBaseEntity extends BaseIdEntity {
+}
+```
+
 ### 主键生成
 
 

@@ -1,10 +1,8 @@
 package org.swiftboot.demo.model;
 
+import jakarta.persistence.*;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
-
-import jakarta.persistence.*;
 
 /**
  * 角色权限关联
@@ -14,7 +12,7 @@ import jakarta.persistence.*;
 @Description("角色权限关联")
 @Entity
 @Table(name = "DEMO_ADMIN_ROLE_PERMISSION_REL")
-public class AdminRolePermissionRelEntity extends BaseBoolDeleteEntity {
+public class AdminRolePermissionRelEntity extends BaseEntity {
 
     /**
      * 管理员角色

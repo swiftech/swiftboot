@@ -3,7 +3,6 @@ package org.swiftboot.demo.model;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
 
 /**
  * 商品订单关系
@@ -13,7 +12,7 @@ import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
 @Description("商品订单关系")
 @Entity
 @Table(name = "DEMO_GOODS_ORDER_REL")
-public class GoodsOrderRelEntity extends BaseBoolDeleteEntity {
+public class GoodsOrderRelEntity extends BaseEntity {
 
     /**
      * 订单 ID

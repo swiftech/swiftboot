@@ -8,7 +8,6 @@ import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.common.auth.model.AccessTokenPersistable;
 import org.swiftboot.common.auth.model.RefreshTokenPersistable;
 import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +19,7 @@ import java.time.LocalDateTime;
 @Description("App用户")
 @Entity
 @Table(name = "DEMO_APP_USER")
-public class AppUserEntity extends BaseLocalDateTimeEntity implements UserPersistable, AccessTokenPersistable, RefreshTokenPersistable {
+public class AppUserEntity extends BaseEntity implements UserPersistable, AccessTokenPersistable, RefreshTokenPersistable {
 
     /**
      * Login name of app user

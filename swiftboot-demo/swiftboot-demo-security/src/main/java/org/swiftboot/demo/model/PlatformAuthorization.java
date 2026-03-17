@@ -1,8 +1,6 @@
 package org.swiftboot.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.swiftboot.data.model.entity.BaseIdEntity;
 
 /**
@@ -10,6 +8,12 @@ import org.swiftboot.data.model.entity.BaseIdEntity;
  */
 @Entity
 @Table(name="PLATFORM_AUTHORIZATION")
+@AttributeOverrides({
+        @AttributeOverride(
+                name = "id", // 父类中ID字段的名称
+                column = @Column(name = "ID", length = 32, nullable = false) // 子类指定的长度和约束
+        )
+})
 public class PlatformAuthorization extends BaseIdEntity {
     @Column(unique = true, nullable = false, length = 64)
     private String openId;

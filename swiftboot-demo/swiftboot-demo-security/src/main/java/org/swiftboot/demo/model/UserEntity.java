@@ -1,8 +1,6 @@
 package org.swiftboot.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
 import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
@@ -15,6 +13,12 @@ import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 @Description("App用户")
 @Entity
 @Table(name = "DEMO_USER")
+@AttributeOverrides({
+        @AttributeOverride(
+                name = "id", // 父类中ID字段的名称
+                column = @Column(name = "ID", length = 32, nullable = false) // 子类指定的长度和约束
+        )
+})
 public class UserEntity extends BaseLocalDateTimeEntity {
 
     @Column(unique = true, length = 64)

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
 
 import java.util.Set;
 
@@ -16,7 +15,7 @@ import java.util.Set;
 @Description("管理员用户角色")
 @Entity
 @Table(name = "DEMO_ADMIN_ROLE")
-public class AdminRoleEntity extends BaseBoolDeleteEntity {
+public class AdminRoleEntity extends BaseEntity {
 
     /**
      * 管理员用户角色名称

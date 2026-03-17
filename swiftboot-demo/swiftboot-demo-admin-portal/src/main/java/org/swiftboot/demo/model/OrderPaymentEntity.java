@@ -1,11 +1,10 @@
 package org.swiftboot.demo.model;
 
-import org.springframework.context.annotation.Description;
-import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.springframework.context.annotation.Description;
+
 import java.math.BigDecimal;
 
 /**
@@ -14,7 +13,7 @@ import java.math.BigDecimal;
 @Description("订单支付")
 @Entity
 @Table(name = "DEMO_ORDER_PAYMENT")
-public class OrderPaymentEntity extends BaseBoolDeleteEntity {
+public class OrderPaymentEntity extends BaseEntity {
 
     @Column(name = "TOTAL_PRICE")
     private BigDecimal totalPrice;

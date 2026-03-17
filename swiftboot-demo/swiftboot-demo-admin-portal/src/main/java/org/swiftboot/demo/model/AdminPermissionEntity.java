@@ -3,7 +3,6 @@ package org.swiftboot.demo.model;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 
 import java.util.Objects;
 import java.util.Set;
@@ -16,7 +15,7 @@ import java.util.Set;
 @Description("管理员用户权限")
 @Entity
 @Table(name = "DEMO_ADMIN_PERMISSION")
-public class AdminPermissionEntity extends BaseLocalDateTimeEntity {
+public class AdminPermissionEntity extends BaseEntity {
 
     /**
      * 管理员用户权限代码

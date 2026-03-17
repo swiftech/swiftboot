@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
 
 /**
  * 商品详情
@@ -15,7 +14,7 @@ import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
 @Description("商品详情")
 @Entity
 @Table(name = "DEMO_GOODS_DETAIL")
-public class GoodsDetailEntity extends BaseBoolDeleteEntity {
+public class GoodsDetailEntity extends BaseEntity {
 
     /**
      * 商品图片URI

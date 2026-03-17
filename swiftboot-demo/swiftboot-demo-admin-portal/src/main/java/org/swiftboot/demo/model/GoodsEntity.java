@@ -3,7 +3,6 @@ package org.swiftboot.demo.model;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Description;
 import org.swiftboot.data.annotation.PropertyDescription;
-import org.swiftboot.data.model.entity.BaseBoolDeleteEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,7 +16,7 @@ import java.util.Set;
 @Description("商品")
 @Entity
 @Table(name = "DEMO_GOODS")
-public class GoodsEntity extends BaseBoolDeleteEntity {
+public class GoodsEntity extends BaseEntity {
 
     /**
      * 商品名称
