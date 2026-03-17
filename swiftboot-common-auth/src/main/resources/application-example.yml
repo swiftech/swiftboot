@@ -6,9 +6,9 @@ swiftboot:
       accessTokenExpirationSeconds: 600
       # default is 24 hours
       refreshTokenExpirationSeconds: 86400
-      # default is direct
+      # `direct` | `refresh` , default is `direct`
       revokeType: refresh
-      # default is immutable
+      # `immutable` | `rolling`, default is `immutable`
       refreshMode: rolling
-      # default is memory
-      storeMode: custom
+      # `memory` | `redis`, default is `memory`, do not set this if customize your own store implementation.
+      storeMode: redis
