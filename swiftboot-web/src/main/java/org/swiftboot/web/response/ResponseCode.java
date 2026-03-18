@@ -195,7 +195,7 @@ public class ResponseCode {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
         }
     }
 
@@ -223,7 +223,7 @@ public class ResponseCode {
                 log.debug(Info.get(ResponseCode.class, R.VALIDATE_INI1T, argumentedMsg));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage(), e);
             return;
         }
         log.info(Info.get(ResponseCode.class, R.I18N_INIT_DONE));
@@ -251,7 +251,7 @@ public class ResponseCode {
         for (Field field : fields) {
             if (field.getName().startsWith("CODE_")) {
                 String codeNum = field.get(null).toString();
-                log.debug(String.format("  %s(%s)-%s", field.getName(), codeNum, locale));
+                log.trace(String.format("  %s(%s)-%s", field.getName(), codeNum, locale));
                 boolean alreadyExist = locale == null ? StringUtils.isNotBlank(codeKeyMap.get(codeNum))
                         : StringUtils.isNotBlank(codeLocaleKeyMap.get(codeNum, locale));
                 if (alreadyExist) {

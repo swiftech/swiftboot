@@ -1,16 +1,16 @@
 package org.swiftboot.web.i18n;
 
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -21,6 +21,8 @@ import java.util.Locale;
  */
 @Component
 public class MessageHelper {
+
+    private static final Logger log = LoggerFactory.getLogger(MessageHelper.class);
 
     @Resource
     private MessageSource messageSource;
@@ -38,10 +40,18 @@ public class MessageHelper {
         return messageSource.getMessage(key, args, userLocale);
     }
 
+    /**
+     * Resolve supported locales from the resource files with base name.
+     *
+     * @param baseName like com.example.message
+     * @return
+     * @throws IOException
+     */
     public List<Locale> getSupportedLocales(String baseName) throws IOException {
         List<Locale> supportedLocales = new ArrayList<>();
 
         String pattern = "classpath*:%s_*.properties".formatted(baseName.replace('.', '/'));
+        log.debug("Resolve locales from resource file pattern: %s".formatted(pattern));
         org.springframework.core.io.Resource[] resources = resourcePatternResolver.getResources(pattern);
 
         for (org.springframework.core.io.Resource resource : resources) {
@@ -52,6 +62,7 @@ public class MessageHelper {
                 supportedLocales.add(Locale.forLanguageTag(localePart.replace('_', '-')));
             }
         }
+        log.debug("Resolved supported languages: %s".formatted(StringUtils.join(supportedLocales, ",")));
         return supportedLocales;
     }
 }
