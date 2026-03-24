@@ -3,8 +3,9 @@ package org.swiftboot.util;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author swiftech
@@ -53,7 +54,7 @@ public class PropertiesUtils {
             List<T> collect = entries.stream().filter(
                     file -> handler.getFileName(file).equals(
                             String.format("%s_%s.properties", nonLocaleFileName, curLocale)))
-                    .collect(Collectors.toList());
+                    .toList();
             if (!collect.isEmpty()) {
                 ret.addAll(collect);
             }

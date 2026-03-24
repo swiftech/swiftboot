@@ -41,6 +41,14 @@ public class MessageController {
         return Response.builder().code(ResponseCode.CODE_ARGUMENTS_ERROR).build();
     }
 
+    @Operation(description = "locale from request")
+    @GetMapping(value = "/locale/anno")
+    public Response<Void> localeAnno(Locale locale) {
+        log.debug("Language code: {}", locale.toString());
+        log.debug("Locale from request: %s".formatted(locale));
+        return Response.builder().code(ResponseCode.CODE_ARGUMENTS_ERROR).build();
+    }
+
     @Operation(description = "user message")
     @GetMapping(value = "/user")
     public Response<Void> userProvided() {
@@ -64,7 +72,7 @@ public class MessageController {
     @GetMapping(value = "/parameterized/helper")
     public Response<Void> parameterizedResponseMessage() {
         log.debug(LocaleContextHolder.getLocale().toString());
-        String message = messageHelper.getMessage("i18n.parameterized","param");
+        String message = messageHelper.getMessage("i18n.parameterized", "param");
         return Response.builder().message(message).build();
     }
 
