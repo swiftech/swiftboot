@@ -62,6 +62,8 @@ spring:
     init:
       mode: always
   security:
+#    filter:
+#      dispatcher-types: async,error,forward,request
     oauth2:
       client:
         registration:
@@ -77,6 +79,9 @@ spring:
             provider: feishu
             scope:
               - offline_access
+              - contact:user.base:readonly
+              - contact:contact.base:readonly
+              - contact:user.employee:readonly
             authorization-grant-type: authorization_code
             redirect-uri: http://swiftboot.org:8081/login/oauth2/code/feishu
             client-id: ${OAUTH2_CLIENT_ID_FEISHU}
