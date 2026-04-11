@@ -10,6 +10,8 @@
     </parent>
 
     <artifactId>swiftboot-common-auth</artifactId>
+    <name>swiftboot-common-auth</name>
+    <description>SwiftBoot common authentication module</description>
 
     <dependencies>
         <dependency>

@@ -10,9 +10,10 @@
     </parent>
 
     <artifactId>swiftboot-apidoc</artifactId>
+    <name>swiftboot-apidoc</name>
+    <description>SwiftBoot api document module</description>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>

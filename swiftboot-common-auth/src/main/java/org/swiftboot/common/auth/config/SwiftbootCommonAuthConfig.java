@@ -39,7 +39,7 @@ public class SwiftbootCommonAuthConfig implements WebMvcConfigurer {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(value = "swiftboot.auth.jwt.storeMode", havingValue = "memory")
+//    @ConditionalOnProperty(value = "swiftboot.auth.jwt.storeMode", havingValue = "memory")
     public JwtStore inMemoryJwtStore() {
         return new InMemoryJwtStore();
     }
