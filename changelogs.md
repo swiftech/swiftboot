@@ -3,6 +3,7 @@ V3.1.0
   * `[swiftboot-auth]`: a new `refresh mode` configuration is introduced to handle the used refresh token after refreshing an access token. 
   * `[swiftboot-common-auth]`: a new `storeMode` configuration is introduced to set up how to store the JWT, and new `JwtStore` interface lets user implement custom JWT store.
   * `[swiftboot-common-auth]`: new `@IfNecessary` annotation for endpoints that do not require user login, user information will still be verified and retrieved if the client provides a JWT or session ID. If the user's JWT or session is invalid, a 401 error will be returned.
+  * `[swiftboot-utils]`: new `I18nHelper` to provide support of internationalization.
 * Improvements:
   * `[swiftboot-common-auth]`: new `AccessToken` and `RefreshToken` classes for authentication result.  
   * `[swiftboot-utils]`: new utils methods to `BeanUtils` and `LocalDateTimeUtils`.

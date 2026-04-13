@@ -31,11 +31,13 @@
 
 * `ElapsedTime` to calculate elapsed time in milliseconds
 
-* `WordUtils` to handle the english words
+* `WordUtils` to handle the English words
 
 * `UrlUtils` to handle the URL
 
 * `PathUtils` to handle file path
+
+* `I18nHelper` to provide support of internationalization.
 
 ### Maven
 
