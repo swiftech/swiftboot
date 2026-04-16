@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.swiftboot.web.config.SwiftBootWebConfigBean;
+import org.swiftboot.web.i18n.MessageHelper;
 import org.swiftboot.web.response.Response;
 import org.swiftboot.web.response.ResponseCode;
 import org.swiftboot.web.validate.ValidationResult;
@@ -39,6 +40,9 @@ public class ValidationExceptionProcessor {
     @Resource
     private ResponseCode responseCode;
 
+    @Resource
+    private MessageHelper messageHelper;
+
     /**
      * 处理 Validation 框架抛出的验证异常，在 {@link org.swiftboot.web.validate.ValidateResultAspect}
      * 不生效的时候(在控制器方法没有 {@link BindingResult} 参数的时候)做处理。
@@ -55,7 +59,8 @@ public class ValidationExceptionProcessor {
         log.error(e.getMessage(), e);
         BindingResult bindingResult = e.getBindingResult();
         if (bindingResult.hasErrors()) {
-            ValidationResult validationResult = ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
+            ValidationResult validationResult = ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult,
+                    swiftBootConfigBean.getValidation().isI18n() ? messageHelper : null);
             if (swiftBootConfigBean.getValidation().isResultInJson()) {
                 return new Response<>(ResponseCode.CODE_ARGUMENTS_ERROR, validationResult);
             }

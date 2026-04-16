@@ -1,5 +1,6 @@
 package org.swiftboot.auth.aop;
 
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,6 @@ import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.util.JsonUtils;
 import org.swiftboot.web.util.SpringWebUtils;
 
-import jakarta.annotation.Resource;
 import java.lang.reflect.Type;
 
 /**

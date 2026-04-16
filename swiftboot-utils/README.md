@@ -60,6 +60,6 @@
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-utils</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
   </dependency>
   ```

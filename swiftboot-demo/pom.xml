@@ -16,13 +16,13 @@
     </parent>
     <groupId>org.swiftboot</groupId>
     <artifactId>swiftboot-demo</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <name>swiftboot-demo</name>
     <description>Demo project for SwiftBoot</description>
 
     <properties>
         <java.version>17</java.version>
-        <swiftboot.version>3.1.0</swiftboot.version>
+        <swiftboot.version>3.1.1</swiftboot.version>
         <!--        <junit.version>5.5.2</junit.version>-->
         <mysql.version>9.5.0</mysql.version>
         <postgres.version>42.7.9</postgres.version>

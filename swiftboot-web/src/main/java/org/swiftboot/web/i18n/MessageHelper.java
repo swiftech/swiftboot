@@ -30,6 +30,31 @@ public class MessageHelper {
     @Resource
     private ResourcePatternResolver resourcePatternResolver;
 
+    /**
+     * Static utils method to retrieve message from specified message source object.
+     * Be used for module only message source.
+     *
+     * @param messageSource
+     * @param code
+     * @return
+     */
+    public static String getMessage(MessageSource messageSource, String code){
+        return messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
+    }
+
+    /**
+     * Static utils method to retrieve message from specified message source object with arguments.
+     * Be used for module only message source.
+     *
+     * @param messageSource
+     * @param code
+     * @param args
+     * @return
+     */
+    public static String getMessage(MessageSource messageSource, String code, Object... args) {
+        return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
+    }
+
     public String getMessage(String key) {
         Locale userLocale = LocaleContextHolder.getLocale();
         return messageSource.getMessage(key, null, userLocale);

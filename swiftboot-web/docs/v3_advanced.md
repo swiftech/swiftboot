@@ -151,11 +151,34 @@ public class ErrorCode {
   ```java
   throw new ErrMessageException("4001", "error message");
   ```
+> 如果第二个参数不传，则会尝试从资源文件中找到对应的字符串资源。
+
+
+### 多语言
+
+* 定义 `MessageSource`，加入自定义资源文件的名称。
+> 从3.1.1开始，不需要再把 SwiftBoot 内部定义的资源文件加进去了，只需要配置自定义的文件即可。
+
+```java
+@Bean
+public MessageSource messageSource() {
+    ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+    messageSource.setBasenames("classpath:messages");
+    messageSource.setDefaultEncoding("UTF-8");
+    messageSource.setFallbackToSystemLocale(false); // not using system default locale.
+    return messageSource;
+}
+```
+* 默认情况下 SpringBoot 会按照系统的语言设定去读取相应语言的资源文件，如果需要强制按照某种语言读取，则可以在应用程序启动的地方添加强制设定语言，例如：
+```java
+Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
+```
+
 
 ### 输入参数验证
 
 
-除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 `JSON` 输出格式。（自动从 Request 对象的 `ApiModelProperty` 注解中获取到参数对应的描述信息）
+除了常规的异常处理增强之外，SwiftBoot 还实现了 `ValidationExceptionProcessor` 控制器增强来处理验证异常信息的转换。它会捕获验证框架抛出的异常，并把异常转换为 SwiftBoot 定义的 `JSON` 输出格式。（自动从 Request 对象的属性定义上的 `@Schema` 注解中获取到参数对应的描述信息）
 配置：
   ```java
   @Bean
@@ -175,6 +198,19 @@ public class ErrorCode {
   }
   ```
 
+如果需要让属性名称支持多语言，只要配置
+```yaml
+swiftboot:
+  web:
+    validation:
+      i18n: true
+```
+然后用 `@Schema` 注解属性的时候，用资源代码替代直接的文字描述，例如：
+```java
+@Schema(description = "i8n.validation.my.param")
+```
+> 最后别忘了在资源文件中添加你要显示的多语言文字描述
+
 ### HTTP 头处理
 
 只要你的接口参数对象继承了 `HttpRequest` 类或者其子类，SwiftBoot 就会自动把 `HttpServletRequest` 中的 Header 添加到对象中，通过调用 `getHeader()` 方法就可以得到 Header 值：
@@ -184,25 +220,6 @@ public class MyRequest extends HttpRequest {
 }
 
 String myHeader = myRequest.getHeader("my_header");
-```
-
-### 多语言
-
-* 定义 `MessageSource`，配置默认的资源文件，如果有自定义资源文件的也要配置。
-* 
-```java
-@Bean
-public MessageSource messageSource() {
-    ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-    messageSource.setBasenames("classpath:message", "classpath:validation");
-    messageSource.setDefaultEncoding("UTF-8");
-    messageSource.setFallbackToSystemLocale(false); // not using system default locale.
-    return messageSource;
-}
-```
-* 默认情况下 SpringBoot 会按照系统的语言设定去读取相应语言的资源文件，如果需要强制按照某种语言读取，则可以在应用程序启动的地方添加强制设定语言，例如：
-```java
-Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
 ```
 
 ### 其他

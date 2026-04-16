@@ -4,6 +4,8 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -15,6 +17,7 @@ import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.JwtUtils;
 import org.swiftboot.common.auth.annotation.*;
+import org.swiftboot.web.i18n.MessageHelper;
 
 /**
  * Populate values from JWT to the annotated parameter of controller.
@@ -29,6 +32,10 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Resource
     private JwtTokenProvider jwtTokenProvider;
+
+    @Resource
+    @Qualifier("swiftbootCommonAuthMessageSource")
+    private MessageSource swiftbootCommonAuthMessageSource;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -73,7 +80,7 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
             } catch (Exception e) {
                 log.error(e.getLocalizedMessage());
                 if (parameter.hasParameterAnnotation(IfNecessary.class)) {
-                    throw new AuthenticationException("Invalid authentication");
+                    throw new AuthenticationException(MessageHelper.getMessage(swiftbootCommonAuthMessageSource, "swiftboot.auth.invalid.authentication"));
                 }
                 else {
                     return null;

@@ -2,10 +2,10 @@ package org.swiftboot.auth.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.swiftboot.auth.filter.JwtAuthFilter;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.auth.service.impl.DefaultUserJwtAuthService;
@@ -34,4 +34,11 @@ public class SwiftbootAuthJwtConfig {
         return new DefaultUserJwtAuthService<>();
     }
 
+    @Bean(name = "swiftbootAuthMessageSource")
+    public MessageSource swiftbootAuthMessageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("i18n/swiftboot-auth");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
 }

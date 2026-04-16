@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.swiftboot.util.AnnotationUtils;
 import org.swiftboot.util.BeanUtils;
+import org.swiftboot.web.i18n.MessageHelper;
 import org.swiftboot.web.response.Response;
 import org.swiftboot.web.util.JacksonUtils;
 import org.swiftboot.web.util.MessageUtils;
@@ -31,7 +32,7 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
      * @param bindingResult 校验结果对象
      * @return
      */
-    public static ValidationResult readFromBindingResult(Object bean, BindingResult bindingResult) {
+    public static ValidationResult readFromBindingResult(Object bean, BindingResult bindingResult, MessageHelper messageHelper) {
         if (bindingResult.hasErrors()) {
             ValidationResult validationResult = new ValidationResult();
             for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -49,7 +50,13 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
                         fieldDesc = k; // 不存在的话退回实用 key 值来标识
                     }
                     else {
-                        fieldDesc = apiModelAnno.description();
+                        if (messageHelper == null) {
+                            fieldDesc = apiModelAnno.description();
+                        }
+                        else {
+                            // i18n
+                            fieldDesc = messageHelper.getMessage(apiModelAnno.description());
+                        }
                     }
                 } catch (Exception e) {
                     fieldDesc = k;

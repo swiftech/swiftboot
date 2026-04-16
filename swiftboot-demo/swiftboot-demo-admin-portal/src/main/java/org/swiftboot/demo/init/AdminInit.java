@@ -78,7 +78,7 @@ public class AdminInit {
         }
         else {
             permissionEntity = exist.get();
-            permissionEntity.setUpdateTime(LocalDateTime.now());
+//            permissionEntity.setUpdateTime(LocalDateTime.now());
         }
 
         log.debug("新建或者更新权限：" + permConfig.getCode());

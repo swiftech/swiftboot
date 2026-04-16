@@ -1,5 +1,6 @@
 package org.swiftboot.web.validate;
 
+import jakarta.annotation.Resource;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.swiftboot.collections.ArrayUtils;
+import org.swiftboot.web.config.SwiftBootWebConfigBean;
 import org.swiftboot.web.exception.ValidationException;
+import org.swiftboot.web.i18n.MessageHelper;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +29,12 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Component
 public class ValidateResultAspect {
     private static final Logger log = getLogger(ValidateResultAspect.class);
+
+    @Resource
+    private MessageHelper messageHelper;
+
+    @Resource
+    private SwiftBootWebConfigBean swiftBootConfigBean;
 
     /**
      * 切入带有 {@link ConvertValidateResult} 注解的方法
@@ -60,7 +69,8 @@ public class ValidateResultAspect {
                 List<ObjectError> allErrors = bindingResult.getAllErrors();
                 if (!allErrors.isEmpty()) {
                     ValidationResult validationResult =
-                            ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult);
+                            ValidationResult.readFromBindingResult(bindingResult.getTarget(), bindingResult,
+                                    swiftBootConfigBean.getValidation().isI18n() ? messageHelper : null);
                     throw new ValidationException("Arguments validation failed", validationResult);
                 }
             }

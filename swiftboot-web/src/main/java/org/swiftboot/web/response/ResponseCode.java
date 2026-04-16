@@ -7,6 +7,7 @@ import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -98,6 +99,10 @@ public class ResponseCode {
     private MessageSource messageSource;
 
     @Resource
+    @Qualifier("swiftbootWebMessageSource")
+    private MessageSource swiftbootWebMessageSource;
+
+    @Resource
     private MessageHelper messageHelper;
 
     /**
@@ -121,6 +126,45 @@ public class ResponseCode {
 
     public String getMessage(String code, String... args) {
         String msg;
+        Locale locale = LocaleContextHolder.getLocale();
+        String key;
+        if (StringUtils.isBlank(locale.getLanguage())) {
+            key = codeKeyMap.get(code);
+        }
+        else {
+            key = codeLocaleKeyMap.get(code, locale);
+            // still need to fall back if not found
+            if (StringUtils.isBlank(key)) {
+                key = codeKeyMap.get(code);
+            }
+        }
+        try {
+            // lookup in module's resources first
+            msg = swiftbootWebMessageSource.getMessage(key, args, locale);
+            if (StringUtils.isBlank(msg)) {
+                System.out.printf("WARN: message not found for code '%s'-'%s'%n", code, locale);
+            }
+        } catch (Exception e) {
+            try {
+                // lookup in project's resources
+                msg = messageSource.getMessage(key, args, locale);
+            } catch(Exception e2) {
+                System.out.println(Info.get(ResponseCode.class, R.NO_MSG_FOR_CODE1, code));
+                msg = code; // 没有则直接返回 CODE
+            }
+        }
+        return msg;
+    }
+
+    /**
+     * 获取错误代码对应的错误消息
+     *
+     * @param code
+     * @return
+     * @deprecated
+     */
+    public static String getErrorMessage(String code) {
+        String msg;
         try {
             Locale locale = LocaleContextHolder.getLocale();
             String key;
@@ -134,39 +178,8 @@ public class ResponseCode {
                     key = codeKeyMap.get(code);
                 }
             }
-            msg = messageSource.getMessage(key, args, locale);
-            if (StringUtils.isBlank(msg)) {
-                System.out.printf("WARN: message not found for code '%s'-'%s'%n", code, locale);
-            }
-        } catch (Exception e) {
-            System.out.println(Info.get(ResponseCode.class, R.NO_MSG_FOR_CODE1, code));
-            msg = code; // 没有则直接返回 CODE
-        }
-        return msg;
-    }
-
-    /**
-     * 获取错误代码对应的错误消息
-     *
-     * @param code
-     * @return
-     */
-    public static String getErrorMessage(String code) {
-        String msg;
-        try {
-            String key;
-            if (StringUtils.isBlank(LocaleContextHolder.getLocale().getLanguage())) {
-                key = codeKeyMap.get(code);
-            }
-            else {
-                key = codeLocaleKeyMap.get(code, LocaleContextHolder.getLocale());
-                // still need to fall back if not found
-                if (StringUtils.isBlank(key)) {
-                    key = codeKeyMap.get(code);
-                }
-            }
             if (StringUtils.isBlank(key)) {
-                System.out.printf("WARN: message not found for code '%s'-'%s'%n", code, LocaleContextHolder.getLocale());
+                System.out.printf("WARN: message not found for code '%s'-'%s'%n", code, locale);
             }
             msg = code;
         } catch (Exception e) {
@@ -234,6 +247,7 @@ public class ResponseCode {
      * @throws IllegalAccessException
      */
     public void loadFromClass(Class<?> errCodeClass) throws IllegalAccessException, IOException {
+        log.debug("Load error code from class: " + errCodeClass.getName());
         List<Field> fields = BeanUtils.getStaticFieldsByType(errCodeClass, String.class);
 
         // load fallback messages

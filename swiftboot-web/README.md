@@ -10,7 +10,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>2.4.10</version>
+    <version>2.4.11</version>
   </dependency>
   ```
 
@@ -21,7 +21,7 @@ Web 应用开发的核心模块，依赖于 SwiftBoot-Data。
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-web</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
   </dependency>
   ```
 

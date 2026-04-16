@@ -55,10 +55,12 @@ public class ExceptionProcessor {
     public Response<?> onErrMessageException(NativeWebRequest request, ErrMessageException e) {
         log.debug("on ErrMessageException...");
         log.error(e.getMessage(), e);
+        // use message directly if provided
         if (StringUtils.isNotBlank(e.getMessage())) {
             return new Response<>(e);
         }
         else {
+            // try to retrieve message by error code.
             String message;
             if (e.getMessageArgs() != null && !e.getMessageArgs().isEmpty()) {
                 message = responseCode.getMessage(e.getErrorCode(), e.getMessageArgs().toArray(new String[0]));

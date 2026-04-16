@@ -4,6 +4,8 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
@@ -14,6 +16,7 @@ import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.common.auth.response.LogoutResponse;
 import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.PasswordUtils;
+import org.swiftboot.web.i18n.MessageHelper;
 
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +35,10 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
 
     @Resource
     protected AuthConfigBean authConfig;
+
+    @Resource
+    @Qualifier("swiftbootAuthMessageSource")
+    private MessageSource swiftbootAuthMessageSource;
 
     @Override
     public Session userSignIn(String loginId, String loginPwd) {
@@ -59,7 +66,7 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
         }
         else {
             log.debug("Sign in failed for user: %s".formatted(loginId));
-            throw new AuthenticationException("Sign in failed");
+            throw new AuthenticationException(MessageHelper.getMessage(swiftbootAuthMessageSource, "swiftboot.auth.signin.failed"));
         }
     }
 

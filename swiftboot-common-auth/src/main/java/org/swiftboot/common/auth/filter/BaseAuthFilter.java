@@ -1,6 +1,7 @@
 package org.swiftboot.common.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,9 @@ import java.nio.charset.StandardCharsets;
  */
 public abstract class BaseAuthFilter extends OncePerRequestFilter {
 
+    @Resource
+    private ResponseCode responseCode;
+
     /**
      * Be used for JWT
      *
@@ -38,7 +42,7 @@ public abstract class BaseAuthFilter extends OncePerRequestFilter {
      */
     protected void responseWithError(HttpServletResponse response, String errorCode) throws IOException {
         Response<?> resp = new Response<>(errorCode);
-        resp.setMessage(ResponseCode.getErrorMessage(errorCode));
+        resp.setMessage(responseCode.getMessage(errorCode));
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(resp));

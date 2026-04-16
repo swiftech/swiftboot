@@ -4,6 +4,8 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -16,6 +18,7 @@ import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.common.auth.annotation.*;
+import org.swiftboot.web.i18n.MessageHelper;
 
 import java.util.Map;
 
@@ -37,6 +40,10 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
 
     @Resource
     private SessionService sessionService;
+
+    @Resource
+    @Qualifier("swiftbootAuthMessageSource")
+    private MessageSource swiftbootAuthMessageSource;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -99,7 +106,7 @@ public class UserSessionArgumentResolver implements HandlerMethodArgumentResolve
             } catch (Exception e) {
                 log.error(e.getLocalizedMessage());
                 if (parameter.hasParameterAnnotation(IfNecessary.class)) {
-                    throw new AuthenticationException("Invalid authentication");
+                    throw new AuthenticationException(MessageHelper.getMessage(swiftbootAuthMessageSource, "swiftboot.auth.invalid.authentication"));
                 }
                 else {
                     return null;

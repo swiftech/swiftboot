@@ -17,6 +17,7 @@ import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
 import org.swiftboot.util.PasswordUtils;
+import org.swiftboot.web.i18n.MessageHelper;
 
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +44,9 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
 
     @Resource
     protected JwtConfigBean jwtConfig;
+
+    @Resource
+    protected MessageHelper messageHelper;
 
     @Override
     public JwtAuthentication userSignIn(String loginId, String loginPwd) {
@@ -74,15 +78,15 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         // validate refresh token
         try {
             if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
-                throw new AuthenticationException("Refresh Token is invalid");
+                throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.invalid"));
             }
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(), e);
-            throw new AuthenticationException("Refresh Token is invalid");
+            throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.invalid"));
         }
         // whether revoked.
         if (jwtService.isRevokedRefreshToken(refreshToken)) {
-            throw new AuthenticationException("Refresh Token is revoked");
+            throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.revoked"));
         }
 
         String userId = jwtTokenProvider.getUserId(refreshToken);
@@ -107,7 +111,7 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         }
         else {
             log.warn("Could not find user for the refresh token: %s".formatted(userId));
-            throw new AuthenticationException("Could not find user for the refresh token.");
+            throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.user.not.found"));
         }
     }
 

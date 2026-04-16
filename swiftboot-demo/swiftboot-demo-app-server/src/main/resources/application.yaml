@@ -58,7 +58,7 @@ spring:
 logging:
   level:
     root: INFO
-    org.swiftboot: DEBUG
+    org.swiftboot: TRACE
   file:
     name: ${user.dir}/logs/swiftboot-demo-app-server.log
 #springdoc:
@@ -75,7 +75,8 @@ swiftboot:
     filter:
       cors: true
     validation:
-      resultInJson: false
+      resultInJson: true
+      i18n: false
   data:
     model:
       autoGenerateId: true
