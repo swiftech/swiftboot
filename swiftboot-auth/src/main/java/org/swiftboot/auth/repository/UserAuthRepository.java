@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface UserAuthRepository<T extends UserPersistable> extends CrudRepository<T, String> {
 
     /**
-     * Query app user by Login name and password of app user
+     * Query user by Login name and password.
      *
      * @param loginName Login name
      * @param loginPwd  Login pwd
@@ -26,4 +26,11 @@ public interface UserAuthRepository<T extends UserPersistable> extends CrudRepos
      */
     Optional<T> findByLoginNameAndLoginPwd(String loginName, String loginPwd);
 
+    /**
+     * Query user by login name.
+     *
+     * @param loginName
+     * @return
+     */
+    Optional<T> findByLoginName(String loginName);
 }

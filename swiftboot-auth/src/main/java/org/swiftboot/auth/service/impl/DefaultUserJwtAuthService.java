@@ -4,6 +4,8 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.UserPersistable;
@@ -46,7 +48,8 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
     protected JwtConfigBean jwtConfig;
 
     @Resource
-    protected MessageHelper messageHelper;
+    @Qualifier("swiftbootAuthMessageSource")
+    private MessageSource swiftbootAuthMessageSource;
 
     @Override
     public JwtAuthentication userSignIn(String loginId, String loginPwd) {
@@ -64,7 +67,7 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         }
         else {
             log.warn("Sign in failed for user: %s".formatted(loginId));
-            throw new AuthenticationException("Sign in failed");
+            throw new AuthenticationException(MessageHelper.getMessage(swiftbootAuthMessageSource, "swiftboot.auth.signin.failed"));
         }
     }
 
@@ -78,15 +81,15 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         // validate refresh token
         try {
             if (StringUtils.isBlank(refreshToken) || !jwtTokenProvider.validateToken(refreshToken)) {
-                throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.invalid"));
+                throw new AuthenticationException(MessageHelper.getMessage(swiftbootAuthMessageSource, "swiftboot.auth.refresh.token.invalid"));
             }
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(), e);
-            throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.invalid"));
+            throw new AuthenticationException(MessageHelper.getMessage(swiftbootAuthMessageSource, "swiftboot.auth.refresh.token.invalid"));
         }
         // whether revoked.
         if (jwtService.isRevokedRefreshToken(refreshToken)) {
-            throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.revoked"));
+            throw new AuthenticationException(MessageHelper.getMessage(swiftbootAuthMessageSource, "swiftboot.auth.refresh.token.revoked"));
         }
 
         String userId = jwtTokenProvider.getUserId(refreshToken);
@@ -111,12 +114,19 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         }
         else {
             log.warn("Could not find user for the refresh token: %s".formatted(userId));
-            throw new AuthenticationException(messageHelper.getMessage("swiftboot.auth.refresh.token.user.not.found"));
+            throw new AuthenticationException(MessageHelper.getMessage(swiftbootAuthMessageSource, "swiftboot.auth.refresh.token.user.not.found"));
         }
     }
 
+    /**
+     *
+     * @param accessToken
+     * @return
+     * @see org.swiftboot.common.auth.aop.JwtLogoutResponseAdvice
+     */
     @Override
     public LogoutResponse<String> userLogout(String accessToken) {
+        // No need to revoke here, since returning LogoutResponse will cause the access token and refresh token be revoked automatically.
         return new LogoutResponse<>(accessToken);
     }
 

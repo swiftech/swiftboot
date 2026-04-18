@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.demo.dto.Demo1Dto;
 import org.swiftboot.demo.dto.Demo2Dto;
 import org.swiftboot.service.service.CaptchaService;
+import org.swiftboot.web.annotation.RateLimit;
+import org.swiftboot.web.constant.LimitType;
 import org.swiftboot.web.response.Response;
 
 import java.time.LocalDateTime;
@@ -63,6 +65,20 @@ public class HealthController {
         String captchaId = captchaService.createCaptcha("SB_APP_SERVER_CAPTCHA");
         String captcha = captchaService.getCaptchaText("SB_APP_SERVER_CAPTCHA", captchaId);
         return Response.builder(String.class).ok().data(captcha).build();
+    }
+
+    @Operation(description = "User rate limit")
+    @GetMapping(value = "user_rate_limit")
+    @RateLimit(time = 5000, count = 1, limitType = LimitType.USER)
+    public Response<String> userRateLimit() {
+        return Response.builder(String.class).ok().data("User rate limit in 5 seconds").build();
+    }
+
+    @Operation(description = "Global rate limit")
+    @GetMapping(value = "global_rate_limit")
+    @RateLimit(time = 2000, count = 2)
+    public Response<String> globalRateLimit() {
+        return Response.builder(String.class).ok().data("Global rate limit 2 times in 2 seconds").build();
     }
 
 

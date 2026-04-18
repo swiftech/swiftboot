@@ -222,6 +222,22 @@ public class MyRequest extends HttpRequest {
 String myHeader = myRequest.getHeader("my_header");
 ```
 
+### 接口限流
+从v3.1.1开始，注解 `RateLimitAspect` 可用于给特定接口限流，或者给特定接口针对用户进行限流。
+例如，限制一个接口1秒钟只能只能被访问10次：
+```java
+@RateLimit(time = 1000, count = 10)
+public Response<String> rateLimit() {
+}
+```
+
+例如，限制一个用户在5秒钟之内之内请求此接口1次：
+```java
+@RateLimit(time = 5000, count = 1, limitType = LimitType.USER)
+public Response<String> userRateLimit() {
+}
+```
+
 ### 其他
 * 开启 CORS 跨域
 ```yaml

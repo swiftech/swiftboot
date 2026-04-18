@@ -80,8 +80,15 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
         throw new UnsupportedOperationException("Not supported.");
     }
 
+    /**
+     *
+     * @param accessToken
+     * @return
+     * @see org.swiftboot.auth.aop.UserSessionLogoutResponseAdvice
+     */
     @Override
     public LogoutResponse<String> userLogout(String accessToken) {
+        // No need to revoke here, since returning LogoutResponse will cause the session be revoked automatically.
         return new LogoutResponse<>(accessToken);
     }
 }

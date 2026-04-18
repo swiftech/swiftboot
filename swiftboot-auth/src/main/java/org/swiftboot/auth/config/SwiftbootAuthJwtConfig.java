@@ -34,11 +34,4 @@ public class SwiftbootAuthJwtConfig {
         return new DefaultUserJwtAuthService<>();
     }
 
-    @Bean(name = "swiftbootAuthMessageSource")
-    public MessageSource swiftbootAuthMessageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("i18n/swiftboot-auth");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
 }
