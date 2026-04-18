@@ -85,7 +85,7 @@ public class RateLimitAspect {
             counter.expireTime = now + timeInMillis;
         } else {
             // check count in current time window.
-            if (counter.count.incrementAndGet() > count) {
+            if (counter.count.getAndIncrement() > count) {
                 throw new RuntimeException(MessageHelper.getMessage(swiftbootWebMessageSource, "swiftboot.web.rate.limit.cooling"));
             }
         }
