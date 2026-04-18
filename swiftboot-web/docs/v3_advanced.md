@@ -207,9 +207,9 @@ swiftboot:
 ```
 然后用 `@Schema` 注解属性的时候，用资源代码替代直接的文字描述，例如：
 ```java
-@Schema(description = "i8n.validation.my.param")
+@Schema(description = "i8n.validation.login.username")
 ```
-> 最后别忘了在资源文件中添加你要显示的多语言文字描述
+> 最后别忘了在资源文件中添加对应的多语言文字描述
 
 ### HTTP 头处理
 
@@ -223,18 +223,19 @@ String myHeader = myRequest.getHeader("my_header");
 ```
 
 ### 接口限流
-从v3.1.1开始，注解 `RateLimitAspect` 可用于给特定接口限流，或者给特定接口针对用户进行限流。
-例如，限制一个接口1秒钟只能只能被访问10次：
+从v3.1.1开始，新增的注解 `RateLimit` 可用于给特定接口限流，或者给特定接口针对用户进行限流。
+
+例如，限制一个接口1秒钟之内只能被请求10次：
 ```java
 @RateLimit(time = 1000, count = 10)
-public Response<String> rateLimit() {
+public Response<String> limitedEndpoint() {
 }
 ```
 
 例如，限制一个用户在5秒钟之内之内请求此接口1次：
 ```java
 @RateLimit(time = 5000, count = 1, limitType = LimitType.USER)
-public Response<String> userRateLimit() {
+public Response<String> userLimitedEndpoint() {
 }
 ```
 

@@ -1,3 +1,10 @@
+V3.1.1
+* New Features
+  * `[swiftboot-web]` 增加接口限流注解 `RateLimit` 用于给特定接口限流，或者给特定接口针对用户进行限流
+* Improvements:
+  * `[swiftboot-web]` 优化了多语言资源文件的使用方式，开发者不需要再自己的项目中显示声明 SwiftBoot-Web 的资源文件位置了，SwiftBoot 会自动处理。
+  * `[swiftboot-web]` 实现了从 Swagger 注解中获取多语言化的资源用来显示参数验证错误信息。
+
 V3.1.0
 * New Features
   * `[swiftboot-auth]`: a new `refresh mode` configuration is introduced to handle the used refresh token after refreshing an access token. 

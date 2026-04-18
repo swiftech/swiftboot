@@ -9,6 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Used to limit the request frequency of an API. The limit can be applied globally to the API or to each user.
  *
  * @since 3.1.1
  * @see RateLimitAspect
