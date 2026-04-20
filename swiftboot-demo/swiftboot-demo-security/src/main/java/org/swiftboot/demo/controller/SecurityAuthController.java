@@ -17,7 +17,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.annotation.Token;
 import org.swiftboot.common.auth.request.NamePasswordLoginRequest;

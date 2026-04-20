@@ -11,7 +11,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.aop.JwtArgumentResolver;
 import org.swiftboot.common.auth.service.JwtStore;

@@ -1,4 +1,4 @@
-package org.swiftboot.auth.controller;
+package org.swiftboot.auth.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.swiftboot.data.model.entity.IdPersistable;

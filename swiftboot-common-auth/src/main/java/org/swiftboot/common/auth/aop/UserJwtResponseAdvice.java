@@ -14,7 +14,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 import org.swiftboot.common.auth.response.AuthenticatedResponse;
-import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 

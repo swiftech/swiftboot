@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.demo.dto.*;

@@ -17,7 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.JwtUtils;
 import org.swiftboot.common.auth.config.JwtConfigBean;

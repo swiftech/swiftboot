@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.common.auth.config.JwtConfigBean;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.service.JwtStore;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Stores tokens in memory for developing and testing.
  *
- * @see org.swiftboot.common.auth.JwtService
+ * @see JwtService
  * @see JwtServiceImpl
  * @since 3.1
  */

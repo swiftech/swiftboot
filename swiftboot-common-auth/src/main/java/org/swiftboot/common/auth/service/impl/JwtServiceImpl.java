@@ -4,7 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.service.JwtStore;
@@ -13,7 +13,7 @@ import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.swiftboot.common.auth.JwtService.abbreviateToken;
+import static org.swiftboot.common.auth.service.JwtService.abbreviateToken;
 
 /**
  *

@@ -1,4 +1,4 @@
-package org.swiftboot.common.auth;
+package org.swiftboot.common.auth.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.swiftboot.common.auth.token.JwtAuthentication;

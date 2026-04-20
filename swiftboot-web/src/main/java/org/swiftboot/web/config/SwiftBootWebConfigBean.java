@@ -33,6 +33,12 @@ public class SwiftBootWebConfigBean {
     @NestedConfigurationProperty
     private FilterConfigBean filter = new FilterConfigBean();
 
+    /**
+     * Mock config
+     */
+    @NestedConfigurationProperty
+    private MockConfigBean mock;
+
     public String getFormatPatternLocalDateTime() {
         return formatPatternLocalDateTime;
     }
@@ -87,5 +93,13 @@ public class SwiftBootWebConfigBean {
 
     public void setFilter(FilterConfigBean filter) {
         this.filter = filter;
+    }
+
+    public MockConfigBean getMock() {
+        return mock;
+    }
+
+    public void setMock(MockConfigBean mock) {
+        this.mock = mock;
     }
 }

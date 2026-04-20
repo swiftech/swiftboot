@@ -5,7 +5,7 @@
     <parent>
         <artifactId>swiftboot</artifactId>
         <groupId>com.github.swiftech</groupId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
     </parent>
     <artifactId>swiftboot-security</artifactId>
     <name>swiftboot-security</name>

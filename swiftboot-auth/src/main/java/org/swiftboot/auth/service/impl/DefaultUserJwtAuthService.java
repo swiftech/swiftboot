@@ -11,7 +11,7 @@ import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.common.auth.JwtService;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.response.LogoutResponse;

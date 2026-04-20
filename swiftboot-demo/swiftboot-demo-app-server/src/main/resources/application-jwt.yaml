@@ -1,5 +1,9 @@
 #debug: true
 swiftboot:
+#  web:
+#    mock:
+#      mockTimeout: true
+#      timeout: 20000
   auth:
     authType: jwt
     passwordSalt: 74b62b0ae8dfca1d88d8a41bd
