@@ -78,11 +78,13 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
                 else
                     return null;
             } catch (Exception e) {
-                log.error(e.getLocalizedMessage());
+                if (log.isErrorEnabled()) log.error(e.getLocalizedMessage(), e);
                 if (parameter.hasParameterAnnotation(IfNecessary.class)) {
                     throw new AuthenticationException(MessageHelper.getMessage(swiftbootCommonAuthMessageSource, "swiftboot.auth.invalid.authentication"));
                 }
                 else {
+                    if (log.isInfoEnabled())
+                        log.info("Access token is invalid but still proceed, use @IfNecessary if 401 exception is required.");
                     return null;
                 }
             }

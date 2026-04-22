@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 
 /**
  * Used to limit the request frequency of an API. The limit can be applied globally to the API or to each user.
+ * If user has not signed in, IP or User-Agent will be used for identification.
  *
  * @since 3.1.1
  * @see RateLimitAspect

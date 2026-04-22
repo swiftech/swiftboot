@@ -45,6 +45,6 @@ public class AppUnsecureController {
     public Response<String> unsecureWithToken(@UserId @IfNecessary String userId) {
         log.info("> /app/unsecure");
         log.info("User ID: " + userId);
-        return new Response<>("OK");
+        return Response.builder(String.class).data("OK with user ID: " + userId).ok().build();
     }
 }

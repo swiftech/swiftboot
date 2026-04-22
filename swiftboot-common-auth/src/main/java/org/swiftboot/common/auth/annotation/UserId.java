@@ -11,6 +11,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Inject user ID to controller's method parameter with this annotation.
+ *
  * @author swiftech
  * @see JwtArgumentResolver
  * @since 2.1

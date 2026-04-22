@@ -1,5 +1,8 @@
 # changelogs
 
+## V3.1.2
+* new `NetworkUtils` class.
+
 ## v3.0.0
 * new `MonthDayUtils` class.
 * new `ImageUtils` class.

@@ -10,7 +10,10 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Inject token expire time to controller's method parameter with this annotation.
+ *
  * @author swiftech
+ * @see org.swiftboot.common.auth.aop.JwtArgumentResolver
  * @since 2.1
  */
 @Target({ElementType.PARAMETER})

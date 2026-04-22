@@ -26,7 +26,7 @@ public class SwiftbootDemoSecurityConfig {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:message", "classpath:validation");
+        messageSource.setBasenames("classpath:error_message");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setFallbackToSystemLocale(false); // not using system default locale.
         return messageSource;

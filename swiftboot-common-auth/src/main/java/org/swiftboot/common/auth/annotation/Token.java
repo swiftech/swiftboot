@@ -10,6 +10,9 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Inject user token to controller's method parameter with this annotation.
+ *
+ * @see org.swiftboot.common.auth.aop.JwtArgumentResolver
  * @since 3.0
  */
 @Target({ElementType.PARAMETER})

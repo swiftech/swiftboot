@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.swiftboot.util.NetworkUtils;
 import org.swiftboot.web.annotation.RateLimit;
 import org.swiftboot.web.constant.LimitType;
 import org.swiftboot.web.i18n.MessageHelper;
@@ -106,7 +107,7 @@ public class RateLimitAspect {
 
         // 3. try IP from reverse proxy
         String realIp = HttpServletUtils.getClientIp(request);
-        if (StringUtils.isNotBlank(realIp)) return realIp;
+        if (StringUtils.isNotBlank(realIp) && !NetworkUtils.isLocalOrPrivateIp(realIp)) return realIp;
 
         // 4 fallback (IP address from reverse proxy might be incorrect)
         return request.getRemoteAddr() + request.getHeader("User-Agent");

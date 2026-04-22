@@ -39,6 +39,8 @@
 
 * `I18nHelper` to provide support of internationalization.
 
+* `NetworkUtils` to provide network related utils.
+
 ### Maven
 
 稳定版：
