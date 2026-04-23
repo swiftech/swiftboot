@@ -2,6 +2,7 @@
 
 ## V3.1.2
 * new `NetworkUtils` class.
+* add `countToDisplaySize` method to `CalcUtils`.
 
 ## v3.0.0
 * new `MonthDayUtils` class.

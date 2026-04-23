@@ -216,4 +216,43 @@ public class CalcUtils {
             return a;
         }
     }
+
+
+    /**
+     * Count to size for human-readable displaying, scale is 2 as default.
+     *
+     * @param count
+     * @return
+     * @since 3.1.2
+     */
+    public static String countToDisplaySize(long count) {
+        return countToDisplaySize(count, 2);
+    }
+
+    /**
+     * Count to size for human-readable displaying.
+     *
+     * @param count
+     * @param scale
+     * @return
+     * @since 3.1.2
+     */
+    public static String countToDisplaySize(long count, int scale) {
+        if (count < 1024) {
+            return String.valueOf(count);
+        }
+        else if (count < 1024 * 1024) {
+            String template = "%%.%df K".formatted(scale);
+            return template.formatted((count / 1024f));
+        }
+        else if (count < 1024 * 1024 * 1024) {
+            String template = "%%.%df M".formatted(scale);
+            return template.formatted(count / 1024 / 1024f);
+        }
+        else if (count < 1024L * 1024 * 1024 * 1024) {
+            String template = "%%.%df G".formatted(scale);
+            return template.formatted(count / 1024 / 1024 / 1024f);
+        }
+        return String.valueOf(count);
+    }
 }
