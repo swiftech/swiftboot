@@ -57,4 +57,20 @@ class CalcUtilsTest {
         Assertions.assertEquals(BigDecimal.valueOf(15), CalcUtils.limitIn(BigDecimal.valueOf(15), min, max));
         Assertions.assertEquals(max, CalcUtils.limitIn(BigDecimal.valueOf(25), min, max));
     }
+
+    @Test
+    void countToDisplaySize() {
+        Assertions.assertEquals("100", CalcUtils.countToDisplaySize(100L));
+        Assertions.assertEquals("100.00 K", CalcUtils.countToDisplaySize(100 * 1024));
+        Assertions.assertEquals("100.00 M", CalcUtils.countToDisplaySize(100 * 1024 * 1024));
+        Assertions.assertEquals("100.00 G", CalcUtils.countToDisplaySize(100L * 1024 * 1024 * 1024));
+    }
+
+    @Test
+    void countToDisplaySizeScale() {
+        Assertions.assertEquals("100", CalcUtils.countToDisplaySize(100L, 2));
+        Assertions.assertEquals("100.00 K", CalcUtils.countToDisplaySize(100 * 1024, 2));
+        Assertions.assertEquals("100.00 M", CalcUtils.countToDisplaySize(100 * 1024 * 1024, 2));
+        Assertions.assertEquals("100.00 G", CalcUtils.countToDisplaySize(100L * 1024 * 1024 * 1024, 2));
+    }
 }
