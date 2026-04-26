@@ -1,3 +1,6 @@
+V3.1.3
+* Supports German, French, Italian, Spanish, and Portuguese.
+
 V3.1.2
 * `[swiftboot-web]`: add local IP detection to RateLimit.
 * `[swiftboot-utils]`: new `NetworkUtils` class.
