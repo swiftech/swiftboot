@@ -158,6 +158,7 @@ public class I18nHelper {
                 return MessageFormat.format(pattern, params);
             } catch (Exception e) {
                 // Continue to next bundle
+                log.warn("Failed to get message for '%s'".formatted(key));
             }
         }
         return key;

@@ -47,10 +47,10 @@
         <spring.boot.version>3.5.14</spring.boot.version>
         <spring.data.version>3.5.11</spring.data.version>
         <spring.data.jpa.version>3.5.11</spring.data.jpa.version>
-        <spring.version>6.2.17</spring.version>
+        <spring.version>6.2.18</spring.version>
         <spring.security.version>6.5.9</spring.security.version>
         <springdoc.version>2.8.16</springdoc.version>
-        <swagger.v3.version>2.2.42</swagger.v3.version>
+        <swagger.v3.version>2.2.48</swagger.v3.version>
         <aspectj.version>1.9.25.1</aspectj.version>
         <hibernate.version>6.6.41.Final</hibernate.version>
         <hibernate.validator.version>8.0.3.Final</hibernate.validator.version>
