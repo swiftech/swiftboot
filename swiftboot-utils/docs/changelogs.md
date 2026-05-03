@@ -1,5 +1,8 @@
 # changelogs
 
+## V3.1.3
+* new `VersionUtils` class for comparing software versions.
+
 ## V3.1.2
 * new `NetworkUtils` class.
 * add `countToDisplaySize` method to `CalcUtils`.

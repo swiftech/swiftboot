@@ -1,5 +1,6 @@
 V3.1.3
 * Supports German, French, Italian, Spanish, and Portuguese.
+* `[swiftboot-utils]`: new `VersionUtils` class for comparing software versions.
 
 V3.1.2
 * `[swiftboot-web]`: add local IP detection to RateLimit.
