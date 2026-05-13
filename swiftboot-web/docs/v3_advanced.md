@@ -239,6 +239,8 @@ public Response<String> userLimitedEndpoint() {
 }
 ```
 
+> 注意：通过反向代理服务器（如nginx）提供API的情况下，有可能会拿到本机的IP地址，所以如果要针对个人进行流量控制的话，必须保证反向代理服务器可以给出正确的IP地址，否则可能会导致所有未登录的用户被限流。
+
 ### 其他
 * 开启 CORS 跨域
 ```yaml

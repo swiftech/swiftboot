@@ -3,7 +3,7 @@ V3.1.3
 * `[swiftboot-utils]`: new `VersionUtils` class for comparing software versions.
 
 V3.1.2
-* `[swiftboot-web]`: add local IP detection to RateLimit.
+* `[swiftboot-web]`: add local IP detection to rate limit control.
 * `[swiftboot-utils]`: new `NetworkUtils` class.
 * `[swiftboot-utils]`: add `countToDisplaySize` method to `CalcUtils`.
 * support Traditional Chinese, Japanese and Korean.

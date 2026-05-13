@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Enable this functionality by adding {@code RateLimit} annotation to the controller's methods that you want to limit the request,
  * set window time and a limit on the number of HTTP requests.
  * The expired requests in cache will be cleared every 60 minutes.
+ * NOTE: When the API is provided through a reverse proxy server (such as nginx), it is possible to obtain the local IP address. Therefore, if rate limit is to be carried out for individuals, it is necessary to ensure that the reverse proxy server can provide the correct IP address
  *
  * @since 3.1.1
  * @see RateLimit

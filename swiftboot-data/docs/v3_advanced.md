@@ -122,7 +122,7 @@ public abstract class MyBaseEntity extends BaseIdEntity {
   继承 `BooleanLogicalDeleteExtend` 接口，它已经实现了逻辑删除的 JPA 方法 `deleteLogically` 和 `undeleteLogically`，直接使用即可：
 
 ```java
-public interface BoolLogicalDeleteDao extends CrudRepository<MyLogicalDeleteEntity, String>,
+public interface BoolLogicalDeleteRepository extends CrudRepository<MyLogicalDeleteEntity, String>,
         BooleanLogicalDeleteExtend<MyLogicalDeleteEntity> {
 }
 ```
@@ -153,7 +153,8 @@ InterceptorRegisterBean<MyHibernateInterceptor> registerDataPermissionIntercepto
 ```
 
 ### YearMonth 数据类型支持
-如果实体类字段是 `java.time.YearMonth` 类型的，默认情况下 SpringDataJPA 会以二进制字段存储，这显然不方便开发和维护，所以需要存储成数据库的 `Date` 类型，那么只需要在实体类属性上添加注解，例如：
+
+如果实体类字段是 `java.time.YearMonth` 类型的，默认情况下 Spring-Data-JPA 会以二进制字段存储，这显然不方便开发和维护，所以提供了一个转换类`YearMonthAttributeConverter`，如果需要存储成数据库的 `Date` 类型，那么只需要在实体类属性上添加注解，例如：
 ```java
 @Convert(converter = YearMonthAttributeConverter.class)
 @Column(name = "year_month", nullable = false)
