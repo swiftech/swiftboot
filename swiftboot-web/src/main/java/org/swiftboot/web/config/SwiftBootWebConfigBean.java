@@ -39,6 +39,12 @@ public class SwiftBootWebConfigBean {
     @NestedConfigurationProperty
     private MockConfigBean mock;
 
+    /**
+     * Rate limit config
+     */
+    @NestedConfigurationProperty
+    private RateLimitConfigBean rateLimit = new RateLimitConfigBean();
+
     public String getFormatPatternLocalDateTime() {
         return formatPatternLocalDateTime;
     }
@@ -101,5 +107,13 @@ public class SwiftBootWebConfigBean {
 
     public void setMock(MockConfigBean mock) {
         this.mock = mock;
+    }
+
+    public RateLimitConfigBean getRateLimit() {
+        return rateLimit;
+    }
+
+    public void setRateLimit(RateLimitConfigBean rateLimit) {
+        this.rateLimit = rateLimit;
     }
 }

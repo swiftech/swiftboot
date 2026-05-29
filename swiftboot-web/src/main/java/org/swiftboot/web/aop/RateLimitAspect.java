@@ -11,10 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.swiftboot.util.NetworkUtils;
 import org.swiftboot.web.annotation.RateLimit;
+import org.swiftboot.web.config.RateLimitConfigBean;
+import org.swiftboot.web.config.RateLimitRuleConfigBean;
+import org.swiftboot.web.config.SwiftBootWebConfigBean;
 import org.swiftboot.web.constant.LimitType;
 import org.swiftboot.web.i18n.MessageHelper;
 import org.swiftboot.web.util.HttpServletUtils;
@@ -27,11 +31,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Limit the HTTP request traffic for each endpoint or for each user on each endpoint，
- * Enable this functionality by adding {@code RateLimit} annotation to the controller's methods that you want to limit the request,
- * set window time and a limit on the number of HTTP requests.
+ * Limit the HTTP request traffic for each endpoint or for each user on each endpoint.
+ * Supports two configuration approaches:
+ * <ol>
+ *   <li><b>Annotation-based:</b> Add {@code @RateLimit} annotation to controller methods.</li>
+ *   <li><b>Configuration-based:</b> Define rules in application.yaml or configuration classes
+ *       under {@code swiftboot.web.rate-limit.rules}.</li>
+ * </ol>
  * The expired requests in cache will be cleared every 60 minutes.
- * NOTE: When the API is provided through a reverse proxy server (such as nginx), it is possible to obtain the local IP address. Therefore, if rate limit is to be carried out for individuals, it is necessary to ensure that the reverse proxy server can provide the correct IP address
+ * <p>
+ * NOTE: When the API is provided through a reverse proxy server (such as nginx), it is possible to obtain
+ * the local IP address. Therefore, if rate limit is to be carried out for individuals, it is necessary to ensure
+ * that the reverse proxy server can provide the correct IP address.
  *
  * @since 3.1.1
  * @see RateLimit
@@ -42,9 +53,14 @@ public class RateLimitAspect {
 
     private static final Logger log = LoggerFactory.getLogger(RateLimitAspect.class);
 
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
     @Resource
     @Qualifier("swiftbootWebMessageSource")
     private MessageSource swiftbootWebMessageSource;
+
+    @Resource
+    private SwiftBootWebConfigBean swiftBootWebConfigBean;
 
     // limit cache：Key -> Counter
     private final Map<String, RequestCounter> limitMap = new ConcurrentHashMap<>();
@@ -68,16 +84,65 @@ public class RateLimitAspect {
         }
 
         String key = joinPoint.getSignature().toShortString();
-        if (rateLimit.limitType() == LimitType.USER){
+        if (rateLimit.limitType() == LimitType.USER) {
             HttpServletRequest request = attributes.getRequest();
             String userId = getUserIdentifier(request);
             key = "%s:%s".formatted(key, userId);
         }
 
         log.debug("Lock key: %s".formatted(key));
-        int count = rateLimit.count();
-        long timeInMillis = rateLimit.time();
+        return applyRateLimit(joinPoint, key, rateLimit.count(), rateLimit.time());
+    }
 
+    @Around("(@annotation(org.springframework.web.bind.annotation.RequestMapping) || " +
+            "@annotation(org.springframework.web.bind.annotation.GetMapping) || " +
+            "@annotation(org.springframework.web.bind.annotation.PostMapping) || " +
+            "@annotation(org.springframework.web.bind.annotation.PutMapping) || " +
+            "@annotation(org.springframework.web.bind.annotation.DeleteMapping) || " +
+            "@annotation(org.springframework.web.bind.annotation.PatchMapping)) && " +
+            "!@annotation(org.swiftboot.web.annotation.RateLimit)")
+    public Object interceptorByConfig(ProceedingJoinPoint joinPoint) throws Throwable {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes == null) {
+            return joinPoint.proceed(); // not web application
+        }
+
+        RateLimitConfigBean rateLimitConfig = swiftBootWebConfigBean.getRateLimit();
+        if (rateLimitConfig == null || rateLimitConfig.getRules() == null || rateLimitConfig.getRules().isEmpty()) {
+            return joinPoint.proceed();
+        }
+
+        HttpServletRequest request = attributes.getRequest();
+        String requestUri = request.getRequestURI();
+
+        for (RateLimitRuleConfigBean rule : rateLimitConfig.getRules()) {
+            if (StringUtils.isBlank(rule.getUri())) {
+                continue;
+            }
+            if (pathMatcher.match(rule.getUri(), requestUri)) {
+                String key = joinPoint.getSignature().toShortString();
+                if (rule.getLimitType() == LimitType.USER) {
+                    String userId = getUserIdentifier(request);
+                    key = "%s:%s".formatted(key, userId);
+                }
+                log.debug("Lock key by config: %s".formatted(key));
+                return applyRateLimit(joinPoint, key, rule.getCount(), rule.getTime());
+            }
+        }
+
+        return joinPoint.proceed();
+    }
+
+    /**
+     *
+     * @param joinPoint
+     * @param key
+     * @param maxCount max count in the period.
+     * @param timeInMillis period for limit.
+     * @return
+     * @throws Throwable
+     */
+    private Object applyRateLimit(ProceedingJoinPoint joinPoint, String key, int maxCount, long timeInMillis) throws Throwable {
         long now = System.currentTimeMillis();
         RequestCounter counter = limitMap.computeIfAbsent(key, k -> new RequestCounter(now + timeInMillis));
 
@@ -87,7 +152,8 @@ public class RateLimitAspect {
             counter.expireTime = now + timeInMillis;
         } else {
             // check count in current time window.
-            if (counter.count.getAndIncrement() > count) {
+            // NOTE: get first then increase to let the very first visit pass.
+            if (counter.count.getAndIncrement() > maxCount) {
                 throw new RuntimeException(MessageHelper.getMessage(swiftbootWebMessageSource, "swiftboot.web.rate.limit.cooling"));
             }
         }

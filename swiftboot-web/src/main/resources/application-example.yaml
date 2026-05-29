@@ -25,6 +25,16 @@ swiftboot:
     formatPatternLocalTime: HH:mm:ss
     formatPatternYearMonth: yyyy-MM
     formatPatternMonthDay: MM-dd
+    rate-limit:
+      rules:
+        - uri: /health/**
+          time: 1000
+          count: 10
+          limit-type: DEFAULT
+        - uri: /api/user/**
+          time: 5000
+          count: 5
+          limit-type: USER
   data:
     model:
       # 是否自动生成实体类的 ID
