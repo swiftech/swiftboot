@@ -1,3 +1,6 @@
+V3.1.4
+* `[swiftboot-web]`： Added the ability to rate limit by configuring the endpoint uri path through a configuration file.
+
 V3.1.3
 * Supports German, French, Italian, Spanish, and Portuguese.
 * `[swiftboot-utils]`: new `VersionUtils` class for comparing software versions.
