@@ -2,41 +2,15 @@
 提供 Web 开发中常见的服务
 
 ### 特性
-* Redis 服务，支持集群模式
 * Captcha 服务，实现基于文本的防机器人验证码
 
-### Maven
+### 版本
 
-```xml
-<dependency>
-    <groupId>com.github.swiftech</groupId>
-    <artifactId>swiftboot-service</artifactId>
-    <version>2.2.1</version>
-</dependency>
+##### 稳定版: v2.4.11
+基于SpringBoot 2.7，JDK 8
+[v2.md](docs/v2.md)
 
-```
-	
-### 使用方法
-* application.yaml
-```yaml
-swiftboot:
-  service:
-    redis:
-      host: localhost
-      port: 6379
-      cluster: localhost:6379
-  captcha:
-    expiresIn: 300
-```
 
-* MyController.java
-```java
-public class MyController {
-    @Resource
-    private RedisService redisService;
-    
-    @Resource
-    private CaptchaService captchaService;
-
-}
-```
+##### 不稳定版: v3.1.1
+基于SpringBoot 3.4+，JDK 21+
+[v3.md](docs/v3.md)

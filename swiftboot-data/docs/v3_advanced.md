@@ -67,6 +67,7 @@ public abstract class MyBaseEntity extends BaseIdEntity {
 
 规则：
 * 根据需要的时间类型选择继承哪一个抽象基类。
+  * 支持的抽象基类有：`BaseLocalDateTimeEntity`, `BaseDateTimeEntity`, `BaseLongTimeEntity`, 
 * 创建时间会在保存新实体之前自动设置。
 * 一对一或一对多关联的实体或者子实体集合，也会按照以上的规则进行自动设置。
 * 更新时间需要选择自动设置的策略，默认为 `on-change`，参考以下设置：
@@ -104,7 +105,7 @@ public abstract class MyBaseEntity extends BaseIdEntity {
 
 首先选择标记逻辑删除的字段的类型，可以选择 `Boolean` 或者 `Integer`，根据选择决定相关的类需要继承不同的父类。 例如，选择 `Boolean` 类型的字段记录逻辑删除：
 
-* Entity 类
+* 实体类定义
 
   继承 `BaseBoolDeleteEntity` 类（其中已经定义了一个 `Boolean` 类型的 `IS_DELETE`（`isDelete`） 字段）例如：
 
@@ -114,10 +115,10 @@ public abstract class MyBaseEntity extends BaseIdEntity {
   public class MyLogicalDeleteEntity extends BaseBoolDeleteEntity {
   }
   ```
-
+  > 其他类型的基类还有 `BaseIntDeleteEntity`, 可以用 Integer 类型作为逻辑删除标识。
   > 如果你的实体类需要继承其他类，而不能继承 `BaseBoolDeleteEntity` 类，可以通过实现 `LogicalDeletePersistable<Boolean>` 接口来自己实现这个字段的定义
 
-* Repository 类
+* Repository 类定义
 
   继承 `BooleanLogicalDeleteExtend` 接口，它已经实现了逻辑删除的 JPA 方法 `deleteLogically` 和 `undeleteLogically`，直接使用即可：
 
