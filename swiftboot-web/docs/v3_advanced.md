@@ -223,7 +223,8 @@ String myHeader = myRequest.getHeader("my_header");
 ```
 
 ### 接口限流
-从v3.1.1开始，新增的注解 `RateLimit` 可用于给特定接口限流，或者给特定接口针对用户进行限流。
+
+从v3.1.1开始，新增的注解 `@RateLimit` 可用于给特定接口限流，或者给特定接口针对用户进行限流。
 
 例如，限制一个接口1秒钟之内只能被请求10次：
 ```java
@@ -232,7 +233,7 @@ public Response<String> limitedEndpoint() {
 }
 ```
 
-例如，限制一个用户在5秒钟之内之内请求此接口1次：
+例如，限制一个用户在5秒钟之内请求此接口1次：
 ```java
 @RateLimit(time = 5000, count = 1, limitType = LimitType.USER)
 public Response<String> userLimitedEndpoint() {
@@ -240,6 +241,47 @@ public Response<String> userLimitedEndpoint() {
 ```
 
 > 注意：通过反向代理服务器（如nginx）提供API的情况下，有可能会拿到本机的IP地址，所以如果要针对个人进行流量控制的话，必须保证反向代理服务器可以给出正确的IP地址，否则可能会导致所有未登录的用户被限流。
+
+从v3.1.4开始，除了注解方式外，还可以通过配置文件定义限流规则，按 URI 路径匹配进行限流，无需修改代码：
+
+```yaml
+swiftboot:
+  web:
+    rate-limit:
+      rules:
+        - uri: /health/**
+          time: 1000
+          count: 10
+          limit-type: DEFAULT
+        - uri: /api/user/**
+          time: 5000
+          count: 5
+          limit-type: USER
+```
+
+配置说明：
+* `uri`：Ant 风格的路径匹配模式。
+* `time`：时间窗口（毫秒），默认 1000。
+* `count`：时间窗口内允许的最大请求次数，默认 10。
+* `limit-type`：限流类型，`DEFAULT` 为全局限流，`USER` 为针对用户限流。
+
+> 注解和配置文件两种方式可以同时使用，互不冲突。
+
+### 模拟 API 超时
+
+从v3.1.3开始，新增全局 API 延迟功能，用于测试前端对接口超时的处理。开启后所有 API 请求都会被强制延迟指定的时间。
+
+配置方式：
+
+```yaml
+swiftboot:
+  web:
+    mock:
+      mockTimeout: true        # 开启后所有接口都会延迟响应
+      timeout: 10000           # 延迟时间（毫秒），默认 10000（10秒）
+```
+
+> 此功能仅用于开发和测试环境，切勿在生产环境开启。
 
 ### 其他
 * 开启 CORS 跨域
