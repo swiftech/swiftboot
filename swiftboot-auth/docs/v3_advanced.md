@@ -123,7 +123,7 @@ public AuthenticatedResponse<AppUserSignInDto, Session> userSignIn(@RequestBody 
 
 * 配置过滤器
 
-  对于需要登录才能访问的资源路径，按照 SpringBoot 提供的方式配置过滤器 `org.swiftboot.auth.filter.SessionAuthFilter`
+  对于需要登录才能访问的资源路径，按照 SpringBoot 的方式配置过滤器 `org.swiftboot.auth.filter.SessionAuthFilter`
 
 ```java
 @Resource

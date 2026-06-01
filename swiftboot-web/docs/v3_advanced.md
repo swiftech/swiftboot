@@ -10,7 +10,7 @@
 
 #### 子集合的参数自动填充
 
-对于编辑一个对象时的子集合的增删改查，无需对子对象分别进行各自的处理，只需要查询父实体并对其子实体集合执行 `clear()` 操作， 然后再调用 `populateEntity()` 将参数中的子集合填充至父实体中，SwiftBoot 会自动判断实体是否存在，如果已经存在则进行更新，如果不存在则新增，其余不在子集合中的实体都会被删除。
+对于编辑一个对象时的子集合的增删改查，无需对子对象分别进行处理，只需要查询父实体并对其子实体集合执行 `clear()` 操作， 然后再调用 `populateEntity()` 将参数中的子集合填充至父实体中，SwiftBoot 会自动判断实体是否存在，如果已经存在则进行更新，如果不存在则新增，其余不在子集合中的实体都会被删除。
 例如：
 
 
@@ -54,6 +54,21 @@
 * 无需直接操作子集合中的对象就能自动填充子实体。
 * 无需区别处理集合中删除、编辑和新增的子对象。
 
+### 返回值
+接口的返回值可以通过构造 `org.swiftboot.web.response.Response` 对象包含DTO对象来实现，例如
+> 这不是必须的，你也可以用 Spring Web 原生的 ResponseEntity 来返回值，只是你不再能利用 SwiftBoot 提供的相关功能了。
+
+* 直接构造：
+```java
+OrderDto dto = new OrderDto();
+return new Response(dto);
+```
+
+* 通过构造器构造
+```java
+OrderDto dto = new OrderDto();
+return Response.builder(OrderDto.class).data(dto).build();
+```
 
 ### DTO 参数的自动填充
 * 返回值对象 DTO 通常要继承 `BasePopulateDto` 类就可以利用自动填充功能。如果需要避免继承关系获得更多的灵活性，DTO 类可以不继承 `BasePopulateDto` 但是必须实现 `PopulatableDto` 接口。
@@ -63,26 +78,15 @@
 * 有时候虽然 DTO 对象之间定义了关联关系，但是你可能不希望在所有的场景下都自动的填充关联的对象，那么 `populateByEntity()` 方法提供了一个 `includeRelation` 参数可以覆盖默认的填充行为，只对当前 DTO 类的属性进行填充，而不会处理关联对象（包括一对一，多对一或者一对多关系）。
 
 
-### Java8 时间类型的处理
-
-SwiftBoot-Web 提供了对 Java8 时间类型的支持，包括 `LocalDateTime`，`LocalDate`，`LocalTime`，`YearMonth`，`MonthDay`。
-例如对于 `LocalDateTime` 类型的时间，输入参数只需要提供格式为 `2025-05-01 11:11:11` 这样的字符串，就会自动转换为 `LocalDateTime` 类型，对于 DTO 来说也是类似。
-如果需要使用其他时间格式，只需要在配置文件中定义即可：
-```
-swiftboot:
-  web:
-    formatPatternLocalDateTime: yyyy-MM-dd HH:mm:ss
-```
-> 其他的时间类型格式参考 [application-example.yaml](../src/main/resources/application-example.yaml)
-
-
 ### 错误处理
 
-构造 `Response` 可以将错误代码传入，`ResponseCode` 这个类提供了一些常见的错误代码（从 3000 开始）。例如：
+构造 `org.swiftboot.web.response.Response` 对象可以将错误代码传入返回给前端，`org.swiftboot.web.response.ResponseCode` 这个类提供了一些常见的错误代码（从 3000 开始）。例如：
 
 ```java
 return new Response(ResponseCode.CODE_PARAMS_ERROR); // 返回 '输入参数错误' 给客户端
 ```
+
+以上代码会返回如下数据给前端（假设客户端语言为简体中文）：
 
 ```json
 {
@@ -119,6 +123,19 @@ public class ErrorCode {
 ```
 
 > 为了不和默认的 code 冲突，自定义的错误代码取值从4000开始
+
+
+### Java8 时间类型的处理
+
+SwiftBoot-Web 提供了对 Java8 时间类型的支持，包括 `LocalDateTime`，`LocalDate`，`LocalTime`，`YearMonth`，`MonthDay`。
+例如对于 `LocalDateTime` 类型的时间，输入参数只需要提供格式为 `2025-05-01 11:11:11` 这样的字符串，就会自动转换为 `LocalDateTime` 类型，对于 DTO 来说也是类似。
+如果需要使用其他时间格式，只需要在配置文件中定义即可：
+```
+swiftboot:
+  web:
+    formatPatternLocalDateTime: yyyy-MM-dd HH:mm:ss
+```
+> 其他的时间类型格式参考 [application-example.yaml](../src/main/resources/application-example.yaml)
 
 
 ### 统一 API 异常处理
