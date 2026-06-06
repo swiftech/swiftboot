@@ -69,9 +69,11 @@ logging:
 #    - /foobar
 swiftboot:
   web:
-    formatPatternLocalDateTime: yyyy-MM-dd HH:mm:ss
-    formatPatternLocalDate: yyyy-MM-dd
-    formatPatternLocalTime: HH:mm:ss
+    formatPatternLocalDateTime: yyyy/MM/dd HH:mm:ss
+    formatPatternLocalDate: yyyy/MM/dd
+    formatPatternLocalTime: HH-mm-ss
+    format-pattern-year-month: yyyy/MM
+    format-pattern-month-day: MM/dd
     filter:
       cors: true
     validation:

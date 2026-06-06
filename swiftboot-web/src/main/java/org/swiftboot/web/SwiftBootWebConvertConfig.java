@@ -7,6 +7,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.*;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -20,6 +23,7 @@ import java.util.List;
 
 /**
  * Config conversion at web tier.
+ *
  * @since 3.0
  */
 @Configuration
@@ -27,6 +31,18 @@ public class SwiftBootWebConvertConfig implements WebMvcConfigurer {
 
     @Resource
     private SwiftBootWebConfigBean configBean;
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+        registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalDateTime()));
+        registrar.setDateFormatter(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalDate()));
+        registrar.setTimeFormatter(DateTimeFormatter.ofPattern(configBean.getFormatPatternLocalTime()));
+        registrar.registerFormatters(registry);
+        //  YearMonth and MonthDay have to do it manually.
+        registry.addConverter(new YearMonthConverter());
+        registry.addConverter(new MonthDayConverter());
+    }
 
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
@@ -56,4 +72,22 @@ public class SwiftBootWebConvertConfig implements WebMvcConfigurer {
         converters.add(0, new ByteArrayHttpMessageConverter());
         converters.add(1, mappingJackson2HttpMessageConverter());
     }
+
+
+    private class YearMonthConverter implements Converter<String, YearMonth> {
+        @Override
+        public YearMonth convert(String source) {
+            return YearMonth.parse(source.trim(),
+                    DateTimeFormatter.ofPattern(configBean.getFormatPatternYearMonth()));
+        }
+    }
+
+    private class MonthDayConverter implements Converter<String, MonthDay> {
+        @Override
+        public MonthDay convert(String source) {
+            return MonthDay.parse(source.trim(),
+                    DateTimeFormatter.ofPattern(configBean.getFormatPatternMonthDay()));
+        }
+    }
+
 }

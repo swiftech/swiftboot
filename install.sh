@@ -7,6 +7,8 @@ fi
 
 version=$1
 
+echo "Install version: ${version}"
+
 mvn -N install
 mvn clean install -Dmaven.test.skip=true -f swiftboot-utils/pom.xml
 mvn clean install -Dmaven.test.skip=true -f swiftboot-collections/pom.xml

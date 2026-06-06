@@ -14,6 +14,9 @@ public class PopulatedEntity implements IdPersistable {
     @Column
     private String persistentField;
 
+    @Column
+    private TestEnum  testEnum;
+
     @Override
     public String getId() {
         return id;
@@ -30,5 +33,13 @@ public class PopulatedEntity implements IdPersistable {
 
     public void setPersistentField(String persistentField) {
         this.persistentField = persistentField;
+    }
+
+    public TestEnum getTestEnum() {
+        return testEnum;
+    }
+
+    public void setTestEnum(TestEnum testEnum) {
+        this.testEnum = testEnum;
     }
 }

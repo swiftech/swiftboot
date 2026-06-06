@@ -30,6 +30,7 @@ public class ValidationResult extends ArrayList<ValidationResult.InputError> {
      *
      * @param bean          校验的参数对象
      * @param bindingResult 校验结果对象
+     * @param messageHelper i18n source
      * @return
      */
     public static ValidationResult readFromBindingResult(Object bean, BindingResult bindingResult, MessageHelper messageHelper) {

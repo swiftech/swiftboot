@@ -1,5 +1,8 @@
 V3.1.4
-* `[swiftboot-web]`： Added the ability to rate limit by configuring the endpoint uri path through a configuration file.
+* `[swiftboot-web]`: Added the ability to rate limit by configuring the endpoint uri path through a configuration file.
+* `[swiftboot-web]`: Added support for automatic conversion of time type parameter variables in controllers, including time variables passed directly as parameters in `GET` and time attributes in request parameter objects.
+* `[swiftboot-web]`: Add `SpringContextHolder` to obtain a reference to the `ApplicationContext` of the Spring context.
+* The encoding of resource files is uniformly changed to UTF-8
 
 V3.1.3
 * Supports German, French, Italian, Spanish, and Portuguese.

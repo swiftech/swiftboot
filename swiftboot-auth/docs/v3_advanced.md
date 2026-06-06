@@ -8,6 +8,14 @@
 
 对于已登录的用户的请求，用户 ID 会被自动的注入，无需写代码从 Header 或者 Cookie 获取用户 Token，再从会话中获取用户 ID 了。
 
+* 只需要在 Controller 方法上加一个 `String` 类型的参数，并且加上 `@UserId` 注解即可得到用户ID。例如：
+
+```java
+public HttpResponse<?> getOrderList(@UserId String userId) {
+    log.info(userId);
+}
+```
+
 * 对于 `POST` 请求，只要是继承自 `BaseAuthenticatedRequest` 或者其子类的接口参数对象，都会被自动的注入用户ID和用户名称，在 Controller 中只要通过 `request.getUerId()` 和 `request.getUserName()` 就可以获得。例如：
 
 ```java
@@ -17,17 +25,10 @@ public class OrderCreateRequest extends BaseAuthenticatedRequest<OrderEntity> {
 ```
 
 ```java
-@RequestMapping(value = "order/create", method = RequestMethod.POST)
+@PostMapping(value = "order/create")
 public HttpResponse<OrderCreateResult> orderCreate(@RequestBody OrderCreateRequest request) {
     log.info(request.getUserId());
     log.info(request.getUserName());
-}
-```
-* 对于 `GET` 请求，只需要在 Controller 方法上加一个 `String` 类型的参数，并且加上 `@UserId` 注解即可得到用户ID。例如：
-
-```java
-public HttpResponse<?> getOrderList(@UserId String userId) {
-    log.info(userId);
 }
 ```
 
@@ -163,7 +164,7 @@ swiftboot:
   认证模式，可选 `jwt` 和 `session`，不配置的话不启用
 
 * type
-  配置为 `redis`, 使用 Redis 存储会话，需要配置 `RedisService`，参考：[swiftboot-service](../../swiftboot-service/docs/v3.md)。
+  配置为 `redis`, 使用 Redis 存储会话，需要配置 SpringBoot 的 Redis 客户端。
   配置为 `mock`，使用内存存储会话，仅用于调试。
 
 * group

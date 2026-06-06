@@ -11,8 +11,8 @@
 #### 子集合的参数自动填充
 
 对于编辑一个对象时的子集合的增删改查，无需对子对象分别进行处理，只需要查询父实体并对其子实体集合执行 `clear()` 操作， 然后再调用 `populateEntity()` 将参数中的子集合填充至父实体中，SwiftBoot 会自动判断实体是否存在，如果已经存在则进行更新，如果不存在则新增，其余不在子集合中的实体都会被删除。
+> 如果有哪个属性不需要（或者无法）自动填充的，在属性上使用 `@PopulateIgnore` 注解来忽略自动填充。
 例如：
-
 
 父参数对象定义，包含子对象的集合：
   ```java
@@ -127,15 +127,25 @@ public class ErrorCode {
 
 ### Java8 时间类型的处理
 
-SwiftBoot-Web 提供了对 Java8 时间类型的支持，包括 `LocalDateTime`，`LocalDate`，`LocalTime`，`YearMonth`，`MonthDay`。
-例如对于 `LocalDateTime` 类型的时间，输入参数只需要提供格式为 `2025-05-01 11:11:11` 这样的字符串，就会自动转换为 `LocalDateTime` 类型，对于 DTO 来说也是类似。
+SwiftBoot-Web 提供了对 Java 8 的时间类型的支持，包括 `LocalDateTime`，`LocalDate`，`LocalTime`，`YearMonth`，`MonthDay`。
+例如对于接口要求的 `LocalDateTime` 类型的时间参数，客户端只需要提供类似 `2025-05-01 11:11:11` （默认为 `yyyy-MM-dd HH:mm:ss`格式）这样的字符串，就会自动转换为 `LocalDateTime` 类型，对于 DTO 的参数来说也是类似。
+不管是 `GET` 接口直接传参时间变量，或者是接口定义请求参数对象中的时间属性，都支持自动转换。
 如果需要使用其他时间格式，只需要在配置文件中定义即可：
 ```
 swiftboot:
   web:
-    formatPatternLocalDateTime: yyyy-MM-dd HH:mm:ss
+    formatPatternLocalDateTime: yyyy/MM/dd HH:mm:ss
 ```
-> 其他的时间类型格式参考 [application-example.yaml](../src/main/resources/application-example.yaml)
+其他的时间类型配置分别如下：
+```
+swiftboot:
+  web:
+    formatPatternLocalDate: yyyy-MM-dd
+    formatPatternLocalTime: HH:mm:ss
+    formatPatternYearMonth: yyyy-MM
+    formatPatternMonthDay: MM-dd
+```
+> 参考 [application-example.yaml](../src/main/resources/application-example.yaml)
 
 
 ### 统一 API 异常处理

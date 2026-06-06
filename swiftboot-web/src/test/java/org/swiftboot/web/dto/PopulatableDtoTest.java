@@ -21,4 +21,19 @@ public class PopulatableDtoTest {
         }
 
     }
+
+
+    @Test
+    public void testPopulateEnum() {
+        PopulatedEntity entity = new PopulatedEntity();
+        entity.setId(IdUtils.makeUUID());
+        entity.setTestEnum(TestEnum.A);
+        PopulatedDto dto = PopulatableDto.createDto(PopulatedDto.class, entity, false);
+        try {
+            System.out.println(JsonUtils.object2Json(dto));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

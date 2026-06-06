@@ -119,7 +119,7 @@ public class Initializer implements ApplicationContextAware {
     /**
      * Run in command line mode, not the web mode
      *
-     * @param baseDirPath absolut path.
+     * @param baseDirPath absolute path.
      */
     public void preAssignIdToAllDataFiles(String baseDirPath) {
         log.info(String.format("Try to pre-assign id to all csv files under: %s", baseDirPath));

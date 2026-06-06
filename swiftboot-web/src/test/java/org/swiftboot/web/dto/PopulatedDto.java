@@ -10,11 +10,21 @@ public class PopulatedDto extends NonPopulateBaseDto implements PopulatableDto<P
 
     private String persistentField;
 
+    private TestEnum testEnum;
+
     public String getPersistentField() {
         return persistentField;
     }
 
     public void setPersistentField(String persistentField) {
         this.persistentField = persistentField;
+    }
+
+    public TestEnum getTestEnum() {
+        return testEnum;
+    }
+
+    public void setTestEnum(TestEnum testEnum) {
+        this.testEnum = testEnum;
     }
 }
