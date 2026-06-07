@@ -41,7 +41,7 @@ public class IdUtils {
         StringBuilder buf = new StringBuilder(32);
         buf.append(bizCode, 0, bizCode.length())
                 .append(DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMddHHmmssSSS"))
-                .append(RandomStringUtils.randomAlphabetic(15 - bizCode.length()).toLowerCase());
+                .append(RandomStringUtils.secure().nextAlphabetic(15 - bizCode.length()).toLowerCase());
         return buf.toString();
     }
 
@@ -67,7 +67,7 @@ public class IdUtils {
         buf.append(bizCode, 0, bizCode.length())
                 .append(serverId, 0, serverId.length())
                 .append(DateFormatUtils.format(System.currentTimeMillis(), "yyyyMMddHHmmssSSS"))
-                .append(RandomStringUtils.randomAlphabetic(15 - bizCode.length() - serverId.length()).toLowerCase());
+                .append(RandomStringUtils.secure().nextAlphabetic(15 - bizCode.length() - serverId.length()).toLowerCase());
         return buf.toString();
     }
 
@@ -86,6 +86,6 @@ public class IdUtils {
      * @return
      */
     public static String makeSnRandom() {
-        return makeSn() + RandomStringUtils.randomNumeric(3);
+        return makeSn() + RandomStringUtils.secure().nextAlphabetic(3);
     }
 }

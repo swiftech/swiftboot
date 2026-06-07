@@ -1,6 +1,6 @@
 package org.swiftboot.util;
 
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -8,25 +8,13 @@ import java.util.TreeSet;
 public class EnvUtils {
 
 
-    public static void main(String[] args) {
-//        printSystemProperties();
-
-        displaySystemPropsInStdout("", (propEntry, str) -> propEntry.getKey().toString().contains(str));
-    }
-
     public static void printSystemProperties() {
         displaySystemPropsInStdout("", new SysPropertyExtractor() {
             @Override
-            public boolean matched(Map.Entry propEntry, String str) {
+            public boolean matched(Entry propEntry, String str) {
                 return propEntry.getKey().toString().contains(str);
             }
         });
-//        Properties properties = System.getProperties();
-//        Enumeration<Object> keys = properties.keys();
-//        while (keys.hasMoreElements()) {
-//            Object key = keys.nextElement();
-//            System.out.println("  " + key + "=" + properties.getProperty(String.valueOf(key)));
-//        }
     }
 
     /**
@@ -39,7 +27,7 @@ public class EnvUtils {
         Properties props = System.getProperties();
         // TODO to sort properties if required.
         Set<String> propsList = new TreeSet<>();
-        for (Map.Entry entry : props.entrySet()) {
+        for (Entry entry : props.entrySet()) {
             if (extractor == null || extractor.matched(entry, keyword)) {
                 propsList.add(" sys prop: " + entry.getKey() + " = " + entry.getValue());
             }
@@ -69,6 +57,6 @@ public class EnvUtils {
          * @param str
          * @return
          */
-        boolean matched(Map.Entry propEntry, String str);
+        boolean matched(Entry propEntry, String str);
     }
 }

@@ -51,25 +51,6 @@ public class BufferedIoUtils {
     }
 
     /**
-     * 读取输入流数据到缓存并通过回调返回给调用者
-     *
-     * @param in
-     * @param bufSize  缓存大小 256字节 ~ 10K字节
-     * @param callback 读取的字节数组，最大数量为 bufSize
-     * @throws Exception
-     * @deprecated
-     */
-    public static void readInputStream(InputStream in, int bufSize, Callback<byte[]> callback) throws Exception {
-        readFrom(in, bufSize, bytes -> {
-            try {
-                callback.on(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    /**
      * 将输入流的数据写入文件中
      *
      * @param in

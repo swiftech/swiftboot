@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.annotation.Order;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.Validator;
@@ -30,7 +30,7 @@ public class SwiftBootWebConfig implements WebMvcConfigurer {
 
     @Bean(name = "swiftbootWebMessageSource")
     public MessageSource swiftbootWebMessageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames("i18n/swiftboot-web", "i18n/validation");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;

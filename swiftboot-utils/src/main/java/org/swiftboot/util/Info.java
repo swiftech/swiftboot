@@ -4,7 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -39,7 +41,7 @@ public class Info {
     /**
      * Ge information by a tag with params for class
      *
-     * @param clazz  Class for which you lookup information
+     * @param clazz  Class for which you look up information
      * @param tag    Indicate which information
      * @param params Params in the information
      * @return
@@ -57,7 +59,7 @@ public class Info {
     /**
      * Get information by a tag with params for class
      *
-     * @param clazz Class for which you lookup information
+     * @param clazz Class for which you look up information
      * @param tag   Indicate which information
      * @return
      */
@@ -165,7 +167,7 @@ public class Info {
      */
     private static int loadOnePropertiesFile(InputStream ins) throws IOException {
         Properties p = new Properties();
-        p.load(ins);
+        p.load(new InputStreamReader(ins, StandardCharsets.UTF_8));
         ins.close();
         if (propertiesList == null) {
             propertiesList = new LinkedList<>();

@@ -1,5 +1,8 @@
 # changelogs
 
+## V3.1.4
+* removed deprecated method `readInputStream()` from class `BufferedIoUtils`.
+
 ## V3.1.3
 * new `VersionUtils` class for comparing software versions.
 

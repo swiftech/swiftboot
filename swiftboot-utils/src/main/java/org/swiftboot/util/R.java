@@ -19,18 +19,12 @@ public class R implements Resource {
     public static final String NO_GENERIC_CLASS_TO_ANCESTOR1 = "no_generic_class_to_ancestor1";
     public static final String NO_GENERIC_CLASS_TO_PARENT1 = "no_generic_class_to_parent1";
     public static final String NO_DATA_FOUND1 = "no_data_found1";
+    public static final String FILE_NOT_EXIST = "file_not_exist";
 
 
     public static Class<?>[] getResourceClasses() {
         return new Class[]{
                 R.class
         };
-    }
-
-    public static void main(String[] args) {
-        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));
-//        Info.validateForAllLocale();
-        System.out.println();
-        System.out.println(Info.get(IdUtils.class, org.swiftboot.util.R.ID_FAILED1));
     }
 }
