@@ -24,7 +24,7 @@ public class ImageUtils {
      */
     public static boolean scaleImage(File srcFile, double scale, File targetFile) throws IOException {
         if (!srcFile.exists()) {
-            throw new FileNotFoundException("文件不存在");
+            throw new FileNotFoundException(Info.get(ImageUtils.class, R.FILE_NOT_EXIST));
         }
         try {
             BufferedImage inputImage = ImageIO.read(srcFile);
