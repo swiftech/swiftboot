@@ -21,7 +21,7 @@ import org.swiftboot.web.i18n.MessageHelper;
 
 /**
  * Populate values from JWT to the annotated parameter of controller.
- * {@link UserId}, {@link UserName}, {@link ExpireTime}, {@link Addition}
+ * {@link UserId}, {@link UserName}, {@link ExpireTime}, {@link Addition}, {@link Roles}
  * this argument resolver only works under JWT mode.
  *
  * @since 3.0
@@ -43,7 +43,8 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
                 || parameter.hasParameterAnnotation(UserId.class)
                 || parameter.hasParameterAnnotation(UserName.class)
                 || parameter.hasParameterAnnotation(ExpireTime.class)
-                || parameter.hasParameterAnnotation(Addition.class);
+                || parameter.hasParameterAnnotation(Addition.class)
+                || parameter.hasParameterAnnotation(Roles.class);
     }
 
     @Override
@@ -65,6 +66,9 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
                 }
                 else if (parameter.hasParameterAnnotation(UserName.class)) {
                     return jwtTokenProvider.getUsername(accessToken);
+                }
+                else if (parameter.hasParameterAnnotation(Roles.class)) {
+                    return jwtTokenProvider.getRoles(accessToken);
                 }
                 else if (parameter.hasParameterAnnotation(ExpireTime.class)) {
                     return jwtTokenProvider.getExpireTime(accessToken).getTime();

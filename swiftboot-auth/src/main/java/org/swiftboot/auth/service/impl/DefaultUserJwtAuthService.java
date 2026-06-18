@@ -21,6 +21,7 @@ import org.swiftboot.common.auth.token.RefreshToken;
 import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.i18n.MessageHelper;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -62,6 +63,8 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
         Optional<E> optUser = userAuthRepository.findByLoginNameAndLoginPwd(loginId, encryptedPwd);
         if (optUser.isPresent()) {
             E userEntity = optUser.get();
+            if (additions == null) additions = new HashMap<>();
+            additions.put(JwtTokenProvider.ROLES_KEY, userEntity.getRoles());
             log.debug("Sign in user id: %s".formatted(userEntity.getId()));
             return this.generateTokens(userEntity, additions, true);
         }

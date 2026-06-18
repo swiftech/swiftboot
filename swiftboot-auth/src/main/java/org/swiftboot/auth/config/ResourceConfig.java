@@ -12,7 +12,7 @@ public class ResourceConfig {
     @Bean(name = "swiftbootAuthMessageSource")
     public MessageSource swiftbootAuthMessageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("i18n/swiftboot-auth");
+        messageSource.setBasename("classpath:i18n/swiftboot-auth");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

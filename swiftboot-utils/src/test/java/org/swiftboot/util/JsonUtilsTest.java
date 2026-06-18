@@ -1,5 +1,9 @@
 package org.swiftboot.util;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +19,23 @@ import java.util.Map;
 public class JsonUtilsTest {
 
     @Test
+    void setByPath() throws JsonProcessingException {
+        String json = """
+                {
+                    "foo": {
+                        "bar": 124
+                    }
+                }
+                """;
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(json);
+        JsonUtils.setByPath(jsonNode, "foo.bar", 9999);
+        Assertions.assertEquals(9999, jsonNode.get("foo").get("bar").asInt());
+        JsonUtils.setByPath(jsonNode, "foo.bar.car", 123);
+        Assertions.assertEquals(9999, jsonNode.get("foo").get("bar").asInt());
+    }
+
+    @Test
     void jsonToMapSafe() {
         String json = """
                 {
@@ -28,17 +49,28 @@ public class JsonUtilsTest {
     }
 
     @Test
-    void testJsonToObject() {
-        JsonObject jsonObject = new JsonObject();
+    void jsonToObject() {
+        MyJsonObject jsonObject = new MyJsonObject();
         try {
             String json = JsonUtils.object2Json(jsonObject);
             System.out.println(json);
-            JsonObject jsonObject2 = JsonUtils.jsonTo(json, JsonObject.class);
+            MyJsonObject jsonObject2 = JsonUtils.jsonTo(json, MyJsonObject.class);
             Assertions.assertEquals(jsonObject.getLocalDate(), jsonObject2.getLocalDate());
             Assertions.assertEquals(jsonObject.getLocalDateTime(), jsonObject2.getLocalDateTime());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void jsonToWithUnknownField() throws IOException {
+        String json = """
+                {
+                    "foo": "bar",
+                    "car": 124
+                }
+                """;
+        JsonUtils.jsonTo(json, MyJsonObject2.class);
     }
 
     @Test
@@ -52,8 +84,23 @@ public class JsonUtilsTest {
         Assertions.assertEquals("{\"key1\":\"value1\"}", s);
     }
 
+    /**
+     *
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class MyJsonObject2 {
+        private String foo;
 
-    public static class JsonObject {
+        public String getFoo() {
+            return foo;
+        }
+
+        public void setFoo(String foo) {
+            this.foo = foo;
+        }
+    }
+
+    public static class MyJsonObject {
         private LocalDateTime localDateTime = LocalDateTime.now();
         private LocalDate localDate = LocalDate.now();
 

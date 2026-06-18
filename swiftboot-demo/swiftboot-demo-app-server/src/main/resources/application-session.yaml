@@ -9,3 +9,14 @@ swiftboot:
       updateExpireTime: true
       useCookie: true
       cookiePath: /
+  web:
+    rate-limit:
+      rules:
+        - uri: /rate_limit/user/cfg
+          time: 1000
+          count: 1
+          limit-type: DEFAULT
+        - uri: /rate_limit/global/cfg
+          time: 1000
+          count: 1
+          limit-type: USER

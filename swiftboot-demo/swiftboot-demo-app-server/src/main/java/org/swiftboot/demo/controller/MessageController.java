@@ -86,16 +86,18 @@ public class MessageController {
     @Operation(description = "i18n")
     @GetMapping(value = "/i18n")
     public Response<String> i18n() {
+        Locale locale = LocaleContextHolder.getLocale();
+        log.debug("Locale from request: %s".formatted(locale));
         String msgDefault = messageHelper.getMessage("i18n.default");
-        System.out.println(msgDefault);
+        log.debug("Default resource: %s".formatted(msgDefault));
         String msgI18n = messageHelper.getMessage("i18n.test");
-        System.out.println(msgI18n);
+        log.debug("Current locale resource: %s".formatted(msgI18n));
         return Response.builder(String.class).ok().data(msgI18n).build();
     }
 
     @GetMapping(value = "/module")
     public Response<String> module() {
-        System.out.println(swiftbootAuthMessageSource);
+        log.debug(String.valueOf(swiftbootAuthMessageSource));
         String moduleMessage = swiftbootAuthMessageSource.getMessage("swifboot.auth.module.name", null, LocaleContextHolder.getLocale());
         return Response.builder(String.class).ok().data(moduleMessage).build();
     }

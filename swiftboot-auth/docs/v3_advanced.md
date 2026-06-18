@@ -49,7 +49,7 @@ public HttpResponse<?> getPublicData(@UserId @IfNecessary String userId) {
 ```
 > 注意：当你启用 `@IfNecessary` 之后，如果给出的 JWT 失效，则会抛出异常并返回 `401 Unauthorized` 错误。
 
-## 自定义 `UserAuthService`
+## 自定义 `UserAuthService` 实现类
 
 如果默认提供的 `DefaultUserJwtAuthService` 或 `DefaultUserSessionAuthService` 实现类不能满足需要（比如希望把更多的用户信息加入Token或者会话中，如用户角色、等级等等），那么你可以自定义 `UserAuthService` 的实现类：
 
@@ -62,6 +62,7 @@ public class MyUserAuthService implements UserAuthService<JwtAuthentication> {
 
 
 ## 刷新 Access Token
+
 如果采用的是 JWT 认证模式，那么可能需要为客户端提供刷新 Access Token 的接口，例如：
 ```java
 @Resource
@@ -88,7 +89,36 @@ swiftboot:
       refreshMode: rolling
 ```
 
-----
+## 用户角色权限控制
+
+SwiftBoot-Auth 模块提供的简单的用户角色权限控制功能，你只需要配置一个过滤器，设置好哪些端点路径需要哪些角色才能访问，并且给需要分配访问权限的用户加上角色就可以了，具体示例如下：
+
+* 实体类定义
+用户实体类实现 `UserPersistent` 接口的 `getRoles()` 方法，通过这个方法将存储的用户的角色信息交给 SwiftBoot-Auth 来识别用户的权限：
+```java
+  @Override
+  public String getRoles() {
+      return this.roles;
+  }
+```
+
+* 配置过滤器
+通过 `addUrlPatterns` 配置要求对用户角色（可以多个）进行验证的端点路径：
+```java
+  @Resource
+  UserRolesFilter userRolesFilter;
+  @Bean
+  public FilterRegistrationBean<UserRolesFilter> registerUserRoleFilter() {
+      FilterRegistrationBean<UserRolesFilter> registrationBean = new FilterRegistrationBean<>();
+      userRolesFilter.setRoles(List.of("admin"));
+      registrationBean.setFilter(userRolesFilter);
+      registrationBean.addUrlPatterns("/api/v1/manage/*");
+      return registrationBean;
+  }
+```
+
+----------------
+
 
 ## Session 模式：
 

@@ -161,3 +161,27 @@ InterceptorRegisterBean<MyHibernateInterceptor> registerDataPermissionIntercepto
 @Column(name = "year_month", nullable = false)
 private YearMonth yearMonth;
 ```
+
+### GenericRepository
+
+有时候需要对多个不同的实体类进行相同的操作，比如保存，但是注入所有的 `Repository` 接口并根据实体类型判断去调哪个接口显得非常的不优雅。
+SwiftBoot-Data 提供了 `GenericRepository` 类来做到这一点，不管你要操作哪个实体类，你只需要注入单个`GenericRepository`类即可。
+
+配置扫描
+```java
+@EnableJpaRepositories(basePackages = {"org.swiftboot.data.repository"})
+```
+
+代码中使用:
+```java
+@Resource
+private GenericRepository genericRepository;
+
+```
+
+```java
+genericRepository.findById(User.class, id);
+genericRepository.findById(Order.class, id);
+genericRepository.save(userEntity);
+genericRepository.save(orderEntity);
+```

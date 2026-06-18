@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.swiftboot.auth.filter.JwtAuthFilter;
+import org.swiftboot.auth.filter.UserRolesFilter;
 import org.swiftboot.auth.service.UserAuthService;
 import org.swiftboot.auth.service.impl.DefaultUserJwtAuthService;
 import org.swiftboot.common.auth.token.JwtAuthentication;
@@ -20,6 +21,11 @@ public class SwiftbootAuthJwtConfig {
     @Bean
     public JwtAuthFilter jwtAuthFilter() {
         return new JwtAuthFilter();
+    }
+
+    @Bean
+    public UserRolesFilter userRolesFilter() {
+        return new UserRolesFilter();
     }
 
     /**

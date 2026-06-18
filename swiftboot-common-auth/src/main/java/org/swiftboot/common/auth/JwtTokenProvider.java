@@ -26,6 +26,7 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     public static final String USERNAME_KEY = "username";
+    public static final String ROLES_KEY = "roles";
     private static final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
     private final JwtConfigBean jwtConfig;
 
@@ -144,6 +145,11 @@ public class JwtTokenProvider {
 
     public String getUsername(String token) {
         Object addition = getAddition(token, USERNAME_KEY);
+        return addition == null ? "" : addition.toString();
+    }
+
+    public String getRoles(String token) {
+        Object addition = getAddition(token, ROLES_KEY);
         return addition == null ? "" : addition.toString();
     }
 

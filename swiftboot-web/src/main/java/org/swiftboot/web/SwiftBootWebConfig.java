@@ -31,7 +31,7 @@ public class SwiftBootWebConfig implements WebMvcConfigurer {
     @Bean(name = "swiftbootWebMessageSource")
     public MessageSource swiftbootWebMessageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("i18n/swiftboot-web", "i18n/validation");
+        messageSource.setBasenames("classpath:i18n/swiftboot-web", "classpath:i18n/validation");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

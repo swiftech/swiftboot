@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.swiftboot.common.auth.AuthenticationException;
+import org.swiftboot.common.auth.annotation.Roles;
 import org.swiftboot.common.auth.annotation.UserId;
 import org.swiftboot.common.auth.annotation.UserName;
 import org.swiftboot.data.model.entity.IdPersistable;
@@ -66,11 +67,19 @@ public class AppSecureController {
     @GetMapping(value = "unauthorized")
     public Response<Void> unauthorized() {
         log.info("> /app/unauthorized");
-        String userRole = "GUEST";
-        if (!"admin".equals(userRole)) {
+        if (true) {
+            // just throw exception to test the http error.
             throw new AuthenticationException("Unauthorized");
         }
         return Response.builder().message("Unauthorized").build();
+    }
+
+    @Operation(description = "Test authorized by roles")
+    @GetMapping(value = "roles")
+    public Response<Void> unauthorizedRole(@Roles String userRoles) {
+        log.info("> /app/role");
+        log.info("User roles: " + userRoles);
+        return Response.builder().message("Authorized by roles: " + userRoles).build();
     }
 
 }

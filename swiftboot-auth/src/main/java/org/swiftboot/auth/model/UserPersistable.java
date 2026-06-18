@@ -12,6 +12,7 @@ public interface UserPersistable {
 
     /**
      * User ID
+     *
      * @return
      */
     String getId();
@@ -25,8 +26,16 @@ public interface UserPersistable {
 
     /**
      * User password
+     *
      * @return
      */
     String getLoginPwd();
 
+    /**
+     * User roles that separated in comma.
+     *
+     * @return null or empty if no roles for user.
+     * @since 3.1.5
+     */
+    String getRoles();
 }

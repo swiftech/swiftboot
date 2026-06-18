@@ -35,13 +35,16 @@ public class AppUserEntity extends BaseEntity implements UserPersistable, Access
     @Column(name = "LOGIN_PWD", length = 64, nullable = false)
     private String loginPwd;
 
+    @Column(name = "ROLES", length = 32)
+    private String roles;
+
     @Column(name = "LAST_LOGIN_TIME")
     private LocalDateTime lastLoginTime;
 
-    @Column(name = "ACCESS_TOKEN")
+    @Column(name = "ACCESS_TOKEN", length = 512)
     private String accessToken;
 
-    @Column(name = "REFRESH_TOKEN")
+    @Column(name = "REFRESH_TOKEN", length = 512)
     private String refreshToken;
 
     @Column(name = "ACCESS_TOKEN_EXPIRES_AT")
@@ -86,6 +89,15 @@ public class AppUserEntity extends BaseEntity implements UserPersistable, Access
      */
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
+    }
+
+    @Override
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public LocalDateTime getLastLoginTime() {

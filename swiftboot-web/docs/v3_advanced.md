@@ -202,10 +202,15 @@ public MessageSource messageSource() {
     return messageSource;
 }
 ```
-* 默认情况下 SpringBoot 会按照系统的语言设定去读取相应语言的资源文件，如果需要强制按照某种语言读取，则可以在应用程序启动的地方添加强制设定语言，例如：
+
+* 默认情况下 SpringBoot 会按照系统的语言设定去读取相应语言的资源文件，如果需要强制按照某种语言读取，可以在应用程序启动的地方设定系统默认语言，例如：
+
 ```java
 Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
 ```
+
+* SpringBoot 会按照客户端给出的语言参数 `Accept-Language` 去读取相应语言的资源，如果客户端给出了语言参数，它的优先级高于前面设置的默认语言。
+> 通过 `LocaleContextHolder.getLocale()` 可以得到当前请求的语言。
 
 
 ### 输入参数验证

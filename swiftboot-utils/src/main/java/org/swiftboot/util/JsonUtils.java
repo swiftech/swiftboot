@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,14 +25,66 @@ public class JsonUtils {
     static Logger log = LoggerFactory.getLogger(JsonUtils.class);
 
     /**
-     * 按照格式 "xxx.xxx.xxx" 递归选中 JSON 树中的子节点
+     * Set json node value by path like 'a.b.c'
      *
-     * @param rootNode
-     * @param selector
+     * @param node
+     * @param path
+     * @param value
+     * @param <T>
      * @return
      */
-    public static Object select(JsonNode rootNode, String selector) {
-        String[] keys = StringUtils.split(selector, '.');
+    public static <T> JsonNode setByPath(JsonNode node, String path, T value) {
+        String[] keys = StringUtils.split(path, '.');
+        String latestKey = keys[keys.length - 1];
+        JsonNode latestParentNode = _select(node, ArrayUtils.subarray(keys, 0, keys.length - 1), 0);
+        if (latestParentNode.isObject()) {
+            ObjectNode on = ((ObjectNode) latestParentNode);
+            if (value instanceof String s) {
+                on.put(latestKey, s);
+            }
+            else if (value instanceof Number) {
+                on.put(latestKey, ((Number) value).longValue());
+            }
+            else if (value instanceof Boolean) {
+                on.put(latestKey, ((Boolean) value).booleanValue());
+            }
+            else if (value instanceof Double) {
+                on.put(latestKey, ((Double) value).doubleValue());
+            }
+            else if (value instanceof Float) {
+                on.put(latestKey, ((Float) value).floatValue());
+            }
+            else if (value instanceof Integer) {
+                on.put(latestKey, ((Integer) value).intValue());
+            }
+            else if (value instanceof Long) {
+                on.put(latestKey, ((Long) value).longValue());
+            }
+            else if (value instanceof Integer) {
+                on.put(latestKey, ((Integer) value).intValue());
+            }
+            else if (value instanceof Short) {
+                on.put(latestKey, ((Short) value).shortValue());
+            }
+            else if (value instanceof Byte) {
+                on.put(latestKey, ((Byte) value).byteValue());
+            }
+            else {
+                throw new RuntimeException(Info.get(JsonUtils.class, R.NO_DATA_FOUND1, ArrayUtils.toString(keys)));
+            }
+        }
+        return node;
+    }
+
+    /**
+     * 按照格式为 "a.b.c" 的路径递归选中 JSON 树中的子节点。
+     *
+     * @param rootNode
+     * @param path
+     * @return
+     */
+    public static Object select(JsonNode rootNode, String path) {
+        String[] keys = StringUtils.split(path, '.');
 
         log.debug("Select in " + rootNode.toString());
 
@@ -87,6 +140,15 @@ public class JsonUtils {
         });
     }
 
+    public static <T> T jsonToSafe(String strJson, Class<T> type) {
+        try {
+            return jsonTo(strJson, type);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
     /**
      * JSON 格式字符串转换为指定类型对象
      *
@@ -99,6 +161,15 @@ public class JsonUtils {
     public static <T> T jsonTo(String strJson, Class<T> type) throws IOException {
         ObjectMapper mapper = getJava8ObjectMapper();
         return mapper.readValue(strJson, type);
+    }
+
+    public static <T> T jsonToSafe(String strJson, TypeReference<T> type) {
+        try {
+            return jsonTo(strJson, type);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
     }
 
     /**

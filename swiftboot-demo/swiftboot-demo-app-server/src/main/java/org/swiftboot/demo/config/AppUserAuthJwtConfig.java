@@ -8,8 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.swiftboot.auth.filter.JwtAuthFilter;
+import org.swiftboot.auth.filter.UserRolesFilter;
 import org.swiftboot.common.auth.service.JwtStore;
 import org.swiftboot.demo.service.JwtDatabaseStore;
+
+import java.util.List;
 
 /**
  * Enabled when swiftboot.auth.authType = jwt
@@ -24,6 +27,9 @@ public class AppUserAuthJwtConfig implements WebMvcConfigurer {
     @Resource
     JwtAuthFilter jwtAuthFilter;
 
+    @Resource
+    UserRolesFilter userRolesFilter;
+
     @Bean
     public FilterRegistrationBean<JwtAuthFilter> registerJwtAuthFilter() {
         FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
@@ -35,8 +41,19 @@ public class AppUserAuthJwtConfig implements WebMvcConfigurer {
         return registrationBean;
     }
 
+    @Bean
+    public FilterRegistrationBean<UserRolesFilter> registerUserRoleFilter() {
+        FilterRegistrationBean<UserRolesFilter> registrationBean = new FilterRegistrationBean<>();
+        userRolesFilter.setRoles(List.of("admin"));
+        registrationBean.setFilter(userRolesFilter);
+        registrationBean.addUrlPatterns("/app/roles");
+        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
+        return registrationBean;
+    }
+
     /**
      * Force to use database to store JWT.
+     *
      * @return
      */
     @Bean

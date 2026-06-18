@@ -66,7 +66,7 @@ public class SwiftbootCommonAuthConfig implements WebMvcConfigurer {
     @Bean(name = "swiftbootCommonAuthMessageSource")
     public MessageSource swiftbootCommonAuthMessageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("i18n/swiftboot-common-auth");
+        messageSource.setBasename("classpath:i18n/swiftboot-common-auth");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
