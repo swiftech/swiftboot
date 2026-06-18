@@ -1,3 +1,12 @@
+V3.1.5
+* `[swiftboot-auth]`: new `UserRolesFilter` is introduced to handle user access control according to user roles.
+* `[swiftboot-data]`: new `GenericRepository` for handling entity classes of uncertain types.
+* `[swiftboot-utils]`: new `jsonToSafe` and `setByPath` methods to `JsonUtils`.
+* Bug Fixes:
+  * unable to load resources since the `ReloadableResourceBundleMessageSource` is used.
+  * missing i18n resource for filters.
+* update dependencies
+
 V3.1.4
 * `[swiftboot-web]`: Added the ability to rate limit by configuring the endpoint uri path through a configuration file.
 * `[swiftboot-web]`: Added support for automatic conversion of time type parameter variables in controllers, including time variables passed directly as parameters in `GET` and time attributes in request parameter objects.
