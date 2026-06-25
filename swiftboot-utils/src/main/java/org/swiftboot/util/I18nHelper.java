@@ -8,7 +8,6 @@ import java.util.*;
 
 /**
  * Internationalization helper class for managing application locales and resource bundles.
- * Supports English and Simplified Chinese.
  * If you want to change the language, use setLocale() directly.
  * <p>
  * Supports loading multiple resource bundles. Use {@link #addBundle(String)} to register additional bundles.

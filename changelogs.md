@@ -1,7 +1,10 @@
 V3.1.5
 * `[swiftboot-auth]`: new `UserRolesFilter` is introduced to handle user access control according to user roles.
 * `[swiftboot-data]`: new `GenericRepository` for handling entity classes of uncertain types.
-* `[swiftboot-utils]`: new `jsonToSafe` and `setByPath` methods to `JsonUtils`.
+* `[swiftboot-utils]`: 
+  * new methods `jsonToSafe` and `setByPath` to `JsonUtils`.
+  * new methods `getSysProps` and `printSysProps` to `SysUtils`.
+  * remove methods `displaySystemPropsInStdout` and `printSystemProperties` from `EnvUtils`.
 * Bug Fixes:
   * unable to load resources since the `ReloadableResourceBundleMessageSource` is used.
   * missing i18n resource for filters.

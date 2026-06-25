@@ -172,6 +172,13 @@ public class PreferenceManager {
         return prefs.get(key, null);
     }
 
+    /**
+     * Try to get preference by key, if not exist, get preference by alias instead.
+     *
+     * @param key
+     * @param alias
+     * @return
+     */
     public Object getPreferenceAlias(String key, String alias) {
         Object v = this.getPreference(key);
         if (v == null && alias != null) {

@@ -75,7 +75,7 @@ class PreferenceManagerTest {
         Assertions.assertNull(myStrClass);
 
         // test default value
-        myStrClass = (MyStrClass) pm.getPreference("no_exist_key", def);
+        myStrClass = pm.getPreference("no_exist_key", def);
         Assertions.assertEquals(myStrClass, def);
         Assertions.assertSame(myStrClass, def);
 

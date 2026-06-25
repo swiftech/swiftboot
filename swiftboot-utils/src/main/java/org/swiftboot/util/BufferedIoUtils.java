@@ -77,21 +77,4 @@ public class BufferedIoUtils {
         return bufSize;
     }
 
-    /**
-     * Generic Callback
-     *
-     * @author swiftech
-     * @deprecated
-     **/
-    @FunctionalInterface
-    public interface Callback<T> {
-
-        /**
-         * 返回读取到的数据给调用端处理，发生异常则数据读取中止
-         *
-         * @param t
-         * @throws IOException
-         */
-        void on(T t) throws IOException;
-    }
 }

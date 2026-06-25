@@ -171,7 +171,7 @@ public class BeanUtils {
      * @return 属性值列表
      * @throws NoSuchFieldException 没有该字段时抛出
      */
-    public static <T extends Object> List<T> forceGetProperties(Object object, Class<T> fieldClass) throws NoSuchFieldException {
+    public static <T> List<T> forceGetProperties(Object object, Class<T> fieldClass) throws NoSuchFieldException {
         List<T> ret = new LinkedList<>();
 
         for (Field declaredField : getDeclaredFields(object, fieldClass)) {

@@ -16,10 +16,10 @@
 
   ```xml
   <dependency>
-  <groupId>com.github.swiftech</groupId>
-  <artifactId>swiftboot-data</artifactId>
-  <version>2.4.10</version>
-</dependency>
+	  <groupId>com.github.swiftech</groupId>
+	  <artifactId>swiftboot-data</artifactId>
+	  <version>2.4.11</version>
+	</dependency>
   ```
 
 不稳定版:
@@ -29,6 +29,6 @@
   <dependency>
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftboot-data</artifactId>
-    <version>3.1.4</version>
+    <version>3.1.5</version>
   </dependency>
   ```

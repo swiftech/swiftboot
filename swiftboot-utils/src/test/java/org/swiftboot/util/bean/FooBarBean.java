@@ -1,11 +1,11 @@
-package org.swiftboot.util;
+package org.swiftboot.util.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author swiftech 2019-04-01
  **/
-class FooBarBean extends BaseBean {
+public class FooBarBean extends BaseBean {
 
     private String field1 = "field 1";
 

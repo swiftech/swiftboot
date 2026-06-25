@@ -22,17 +22,17 @@ class PropertiesUtilsTest {
         List<File> resourceFileList = Arrays.asList(resourceFiles);
         System.out.println("resourceFileList: " + resourceFileList.size());
         List<File> filesToLoad = PropertiesUtils.filterPropertiesByLocale(resourceFileList,
-                new PropertiesUtils.ExtractHandler<File>() {
+                new PropertiesUtils.ExtractHandler<>() {
                     @Override
                     public String getFileName(File file) {
                         return file.getName();
                     }
 
                     @Override
-                    public void onPureFileName(String pureName) {
-                        System.out.println("# " + pureName);
+                    public void onBaseFileName(String baseName) {
+                        System.out.println("# " + baseName);
                         try {
-                            Class<?> resClass = Class.forName(pureName); // file name must be the same with related resource class full name
+                            Class<?> resClass = Class.forName(baseName); // file name must be the same with related resource class full name
                             System.out.println(resClass);
                         } catch (ClassNotFoundException e) {
                             System.out.println("Not a information resource file: " + e.getLocalizedMessage());

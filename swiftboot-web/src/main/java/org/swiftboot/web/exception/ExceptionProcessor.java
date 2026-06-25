@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +16,7 @@ import org.swiftboot.web.response.Response;
 import org.swiftboot.web.response.ResponseCode;
 
 /**
+ * 应用到所有 @RequestMapping 注解的方法，在其抛出异常的时候执行。
  * 项目中需添加：
  * <pre>
  * &lt;context:component-scan base-package="org.swiftboot.web"/&gt;
@@ -44,7 +46,7 @@ public class ExceptionProcessor {
     private ResponseCode responseCode;
 
     /**
-     * 应用到所有 @RequestMapping 注解的方法,在其抛出 ErrMessageException 的时候执行
+     * 自定义的 ErrMessageException 异常处理，通过错误代码自动填充多语言的错误信息。
      *
      * @param request 请求参数
      * @param e       异常参数
@@ -88,7 +90,22 @@ public class ExceptionProcessor {
     }
 
     /**
-     * 应用到所有 @RequestMapping 注解的方法,在其抛出 Exception 的时候执行
+     * 数据层抛出的异常统一封装，避免暴露底层错误信息。
+     *
+     * @param request
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseBody
+    public Response<?> onDataAccessException(NativeWebRequest request, DataAccessException e) {
+        log.debug("on onDataAccessException...");
+        log.error(e.getMessage(), e);
+        return Response.builder().code(ResponseCode.CODE_SYS_DB_ERROR).build();
+    }
+
+    /**
+     * 除了以上特定的异常外的异常，统一返回系统错误。
      *
      * @param request 请求参数
      * @param e       异常参数

@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.NamedExecutable;
 import org.junit.jupiter.api.Test;
-import org.swiftboot.util.time.BeanInterface;
+import org.swiftboot.util.bean.BeanInterface;
+import org.swiftboot.util.bean.FooBarBean;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -14,11 +15,17 @@ import java.util.*;
  **/
 public class BeanUtilsTest {
 
+    /**
+     * filed in the interface should not be extracted.
+     *
+     * @throws NoSuchFieldException
+     */
     @Test
     public void getDeclaredField() throws NoSuchFieldException {
-         BeanUtils.getDeclaredFields(BeanInterface.class, String.class);
+        BeanUtils.getDeclaredFields(BeanInterface.class, String.class);
         List<Field> declaredFields = BeanUtils.getDeclaredFields(FooBarBean.class, String.class);
-        declaredFields.forEach(f->{
+        Assertions.assertFalse(declaredFields.isEmpty());
+        declaredFields.forEach(f -> {
             System.out.println(f.getName());
         });
         Assertions.assertThrowsExactly(NoSuchFieldException.class, (NamedExecutable) () -> BeanUtils.getDeclaredField(FooBarBean.class, "none"));

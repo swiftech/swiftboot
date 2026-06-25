@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * 处理 .properties 文件的工具类
+ *
  * @author swiftech
  * @since 1.2
  */
@@ -16,12 +18,12 @@ public class PropertiesUtils {
     /**
      * 过滤出当前 Locale 对应的所有 properties 文件，如果此 Locale 对应的文件不存在，则取默认的没有 Locale 标识的文件
      *
-     * @param entries
+     * @param fileEntries
      * @param handler
      * @param <T> 表示文件的类型，例如 File，ZipEntry 等等
      * @return
      */
-    public static <T> List<T> filterPropertiesByLocale(List<T> entries, ExtractHandler<T> handler) {
+    public static <T> List<T> filterPropertiesByLocale(List<T> fileEntries, ExtractHandler<T> handler) {
         List<String> localeNames = new LinkedList<>();
         for (Locale locale : LocaleUtils.availableLocaleSet()) {
             localeNames.add(locale.getLanguage() + "_" + locale.getCountry());
@@ -34,7 +36,7 @@ public class PropertiesUtils {
 
         // find non-locale resource files;
         List<T> nonLocaleFiles = new LinkedList<>();
-        for (T entry : entries) {
+        for (T entry : fileEntries) {
             long countOfLocaled = localeNames.stream().filter(
                     locale -> handler.getFileName(entry).endsWith(locale + ".properties"))
                     .count();
@@ -50,8 +52,8 @@ public class PropertiesUtils {
         List<T> ret = new LinkedList<>();
         for (T nonLocaleEntry : nonLocaleFiles) {
             String nonLocaleFileName = StringUtils.substringBeforeLast(handler.getFileName(nonLocaleEntry), ".properties");
-            handler.onPureFileName(nonLocaleFileName);
-            List<T> collect = entries.stream().filter(
+            handler.onBaseFileName(nonLocaleFileName);
+            List<T> collect = fileEntries.stream().filter(
                     file -> handler.getFileName(file).equals(
                             String.format("%s_%s.properties", nonLocaleFileName, curLocale)))
                     .toList();
@@ -75,9 +77,10 @@ public class PropertiesUtils {
         String getFileName(T t);
 
         /**
-         * 得到纯名称（不带locale）
+         * 得到文件基础名（不带locale）
+         * @param baseName
          */
-        void onPureFileName(String pureName);
+        void onBaseFileName(String baseName);
     }
 
 

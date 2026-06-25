@@ -23,8 +23,7 @@ public class ZipUtils {
      * @return
      */
     public static List<ZipEntry> searchInZip(InputStream ins, String suffix, boolean recursive) {
-        try (BufferedInputStream bis = new BufferedInputStream(ins);
-             ZipInputStream zis = new ZipInputStream(bis)) {
+        try (BufferedInputStream bis = new BufferedInputStream(ins); ZipInputStream zis = new ZipInputStream(bis)) {
             List<ZipEntry> ret = new LinkedList<>();
             ZipEntry ze;
             while ((ze = zis.getNextEntry()) != null) {
@@ -118,7 +117,7 @@ public class ZipUtils {
     }
 
     /**
-     * 读取文件部分内容
+     * ZIP缓冲区接口，每次都读取不超过缓冲区的大小的数据。
      */
     @FunctionalInterface
     public interface ZipBuffer {
@@ -126,7 +125,7 @@ public class ZipUtils {
     }
 
     /**
-     * 完整读取文件内容
+     * ZIP读取器接口，每次都读取一个文件。
      */
     @FunctionalInterface
     public interface ZipReader {
@@ -134,7 +133,7 @@ public class ZipUtils {
     }
 
     /**
-     * 一个文件读取完成
+     * 文件完成接口，一个文件读取完成。
      */
     @FunctionalInterface
     public interface OneFileCompleted {

@@ -12,10 +12,20 @@ public class PathUtils {
     private static final String PATH_BASE_WIN = "[a-zA-Z]:\\\\";
     private static final Pattern winPathPattern = Pattern.compile(PATH_BASE_WIN);
 
+    /**
+     *
+     * @param path
+     * @return
+     */
     public static boolean isWindowsPath(String path) {
         return winPathPattern.matcher(path).find();
     }
 
+    /**
+     *
+     * @param path
+     * @return
+     */
     public static boolean isAbsolutePath(String path) {
         return Strings.CS.startsWith(path, "/") || isWindowsPath(path);
     }
