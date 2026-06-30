@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 列表查询结果抽象类
+ * 自动填充的列表查询结果抽象类
  *
  * @param <T> 集合中元素的类型
  * @param <E> 元素对应的实体类类型

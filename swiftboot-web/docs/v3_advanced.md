@@ -8,7 +8,7 @@
 * 对于修改数据的操作，查询出需要修改的实体类之后，调用 `populateEntity()` 方法将输入参数对象中所有名称对应的值填充到实体类中。 对于用 `@OneToOne` 和 `@OneToMany` 注解标注的子类或者子集合也会被自动填充。
 
 
-#### 子集合的参数自动填充
+#### 请求对象中子集合的参数自动填充
 
 对于编辑一个对象时的子集合的增删改查，无需对子对象分别进行处理，只需要查询父实体并对其子实体集合执行 `clear()` 操作， 然后再调用 `populateEntity()` 将参数中的子集合填充至父实体中，SwiftBoot 会自动判断实体是否存在，如果已经存在则进行更新，如果不存在则新增，其余不在子集合中的实体都会被删除。
 例如：
@@ -60,14 +60,14 @@
 private boolean password;
 ```
 
-### 返回值
+### 返回值对象 DTO
 接口的返回值可以通过构造 `org.swiftboot.web.response.Response` 对象包含DTO对象来实现，例如
 > 这不是必须的，你也可以用 Spring Web 原生的 ResponseEntity 来返回值，只是你不再能利用 SwiftBoot 提供的相关功能了。
 
 * 直接构造：
 ```java
 OrderDto dto = new OrderDto();
-return new Response(dto);
+return new Response<OrderDto>(dto);
 ```
 
 * 通过构造器构造
@@ -83,6 +83,48 @@ return Response.builder(OrderDto.class).data(dto).build();
 * 如果实体类定义了一对一、一对多关联，那么 DTO 类也可以定义相应的关联关系（变量名相同），这样的关联对象也会被自动填充
 * 有时候虽然 DTO 对象之间定义了关联关系，但是你可能不希望在所有的场景下都自动的填充关联的对象，那么 `populateByEntity()` 方法提供了一个 `includeRelation` 参数可以覆盖默认的填充行为，只对当前 DTO 类的属性进行填充，而不会处理关联对象（包括一对一，多对一或者一对多关系）。
 
+
+### 分页 DTO 对象
+SwiftBoot-Data 提供了 `BasePopulatePageDto` 结合 Spring Data JPA 的分页功能简化分页查询的代码实现：
+* 首先定义一个分页的 DTO 对象，例如
+```java
+public class OrderPageDto extends BasePopulatePageDto<OrderDto, Order>
+```
+* Service 层用 `populateByEntities` 方法从 Spring Data JPA 的分页结果对象自动填充到 DTO 对象中
+
+```java
+Page<Order> pages = orderRepository.query(PageRequest.of(page, size));
+OrderPageDto dto = new OrderPageDto();
+dto.populateByEntities(pages);
+```
+
+* Controller 层直接将这个对象返回给客户端
+```java
+return Response.builder(OrderPageDto.class).data(dto).build();
+```
+
+* 接口会返回类似以下格式的数据：
+```json
+{
+  "code": "2000",
+  "message": "OK",
+  "data": {
+    "items": [
+      {
+        "id": "6ad41854882c4439946496f71f372d53",
+        "amount": 128 
+      },
+      {
+        "id": "e6c87bb1c45c4d069467043017058cd9",
+        "amount": 352
+      }
+    ],
+    "total": 2,
+    "page": 0,
+    "size": 5
+  }
+}
+```
 
 ### 错误处理
 

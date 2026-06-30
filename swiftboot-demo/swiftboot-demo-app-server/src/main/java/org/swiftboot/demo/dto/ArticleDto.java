@@ -1,17 +1,14 @@
-package org.swiftboot.demo.model;
+package org.swiftboot.demo.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import org.swiftboot.data.model.entity.IdPersistable;
+import org.swiftboot.demo.model.Article;
+import org.swiftboot.web.dto.BasePopulateDto;
 
-@Entity
-@Table(name = "article")
-public class Article implements IdPersistable {
+/**
+ *
+ */
+public class ArticleDto extends BasePopulateDto<Article> {
 
-    @Id()
     private String id;
-
     private String title;
 
     public String getId() {
