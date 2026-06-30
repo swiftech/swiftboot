@@ -2,6 +2,7 @@
 
 ## V3.1.5
 * 统一拦截 `DataAccessException` 异常，避免暴露底层错误信息。
+* 增加 `BasePopulatePageDto` 类简化分页查询实现
 
 ## V3.1.4
 * 新增通过配置文件配置接口地址路径进行限流的功能。

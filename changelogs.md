@@ -1,5 +1,6 @@
 V3.1.5
 * `[swiftboot-auth]`: new `UserRolesFilter` is introduced to handle user access control according to user roles.
+* `[swiftboot-web]`: Add the `BasePopulatePageDto` class to simplify the implementation of paginated queries.
 * `[swiftboot-data]`: new `GenericRepository` for handling entity classes of uncertain types.
 * `[swiftboot-utils]`: 
   * new methods `jsonToSafe` and `setByPath` to `JsonUtils`.
