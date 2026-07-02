@@ -6,6 +6,7 @@ V3.1.5
   * new methods `jsonToSafe` and `setByPath` to `JsonUtils`.
   * new methods `getSysProps` and `printSysProps` to `SysUtils`.
   * remove methods `displaySystemPropsInStdout` and `printSystemProperties` from `EnvUtils`.
+  * new `toCronExpression` methods to `CronUtils`.
 * Bug Fixes:
   * unable to load resources since the `ReloadableResourceBundleMessageSource` is used.
   * missing i18n resource for filters.

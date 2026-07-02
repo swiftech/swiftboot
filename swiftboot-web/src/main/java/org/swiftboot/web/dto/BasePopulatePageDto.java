@@ -31,9 +31,28 @@ public class BasePopulatePageDto<T extends BasePopulateDto<E>, E extends IdPersi
      */
     private Integer size;
 
+    /**
+     * Populate from paged entries.
+     *
+     * @param page
+     */
     public void populateByEntities(Page<E> page) {
         List<E> list = page.getContent().stream().toList();
         super.populateByEntities(list);
+        this.page = page.getNumber();
+        this.size = page.getSize();
+        this.total = page.getTotalElements();
+    }
+
+    /**
+     * Populate from paged entries with more extra handling.
+     *
+     * @param page
+     * @param populateHandler
+     */
+    public void populateByEntities(Page<E> page, PopulateHandler<T, E> populateHandler) {
+        List<E> list = page.getContent().stream().toList();
+        super.populateByEntities(list, populateHandler);
         this.page = page.getNumber();
         this.size = page.getSize();
         this.total = page.getTotalElements();

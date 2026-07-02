@@ -56,7 +56,9 @@ public class ArticleController {
         log.debug("Query articles by page {} with size {}", page, size);
         Page<Article> pages = articleRepository.findAllBy(PageRequest.of(page, size));
         ArticlePageDto ret = new ArticlePageDto();
-        ret.populateByEntities(pages);
+        ret.populateByEntities(pages, (dto, entity) -> {
+            dto.setTitle(entity.getTitle() + "(modified)");
+        });
         return Response.builder(ArticlePageDto.class).data(ret).build();
     }
 

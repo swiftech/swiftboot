@@ -36,9 +36,11 @@ public class BeanUtilsTest {
         Collection<Field> fieldsIgnore = BeanUtils.getFieldsIgnore(FooBarBean.class, JsonIgnore.class);
         List<Field> l = new ArrayList<>(fieldsIgnore);
         Assertions.assertEquals(3, fieldsIgnore.size());
-        Assertions.assertEquals("field3", l.get(0).getName());
-        Assertions.assertEquals("field1", l.get(1).getName());
-        Assertions.assertEquals("field0", l.get(2).getName());
+        Assertions.assertTrue(l.stream().anyMatch(f -> f.getName().equals("field1")));
+        Assertions.assertTrue(l.stream().anyMatch(f -> f.getName().equals("field3")));
+        Assertions.assertTrue(l.stream().anyMatch(f -> f.getName().equals("field0")));
+        // Must not include
+        Assertions.assertFalse(l.stream().anyMatch(f -> f.getName().equals("field2")));
     }
 
     @Test

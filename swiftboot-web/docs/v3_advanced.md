@@ -97,6 +97,7 @@ Page<Order> pages = orderRepository.query(PageRequest.of(page, size));
 OrderPageDto dto = new OrderPageDto();
 dto.populateByEntities(pages);
 ```
+> 使用 `populateByEntities(Page<E> page, PopulateHandler<T, E> populateHandler)` 可以在每个 DTO 被填充之后做一些额外的处理。
 
 * Controller 层直接将这个对象返回给客户端
 ```java

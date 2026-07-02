@@ -4,6 +4,7 @@
 * new methods `jsonToSafe` and `setByPath` to `JsonUtils`.
 * new methods `getSysProps` and `printSysProps` to `SysUtils`.
 * remove methods `displaySystemPropsInStdout` and `printSystemProperties` from `EnvUtils`.
+* new `toCronExpression` methods to `CronUtils`.
 
 ## V3.1.4
 * removed deprecated method `readInputStream()` from class `BufferedIoUtils`.
