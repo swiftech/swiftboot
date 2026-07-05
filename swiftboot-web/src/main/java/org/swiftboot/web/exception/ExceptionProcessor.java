@@ -1,5 +1,7 @@
 package org.swiftboot.web.exception;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -8,12 +10,15 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.swiftboot.web.response.Response;
 import org.swiftboot.web.response.ResponseCode;
+
+import java.util.stream.Collectors;
 
 /**
  * 应用到所有 @RequestMapping 注解的方法，在其抛出异常的时候执行。
@@ -102,6 +107,27 @@ public class ExceptionProcessor {
         log.debug("on onDataAccessException...");
         log.error(e.getMessage(), e);
         return Response.builder().code(ResponseCode.CODE_SYS_DB_ERROR).build();
+    }
+
+    /**
+     * Request 对象中的枚举参数不符合时抛出的异常。
+     *
+     * @param request
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseBody
+    public Response<?> onMethodArgumentNotValidException(NativeWebRequest request, HttpMessageNotReadableException e) {
+        log.debug("on onMethodArgumentNotValidException...");
+        log.error(e.getMessage(), e);
+        if (e.getRootCause() instanceof InvalidFormatException ife) {
+            String fieldName = ife.getPath().stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .collect(Collectors.joining("."));
+            return Response.builder().code(ResponseCode.CODE_ARGUMENTS_ERROR_PARAM).messageArgs(fieldName).build();
+        }
+        return Response.builder().code(ResponseCode.CODE_ARGUMENTS_ERROR_PARAM).message(e.getLocalizedMessage()).build();
     }
 
     /**

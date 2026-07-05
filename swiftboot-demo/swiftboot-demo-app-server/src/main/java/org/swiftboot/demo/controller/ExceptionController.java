@@ -7,17 +7,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.swiftboot.demo.ErrorCode;
+import org.swiftboot.demo.constant.FooBarType;
+import org.swiftboot.demo.request.EnumRequest;
 import org.swiftboot.web.exception.ErrMessageException;
+import org.swiftboot.web.response.Response;
 import org.swiftboot.web.response.ResponseCode;
+import org.swiftboot.web.validate.ConvertValidateResult;
 
 @Tag(name = "Endpoints that give exceptions")
 @Controller
 @RequestMapping("/exception")
 @ResponseBody
+@ConvertValidateResult
 public class ExceptionController {
 
     private static final Logger log = LoggerFactory.getLogger(ExceptionController.class);
@@ -48,5 +51,12 @@ public class ExceptionController {
     public ResponseEntity<String> errMessageCustomizedCodeParamsException() {
         log.info("Testing ErrMessageException with customized error code and params");
         throw new ErrMessageException(ErrorCode.CODE_CUSTOMIZED_ERROR_WITH_PARAMS, new String[]{"param1", "param2"});
+    }
+
+    @PostMapping("/enum")
+    public Response<FooBarType> enumException(@RequestBody EnumRequest request) {
+        log.info("Testing enum param in request object of POST method");
+        log.info(": " + request.getFooBarType());
+        return Response.builder(FooBarType.class).ok().data(request.getFooBarType()).build();
     }
 }
