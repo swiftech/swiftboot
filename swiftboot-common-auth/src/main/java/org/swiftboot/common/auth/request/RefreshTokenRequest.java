@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @since 3.0
  */
 @Schema(description = "Refresh Access Token")
-public class RefreshTokenRequest {
+public class RefreshTokenRequest extends BaseAuthRequest{
 
     @Schema(description = "Refresh token", requiredMode = Schema.RequiredMode.REQUIRED)
     private String refreshToken;

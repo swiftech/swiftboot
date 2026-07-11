@@ -1,8 +1,7 @@
 package org.swiftboot.web.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * HttpServlet 工具类
@@ -49,4 +48,19 @@ public class HttpServletUtils {
         }
         return ip;
     }
+
+//    /**
+//     * Convert parameters from servlet request to a map that has multi values connected with comma ','
+//     *
+//     * @param servletRequest
+//     * @return
+//     */
+//    public static Map<String, String> convertParameters(HttpServletRequest servletRequest) {
+//        Map<String, String[]> params = servletRequest.getParameterMap();
+//        Map<String, String> ret = new HashMap<>();
+//        params.forEach((k, v) -> {
+//            ret.put(k, StringUtils.join(v, ","));
+//        });
+//        return ret;
+//    }
 }

@@ -117,6 +117,32 @@ SwiftBoot-Auth 模块提供的简单的用户角色权限控制功能，你只�
   }
 ```
 
+## 为不同的客户端生成不同过期时间的令牌
+在配置文件中配置不同客户端对应的令牌超时时间，例如：
+```yaml
+swiftboot:
+  auth:
+    jwt:
+      client-overrides:
+        app:
+          accessTokenExpirationSeconds: 6000
+          refreshTokenExpirationSeconds: 12000
+        web:
+          accessTokenExpirationSeconds: 30
+          refreshTokenExpirationSeconds: 60
+```
+> 针对客户端的配置会覆盖默认的配置，如果没有配置某个客户端，那么自动使用默认配置
+
+登录认证的时候通过参数 `clientSource` 给出不同的客户端从而获得不同有效期的令牌，例如：
+```json
+{
+  "loginName": "admin",
+  "loginPwd": "12345678",
+  "clientSource": "web"
+}
+```
+> 自定义的登录认证请求参数对象类可以继承 `BaseAuthRequest` 来实现 
+
 ----------------
 
 

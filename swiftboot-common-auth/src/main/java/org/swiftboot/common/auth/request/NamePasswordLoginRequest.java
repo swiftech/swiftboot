@@ -14,7 +14,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
  * @since 3.0
  **/
 @Schema(description = "Login by Name and Password")
-public class NamePasswordLoginRequest {
+public class NamePasswordLoginRequest extends BaseAuthRequest {
 
     @Schema(description = "Login name of user", requiredMode = REQUIRED, example = "13066669999")
     @Length(max = 32)

@@ -4,10 +4,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.swiftboot.common.auth.JwtTokenProvider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
- * @since 3.0.0
  * @see JwtTokenProvider
+ * @since 3.0.0
  */
 @Configuration
 @ConfigurationProperties("swiftboot.auth.jwt")
@@ -54,6 +57,27 @@ public class JwtConfigBean {
      */
     private String storeMode = "memory";
 
+    /**
+     * Specific config override the default config for client.
+     * The identifier for clients is defined in the BaseAuthRequest.
+     *
+     * @see org.swiftboot.common.auth.request.BaseAuthRequest
+     */
+    private Map<String, ClientOverride> clientOverrides = new HashMap<>();
+
+    public long determineAccessTokenExpirationSeconds(String clientSource) {
+        if (clientOverrides.containsKey(clientSource)) {
+            return clientOverrides.get(clientSource).getAccessTokenExpirationSeconds();
+        }
+        return accessTokenExpirationSeconds;
+    }
+
+    public long determineRefreshTokenExpirationSeconds(String clientSource) {
+        if (clientOverrides.containsKey(clientSource)) {
+            return clientOverrides.get(clientSource).getRefreshTokenExpirationSeconds();
+        }
+        return refreshTokenExpirationSeconds;
+    }
 
     public boolean isDirectRevokeType() {
         return "direct".equalsIgnoreCase(revokeType);
@@ -109,5 +133,44 @@ public class JwtConfigBean {
 
     public void setStoreMode(String storeMode) {
         this.storeMode = storeMode;
+    }
+
+    public Map<String, ClientOverride> getClientOverrides() {
+        return clientOverrides;
+    }
+
+    public void setClientOverrides(Map<String, ClientOverride> clientOverrides) {
+        this.clientOverrides = clientOverrides;
+    }
+
+    /**
+     *
+     */
+    public static class ClientOverride {
+        /**
+         * default is 10 minutes.
+         */
+        private long accessTokenExpirationSeconds = 10 * 60;
+
+        /**
+         * default is 24 hours.
+         */
+        private long refreshTokenExpirationSeconds = 24 * 60 * 60;
+
+        public long getAccessTokenExpirationSeconds() {
+            return accessTokenExpirationSeconds;
+        }
+
+        public void setAccessTokenExpirationSeconds(long accessTokenExpirationSeconds) {
+            this.accessTokenExpirationSeconds = accessTokenExpirationSeconds;
+        }
+
+        public long getRefreshTokenExpirationSeconds() {
+            return refreshTokenExpirationSeconds;
+        }
+
+        public void setRefreshTokenExpirationSeconds(long refreshTokenExpirationSeconds) {
+            this.refreshTokenExpirationSeconds = refreshTokenExpirationSeconds;
+        }
     }
 }

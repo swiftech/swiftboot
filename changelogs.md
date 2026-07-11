@@ -1,12 +1,17 @@
+V3.2.0
+* New Features:
+  * `[swiftboot-auth]`:  Add a new feature to configure distinct access token and refresh token timeout durations for different types of clients, utilizing a new request parameter, `clientSource`, to differentiate between them.
+
 V3.1.5
-* `[swiftboot-auth]`: new `UserRolesFilter` is introduced to handle user access control according to user roles.
-* `[swiftboot-web]`: Add the `BasePopulatePageDto` class to simplify the implementation of paginated queries.
-* `[swiftboot-data]`: new `GenericRepository` for handling entity classes of uncertain types.
-* `[swiftboot-utils]`: 
-  * new methods `jsonToSafe` and `setByPath` to `JsonUtils`.
-  * new methods `getSysProps` and `printSysProps` to `SysUtils`.
-  * remove methods `displaySystemPropsInStdout` and `printSystemProperties` from `EnvUtils`.
-  * new `toCronExpression` methods to `CronUtils`.
+* New Features:
+  * `[swiftboot-auth]`: new `UserRolesFilter` is introduced to handle user access control according to user roles.
+  * `[swiftboot-web]`: Add the `BasePopulatePageDto` class to simplify the implementation of paginated queries.
+  * `[swiftboot-data]`: new `GenericRepository` for handling entity classes of uncertain types.
+  * `[swiftboot-utils]`: 
+    * new methods `jsonToSafe` and `setByPath` to `JsonUtils`.
+    * new methods `getSysProps` and `printSysProps` to `SysUtils`.
+    * remove methods `displaySystemPropsInStdout` and `printSystemProperties` from `EnvUtils`.
+    * new `toCronExpression` methods to `CronUtils`.
 * Bug Fixes:
   * unable to load resources since the `ReloadableResourceBundleMessageSource` is used.
   * missing i18n resource for filters.

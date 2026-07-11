@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.swiftboot.common.auth.config.JwtConfigBean;
+import org.swiftboot.common.auth.request.UserContextHolder;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.RefreshToken;
 
@@ -64,7 +65,7 @@ public class JwtTokenProvider {
             throw new RuntimeException("User ID is required to generate access token");
         }
         Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + jwtConfig.getAccessTokenExpirationSeconds() * 1000);
+        Date expireDate = new Date(currentDate.getTime() + jwtConfig.determineAccessTokenExpirationSeconds(UserContextHolder.getClientSource()) * 1000);
         JwtBuilder builder = Jwts.builder();
         builder.subject(userId)
                 .issuedAt(new Date())
@@ -85,7 +86,7 @@ public class JwtTokenProvider {
             throw new RuntimeException("User ID is required to generate access token");
         }
         Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + jwtConfig.getRefreshTokenExpirationSeconds() * 1000);
+        Date expireDate = new Date(currentDate.getTime() + jwtConfig.determineRefreshTokenExpirationSeconds(UserContextHolder.getClientSource()) * 1000);
         JwtBuilder builder = Jwts.builder();
         builder.subject(userId)
                 .issuedAt(new Date())
