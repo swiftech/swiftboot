@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +16,8 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
+import org.swiftboot.common.auth.event.SignOutEvent;
+import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;
 import org.swiftboot.common.auth.response.LogoutResponse;
 
@@ -35,6 +39,9 @@ public class UserSessionLogoutResponseAdvice extends AbstractMappingJacksonRespo
     @Resource
     private SessionService sessionService;
 
+    @Resource
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return super.supports(returnType, converterType)
@@ -53,7 +60,11 @@ public class UserSessionLogoutResponseAdvice extends AbstractMappingJacksonRespo
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return;
         }
+
+        Session session = sessionService.getSession(accessToken);
         // remove session by access token.
         sessionService.removeSession(accessToken);
+        // do notification .
+        applicationEventPublisher.publishEvent(new SignOutEvent(this, session.getUserId(), LocaleContextHolder.getLocale()));
     }
 }

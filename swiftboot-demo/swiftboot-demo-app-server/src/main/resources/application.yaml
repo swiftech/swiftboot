@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: swiftboot-demo-app-server
+  jackson:
+    time-zone: UTC
+    date-format: "yyyy-MM-dd HH:mm:ss"
   data:
     redis:
       host: localhost
@@ -72,6 +75,8 @@ swiftboot:
     formatPatternLocalDateTime: yyyy/MM/dd HH:mm:ss
     formatPatternLocalDate: yyyy/MM/dd
     formatPatternLocalTime: HH-mm-ss
+    formatPatternInstant: yyyy/MM/dd HH:mm:ss
+    formatPatternOffsetDateTime: yyyy/MM/dd HH:mm:ss
     format-pattern-year-month: yyyy/MM
     format-pattern-month-day: MM/dd
     filter:
@@ -82,7 +87,8 @@ swiftboot:
   data:
     model:
       autoGenerateId: true
-      autoUpdateTimeStrategy: on-change
+      serverNode: 1
+      autoUpdateTimeStrategy: always
       initData:
         enabled: true
         baseDir: init/

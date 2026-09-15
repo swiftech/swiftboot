@@ -1,9 +1,11 @@
 package org.swiftboot.data.model.aspect;
 
+import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManager;
 import org.apache.commons.lang3.StringUtils;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,16 +15,13 @@ import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.util.GenericUtils;
 
-import jakarta.annotation.Resource;
-import jakarta.persistence.EntityManager;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.Date;
 
-import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ON_CHANGE;
 import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_NOT_SET;
+import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ON_CHANGE;
 
 /**
  * 持久化实体类之前设置更新时间（updateTime）。由于 Hibernate 的 Interceptor 在数据没改变的情况下不能拦截，
@@ -46,18 +45,18 @@ public class UpdateTimeAspect {
     public void pointcut() {
     }
 
-    @Before(value = "pointcut()")
-    public Object before(JoinPoint joinPoint) {
+    @Around(value = "pointcut()")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (log.isDebugEnabled()) log.debug("%s executed before save()".formatted(this.getClass().getSimpleName()));
         String strategy = configBean.getModel().getAutoUpdateTimeStrategy();
         if (AUTO_UPDATE_TIME_NOT_SET.equals(strategy)
                 || AUTO_UPDATE_TIME_ON_CHANGE.equals(strategy)) {
-            return null;
+            return joinPoint.proceed();
         }
-        if (log.isDebugEnabled()) log.debug("%s executed before save()".formatted(this.getClass().getSimpleName()));
         // 检测前置条件
         Object[] args = joinPoint.getArgs();
         if (args == null) {
-            return null;
+            return joinPoint.proceed();
         }
 
         for (Object arg : args) {
@@ -76,7 +75,9 @@ public class UpdateTimeAspect {
                     log.debug(Info.get(UpdateTimeAspect.class, R.PARAM_NOT_EXTEND_CLASS2, TimePersistable.class.getName(), arg));
             }
         }
-        return null;
+        Object proceed = joinPoint.proceed();
+        //
+        return proceed;
     }
 
     private void tryToSetUpdateTime(TimePersistable entity) {
@@ -101,7 +102,13 @@ public class UpdateTimeAspect {
             return new Date();
         }
         else if (type == LocalDateTime.class) {
-            return LocalDateTime.now();
+            return LocalDateTime.now(ZoneOffset.UTC);
+        }
+        else if (type == Instant.class) {
+            return Instant.now();
+        }
+        else if (type == OffsetDateTime.class) {
+            return OffsetDateTime.now(ZoneOffset.UTC);
         }
         return null;
     }

@@ -10,6 +10,10 @@ public class TimeRequest {
 
     private LocalTime localTime;
 
+    private Instant instant;
+
+    private OffsetDateTime offsetDateTime;
+
     private YearMonth yearMonth;
 
     private MonthDay monthDay;
@@ -36,6 +40,22 @@ public class TimeRequest {
 
     public void setLocalTime(LocalTime localTime) {
         this.localTime = localTime;
+    }
+
+    public Instant getInstant() {
+        return instant;
+    }
+
+    public void setInstant(Instant instant) {
+        this.instant = instant;
+    }
+
+    public OffsetDateTime getOffsetDateTime() {
+        return offsetDateTime;
+    }
+
+    public void setOffsetDateTime(OffsetDateTime offsetDateTime) {
+        this.offsetDateTime = offsetDateTime;
     }
 
     public YearMonth getYearMonth() {

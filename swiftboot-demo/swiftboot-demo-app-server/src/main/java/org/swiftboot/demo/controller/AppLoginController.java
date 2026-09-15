@@ -64,7 +64,7 @@ public class AppLoginController {
             throw new AuthenticationException("User not found");
         }
         AppUserEntity appUserEntity = opt.get();
-        appUserEntity.setLastLoginTime(LocalDateTime.now());
+        appUserEntity.setLastLoginTime(LocalDateTimeUtils.utcNow());
         appUserRepository.save(appUserEntity);
         if (authenticated instanceof JwtAuthentication jwta) {
             return this.createJwtResponse(appUserEntity, jwta);

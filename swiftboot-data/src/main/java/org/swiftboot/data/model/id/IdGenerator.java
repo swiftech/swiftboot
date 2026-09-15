@@ -15,4 +15,11 @@ public interface IdGenerator<T> {
      * @return
      */
     String generate(T object);
+
+    /**
+     *
+     * @param bizName
+     * @return
+     */
+    String generate(String bizName);
 }

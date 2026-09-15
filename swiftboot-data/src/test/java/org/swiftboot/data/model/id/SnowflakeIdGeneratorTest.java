@@ -25,7 +25,7 @@ class SnowflakeIdGeneratorTest {
     @Test
     void generate32() {
         SnowflakeIdGenerator snowflakeIdGenerator = new SnowflakeIdGenerator();
-        String generatedId = snowflakeIdGenerator.generate(null);
+        String generatedId = snowflakeIdGenerator.generate("");
         System.out.println(generatedId);
     }
 }

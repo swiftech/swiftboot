@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Proxy of Hibernate interceptors
@@ -40,7 +39,7 @@ public class InterceptorProxy implements Interceptor, Serializable {
     }
 
     @Override
-    public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
+    public boolean onLoad(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         if (log.isTraceEnabled()) log.trace("Proxy onLoad() %s".formatted(entity));
         boolean isDirty = false;
         for (Interceptor interceptor : interceptors) {
@@ -53,7 +52,7 @@ public class InterceptorProxy implements Interceptor, Serializable {
      *
      */
     @Override
-    public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) throws CallbackException {
+    public boolean onFlushDirty(Object entity, Object id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) throws CallbackException {
         if (log.isTraceEnabled()) log.trace("Proxy onFlushDirty() %s".formatted(entity));
         boolean isDirty = false;
         for (Interceptor interceptor : interceptors) {
@@ -63,35 +62,35 @@ public class InterceptorProxy implements Interceptor, Serializable {
     }
 
     @Override
-    public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
+    public boolean onPersist(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         if (log.isTraceEnabled()) log.trace(String.format("Proxy onSave() %s", entity));
         boolean isDirty = false;
         for (Interceptor interceptor : interceptors) {
-            isDirty = interceptor.onSave(entity, id, state, propertyNames, types) || isDirty;
+            isDirty = interceptor.onPersist(entity, id, state, propertyNames, types) || isDirty;
         }
         return isDirty;
     }
 
     @Override
-    public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
+    public void onRemove(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) throws CallbackException {
         if (log.isTraceEnabled()) log.trace("Proxy onDelete() %s".formatted(entity));
-        interceptors.forEach(interceptor -> interceptor.onDelete(entity, id, state, propertyNames, types));
+        interceptors.forEach(interceptor -> interceptor.onRemove(entity, id, state, propertyNames, types));
     }
 
     @Override
-    public void onCollectionRecreate(Object collection, Serializable key) throws CallbackException {
+    public void onCollectionRecreate(Object collection, Object key) throws CallbackException {
         if (log.isTraceEnabled()) log.trace("Proxy onCollectionRecreate() %s".formatted(key));
         interceptors.forEach(interceptor -> interceptor.onCollectionRecreate(collection, key));
     }
 
     @Override
-    public void onCollectionRemove(Object collection, Serializable key) throws CallbackException {
+    public void onCollectionRemove(Object collection, Object key) throws CallbackException {
         if (log.isTraceEnabled()) log.trace("Proxy onCollectionRemove() %s".formatted(key));
         interceptors.forEach(interceptor -> interceptor.onCollectionRemove(collection, key));
     }
 
     @Override
-    public void onCollectionUpdate(Object collection, Serializable key) throws CallbackException {
+    public void onCollectionUpdate(Object collection, Object key) throws CallbackException {
         if (log.isTraceEnabled()) log.trace("Proxy onCollectionUpdate() %s".formatted(key));
         interceptors.forEach(interceptor -> interceptor.onCollectionUpdate(collection, key));
     }
@@ -113,14 +112,14 @@ public class InterceptorProxy implements Interceptor, Serializable {
         if (log.isTraceEnabled()) log.trace("Proxy isTransient() %s".formatted(entity));
         List<Boolean> bools = interceptors.stream()
                 .map(interceptor -> interceptor.isTransient(entity))
-                .collect(Collectors.toList());
+                .toList();
         Boolean ret = BooleanUtils.or(bools);
         log.trace(String.valueOf(ret));
         return ret;
     }
 
     @Override
-    public int[] findDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
+    public int[] findDirty(Object entity, Object id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
         if (log.isTraceEnabled()) log.trace(String.format("Proxy findDirty() %s[%s]", entity, id));
         List<int[]> collect = interceptors.stream()
                 .map(interceptor -> interceptor.findDirty(entity, id, currentState, previousState, propertyNames, types))
@@ -130,7 +129,7 @@ public class InterceptorProxy implements Interceptor, Serializable {
             ret = ArrayUtils.merge(ret, ints);
         }
         if (org.apache.commons.lang3.ArrayUtils.isNotEmpty(ret)) {
-            if (log.isTraceEnabled()) log.trace("dirty: " + StringUtils.join(ret, ','));
+            if (log.isTraceEnabled()) log.trace("dirty: %s".formatted(StringUtils.join(ret, ',')));
         }
         else {
             if (log.isTraceEnabled()) log.trace("no dirty from client");
@@ -157,7 +156,7 @@ public class InterceptorProxy implements Interceptor, Serializable {
     }
 
     @Override
-    public Object getEntity(String entityName, Serializable id) throws CallbackException {
+    public Object getEntity(String entityName, Object id) throws CallbackException {
         if (log.isTraceEnabled()) {
             log.trace(String.format("Proxy getEntity() %s[%s]", entityName, id));
             log.trace("this method will never invokes any interceptors");

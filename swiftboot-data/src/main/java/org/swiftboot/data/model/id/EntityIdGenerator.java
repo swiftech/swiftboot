@@ -12,6 +12,7 @@ import java.util.Map;
  * 实体类 ID 生成器
  *
  * @author swiftech
+ * @deprecated to SwiftIdGenerator since 3.2
  **/
 public class EntityIdGenerator implements IdGenerator<IdPersistable> {
 
@@ -41,6 +42,11 @@ public class EntityIdGenerator implements IdGenerator<IdPersistable> {
             classCodeMapping.put(entityClass, code);
         }
         return IdUtils.makeID(code);
+    }
+
+    @Override
+    public String generate(String bizName) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private String camelToShort(String camel, int len) {

@@ -27,6 +27,7 @@ import java.util.function.Predicate;
  */
 public abstract class BasePopulateRequest<P extends IdPersistable> extends HttpRequest {
 
+    @JsonIgnore
     private static final Logger log = LoggerFactory.getLogger(BasePopulateRequest.class);
 
     /**

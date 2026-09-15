@@ -5,16 +5,19 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
-import org.swiftboot.common.auth.AuthenticationException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.swiftboot.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.model.SessionBuilder;
 import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.auth.service.UserAuthService;
+import org.swiftboot.common.auth.AuthenticationException;
+import org.swiftboot.common.auth.event.SignInEvent;
 import org.swiftboot.common.auth.response.LogoutResponse;
-import org.swiftboot.util.IdUtils;
+import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.util.PasswordUtils;
 import org.swiftboot.web.i18n.MessageHelper;
 
@@ -40,6 +43,12 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
     @Qualifier("swiftbootAuthMessageSource")
     private MessageSource swiftbootAuthMessageSource;
 
+    @Resource
+    private IdGenerator idGenerator;
+
+    @Resource
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     public Session userSignIn(String loginId, String loginPwd) {
         return this.userSignIn(loginId, loginPwd, null);
@@ -53,7 +62,7 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
             E userEntity = optUser.get();
             log.debug(userEntity.getId());
             // session
-            String token = IdUtils.makeID("usrtoken");
+            String token = idGenerator.generate("usrtoken");
             SessionBuilder sessionBuilder = new SessionBuilder()
                     .userToken(token)
                     .userId(userEntity.getId())
@@ -62,6 +71,7 @@ public class DefaultUserSessionAuthService<E extends UserPersistable> implements
             if (additions != null && !additions.isEmpty()) {
                 additions.forEach(sessionBuilder::addition);
             }
+            applicationEventPublisher.publishEvent(new SignInEvent(this, userEntity.getId(), LocaleContextHolder.getLocale()));
             return sessionBuilder.createSession();
         }
         else {

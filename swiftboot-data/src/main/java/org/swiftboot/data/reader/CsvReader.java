@@ -35,7 +35,7 @@ public class CsvReader {
         if (lines.size() < 2) {
             return;
         }
-        String titleLine = lines.get(0);
+        String titleLine = lines.getFirst();
 
         StringTokenizer titleTokenizer = StringTokenizer.getCSVInstance(titleLine);
         List<String> titles = new LinkedList<>();

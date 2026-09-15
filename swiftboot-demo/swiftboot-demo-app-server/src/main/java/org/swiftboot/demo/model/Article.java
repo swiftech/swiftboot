@@ -1,26 +1,15 @@
 package org.swiftboot.demo.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.swiftboot.data.model.entity.BaseLocalDateTimeEntity;
 import org.swiftboot.data.model.entity.IdPersistable;
 
 @Entity
 @Table(name = "article")
-public class Article implements IdPersistable {
-
-    @Id()
-    private String id;
+public class Article extends BaseLocalDateTimeEntity implements IdPersistable {
 
     private String title;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

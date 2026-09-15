@@ -31,6 +31,7 @@ public class IdUtils {
      *
      * @param bizCode 2-8字节，例如"abba"，如果不在这个范围则抛出异常
      * @return
+     * @deprecated
      */
     public static String makeID(String bizCode) {
         if (StringUtils.isBlank(bizCode)
@@ -55,6 +56,7 @@ public class IdUtils {
      * @param bizCode  2-6字节，例如"abba"，如果不在这个范围则抛出异常
      * @param serverId 1-4字节，例如"02"，如果不在这个范围则抛出异常
      * @return
+     * @deprecated
      */
     public static String makeID(String bizCode, String serverId) {
         if (StringUtils.isAnyBlank(bizCode, serverId)

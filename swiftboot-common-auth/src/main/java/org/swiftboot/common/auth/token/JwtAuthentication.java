@@ -7,6 +7,8 @@ package org.swiftboot.common.auth.token;
  */
 public class JwtAuthentication implements Authenticated {
 
+    private String userId;
+
     private final AccessToken accessToken;
 
     private final RefreshToken refreshToken;

@@ -21,11 +21,11 @@ import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.constant.InitDataConstants;
 import org.swiftboot.data.model.entity.BaseIdEntity;
 import org.swiftboot.data.model.entity.IdPersistable;
+import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.data.reader.CsvReader;
 import org.swiftboot.data.reader.CsvReaderHandler;
 import org.swiftboot.util.BeanUtils;
 import org.swiftboot.util.ClasspathResourceUtils;
-import org.swiftboot.util.IdUtils;
 import org.swiftboot.util.WordUtils;
 
 import java.io.*;
@@ -74,6 +74,9 @@ public class Initializer implements ApplicationContextAware {
 
     @Resource
     private EntityManager entityManager;
+
+    @Resource
+    private IdGenerator<IdPersistable> idGenerator;
 
     /**
      * Class of entities which need to be initialized.
@@ -160,10 +163,10 @@ public class Initializer implements ApplicationContextAware {
                             outBuffer.appendNewLine();
                             log.info(String.format("handle line %d", rowNum));
                             if (columns.size() < columnCount) {
-                                outBuffer.append("\"").append(IdUtils.makeID(code)).append("\"").append(",");
+                                outBuffer.append("\"").append(idGenerator.generate(code)).append("\"").append(",");
                             }
                             else if (StringUtils.isBlank(columns.get(0))) {
-                                columns.set(0, IdUtils.makeID(code));
+                                columns.set(0, idGenerator.generate(code));
                             }
                             String dataRow = WordUtils.joinWordsWithPad(columns, ",", "\"");
                             System.out.println(dataRow);

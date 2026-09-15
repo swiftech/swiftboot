@@ -6,7 +6,7 @@ import org.swiftboot.web.dto.BasePopulateDto;
 /**
  *
  */
-public class ArticleDto extends BasePopulateDto<Article> {
+public class ArticleDto extends BaseCreateUpdateTimeDto<Article> {
 
     private String id;
     private String title;

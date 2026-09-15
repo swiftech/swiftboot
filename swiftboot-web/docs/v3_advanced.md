@@ -255,6 +255,11 @@ Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
 * SpringBoot 会按照客户端给出的语言参数 `Accept-Language` 去读取相应语言的资源，如果客户端给出了语言参数，它的优先级高于前面设置的默认语言。
 > 通过 `LocaleContextHolder.getLocale()` 可以得到当前请求的语言。
 
+SwiftBoot 提供了 `org.swiftboot.web.i18n.MessageHelper`，用来从 `MessageSource` 获取当前用户语言的的资源：
+```java
+messageHelper.getMessage("resource.key");
+```
+> 注意：在 `Filter` 中，因为 LocaleResolver 晚于 `Filter` 执行，所以无效。
 
 ### 输入参数验证
 
@@ -363,6 +368,10 @@ swiftboot:
 ```
 
 > 此功能仅用于开发和测试环境，切勿在生产环境开启。
+
+## 时区支持
+
+从V3.2开始，SwiftBoot 全面支持时区，无需做额外的处理。默认情况下，数据存储全部使用UTC时间，接口输入和输出参数中的时间全部是用户时区，Swiftboot-Web 会根据用户的 locale 判断用户所在时区，自动将所有输入的时间类型转成UTC时区，输出时将UTC时区的时间转换成用户所在时区。
 
 ### 其他
 * 开启 CORS 跨域

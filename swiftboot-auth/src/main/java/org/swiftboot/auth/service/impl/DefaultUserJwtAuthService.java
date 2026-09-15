@@ -5,16 +5,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
-import org.swiftboot.common.auth.AuthenticationException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.event.SignInEvent;
 import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;
 import org.swiftboot.auth.service.UserAuthService;
-import org.swiftboot.common.auth.service.JwtService;
+import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.common.auth.JwtTokenProvider;
 import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.response.LogoutResponse;
+import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.token.AccessToken;
 import org.swiftboot.common.auth.token.JwtAuthentication;
 import org.swiftboot.common.auth.token.RefreshToken;
@@ -52,6 +55,9 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
     @Qualifier("swiftbootAuthMessageSource")
     private MessageSource swiftbootAuthMessageSource;
 
+    @Resource
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     public JwtAuthentication userSignIn(String loginId, String loginPwd) {
         return this.userSignIn(loginId, loginPwd, null);
@@ -65,7 +71,8 @@ public class DefaultUserJwtAuthService<E extends UserPersistable> implements Use
             E userEntity = optUser.get();
             if (additions == null) additions = new HashMap<>();
             additions.put(JwtTokenProvider.ROLES_KEY, userEntity.getRoles());
-            log.debug("Sign in user id: %s".formatted(userEntity.getId()));
+            log.debug("Sign in user %s with roles '%s'".formatted(userEntity.getId(), userEntity.getRoles()));
+            applicationEventPublisher.publishEvent(new SignInEvent(this, userEntity.getId(), LocaleContextHolder.getLocale()));
             return this.generateTokens(userEntity, additions, true);
         }
         else {

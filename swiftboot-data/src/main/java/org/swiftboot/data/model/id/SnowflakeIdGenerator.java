@@ -17,7 +17,7 @@ public class SnowflakeIdGenerator implements IdGenerator<IdPersistable> {
     private final Sequence sequence = new Sequence(0);
 
     /**
-     * Whether padding snowflake id with random numerics after.
+     * Whether padding snowflake id with random numeric after.
      */
     private boolean isPadTo32 = true;
 
@@ -30,6 +30,15 @@ public class SnowflakeIdGenerator implements IdGenerator<IdPersistable> {
 
     @Override
     public String generate(IdPersistable object) {
+        String snowflakeId = String.valueOf(sequence.nextId());
+        if (isPadTo32){
+            snowflakeId = StringUtils.rightPad(snowflakeId, 32, RandomStringUtils.secure().nextNumeric(32 - snowflakeId.length()));
+        }
+        return snowflakeId;
+    }
+
+    @Override
+    public String generate(String bizName) {
         String snowflakeId = String.valueOf(sequence.nextId());
         if (isPadTo32){
             snowflakeId = StringUtils.rightPad(snowflakeId, 32, RandomStringUtils.secure().nextNumeric(32 - snowflakeId.length()));

@@ -2,13 +2,13 @@ package org.swiftboot.data.util;
 
 import org.hibernate.type.BasicType;
 import org.hibernate.type.Type;
+import org.hibernate.type.descriptor.java.InstantJavaType;
 import org.hibernate.type.descriptor.java.JdbcTimestampJavaType;
 import org.hibernate.type.descriptor.java.LocalDateTimeJavaType;
+import org.hibernate.type.descriptor.java.OffsetDateTimeJavaType;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Date;
 
 /**
@@ -24,15 +24,21 @@ public class HibernateUtils {
      * @return
      */
     public static Object nowByType(Type type) {
-        if (type instanceof BasicType bt) {
+        if (type instanceof BasicType<?> bt) {
             if (bt.getJavaType() == Long.class) {
                 return System.currentTimeMillis();
             }
             else if (bt.getJavaType() == LocalDateTime.class) {
-                return LocalDateTime.now();
+                return LocalDateTime.now(ZoneOffset.UTC);
             }
             else if (bt.getJavaType() == LocalDate.class) {
-                return LocalDate.now();
+                return LocalDate.now(ZoneOffset.UTC);
+            }
+            else if (bt.getJavaType() == Instant.class) {
+                return Instant.now();
+            }
+            else if (bt.getJavaType() == OffsetDateTime.class) {
+                return OffsetDateTime.now(ZoneOffset.UTC);
             }
             else if (bt.getJavaType() == Timestamp.class) {
                 return new Timestamp(System.currentTimeMillis());
@@ -42,7 +48,13 @@ public class HibernateUtils {
             }
         }
         else if (type instanceof LocalDateTimeJavaType) {
-            return LocalDateTime.now();
+            return LocalDateTime.now(ZoneOffset.UTC);
+        }
+        else if (type instanceof InstantJavaType) {
+            return Instant.now();
+        }
+        else if (type instanceof OffsetDateTimeJavaType) {
+            return OffsetDateTime.now(ZoneOffset.UTC);
         }
         else if (type instanceof JdbcTimestampJavaType) {
             return new Date();

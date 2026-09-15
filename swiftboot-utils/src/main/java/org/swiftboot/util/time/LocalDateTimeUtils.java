@@ -1,9 +1,6 @@
 package org.swiftboot.util.time;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -11,6 +8,36 @@ import java.util.TimeZone;
  * @since 3.0.0
  */
 public class LocalDateTimeUtils {
+
+    /**
+     * The UTC {@link LocalDateTime} of now.
+     *
+     * @return
+     */
+    public static LocalDateTime utcNow() {
+        return LocalDateTime.now(ZoneOffset.UTC);
+    }
+
+    /**
+     * Convert LocalDateTime with specified timezone to UTC {@link LocalDateTime}.
+     *
+     * @param localDateTime
+     * @param zoneId        Timezone of the given {@code localDateTime}
+     * @return
+     */
+    public static LocalDateTime toUtc(LocalDateTime localDateTime, ZoneId zoneId) {
+        return localDateTime.atZone(zoneId).toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
+    }
+
+    /**
+     * Convert {@link ZonedDateTime} to UTC {@link LocalDateTime}.
+     *
+     * @param zonedDateTime
+     * @return
+     */
+    public static LocalDateTime toUtc(ZonedDateTime zonedDateTime) {
+        return zonedDateTime.toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
+    }
 
     /**
      * Convert {@link LocalDateTime} to {@link ZonedDateTime} with default time zone.

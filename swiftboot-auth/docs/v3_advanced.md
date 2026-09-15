@@ -196,6 +196,16 @@ public FilterRegistrationBean<AuthFilter> regAuthFilter() {
 }
 ```
 
+### 事件
+
+以下事件会在对应的时机抛出，你可以根据实际需要监听事件进行处理。
+
+* 当用户成功完成认证后：
+`org.swiftboot.common.auth.event.SignInEvent`
+
+* 等用户退出登录时：
+`org.swiftboot.common.auth.event.SignOutEvent`
+
 
 
 ### 配置 application.yaml 例子

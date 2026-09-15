@@ -9,7 +9,9 @@ import org.swiftboot.web.SpringBootEnv;
 import redis.embedded.RedisServer;
 
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.Locale;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class SwiftbootDemoAppServerApplication implements ApplicationListener<ApplicationEvent> {
@@ -28,6 +30,7 @@ public class SwiftbootDemoAppServerApplication implements ApplicationListener<Ap
             }
         }
         Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("UTC")));
         SpringApplication myapp = new SpringApplication(SwiftbootDemoAppServerApplication.class);
         myapp.addListeners(new SpringBootEnv());
         myapp.run(args);

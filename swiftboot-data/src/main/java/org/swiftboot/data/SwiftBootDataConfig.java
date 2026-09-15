@@ -1,6 +1,8 @@
 package org.swiftboot.data;
 
 import jakarta.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -10,9 +12,10 @@ import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.constant.AutoUpdateTimeStrategy;
 import org.swiftboot.data.model.aspect.EntityIdAspect;
 import org.swiftboot.data.model.aspect.UpdateTimeAspect;
-import org.swiftboot.data.model.id.DefaultIdGenerator;
+import org.swiftboot.data.model.entity.IdPersistable;
 import org.swiftboot.data.model.id.IdGenerator;
 import org.swiftboot.data.model.id.IdPopulator;
+import org.swiftboot.data.model.id.SwiftIdGenerator;
 import org.swiftboot.data.model.interceptor.*;
 
 /**
@@ -23,6 +26,8 @@ public class SwiftBootDataConfig {
 
     public static final String DATA_MODEL_AUTO_GENERATE_ID = "swiftboot.data.model.autoGenerateId";
     public static final String DATA_MODEL_AUTO_UPDATE_TIME_STRATEGY = "swiftboot.data.model.autoUpdateTimeStrategy";
+
+    private static final Logger log = LoggerFactory.getLogger(SwiftBootDataConfig.class);
 
     @Resource
     private SwiftBootDataConfigBean swiftBootDataConfigBean;
@@ -39,14 +44,14 @@ public class SwiftBootDataConfig {
     }
 
     /**
-     * 加载默认的 ID 生成器，采用 UUID 生成主键ID
+     * 加载默认的 ID 生成器
      *
      * @return
      */
     @Bean
     @ConditionalOnMissingBean(IdGenerator.class)
-    IdGenerator<?> defaultIdGenerator() {
-        return new DefaultIdGenerator();
+    IdGenerator<IdPersistable> idGenerator() {
+        return new SwiftIdGenerator(swiftBootDataConfigBean.getModel().getServerNode());
     }
 
     @Bean
@@ -71,6 +76,7 @@ public class SwiftBootDataConfig {
     @Bean
     @ConditionalOnProperty(value = DATA_MODEL_AUTO_UPDATE_TIME_STRATEGY, havingValue = AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_ALWAYS)
     UpdateTimeAspect updateTimeAspect() {
+        log.info("Enabled UpdateTimeAspect");
         return new UpdateTimeAspect();
     }
 
@@ -83,9 +89,11 @@ public class SwiftBootDataConfig {
     InterceptorProxy interceptorProxy() {
         InterceptorProxy interceptorProxy = new InterceptorProxy();
         if (swiftBootDataConfigBean.getModel().isAutoGenerateId()) {
+            log.info("Registered IdInterceptor");
             interceptorProxy.addInterceptor(idInterceptor());
         }
         if (!AutoUpdateTimeStrategy.AUTO_UPDATE_TIME_NOT_SET.equals(swiftBootDataConfigBean.getModel().getAutoUpdateTimeStrategy())) {
+            log.info("Registered TimeInterceptor");
             interceptorProxy.addInterceptor(timeInterceptor());
         }
         return interceptorProxy;

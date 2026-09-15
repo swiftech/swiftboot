@@ -30,7 +30,7 @@ public class EntityIdAspect {
     private SwiftBootDataConfigBean dataConfigBean;
 
     @Resource
-    private IdPopulator idPopulater;
+    private IdPopulator idPopulator;
 
 
     @Pointcut(value = "execution(public * org.springframework.data.repository.CrudRepository+.save*(..))")
@@ -44,7 +44,7 @@ public class EntityIdAspect {
         if (!dataConfigBean.getModel().isAutoGenerateId()) {
             return null;
         }
-        if (idPopulater == null) {
+        if (idPopulator == null) {
             return null;
         }
         Object[] args = joinPoint.getArgs();
@@ -55,12 +55,12 @@ public class EntityIdAspect {
         for (Object arg : args) {
             if (log.isTraceEnabled()) log.trace("saving %s".formatted(arg));
             if (arg instanceof IdPersistable idPersistable) { // for saving single entity
-                idPopulater.populate(idPersistable, true);
+                idPopulator.populate(idPersistable, true);
             }
             else if (arg instanceof Iterable it) { // for saving entities
                 for (Object o : it) {
                     if (o instanceof IdPersistable subIdPersistable) {
-                        idPopulater.populate(subIdPersistable, true);
+                        idPopulator.populate(subIdPersistable, true);
                     }
                 }
             }

@@ -10,10 +10,10 @@ import org.swiftboot.data.model.id.IdGenerator;
 @AutoConfiguration
 public class AppDataConfig {
 
-    @Bean
-    public IdGenerator<IdPersistable> idGenerator() {
-        return new EntityIdGenerator();
-    }
+//    @Bean
+//    public IdGenerator<IdPersistable> idGenerator() {
+//        return new EntityIdGenerator();
+//    }
 
     @Bean
     public Initializer initializer() {

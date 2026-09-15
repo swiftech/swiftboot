@@ -98,6 +98,7 @@ public abstract class MyBaseEntity extends BaseIdEntity {
 那么可以自行创建一个抽象基类并实现接口 `TimePersistable<T>` ，指定你需要的时间类型和数据库字段名称。 （注意要实现 `equals` 和 `hashCode` 方法）
 实现了 `TimePersistable<T>` 的子类的实体类的 `createTime`, `updateTime` 字段会分别在创建和修改的时候自动填充当前的时间。
 
+注意：从v3.2开始，自动填充的时间为UTC时间，忽略本机时区。
 
 ### 逻辑删除
 
