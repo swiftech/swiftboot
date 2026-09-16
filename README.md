@@ -24,16 +24,15 @@ A lightweight rapid development framework based on Spring Boot, Spring MVC and S
 * 表格数据模版化导入导出，支持 Excel, CSV。
 * 企业 Web 开发常用的工具类和集合类。
 
-### 版本
+### 依赖
+基于SpringBoot 3.5+，JDK 21+
 
-##### 稳定版: v2.4.11
-基于SpringBoot 2.7，JDK 8
-[v2.md](docs/v2.md)
-
-
-##### 不稳定版: v3.1.5
-基于SpringBoot 3.4，JDK 21+
+### 文档
 [v3.md](docs/v3.md)
 
+### 版本
+
+* 稳定版: `v3.1.5`
+* 不稳定版: `v3.2.0`
 
 [完整更新记录](changelogs.md)

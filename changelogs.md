@@ -1,6 +1,10 @@
 V3.2.0
 * New Features:
-  * `[swiftboot-auth]`:  Add a new feature to configure distinct access token and refresh token timeout durations for different types of clients, utilizing a new request parameter, `clientSource`, to differentiate between them.
+  * `[swiftboot-auth]`: Add a new feature to configure distinct access token and refresh token timeout durations for different types of clients, utilizing a new request parameter, `clientSource`, to differentiate between them.
+  * `[swiftboot-auth]`: Emit SignIn and SignOut event when user SignIn and Signout. 
+  * `[swiftboot-data]`: Added new SwiftIdGenerator as the default ID generator for entities. 
+  * `[swiftboot-data]`: Support timezone for all fields of java 8 time type.
+  * `[swiftboot-web]`: Supports timezone automatically with TimeZoneMapper and utils classes.
 
 V3.1.5
 * New Features:
