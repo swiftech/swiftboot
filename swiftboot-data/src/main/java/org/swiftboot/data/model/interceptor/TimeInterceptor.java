@@ -11,7 +11,6 @@ import org.swiftboot.data.config.SwiftBootDataConfigBean;
 import org.swiftboot.data.model.entity.TimePersistable;
 import org.swiftboot.data.util.HibernateUtils;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.*;
@@ -20,6 +19,7 @@ import static org.swiftboot.data.constant.AutoUpdateTimeStrategy.*;
  * 自动设置实体的创建时间（createTime）和更新时间（updateTime）。
  * 对于子集合来说，新创建的实体类会调用 {@code onSave} 方法， merge 实体类会调用 {@code onFlushDirty} 方法。
  * 对于直接持久化的实体来说，如果数据没有改变但是配置为强制设置更新时间的情况下，需要通过 {@code UpdateTimeAspect} 来实现。
+ * 已知问题：在事务完成之前，无法立即得到自动设置的时间。
  *
  * @author swiftech
  * @see org.swiftboot.data.model.aspect.UpdateTimeAspect
@@ -36,15 +36,15 @@ public class TimeInterceptor implements Interceptor {
     private SwiftBootDataConfigBean configBean;
 
     @Override
-    public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        if (log.isTraceEnabled()) log.trace("onSave()");
+    public boolean onPersist(Object entity, Object id, Object[] state, String[] propertyNames, Type[] types) {
+        if (log.isTraceEnabled()) log.trace(this.getClass().getSimpleName() + ".onPersist()");
         boolean changed = false;
         if (entity instanceof TimePersistable) {
-            if (log.isDebugEnabled())
-                log.debug("Auto set createTime for entity: %s".formatted(StringUtils.substringAfterLast(entity.toString(), ".")));
             for (int i = 0; i < propertyNames.length; i++) {
                 String pname = propertyNames[i];
                 if (CREATE_TIME.equals(pname)) {
+                    if (log.isDebugEnabled())
+                        log.debug("Auto set createTime for entity: %s".formatted(StringUtils.substringAfterLast(entity.toString(), ".")));
                     state[i] = HibernateUtils.nowByType(types[i]);
                     changed = true;
                 }
@@ -54,8 +54,8 @@ public class TimeInterceptor implements Interceptor {
     }
 
     @Override
-    public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-        if (log.isTraceEnabled()) log.trace("onFlushDirty()");
+    public boolean onFlushDirty(Object entity, Object id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
+        if (log.isTraceEnabled()) log.trace(this.getClass().getSimpleName() + ".onFlushDirty()");
         boolean changed = false;
         String updateTimeStrategy = configBean.getModel().getAutoUpdateTimeStrategy();
         if (AUTO_UPDATE_TIME_NOT_SET.equals(updateTimeStrategy)) {
@@ -63,8 +63,6 @@ public class TimeInterceptor implements Interceptor {
         }
 
         if (entity instanceof TimePersistable) {
-            if (log.isDebugEnabled())
-                log.debug("Auto set createTime for entity: %s".formatted(StringUtils.substringAfterLast(entity.toString(), ".")));
             // find if data changed (except createTime and updateTime)
             boolean dataChanged = false;
             for (int i = 0; i < propertyNames.length; i++) {
@@ -86,7 +84,9 @@ public class TimeInterceptor implements Interceptor {
                 }
                 else if (UPDATE_TIME.equals(propertyName)) {
                     if (AUTO_UPDATE_TIME_ALWAYS.equals(updateTimeStrategy) ||
-                            (AUTO_UPDATE_TIME_ON_CHANGE.equals(updateTimeStrategy)) && dataChanged) { // force or really changed entities will be updated updateTime.
+                            (AUTO_UPDATE_TIME_ON_CHANGE.equals(updateTimeStrategy)) && dataChanged) { // The updateTime of entity classes that are forced or truly changed will be updated.
+                        if (log.isDebugEnabled())
+                            log.debug("Auto set updateTime for entity: %s".formatted(StringUtils.substringAfterLast(entity.toString(), ".")));
                         currentState[i] = HibernateUtils.nowByType(types[i]);
                         changed = true; // mark as changed
                     }
