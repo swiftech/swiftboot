@@ -32,7 +32,7 @@ public class DynamicTimeZoneLocalDateTimeSerializer extends BaseJsonSerializer<L
             return;
         }
         ZoneId targetZone = TimezoneUtils.zoneIdFromCurrentLocale();
-        if (log.isTraceEnabled()) log.trace("User time zone: %s".formatted(targetZone.toString()));
+        if (log.isTraceEnabled()) log.trace("Serialize %s at user time zone: %s".formatted(value, targetZone.toString()));
 
         // 3. 【核心步骤】将无时区的 LocalDateTime 显式指定为 UTC，再转换到目标时区
         String formattedDate = value.atOffset(ZoneOffset.UTC) // 声明它是 UTC 时间
@@ -40,5 +40,14 @@ public class DynamicTimeZoneLocalDateTimeSerializer extends BaseJsonSerializer<L
                 .format(super.formatter);
 
         gen.writeString(formattedDate);
+    }
+
+    public static void main(String[] args) {
+        LocalDateTime utcTime = LocalDateTime.of(2026, 9, 28, 10, 30, 21);
+        String formattedDate = utcTime.atOffset(ZoneOffset.UTC) // 声明它是 UTC 时间
+                .atZoneSameInstant(ZoneId.of("Asia/Shanghai")) // 转换到目标时区（自动算时差）
+                .format(DateTimeFormatter.ISO_DATE_TIME);
+        System.out.println(formattedDate);
+
     }
 }

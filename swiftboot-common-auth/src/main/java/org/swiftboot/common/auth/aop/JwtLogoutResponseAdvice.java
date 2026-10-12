@@ -1,6 +1,7 @@
 package org.swiftboot.common.auth.aop;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +14,15 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.event.SignOutEvent;
-import org.swiftboot.common.auth.service.JwtService;
+import org.swiftboot.common.auth.request.UserContextHolder;
 import org.swiftboot.common.auth.response.LogoutResponse;
+import org.swiftboot.common.auth.service.JwtService;
 
 /**
  * Automatically revoke access token and refresh token of current authenticated user from the
@@ -44,6 +48,12 @@ public class JwtLogoutResponseAdvice extends AbstractMappingJacksonResponseBodyA
     @Resource
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Resource
+    private JwtConfigBean jwtConfigBean;
+
+    @Resource
+    private TokenHelper tokenHelper;
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return super.supports(returnType, converterType)
@@ -59,8 +69,15 @@ public class JwtLogoutResponseAdvice extends AbstractMappingJacksonResponseBodyA
         if (StringUtils.isBlank(accessToken)) return;
         // revoke authenticate by access token.
         jwtService.revokeAuthenticationByAccessToken(accessToken);
+        if (jwtConfigBean.getUseCookie()) {
+            // reset cookie
+            Cookie atCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "accessToken", "", 0);
+            Cookie rtCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "refreshToken", "", 0);
+            ((ServletServerHttpResponse) response).getServletResponse().addCookie(atCookie);
+            ((ServletServerHttpResponse) response).getServletResponse().addCookie(rtCookie);
+        }
         // do notification.
         String userId = jwtTokenProvider.getUserId(accessToken);
-        applicationEventPublisher.publishEvent(new SignOutEvent(this,userId, LocaleContextHolder.getLocale()));
+        applicationEventPublisher.publishEvent(new SignOutEvent(this, userId, LocaleContextHolder.getLocale()));
     }
 }

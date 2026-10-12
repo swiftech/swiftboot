@@ -8,3 +8,13 @@ swiftboot:
       refreshTokenExpirationSeconds: 600
       revokeType: direct
       refreshMode: immutable
+      accessTokenCookie:
+        path: /
+        maxAge: 120
+        secure: true
+        httpOnly: false
+      refreshTokenCookie:
+        path: /
+        maxAge: 3600
+        secure: true
+        httpOnly: true

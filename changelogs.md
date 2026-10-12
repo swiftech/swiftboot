@@ -1,3 +1,7 @@
+V3.2.1
+* Features:
+  * `[swiftboot-auth]`: Supports returning access credentials after user authentication through cookies. 
+
 V3.2.0
 * New Features:
   * `[swiftboot-auth]`: Add a new feature to configure distinct access token and refresh token timeout durations for different types of clients, utilizing a new request parameter, `clientSource`, to differentiate between them.

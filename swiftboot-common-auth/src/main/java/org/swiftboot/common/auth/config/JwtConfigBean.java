@@ -49,7 +49,7 @@ public class JwtConfigBean {
     /**
      * `memory` | `redis`
      * memory: stores tokens in memory, for testing only.
-     * redis: stores tokens in redis.
+     * redis: stores tokens in Redis.
      * default is `memory`.
      * To customize the store, like in a database, do not set this property, just implement {@code JwtStore} and register as a @Service or a @Component.
      *
@@ -58,8 +58,28 @@ public class JwtConfigBean {
     private String storeMode = "memory";
 
     /**
+     * Use cookie to return access token and refresh token.
+     */
+    private Boolean useCookie = true;
+
+    /**
+     * Cookie config for access token.
+     */
+    private CookieConfigBean accessTokenCookie;
+
+    /**
+     * Cookie config for refresh token.
+     */
+    private CookieConfigBean refreshTokenCookie;
+
+    /**
      * Specific config override the default config for client.
      * The identifier for clients is defined in the BaseAuthRequest.
+     * use following methods to determine the final config for clients:
+     * determineAccessTokenExpirationSeconds()
+     * determineRefreshTokenExpirationSeconds()
+     * determineAccessTokenCookie()
+     * determineRefreshTokenCookie()
      *
      * @see org.swiftboot.common.auth.request.BaseAuthRequest
      */
@@ -77,6 +97,26 @@ public class JwtConfigBean {
             return clientOverrides.get(clientSource).getRefreshTokenExpirationSeconds();
         }
         return refreshTokenExpirationSeconds;
+    }
+
+    public CookieConfigBean determineAccessTokenCookie(String clientSource) {
+        if (clientOverrides.containsKey(clientSource)) {
+            CookieConfigBean atc = clientOverrides.get(clientSource).getAccessTokenCookie();
+            if (atc != null) {
+                return atc;
+            }
+        }
+        return accessTokenCookie;
+    }
+
+    public CookieConfigBean determineRefreshTokenCookie(String clientSource) {
+        if (clientOverrides.containsKey(clientSource)) {
+            CookieConfigBean rtc = clientOverrides.get(clientSource).getRefreshTokenCookie();
+            if (rtc != null) {
+                return rtc;
+            }
+        }
+        return refreshTokenCookie;
     }
 
     public boolean isDirectRevokeType() {
@@ -135,6 +175,30 @@ public class JwtConfigBean {
         this.storeMode = storeMode;
     }
 
+    public Boolean getUseCookie() {
+        return useCookie;
+    }
+
+    public void setUseCookie(Boolean useCookie) {
+        this.useCookie = useCookie;
+    }
+
+    public CookieConfigBean getAccessTokenCookie() {
+        return accessTokenCookie;
+    }
+
+    public void setAccessTokenCookie(CookieConfigBean accessTokenCookie) {
+        this.accessTokenCookie = accessTokenCookie;
+    }
+
+    public CookieConfigBean getRefreshTokenCookie() {
+        return refreshTokenCookie;
+    }
+
+    public void setRefreshTokenCookie(CookieConfigBean refreshTokenCookie) {
+        this.refreshTokenCookie = refreshTokenCookie;
+    }
+
     public Map<String, ClientOverride> getClientOverrides() {
         return clientOverrides;
     }
@@ -157,6 +221,10 @@ public class JwtConfigBean {
          */
         private long refreshTokenExpirationSeconds = 24 * 60 * 60;
 
+        private CookieConfigBean accessTokenCookie;
+
+        private CookieConfigBean refreshTokenCookie;
+
         public long getAccessTokenExpirationSeconds() {
             return accessTokenExpirationSeconds;
         }
@@ -171,6 +239,22 @@ public class JwtConfigBean {
 
         public void setRefreshTokenExpirationSeconds(long refreshTokenExpirationSeconds) {
             this.refreshTokenExpirationSeconds = refreshTokenExpirationSeconds;
+        }
+
+        public CookieConfigBean getAccessTokenCookie() {
+            return accessTokenCookie;
+        }
+
+        public void setAccessTokenCookie(CookieConfigBean accessTokenCookie) {
+            this.accessTokenCookie = accessTokenCookie;
+        }
+
+        public CookieConfigBean getRefreshTokenCookie() {
+            return refreshTokenCookie;
+        }
+
+        public void setRefreshTokenCookie(CookieConfigBean refreshTokenCookie) {
+            this.refreshTokenCookie = refreshTokenCookie;
         }
     }
 }

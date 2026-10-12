@@ -3,6 +3,7 @@ package org.swiftboot.demo.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,6 @@ import org.swiftboot.util.time.LocalDateTimeUtils;
 import org.swiftboot.web.exception.ErrMessageException;
 import org.swiftboot.web.response.Response;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -55,8 +55,7 @@ public class AppLoginController {
 
     @Operation(description = "App user sign in, return access token and refresh token if in JWT mode; return in HTTP header or set cookie(if enabled) if in Session mode")
     @PostMapping(value = "signin")
-    public Response<AppUserSignInDto> appUserSign(
-            @RequestBody NamePasswordLoginRequest request) {
+    public Response<AppUserSignInDto> appUserSign(@RequestBody NamePasswordLoginRequest request, HttpServletResponse response) {
         log.info("> /app/signin");
         Authenticated authenticated = userAuthService.userSignIn(request.getLoginName(), request.getLoginPwd());
         Optional<AppUserEntity> opt = appUserRepository.findByLoginName(request.getLoginName());

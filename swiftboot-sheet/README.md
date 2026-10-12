@@ -242,12 +242,28 @@ builder.sheet(0, "my first sheet")
 ```
 
 
-### Maven:
+### 版本:
+
+* 稳定版
 
 ```xml
-<dependency>
-  <groupId>com.github.swiftech</groupId>
-  <artifactId>swiftboot-sheet</artifactId>
-  <version>2.4.10</version>
-</dependency>
+<dependencies>
+	<dependency>
+		<groupId>com.github.swiftech</groupId>
+		<artifactId>swiftboot-sheet</artifactId>
+		<version>3.1.5</version>
+	</dependency>
+</dependencies>
+```
+
+* 不稳定版
+
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.github.swiftech</groupId>
+		<artifactId>swiftboot-sheet</artifactId>
+		<version>3.2.0</version>
+	</dependency>
+</dependencies>
 ```

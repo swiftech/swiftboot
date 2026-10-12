@@ -1,6 +1,7 @@
 package org.swiftboot.common.auth.aop;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,12 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
+import org.swiftboot.common.auth.config.CookieConfigBean;
+import org.swiftboot.common.auth.config.JwtConfigBean;
+import org.swiftboot.common.auth.request.UserContextHolder;
 import org.swiftboot.common.auth.response.AuthenticatedResponse;
 import org.swiftboot.common.auth.service.JwtService;
 import org.swiftboot.common.auth.token.AccessToken;
@@ -36,6 +41,12 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
     @Resource
     private JwtService jwtService;
 
+    @Resource
+    private JwtConfigBean jwtConfigBean;
+
+    @Resource
+    private TokenHelper tokenHelper;
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return super.supports(returnType, converterType)
@@ -45,21 +56,37 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
     @Override
     protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType,
                                            ServerHttpRequest request, ServerHttpResponse response) {
-        if (log.isDebugEnabled()) log.debug("Handle user tokens after authenticated.");
+        if (log.isDebugEnabled()) log.debug("Handle user tokens after authenticated for client %s".formatted(UserContextHolder.getClientSource()));
         AuthenticatedResponse<?, ?> authenticatedResponse = (AuthenticatedResponse<?, ?>) bodyContainer.getValue();
         Object authenticated = authenticatedResponse.getAuthenticated();
         if (authenticated == null) return;
         if (authenticated instanceof JwtAuthentication ja) {
             AccessToken accessToken = ja.getAccessToken();
-            if (StringUtils.isBlank(accessToken.getTokenValue())){
+            if (StringUtils.isBlank(accessToken.getTokenValue())) {
                 log.warn("No access token found");
                 return;
             }
 
             // avoid handling refreshing access token in `immutable` refresh mode since no new refresh token is generated.
             if (ja.getRefreshToken() != null) {
-                // save authenticated dual token.
+                // save authenticated tokens for refreshing token.
                 jwtService.saveJwtAuthentication(ja);
+            }
+
+            if (jwtConfigBean.getUseCookie()) {
+                CookieConfigBean accessTokenCookieConfig = jwtConfigBean.determineAccessTokenCookie(UserContextHolder.getClientSource());
+                if (accessTokenCookieConfig != null) {
+                    log.debug("Use cookie for access token. " + accessTokenCookieConfig);
+                    Cookie accessTokenCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "accessToken", ja.getAccessToken().getTokenValue());
+                    ((ServletServerHttpResponse) response).getServletResponse().addCookie(accessTokenCookie);
+                }
+
+                CookieConfigBean refreshTokenCookieConfig = jwtConfigBean.determineRefreshTokenCookie(UserContextHolder.getClientSource());
+                if (refreshTokenCookieConfig != null && ja.getRefreshToken() != null) {
+                    log.debug("Use cookie for refresh token. " + refreshTokenCookieConfig);
+                    Cookie refreshTokenCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "refreshToken", ja.getRefreshToken().getTokenValue());
+                    ((ServletServerHttpResponse) response).getServletResponse().addCookie(refreshTokenCookie);
+                }
             }
         }
     }

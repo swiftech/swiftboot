@@ -12,7 +12,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.config.AuthConfigBean;
 import org.swiftboot.auth.filter.SessionAuthFilter;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;

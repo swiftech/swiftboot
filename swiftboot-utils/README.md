@@ -3,7 +3,7 @@
 
 ---
 
-### 功能
+## 功能
 
 * `AnnotationUtils` 通过反射处理 Java 注解的工具类
 
@@ -63,26 +63,34 @@
 	* `MonthDayUtils` 提供和计算 MonthDay 相关的工具方法
 	* `LocalDateTimeUtils` 处理 LocalDateTime 时间类型的工具类
 
-### Maven
 
-稳定版：
-[v2.md](docs/v2.md)
+## 开发指南
 
-```xml
-<dependency>
-	<groupId>com.github.swiftech</groupId>
-	<artifactId>swiftboot-utils</artifactId>
-	<version>2.4.11</version>
-</dependency>
-```
-
-不稳定版:
 [v3.md](docs/v3.md)
 
+
+## 版本
+
+* 稳定版
+
 ```xml
-<dependency>
-	<groupId>com.github.swiftech</groupId>
-	<artifactId>swiftboot-utils</artifactId>
-	<version>3.1.5</version>
-</dependency>
+<dependencies>
+	<dependency>
+		<groupId>com.github.swiftech</groupId>
+		<artifactId>swiftboot-utils</artifactId>
+		<version>3.1.5</version>
+	</dependency>
+</dependencies>
+```
+
+* 不稳定版
+
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.github.swiftech</groupId>
+		<artifactId>swiftboot-utils</artifactId>
+		<version>3.2.0</version>
+	</dependency>
+</dependencies>
 ```

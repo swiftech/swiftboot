@@ -1,4 +1,4 @@
-package org.swiftboot.auth.config;
+package org.swiftboot.common.auth.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 /**
  *
  * @author swiftech 2019-05-20
- * @see SessionConfigBean
  * @see org.swiftboot.common.auth.config.JwtConfigBean
  **/
 @Configuration
@@ -18,7 +17,7 @@ public class AuthConfigBean {
     private String authType = "jwt";
 
     /**
-     * 会话令牌的名称，作为客户端保存和传递时的 key
+     * 会话令牌的名称，作为客户端保存和传递时的 key，默认为 access_token
      */
     private String tokenKey = "access_token";
 

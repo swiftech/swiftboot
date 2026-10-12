@@ -61,20 +61,20 @@ public abstract class BaseImporter implements Importer {
      * @return
      */
     public static Object shrinkMatrix(List<List<Object>> matrix, Integer rowCount, Integer colCount) {
-        if (matrix == null || matrix.isEmpty() || matrix.get(0) == null || matrix.get(0).isEmpty()) {
+        if (matrix == null || matrix.isEmpty() || matrix.getFirst() == null || matrix.getFirst().isEmpty()) {
             return null;
         }
         boolean isHorizontal = rowCount != null && rowCount == 1;
         boolean isVertical = colCount != null && colCount == 1;
         // System.out.println(StringUtils.join(matrix));
         if (isHorizontal && isVertical) {
-            return matrix.get(0).get(0);
+            return matrix.getFirst().getFirst();
         }
         else if (isHorizontal) {
-            return matrix.get(0);
+            return matrix.getFirst();
         }
         else if (isVertical) {
-            return matrix.stream().map(rows -> rows.get(0)).collect(Collectors.toList());
+            return matrix.stream().map(rows -> rows.getFirst()).collect(Collectors.toList());
         }
         else {
             return matrix;

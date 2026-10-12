@@ -23,10 +23,7 @@ public class AutoContextAsyncConfig {
      * 它已经包含了 application.yml 里配置的所有线程池参数！
      */
     @Bean(name = "taskExecutor")
-    public ThreadPoolTaskExecutor taskExecutor(
-            ThreadPoolTaskExecutorBuilder builder,
-            TaskDecorator localeTaskDecorator) {
-
+    public ThreadPoolTaskExecutor taskExecutor(ThreadPoolTaskExecutorBuilder builder, TaskDecorator localeTaskDecorator) {
         // 基于 YAML 里的默认参数构建，仅叠加 TaskDecorator
         return builder.taskDecorator(localeTaskDecorator).build();
     }

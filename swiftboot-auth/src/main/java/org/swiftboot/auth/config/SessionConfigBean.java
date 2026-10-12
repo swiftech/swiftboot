@@ -3,6 +3,7 @@ package org.swiftboot.auth.config;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.swiftboot.common.auth.config.AuthConfigBean;
 
 /**
  * swiftboot.auth.session

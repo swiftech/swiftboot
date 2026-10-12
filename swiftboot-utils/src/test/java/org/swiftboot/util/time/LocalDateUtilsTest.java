@@ -1,5 +1,6 @@
 package org.swiftboot.util.time;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -14,5 +15,9 @@ class LocalDateUtilsTest {
         System.out.println(utcDateTime);
     }
 
-
+    @Test
+    public void weekNumOf() {
+        LocalDate localDate = LocalDate.of(2026, 9, 18);
+        Assertions.assertEquals(5, LocalDateUtils.weekNumOf(localDate, ZoneId.of("Asia/Shanghai")));
+    }
 }

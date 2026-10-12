@@ -107,7 +107,7 @@ public class ExcelExporter extends BaseExporter {
                     return;
                 }
                 int actualRowCount = rowCount == null ? matrix.size() : Math.min(rowCount, matrix.size());
-                int actualColumnCount = columnCount == null ? matrix.get(0).size() : Math.min(columnCount, matrix.get(0).size());
+                int actualColumnCount = columnCount == null ? matrix.getFirst().size() : Math.min(columnCount, matrix.getFirst().size());
 
                 // shift rows if need insert
                 if (metaItem.isInsert()) {
@@ -254,7 +254,7 @@ public class ExcelExporter extends BaseExporter {
         if (row == null || startPos == null) {
             return;
         }
-        int colCount = Math.min(Math.max(columnCount, 1), values.size()); // at least one and not more than size of data.
+        int colCount = Math.clamp(columnCount, 1, values.size()); // at least one and not more than size of data.
         for (int j = 0; j < colCount; j++) {
             cellInfo.get().setColIdx(j);
             Cell cell = row.getCell(startPos.getColumn() + j);

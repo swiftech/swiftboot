@@ -33,7 +33,8 @@ public class SwiftBootWebCorsConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns("*")
 //                .allowedOrigins("*")
                 .allowedHeaders("*")
-                .allowCredentials(true).maxAge(3000);
+                .allowCredentials(true)
+                .maxAge(3000);
     }
 
     @Bean

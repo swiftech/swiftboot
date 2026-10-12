@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.config.AuthConfigBean;
 import org.swiftboot.common.auth.event.SignInEvent;
 import org.swiftboot.auth.model.UserPersistable;
 import org.swiftboot.auth.repository.UserAuthRepository;

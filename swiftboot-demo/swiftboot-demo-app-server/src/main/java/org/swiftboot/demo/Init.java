@@ -3,7 +3,7 @@ package org.swiftboot.demo;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
-import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.config.AuthConfigBean;
 import org.swiftboot.demo.model.AppUserEntity;
 import org.swiftboot.demo.repository.AppUserRepository;
 import org.swiftboot.util.PasswordUtils;

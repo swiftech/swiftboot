@@ -13,7 +13,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
-import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.config.AuthConfigBean;
 import org.swiftboot.auth.config.SessionConfigBean;
 import org.swiftboot.common.auth.response.AuthenticatedResponse;
 import org.swiftboot.auth.model.Session;

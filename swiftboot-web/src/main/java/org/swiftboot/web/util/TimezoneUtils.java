@@ -23,4 +23,13 @@ public class TimezoneUtils {
         // 2. from locale-timezone mapping（like Asia/Shanghai or America/New_York）
         return TimeZoneMapper.resolveZoneId(currentLocale);
     }
+
+    /**
+     * Get the timezone for locale.
+     * @param locale
+     * @return
+     */
+    public static ZoneId zoneIdFromLocale(Locale locale) {
+        return TimeZoneMapper.resolveZoneId(locale);
+    }
 }

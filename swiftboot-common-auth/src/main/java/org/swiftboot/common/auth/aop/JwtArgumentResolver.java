@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -15,7 +14,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.swiftboot.common.auth.AuthenticationException;
 import org.swiftboot.common.auth.JwtTokenProvider;
-import org.swiftboot.common.auth.JwtUtils;
 import org.swiftboot.common.auth.annotation.*;
 import org.swiftboot.web.i18n.MessageHelper;
 
@@ -37,6 +35,9 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
     @Qualifier("swiftbootCommonAuthMessageSource")
     private MessageSource swiftbootCommonAuthMessageSource;
 
+    @Resource
+    private TokenHelper tokenHelper;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(Token.class)
@@ -50,8 +51,7 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         ServletWebRequest servletWebRequest = (ServletWebRequest) webRequest;
-        String bearerToken = servletWebRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        String accessToken = JwtUtils.extractBearerToken(bearerToken);
+        String accessToken = tokenHelper.getTokenFromRequest(servletWebRequest.getRequest());
         if (StringUtils.isBlank(accessToken)) {
             if (log.isTraceEnabled()) log.trace("No access token found in headers");
             return null;
@@ -82,7 +82,7 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
                 else
                     return null;
             } catch (Exception e) {
-                if (log.isErrorEnabled()) log.error(e.getLocalizedMessage(), e);
+                log.error(e.getLocalizedMessage(), e);
                 if (parameter.hasParameterAnnotation(IfNecessary.class)) {
                     throw new AuthenticationException(MessageHelper.getMessage(swiftbootCommonAuthMessageSource, "swiftboot.auth.invalid.authentication"));
                 }

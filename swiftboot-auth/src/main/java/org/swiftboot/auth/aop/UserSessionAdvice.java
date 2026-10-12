@@ -10,7 +10,7 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
-import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.config.AuthConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.request.BaseAuthenticatedRequest;
 import org.swiftboot.auth.service.SessionService;

@@ -8,7 +8,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.swiftboot.auth.config.AuthConfigBean;
+import org.swiftboot.common.auth.config.AuthConfigBean;
 import org.swiftboot.auth.config.SessionConfigBean;
 import org.swiftboot.auth.model.Session;
 import org.swiftboot.auth.service.SessionService;

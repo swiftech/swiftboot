@@ -12,3 +12,13 @@ swiftboot:
       refreshMode: rolling
       # `memory` | `redis`, default is `memory`, do not set this if customize your own store implementation.
       storeMode: redis
+      accessTokenCookie:
+        path: /
+        maxAge: 120
+        secure: true
+        httpOnly: false
+      refreshTokenCookie:
+        path: /
+        maxAge: 3600
+        secure: true
+        httpOnly: true

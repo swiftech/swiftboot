@@ -44,8 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * the local IP address. Therefore, if rate limit is to be carried out for individuals, it is necessary to ensure
  * that the reverse proxy server can provide the correct IP address.
  *
- * @since 3.1.1
  * @see RateLimit
+ * @since 3.1.1
  */
 @Aspect
 @Component
@@ -90,7 +90,7 @@ public class RateLimitAspect {
             key = "%s:%s".formatted(key, userId);
         }
 
-        log.debug("Lock key: %s".formatted(key));
+        if (log.isDebugEnabled()) log.debug("Lock key: %s".formatted(key));
         return applyRateLimit(joinPoint, key, rateLimit.count(), rateLimit.time());
     }
 
@@ -125,7 +125,7 @@ public class RateLimitAspect {
                     String userId = getUserIdentifier(request);
                     key = "%s:%s".formatted(key, userId);
                 }
-                log.debug("Lock key by config: %s".formatted(key));
+                if (log.isDebugEnabled()) log.debug("Lock key by config: %s".formatted(key));
                 return applyRateLimit(joinPoint, key, rule.getCount(), rule.getTime());
             }
         }
@@ -137,7 +137,7 @@ public class RateLimitAspect {
      *
      * @param joinPoint
      * @param key
-     * @param maxCount max count in the period.
+     * @param maxCount     max count in the period.
      * @param timeInMillis period for limit.
      * @return
      * @throws Throwable
@@ -150,7 +150,8 @@ public class RateLimitAspect {
         if (now > counter.expireTime) {
             counter.count.set(1);
             counter.expireTime = now + timeInMillis;
-        } else {
+        }
+        else {
             // check count in current time window.
             // NOTE: get first then increase to let the very first visit pass.
             if (counter.count.getAndIncrement() > maxCount) {

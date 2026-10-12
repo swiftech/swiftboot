@@ -2,16 +2,6 @@
 
 快速实现基于 `SpringSecurity` 和 `JWT` 的用户认证和鉴权
 
-## 使用
-引入
-```xml
-<dependency>
-    <groupId>com.github.swiftech</groupId>
-    <artifactId>swiftboot-security</artifactId>
-    <version>${swiftboot.version}</version>
-</dependency>
-```
-
 ## 认证
 
 SwiftBoot-Security 提供了一个基于 JWT 的过滤器，实现了基本的用户的认证管理
@@ -49,4 +39,30 @@ Authorization=Bearer <access token>
   "code": "403",
   "message": "Access Denied"
 }
+```
+
+## 版本
+
+* 稳定版
+
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.github.swiftech</groupId>
+		<artifactId>swiftboot-security</artifactId>
+		<version>3.1.5</version>
+	</dependency>
+</dependencies>
+```
+
+* 不稳定版
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>com.github.swiftech</groupId>
+    <artifactId>swiftboot-security</artifactId>
+    <version>3.2.0</version>
+  </dependency>
+</dependencies>
 ```

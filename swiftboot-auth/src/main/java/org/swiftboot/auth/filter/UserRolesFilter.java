@@ -14,6 +14,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.aop.TokenHelper;
 import org.swiftboot.common.auth.filter.BaseAuthFilter;
 import org.swiftboot.web.i18n.MessageHelper;
 
@@ -42,9 +43,13 @@ public class UserRolesFilter extends BaseAuthFilter {
     @Qualifier("swiftbootAuthMessageSource")
     private MessageSource swiftbootAuthMessageSource;
 
+    @Resource
+    private TokenHelper tokenHelper;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (log.isDebugEnabled()) log.debug("do auth check for: %s".formatted(request.getRequestURI()));
+        if (log.isDebugEnabled())
+            log.debug("do role check for: [%s]%s".formatted(request.getMethod(), request.getRequestURI()));
         if (roles == null || roles.isEmpty()) {
             // ignore if no roles has been set.
             filterChain.doFilter(request, response);
@@ -53,7 +58,7 @@ public class UserRolesFilter extends BaseAuthFilter {
         // TODO: Workaround for loading locale from client header 'Accept-Language'
         LocaleContextHolder.setLocale(request.getLocale());
         // Get JWT token from HTTP request
-        String token = super.getTokenFromRequest(request);
+        String token = tokenHelper.getTokenFromRequest(request);
         try {
             String strRoles = jwtTokenProvider.getRoles(token);
             log.debug("User roles: %s".formatted(strRoles));
