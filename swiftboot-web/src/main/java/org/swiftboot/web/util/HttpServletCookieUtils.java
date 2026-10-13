@@ -11,6 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
  **/
 public class HttpServletCookieUtils {
 
+    /**
+     *
+     * @param request
+     * @param name
+     * @return
+     */
     public static String getCookieValue(HttpServletRequest request, String name) {
         Cookie cookieToken = WebUtils.getCookie(request, name);
         if (cookieToken == null) {

@@ -18,6 +18,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 import org.swiftboot.common.auth.JwtTokenProvider;
+import org.swiftboot.common.auth.config.CookieConfigBean;
 import org.swiftboot.common.auth.config.JwtConfigBean;
 import org.swiftboot.common.auth.event.SignOutEvent;
 import org.swiftboot.common.auth.request.UserContextHolder;
@@ -71,8 +72,10 @@ public class JwtLogoutResponseAdvice extends AbstractMappingJacksonResponseBodyA
         jwtService.revokeAuthenticationByAccessToken(accessToken);
         if (jwtConfigBean.getUseCookie()) {
             // reset cookie
-            Cookie atCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "accessToken", "", 0);
-            Cookie rtCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "refreshToken", "", 0);
+            CookieConfigBean accessTokenCookieConfig = jwtConfigBean.determineAccessTokenCookie(UserContextHolder.getClientSource());
+            CookieConfigBean refreshTokenCookieConfig = jwtConfigBean.determineRefreshTokenCookie(UserContextHolder.getClientSource());
+            Cookie atCookie = tokenHelper.createTokenCookie(accessTokenCookieConfig, "accessToken", "", 0);
+            Cookie rtCookie = tokenHelper.createTokenCookie(refreshTokenCookieConfig, "refreshToken", "", 0);
             ((ServletServerHttpResponse) response).getServletResponse().addCookie(atCookie);
             ((ServletServerHttpResponse) response).getServletResponse().addCookie(rtCookie);
         }

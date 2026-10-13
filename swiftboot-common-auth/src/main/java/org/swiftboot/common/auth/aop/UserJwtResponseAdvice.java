@@ -56,10 +56,14 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
     @Override
     protected void beforeBodyWriteInternal(MappingJacksonValue bodyContainer, MediaType contentType, MethodParameter returnType,
                                            ServerHttpRequest request, ServerHttpResponse response) {
-        if (log.isDebugEnabled()) log.debug("Handle user tokens after authenticated for client %s".formatted(UserContextHolder.getClientSource()));
+        if (log.isDebugEnabled())
+            log.debug("Handle user tokens after authenticated for client %s".formatted(UserContextHolder.getClientSource()));
         AuthenticatedResponse<?, ?> authenticatedResponse = (AuthenticatedResponse<?, ?>) bodyContainer.getValue();
         Object authenticated = authenticatedResponse.getAuthenticated();
-        if (authenticated == null) return;
+        if (authenticated == null) {
+            log.warn("Not authenticated.");
+            return;
+        }
         if (authenticated instanceof JwtAuthentication ja) {
             AccessToken accessToken = ja.getAccessToken();
             if (StringUtils.isBlank(accessToken.getTokenValue())) {
@@ -77,16 +81,21 @@ public class UserJwtResponseAdvice extends AbstractMappingJacksonResponseBodyAdv
                 CookieConfigBean accessTokenCookieConfig = jwtConfigBean.determineAccessTokenCookie(UserContextHolder.getClientSource());
                 if (accessTokenCookieConfig != null) {
                     log.debug("Use cookie for access token. " + accessTokenCookieConfig);
-                    Cookie accessTokenCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "accessToken", ja.getAccessToken().getTokenValue());
+                    Cookie accessTokenCookie = tokenHelper.createTokenCookie(accessTokenCookieConfig, "accessToken", ja.getAccessToken().getTokenValue());
+                    log.debug("Cookie domain: %s".formatted(accessTokenCookie.getDomain()));
                     ((ServletServerHttpResponse) response).getServletResponse().addCookie(accessTokenCookie);
                 }
 
                 CookieConfigBean refreshTokenCookieConfig = jwtConfigBean.determineRefreshTokenCookie(UserContextHolder.getClientSource());
                 if (refreshTokenCookieConfig != null && ja.getRefreshToken() != null) {
                     log.debug("Use cookie for refresh token. " + refreshTokenCookieConfig);
-                    Cookie refreshTokenCookie = tokenHelper.createTokenCookie(UserContextHolder.getClientSource(), "refreshToken", ja.getRefreshToken().getTokenValue());
+                    Cookie refreshTokenCookie = tokenHelper.createTokenCookie(refreshTokenCookieConfig, "refreshToken", ja.getRefreshToken().getTokenValue());
+                    log.debug("Cookie domain: %s".formatted(refreshTokenCookie.getDomain()));
                     ((ServletServerHttpResponse) response).getServletResponse().addCookie(refreshTokenCookie);
                 }
+            }
+            else {
+                log.debug("Using cookie is disabled.");
             }
         }
     }

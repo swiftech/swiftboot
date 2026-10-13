@@ -9,7 +9,6 @@ import org.springframework.util.StringUtils;
 import org.swiftboot.common.auth.JwtUtils;
 import org.swiftboot.common.auth.config.AuthConfigBean;
 import org.swiftboot.common.auth.config.CookieConfigBean;
-import org.swiftboot.common.auth.config.JwtConfigBean;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -23,36 +22,32 @@ public class TokenHelper {
     @Resource
     private AuthConfigBean authConfigBean;
 
-    @Resource
-    private JwtConfigBean jwtConfigBean;
-
     /**
      *
-     * @param clientSource
+     * @param tokenCookieConfig
      * @param name
      * @param value
      * @return
      */
-    public Cookie createTokenCookie(String clientSource, String name, String value) {
-        return createTokenCookie(clientSource, name, value, null);
+    public Cookie createTokenCookie(CookieConfigBean tokenCookieConfig, String name, String value) {
+        return this.createTokenCookie(tokenCookieConfig, name, value, null);
     }
 
     /**
      *
-     * @param clientSource
+     * @param tokenCookieConfig
      * @param name
      * @param value
-     * @param maxAge       忽略配置，强制使用时间，用于清除cookie
+     * @param maxAge
      * @return
      */
-    public Cookie createTokenCookie(String clientSource, String name, String value, Integer maxAge) {
-        CookieConfigBean accessTokenCookieConfig = jwtConfigBean.determineAccessTokenCookie(clientSource);
+    public Cookie createTokenCookie(CookieConfigBean tokenCookieConfig, String name, String value, Integer maxAge) {
         Cookie tokenCookie = new Cookie(name, value);
-        tokenCookie.setDomain(accessTokenCookieConfig.getDomain());
-        tokenCookie.setPath(accessTokenCookieConfig.getPath());
-        tokenCookie.setHttpOnly(accessTokenCookieConfig.getHttpOnly());
-        tokenCookie.setSecure(accessTokenCookieConfig.getSecure());
-        tokenCookie.setMaxAge(maxAge != null ? maxAge : accessTokenCookieConfig.getMaxAge());
+        tokenCookie.setDomain(tokenCookieConfig.getDomain());
+        tokenCookie.setPath(tokenCookieConfig.getPath());
+        tokenCookie.setHttpOnly(tokenCookieConfig.getHttpOnly());
+        tokenCookie.setSecure(tokenCookieConfig.getSecure());
+        tokenCookie.setMaxAge(maxAge != null ? maxAge : tokenCookieConfig.getMaxAge());
         return tokenCookie;
     }
 

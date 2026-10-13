@@ -73,7 +73,8 @@ public class CookieConfigBean {
     @Override
     public String toString() {
         return "CookieConfigBean{" +
-                "path='" + path + '\'' +
+                "domain='" + domain + '\'' +
+                ", path='" + path + '\'' +
                 ", maxAge=" + maxAge +
                 ", secure=" + secure +
                 ", httpOnly=" + httpOnly +
